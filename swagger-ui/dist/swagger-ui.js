@@ -31790,9 +31790,7 @@ SwaggerUi.Views.MainView = Backbone.View.extend({
       });
     }
 
-    //todo make this a config setting, also the CSS
-    // document.title = "SmartPayments API - Documention and Examples";
-    console.log(this.model)
+    //enables custom header title and page title
     document.title = this.model.info.title
     $('#pageTopTitle').text(this.model.info.title)
 
