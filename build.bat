@@ -1,21 +1,34 @@
 @echo Off
+
+%SYSTEMROOT%\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe %~dp0\build.proj /p:Configuration=Release
+
 set config=%1
 if "%config%" == "" (
    set config=Release
 )
-
-set version=
+ 
+set version=1.0.0
 if not "%PackageVersion%" == "" (
-   set version=-Version %PackageVersion%
+   set version=%PackageVersion%
 )
 
-REM Build
-%WINDIR%\Microsoft.NET\Framework\v4.0.30319\msbuild Swashbuckle.sln /p:Configuration="%config%" /m /v:M /fl /flp:LogFile=msbuild.log;Verbosity=Normal /nr:false
+set nuget=
+if "%nuget%" == "" (
+	set nuget=nuget
+)
 
-REM Package
+%WINDIR%\Microsoft.NET\Framework\v4.0.30319\msbuild Swashbuckle.sln /p:Configuration="%config%" /m /v:M /fl /flp:LogFile=msbuild.log;Verbosity=diag /nr:false
+
 mkdir Build
-call %nuget% pack "Swashbuckle.Core\Swashbuckle.Core.csproj" -symbols -o Build -p Configuration=%config% %version%
-call %nuget% pack "Swashbuckle.WebHost\Swashbuckle.WebHost.csproj" -symbols -o Build -p Configuration=%config% %version%
+mkdir Build\lib
+mkdir Build\lib\net40
+
+%nuget% pack "Swashbuckle.Core\Swashbuckle.Core.nuspec" -NoPackageAnalysis -verbosity detailed -o Build -Version %version% -p Configuration="%config%"
+%nuget% pack "Swashbuckle.WebHost\Swashbuckle.nuspec" -NoPackageAnalysis -verbosity detailed -o Build -Version %version% -p Configuration="%config%"
+
+
+
+
 
 
 
