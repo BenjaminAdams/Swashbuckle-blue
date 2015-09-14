@@ -1,7 +1,5 @@
 @echo Off
 
-%SYSTEMROOT%\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe %~dp0\build.proj /p:Configuration=Release
-
 set config=%1
 if "%config%" == "" (
    set config=Release
