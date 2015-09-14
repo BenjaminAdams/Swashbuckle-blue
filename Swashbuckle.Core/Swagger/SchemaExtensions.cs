@@ -38,11 +38,17 @@ namespace Swashbuckle.Swagger
                     schema.minLength = length.MinimumLength;
                 }
 
-                //var maxLength = attribute as MaxLengthAttribute;
-                //if (maxLength != null)
-                //{
-                //    schema.maxLength = maxLength.MaximumLength;
-                //}
+                var maxLength = attribute as MaxLengthAttribute;
+                if (maxLength != null)
+                {
+                    schema.maxLength = maxLength.Length;
+                }
+
+                var minLength = attribute as MinLengthAttribute;
+                if (minLength != null)
+                {
+                    schema.minLength = minLength.Length;
+                }
             }
 
             if (!jsonProperty.Writable)
