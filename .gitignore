@@ -13,4 +13,4 @@ _ReSharper.*
 *.cache
 *.dotCover
 *.dotsettings
-!*.proj
+!*.proj 
