@@ -1,22 +1,22 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "swagger-ui", "http://localhost:55139", "{DDE07B02-DD45-4ABF-96D3-A4FBB144BBA1}"
 	ProjectSection(WebsiteProperties) = preProject
 		UseIISExpress = "true"
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
-		Debug.AspNetCompiler.VirtualPath = "/localhost_55139"
+		Debug.AspNetCompiler.VirtualPath = "/tmp"
 		Debug.AspNetCompiler.PhysicalPath = "swagger-ui\"
-		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_55139\"
+		Debug.AspNetCompiler.TargetPath = "..\..\..\..\..\tmp\"
 		Debug.AspNetCompiler.Updateable = "true"
 		Debug.AspNetCompiler.ForceOverwrite = "true"
 		Debug.AspNetCompiler.FixedNames = "false"
 		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.VirtualPath = "/localhost_55139"
+		Release.AspNetCompiler.VirtualPath = "/tmp"
 		Release.AspNetCompiler.PhysicalPath = "swagger-ui\"
-		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_55139\"
+		Release.AspNetCompiler.TargetPath = "..\..\..\..\..\tmp\"
 		Release.AspNetCompiler.Updateable = "true"
 		Release.AspNetCompiler.ForceOverwrite = "true"
 		Release.AspNetCompiler.FixedNames = "false"
