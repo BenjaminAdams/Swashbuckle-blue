@@ -14,8 +14,8 @@ REM Build
 
 REM Package
 mkdir Build
-call %nuget% pack "Swashbuckle.Core\Swashbuckle.Core.nuspec" -symbols -o Build -p Configuration=%config% %version%
-call %nuget% pack "Swashbuckle.WebHost\Swashbuckle.nuspec" -symbols -o Build -p Configuration=%config% %version%
+call %nuget% pack "Swashbuckle.Core\Swashbuckle.Core.csproj" -symbols -o Build -p Configuration=%config% %version%
+call %nuget% pack "Swashbuckle.WebHost\Swashbuckle.WebHost.csproj" -symbols -o Build -p Configuration=%config% %version%
 
 
 
