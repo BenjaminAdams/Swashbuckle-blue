@@ -1,33 +1,19 @@
 @echo Off
-
 set config=%1
 if "%config%" == "" (
    set config=Release
 )
- 
-set version=1.0.0
+
+set version=
 if not "%PackageVersion%" == "" (
-   set version=%PackageVersion%
+   set version=-Version %PackageVersion%
 )
 
-set nuget=
-if "%nuget%" == "" (
-	set nuget=nuget
-)
+REM Build
+%WINDIR%\Microsoft.NET\Framework\v4.0.30319\msbuild Swashbuckle.sln /p:Configuration="%config%" /m /v:M /fl /flp:LogFile=msbuild.log;Verbosity=Normal /nr:false
 
-%WINDIR%\Microsoft.NET\Framework\v4.0.30319\msbuild Swashbuckle.sln /p:Configuration="%config%" /m /v:M /fl /flp:LogFile=msbuild.log;Verbosity=diag /nr:false
-
+REM Package
 mkdir Build
-mkdir Build\lib
-mkdir Build\lib\net40
-
-%nuget% pack "Swashbuckle.Core\Swashbuckle.Core.nuspec" -NoPackageAnalysis -verbosity detailed -o Build -Version %version% -p Configuration="%config%"
-%nuget% pack "Swashbuckle.WebHost\Swashbuckle.nuspec" -NoPackageAnalysis -verbosity detailed -o Build -Version %version% -p Configuration="%config%"
-
-
-
-
-
-
-
+call %nuget% pack "Swashbuckle.Core\Swashbuckle.Core.csproj" -symbols -o Build -p Configuration=%config% %version%
+call %nuget% pack "Swashbuckle.WebHost\Swashbuckle.WebHost.csproj" -symbols -o Build -p Configuration=%config% %version%
 
