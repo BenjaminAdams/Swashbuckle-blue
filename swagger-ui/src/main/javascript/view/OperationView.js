@@ -4,12 +4,12 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
   invocationUrl: null,
 
   events: {
-    'submit .sandbox'         : 'submitOperation',
-    'click .submit'           : 'submitOperation',
-    'click .response_hider'   : 'hideResponse',
-    'click .toggleOperation'  : 'toggleOperationContent',
-    'mouseenter .api-ic'      : 'mouseEnter',
-    'dblclick .curl'          : 'selectText',
+    'submit .sandbox': 'submitOperation',
+    'click .submit': 'submitOperation',
+    'click .response_hider': 'hideResponse',
+    'click .toggleOperation': 'toggleOperationContent',
+    'mouseenter .api-ic': 'mouseEnter',
+    'dblclick .curl': 'selectText',
   },
 
   initialize: function(opts) {
@@ -23,21 +23,21 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
   },
 
   selectText: function(event) {
-      var doc = document,
-          text = event.target.firstChild,
-          range,
-          selection;
-      if (doc.body.createTextRange) {
-          range = document.body.createTextRange();
-          range.moveToElementText(text);
-          range.select();
-      } else if (window.getSelection) {
-          selection = window.getSelection();
-          range = document.createRange();
-          range.selectNodeContents(text);
-          selection.removeAllRanges();
-          selection.addRange(range);
-      }
+    var doc = document,
+      text = event.target.firstChild,
+      range,
+      selection;
+    if (doc.body.createTextRange) {
+      range = document.body.createTextRange();
+      range.moveToElementText(text);
+      range.select();
+    } else if (window.getSelection) {
+      selection = window.getSelection();
+      range = document.createRange();
+      range.selectNodeContents(text);
+      selection.removeAllRanges();
+      selection.addRange(range);
+    }
   },
 
   mouseEnter: function(e) {
@@ -77,10 +77,14 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
   // TODO: redactor
   render: function() {
     var a, auth, auths, code, contentTypeModel, isMethodSubmissionSupported, k, key, l, len, len1, len2, len3, len4, m, modelAuths, n, o, p, param, q, ref, ref1, ref2, ref3, ref4, ref5, responseContentTypeView, responseSignatureView, schema, schemaObj, scopeIndex, signatureModel, statusCode, successResponse, type, v, value;
+    var self = this
+    var responseSignatureHtml = ''
+    var inputSignatureHtml = ''
     isMethodSubmissionSupported = jQuery.inArray(this.model.method, this.model.supportedSubmitMethods()) >= 0;
     if (!isMethodSubmissionSupported) {
       this.model.isReadOnly = true;
     }
+
     this.model.description = this.model.description || this.model.notes;
     this.model.oauth = null;
     modelAuths = this.model.authorizations || this.model.security;
@@ -139,8 +143,8 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
         schemaObj = this.model.responses[code].schema;
         if (schemaObj && schemaObj.$ref) {
           schema = schemaObj.$ref;
-          if (schema.indexOf('#/definitions/') === 0) {
-            schema = schema.substring('#/definitions/'.length);
+          if (schema.indexOf('#/definitions/') !== -1) {
+            schema = schema.replace(/^.*#\/definitions\//, '');
           }
         }
         this.model.responseMessages.push({
@@ -148,26 +152,46 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
           message: value.description,
           responseModel: schema
         });
+
       }
     }
     if (typeof this.model.responseMessages === 'undefined') {
       this.model.responseMessages = [];
     }
     signatureModel = null;
+
+    //console.log('successResponse=', this.model.successResponse) 
+    console.log('model====', this.model)
+
+    _.each(this.model.parameters, function(param) {
+      // console.log('inside of a param=', param)
+      if (!param || !param.schema || param.isBody === false) return
+
+      inputSignatureHtml += window.getMockSignatureFromParamAsTable(param.schema, self.model.models, null)
+        //console.log('I generated this inputSig=', inputSignatureHtml)
+    })
+
     if (this.model.successResponse) {
       successResponse = this.model.successResponse;
       for (key in successResponse) {
         value = successResponse[key];
         this.model.successCode = key;
         if (typeof value === 'object' && typeof value.createJSONSample === 'function') {
+
+          responseSignatureHtml += window.getMockSignatureAsTable(value)
+
           signatureModel = {
             sampleJSON: JSON.stringify(value.createJSONSample(), void 0, 2),
             isParam: false,
+            // signature: window.getMockSignatureCustom(value),
             signature: value.getMockSignature()
+              //signature2: value.getMockSignature()
           };
+
         }
       }
     } else if (this.model.responseClassSignature && this.model.responseClassSignature !== 'string') {
+
       signatureModel = {
         sampleJSON: this.model.responseSampleJSON,
         isParam: false,
@@ -178,6 +202,16 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
     if (opts.showRequestHeaders) {
       this.model.showRequestHeaders = true;
     }
+
+    //injected the custom model description here
+    if (responseSignatureHtml !== '') {
+      this.model.responseSignatureHtml = responseSignatureHtml
+    }
+
+    if (inputSignatureHtml !== '') {
+      this.model.inputSignatureHtml = inputSignatureHtml
+    }
+
     $(this.el).html(Handlebars.templates.operation(this.model));
     if (signatureModel) {
       responseSignatureView = new SwaggerUi.Views.SignatureView({
@@ -208,6 +242,9 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
           } else {
             type = ref;
           }
+
+          console.log('!!!!Param=', type, ref)
+
         }
       }
       if (type && type.toLowerCase() === 'file') {
@@ -232,9 +269,24 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
       statusCode = ref5[q];
       this.addStatusCode(statusCode);
     }
+
+    // if (signatureModel) {
+
+    // setTimeout(function() { 
+    //  console.log('found=', $(self.el).find('.model-desc'))
+    // $(self.el).find('.model-desc').first().html(signatureModel.signature)
+    // $(self.el).find('.model-desc').html(signatureModel.signature)
+    // $(self.el).find('.model-desc').first().html('test')
+    // $('.model-desc', $(self.el)).html(signatureModel.signature);
+    //}, 100)
+    // } else {
+    //   console.log('we had no signature model')
+    // }
     return this;
   },
+  createSignatureTable: function(value) {
 
+  },
   addParameter: function(param, consumes) {
     // Render a parameter
     param.consumes = consumes;
@@ -314,7 +366,7 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
         parent: this
       };
       if (this.options.swaggerOptions) {
-        for(var key in this.options.swaggerOptions) {
+        for (var key in this.options.swaggerOptions) {
           opts[key] = this.options.swaggerOptions[key];
         }
       }
@@ -336,7 +388,7 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
     }
   },
 
-  getInputMap: function (form) {
+  getInputMap: function(form) {
     var map, ref1, l, len, o, ref2, m, len1, val, ref3, n, len2;
     map = {};
     ref1 = form.find('input');
@@ -368,7 +420,7 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
     return map;
   },
 
-  isFileUpload: function (form) {
+  isFileUpload: function(form) {
     var ref1, l, len, o;
     var isFileUpload = false;
     ref1 = form.find('input');
@@ -387,7 +439,7 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
 
   // wraps a jquery response as a shred response
   wrap: function(data) {
-   var h, headerArray, headers, i, l, len, o;
+    var h, headerArray, headers, i, l, len, o;
     headers = {};
     headerArray = data.getAllResponseHeaders().split('\r');
     for (l = 0, len = headerArray.length; l < len; l++) {
@@ -432,7 +484,9 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
 
   // handler for hide response link
   hideResponse: function(e) {
-    if (e) { e.preventDefault(); }
+    if (e) {
+      e.preventDefault();
+    }
     $('.response', $(this.el)).slideUp();
     $('.response_hider', $(this.el)).fadeOut();
   },
@@ -449,7 +503,7 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
   },
 
   // show the status codes
-  showCompleteStatus: function(data, parent){
+  showCompleteStatus: function(data, parent) {
     parent.showStatus(data);
   },
 
@@ -553,7 +607,7 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
     $('.response_body', $(this.el)).removeClass('json');
     $('.response_body', $(this.el)).removeClass('xml');
 
-    var supportsAudioPlayback = function(contentType){
+    var supportsAudioPlayback = function(contentType) {
       var audioElement = document.createElement('audio');
       return !!(audioElement.canPlayType && audioElement.canPlayType(contentType).replace(/no/, ''));
     };
@@ -564,7 +618,7 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
       code = $('<code />').text('no content');
       pre = $('<pre class="json" />').append(code);
 
-    // JSON
+      // JSON
     } else if (contentType === 'application/json' || /\+json$/.test(contentType)) {
       var json = null;
       try {
@@ -575,39 +629,40 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
       code = $('<code />').text(json);
       pre = $('<pre class="json" />').append(code);
 
-    // XML
+      // XML
     } else if (contentType === 'application/xml' || /\+xml$/.test(contentType)) {
       code = $('<code />').text(this.formatXml(content));
       pre = $('<pre class="xml" />').append(code);
 
-    // HTML
+      // HTML
     } else if (contentType === 'text/html') {
       code = $('<code />').html(_.escape(content));
       pre = $('<pre class="xml" />').append(code);
 
-    // Plain Text
+      // Plain Text
     } else if (/text\/plain/.test(contentType)) {
       code = $('<code />').text(content);
       pre = $('<pre class="plain" />').append(code);
 
-
-    // Image
+      // Image
     } else if (/^image\//.test(contentType)) {
       pre = $('<img>').attr('src', url);
 
-    // Audio
+      // Audio
     } else if (/^audio\//.test(contentType) && supportsAudioPlayback(contentType)) {
       pre = $('<audio controls>').append($('<source>').attr('src', url).attr('type', contentType));
 
-    // Download
+      // Download
     } else if (headers['Content-Disposition'] && (/attachment/).test(headers['Content-Disposition']) ||
-               headers['content-disposition'] && (/attachment/).test(headers['content-disposition']) ||
-               headers['Content-Description'] && (/File Transfer/).test(headers['Content-Description']) ||
-               headers['content-description'] && (/File Transfer/).test(headers['content-description'])) {
+      headers['content-disposition'] && (/attachment/).test(headers['content-disposition']) ||
+      headers['Content-Description'] && (/File Transfer/).test(headers['Content-Description']) ||
+      headers['content-description'] && (/File Transfer/).test(headers['content-description'])) {
 
       if ('Blob' in window) {
         var type = contentType || 'text/html';
-        var blob = new Blob([content], {type: type});
+        var blob = new Blob([content], {
+          type: type
+        });
         var a = document.createElement('a');
         var href = window.URL.createObjectURL(blob);
         var fileName = response.url.substr(response.url.lastIndexOf('/') + 1);
@@ -622,11 +677,11 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
         pre = $('<pre class="json" />').append('Download headers detected but your browser does not support downloading binary via XHR (Blob).');
       }
 
-    // Location header based redirect download
-    } else if(headers.location || headers.Location) {
+      // Location header based redirect download
+    } else if (headers.location || headers.Location) {
       window.location = response.url;
 
-    // Anything else (CORS)
+      // Anything else (CORS)
     } else {
       code = $('<code />').text(content);
       pre = $('<pre class="json" />').append(code);
@@ -641,11 +696,10 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
     $('.response_hider', $(this.el)).show();
     $('.response_throbber', $(this.el)).hide();
 
-
     //adds curl output
     var curlCommand = this.model.asCurl(this.map);
     curlCommand = curlCommand.replace('!', '&#33;');
-    $( '.curl', $(this.el)).html('<pre>' + curlCommand + '</pre>');
+    $('.curl', $(this.el)).html('<pre>' + curlCommand + '</pre>');
 
     // only highlight the response if response is less than threshold, default state is highlight response
     var opts = this.options.swaggerOptions;
@@ -667,9 +721,9 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
     }
   },
 
-  toggleOperationContent: function (event) {
+  toggleOperationContent: function(event) {
     var elem = $('#' + Docs.escapeResourceName(this.parentId + '_' + this.nickname + '_content'));
-    if (elem.is(':visible')){
+    if (elem.is(':visible')) {
       event.preventDefault();
       $.bbq.pushState('#/', 2);
       Docs.collapseOperation(elem);
@@ -701,7 +755,7 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
   getParamByName: function(name) {
     var i;
     if (this.model.parameters) {
-      for(i = 0; i < this.model.parameters.length; i++) {
+      for (i = 0; i < this.model.parameters.length; i++) {
         if (this.model.parameters[i].name === name) {
           return this.model.parameters[i];
         }

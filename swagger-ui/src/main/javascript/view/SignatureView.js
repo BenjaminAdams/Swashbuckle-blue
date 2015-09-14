@@ -2,22 +2,25 @@
 
 SwaggerUi.Views.SignatureView = Backbone.View.extend({
   events: {
-    'click a.description-link'       : 'switchToDescription',
-    'click a.snippet-link'           : 'switchToSnippet',
-    'mousedown .snippet'          : 'snippetToTextArea'
+    'click a.description-link': 'switchToDescription',
+    'click a.snippet-link': 'switchToSnippet',
+    'mousedown .snippet': 'snippetToTextArea'
   },
 
-  initialize: function () {
+  initialize: function() {
 
   },
 
-  render: function(){
+  render: function() {
 
     $(this.el).html(Handlebars.templates.signature(this.model));
+
+    // $('.model-desc').html(this.model.signature)
 
     this.switchToSnippet();
 
     this.isParam = this.model.isParam;
+    //console.log('model=', this.model)
 
     if (this.isParam) {
       $('.notice', $(this.el)).text('Click to set as parameter value');
@@ -27,8 +30,10 @@ SwaggerUi.Views.SignatureView = Backbone.View.extend({
   },
 
   // handler for show signature
-  switchToDescription: function(e){
-    if (e) { e.preventDefault(); }
+  switchToDescription: function(e) {
+    if (e) {
+      e.preventDefault();
+    }
 
     $('.snippet', $(this.el)).hide();
     $('.description', $(this.el)).show();
@@ -37,8 +42,10 @@ SwaggerUi.Views.SignatureView = Backbone.View.extend({
   },
 
   // handler for show sample
-  switchToSnippet: function(e){
-    if (e) { e.preventDefault(); }
+  switchToSnippet: function(e) {
+    if (e) {
+      e.preventDefault();
+    }
 
     $('.description', $(this.el)).hide();
     $('.snippet', $(this.el)).show();
@@ -49,7 +56,9 @@ SwaggerUi.Views.SignatureView = Backbone.View.extend({
   // handler for snippet to text area
   snippetToTextArea: function(e) {
     if (this.isParam) {
-      if (e) { e.preventDefault(); }
+      if (e) {
+        e.preventDefault();
+      }
 
       var textArea = $('textarea', $(this.el.parentNode.parentNode.parentNode));
 

@@ -1,125 +1,3 @@
-/* Original style from softwaremaniacs.org (c) Ivan Sagalaev <Maniac@SoftwareManiacs.Org> */
-.swagger-section pre code {
-  display: block;
-  padding: 0.5em;
-  background: #F0F0F0;
-}
-.swagger-section pre code,
-.swagger-section pre .subst,
-.swagger-section pre .tag .title,
-.swagger-section pre .lisp .title,
-.swagger-section pre .clojure .built_in,
-.swagger-section pre .nginx .title {
-  color: black;
-}
-.swagger-section pre .string,
-.swagger-section pre .title,
-.swagger-section pre .constant,
-.swagger-section pre .parent,
-.swagger-section pre .tag .value,
-.swagger-section pre .rules .value,
-.swagger-section pre .rules .value .number,
-.swagger-section pre .preprocessor,
-.swagger-section pre .ruby .symbol,
-.swagger-section pre .ruby .symbol .string,
-.swagger-section pre .aggregate,
-.swagger-section pre .template_tag,
-.swagger-section pre .django .variable,
-.swagger-section pre .smalltalk .class,
-.swagger-section pre .addition,
-.swagger-section pre .flow,
-.swagger-section pre .stream,
-.swagger-section pre .bash .variable,
-.swagger-section pre .apache .tag,
-.swagger-section pre .apache .cbracket,
-.swagger-section pre .tex .command,
-.swagger-section pre .tex .special,
-.swagger-section pre .erlang_repl .function_or_atom,
-.swagger-section pre .markdown .header {
-  color: #800;
-}
-.swagger-section pre .comment,
-.swagger-section pre .annotation,
-.swagger-section pre .template_comment,
-.swagger-section pre .diff .header,
-.swagger-section pre .chunk,
-.swagger-section pre .markdown .blockquote {
-  color: #888;
-}
-.swagger-section pre .number,
-.swagger-section pre .date,
-.swagger-section pre .regexp,
-.swagger-section pre .literal,
-.swagger-section pre .smalltalk .symbol,
-.swagger-section pre .smalltalk .char,
-.swagger-section pre .go .constant,
-.swagger-section pre .change,
-.swagger-section pre .markdown .bullet,
-.swagger-section pre .markdown .link_url {
-  color: #080;
-}
-.swagger-section pre .label,
-.swagger-section pre .javadoc,
-.swagger-section pre .ruby .string,
-.swagger-section pre .decorator,
-.swagger-section pre .filter .argument,
-.swagger-section pre .localvars,
-.swagger-section pre .array,
-.swagger-section pre .attr_selector,
-.swagger-section pre .important,
-.swagger-section pre .pseudo,
-.swagger-section pre .pi,
-.swagger-section pre .doctype,
-.swagger-section pre .deletion,
-.swagger-section pre .envvar,
-.swagger-section pre .shebang,
-.swagger-section pre .apache .sqbracket,
-.swagger-section pre .nginx .built_in,
-.swagger-section pre .tex .formula,
-.swagger-section pre .erlang_repl .reserved,
-.swagger-section pre .prompt,
-.swagger-section pre .markdown .link_label,
-.swagger-section pre .vhdl .attribute,
-.swagger-section pre .clojure .attribute,
-.swagger-section pre .coffeescript .property {
-  color: #8888ff;
-}
-.swagger-section pre .keyword,
-.swagger-section pre .id,
-.swagger-section pre .phpdoc,
-.swagger-section pre .title,
-.swagger-section pre .built_in,
-.swagger-section pre .aggregate,
-.swagger-section pre .css .tag,
-.swagger-section pre .javadoctag,
-.swagger-section pre .phpdoc,
-.swagger-section pre .yardoctag,
-.swagger-section pre .smalltalk .class,
-.swagger-section pre .winutils,
-.swagger-section pre .bash .variable,
-.swagger-section pre .apache .tag,
-.swagger-section pre .go .typename,
-.swagger-section pre .tex .command,
-.swagger-section pre .markdown .strong,
-.swagger-section pre .request,
-.swagger-section pre .status {
-  font-weight: bold;
-}
-.swagger-section pre .markdown .emphasis {
-  font-style: italic;
-}
-.swagger-section pre .nginx .built_in {
-  font-weight: normal;
-}
-.swagger-section pre .coffeescript .javascript,
-.swagger-section pre .javascript .xml,
-.swagger-section pre .tex .formula,
-.swagger-section pre .xml .javascript,
-.swagger-section pre .xml .vbscript,
-.swagger-section pre .xml .css,
-.swagger-section pre .xml .cdata {
-  opacity: 0.5;
-}
 .swagger-section .swagger-ui-wrap {
   line-height: 1;
   font-family: "Droid Sans", sans-serif;
@@ -245,13 +123,6 @@
 }
 .swagger-section .swagger-ui-wrap pre {
   font-family: "Anonymous Pro", "Menlo", "Consolas", "Bitstream Vera Sans Mono", "Courier New", monospace;
-  background-color: #fcf6db;
-  border: 1px solid #e5e0c6;
-  padding: 10px;
-}
-.swagger-section .swagger-ui-wrap pre code {
-  line-height: 1.6em;
-  background: none;
 }
 .swagger-section .swagger-ui-wrap .content > .content-type > div > label {
   clear: both;
@@ -352,14 +223,11 @@
 .swagger-section .swagger-ui-wrap .model-signature .propType {
   color: #5555aa;
 }
-.swagger-section .swagger-ui-wrap .model-signature pre:hover {
-  background-color: #ffffdd;
-}
 .swagger-section .swagger-ui-wrap .model-signature pre {
   font-size: .85em;
   line-height: 1.2em;
   overflow: auto;
-  max-height: 200px;
+  max-height: 300px;
   cursor: pointer;
 }
 .swagger-section .swagger-ui-wrap .model-signature ul.signature-nav {
@@ -585,13 +453,6 @@
 }
 .swagger-section .swagger-ui-wrap .markdown pre {
   font-family: "Anonymous Pro", "Menlo", "Consolas", "Bitstream Vera Sans Mono", "Courier New", monospace;
-  background-color: #fcf6db;
-  border: 1px solid #e5e0c6;
-  padding: 10px;
-  margin: 0 0 10px 0;
-}
-.swagger-section .swagger-ui-wrap .markdown pre code {
-  line-height: 1.6em;
 }
 .swagger-section .swagger-ui-wrap div.gist {
   margin: 20px 0 25px 0 !important;
@@ -1149,6 +1010,9 @@
 .swagger-section .api-popup-actions {
   padding-top: 10px;
 }
+* {
+  font-family: Arial, Helvetica, sans-serif !important;
+}
 .swagger-section .access {
   float: right;
 }
@@ -1216,16 +1080,32 @@
   cursor: pointer;
 }
 .swagger-section #header {
-  background-color: #89bf04;
+  background-color: #0085c3;
   padding: 14px;
 }
 .swagger-section #header a#logo {
   font-size: 1.5em;
   font-weight: bold;
   text-decoration: none;
-  background: transparent url(../images/logo_small.png) no-repeat left center;
+  background: transparent url(http://i.imgur.com/KYTDg9n.png) no-repeat left center;
   padding: 20px 0 20px 40px;
   color: white;
+  visibility: hidden;
+}
+.swagger-section #header a#logo:before {
+  content: " ";
+  visibility: visible;
+  background: transparent url(http://i.imgur.com/KYTDg9n.png) no-repeat left center;
+  float: left;
+  height: 49px;
+  width: 49px;
+  margin-top: -12px;
+  margin-right: 12px;
+}
+.swagger-section #header a#logo:after {
+  content: "Dell Payments";
+  visibility: visible;
+  float: left;
 }
 .swagger-section #header form#api_selector {
   display: block;
@@ -1243,6 +1123,7 @@
 }
 .swagger-section #header form#api_selector .input input#input_baseUrl {
   width: 400px;
+  display: none;
 }
 .swagger-section #header form#api_selector .input a#explore {
   display: block;
@@ -1250,8 +1131,8 @@
   font-weight: bold;
   padding: 6px 8px;
   font-size: 0.9em;
-  color: white;
-  background-color: #547f00;
+  color: #0085c3;
+  background-color: white;
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
   -o-border-radius: 4px;
@@ -1260,7 +1141,7 @@
   border-radius: 4px;
 }
 .swagger-section #header form#api_selector .input a#explore:hover {
-  background-color: #547f00;
+  background-color: #DBDCE0;
 }
 .swagger-section #header form#api_selector .input input {
   font-size: 0.9em;

@@ -65,6 +65,21 @@
           </tbody>
           </table>
           {{/if}}
+
+
+          {{#if inputSignatureHtml}}
+              <h4>Input Parameters</h4>
+              {{{inputSignatureHtml}}}
+              <div style='margin-bottom:15px;'></div>
+          {{/if}}
+
+          {{#if responseSignatureHtml}}
+              <h4>Response Parameters</h4>
+              {{{responseSignatureHtml}}}
+              <div style='margin-bottom:15px;'></div>
+          {{/if}}
+
+
           {{#if responseMessages}}
           <div style='margin:0;padding:0;display:inline'></div>
           <h4 data-sw-translate>Response Messages</h4>

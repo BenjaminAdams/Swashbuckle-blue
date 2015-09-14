@@ -5,6 +5,7 @@ SwaggerUi.Views.ResourceView = Backbone.View.extend({
     opts = opts || {};
     this.router = opts.router;
     this.auths = opts.auths;
+
     if ('' === this.model.description) {
       this.model.description = null;
     }
@@ -13,9 +14,8 @@ SwaggerUi.Views.ResourceView = Backbone.View.extend({
     }
   },
 
-  render: function(){
+  render: function() {
     var methods = {};
-
 
     $(this.el).html(Handlebars.templates.resource(this.model));
 
@@ -64,7 +64,6 @@ SwaggerUi.Views.ResourceView = Backbone.View.extend({
 
   },
   // Generic Event handler (`Docs` is global)
-
 
   callDocs: function(fnName, e) {
     e.preventDefault();

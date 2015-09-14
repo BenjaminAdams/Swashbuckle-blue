@@ -22,15 +22,20 @@ var banner = ['/**',
   ' * @link <%= pkg.homepage %>',
   ' * @license <%= pkg.license %>',
   ' */',
-  ''].join('\n');
+  ''
+].join('\n');
 
 /**
  * Clean ups ./dist folder
  */
 gulp.task('clean', function() {
   return gulp
-    .src('./dist', {read: false})
-    .pipe(clean({force: true}))
+    .src('./dist', {
+      read: false
+    })
+    .pipe(clean({
+      force: true
+    }))
     .on('error', log);
 });
 
@@ -52,16 +57,19 @@ function templates() {
 /**
  * JShint all *.js files
  */
-gulp.task('lint', function () {
+gulp.task('lint', function() {
   return gulp.src('./src/main/javascript/**/*.js')
     .pipe(jshint())
-    .pipe(jshint.reporter('jshint-stylish'));
+    .pipe(jshint.reporter('jshint-stylish', {
+      undef: true,
+      asi: false
+    }));
 });
 
 /**
  * Build a distribution
  */
-gulp.task('dist', ['clean','lint'], function() {
+gulp.task('dist', ['clean', 'lint'], function() {
 
   return es.merge(
       gulp.src([
@@ -73,11 +81,15 @@ gulp.task('dist', ['clean','lint'], function() {
     .pipe(order(['scripts.js', 'templates.js']))
     .pipe(concat('swagger-ui.js'))
     .pipe(wrap('(function(){<%= contents %>}).call(this);'))
-    .pipe(header(banner, { pkg: pkg } ))
+    .pipe(header(banner, {
+      pkg: pkg
+    }))
     .pipe(gulp.dest('./dist'))
     .pipe(uglify())
     .on('error', log)
-    .pipe(rename({extname: '.min.js'}))
+    .pipe(rename({
+      extname: '.min.js'
+    }))
     .on('error', log)
     .pipe(gulp.dest('./dist'))
     .pipe(connect.reload());
@@ -100,7 +112,6 @@ gulp.task('less', ['clean'], function() {
     .pipe(gulp.dest('./src/main/html/css/'))
     .pipe(connect.reload());
 });
-
 
 /**
  * Copy lib and html folders
@@ -148,7 +159,6 @@ gulp.task('connect', function() {
 function log(error) {
   console.error(error.toString && error.toString());
 }
-
 
 gulp.task('default', ['dist', 'copy']);
 gulp.task('serve', ['connect', 'watch']);
