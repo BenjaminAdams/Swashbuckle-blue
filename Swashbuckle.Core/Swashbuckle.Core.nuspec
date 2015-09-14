@@ -14,7 +14,7 @@
     <copyright>Copyright 2015</copyright>
     <tags>Swagger SwaggerUi Documentation Discovery Help WebApi AspNet AspNetWebApi Docs SelfHost OWIN</tags>
     <dependencies>
-      <dependency id="Microsoft.AspNet.WebApi.Core" version="4.0.20710" />
+      <dependency id="Microsoft.AspNet.WebApi.Core" version="5.2.3" />
     </dependencies>
   </metadata>
 </package>
