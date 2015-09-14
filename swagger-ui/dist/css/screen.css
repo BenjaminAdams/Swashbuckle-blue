@@ -313,7 +313,7 @@
 }
 .swagger-section .swagger-ui-wrap .body-textarea {
   width: 300px;
-  height: 100px;
+  height: 225px;
   border: 1px solid #aaa;
 }
 .swagger-section .swagger-ui-wrap .markdown p code,
@@ -1079,31 +1079,24 @@
 }
 .swagger-section #header {
   background-color: #0085c3;
-  padding: 14px;
+  padding: 17px;
+  min-height: 25px;
 }
-.swagger-section #header a#logo {
+.swagger-section #header #logo {
   font-size: 1.5em;
   font-weight: bold;
   text-decoration: none;
-  background: transparent url(http://i.imgur.com/KYTDg9n.png) no-repeat left center;
-  padding: 20px 0 20px 40px;
   color: white;
-  visibility: hidden;
-}
-.swagger-section #header a#logo:before {
-  content: " ";
-  visibility: visible;
-  background: transparent url(http://i.imgur.com/KYTDg9n.png) no-repeat left center;
   float: left;
-  height: 49px;
-  width: 49px;
+}
+.swagger-section #header #pageTopTitle {
+  float: left;
+  padding: 0px 0 0px 5px;
+}
+.swagger-section #header #logo img {
+  float: left;
   margin-top: -12px;
   margin-right: 12px;
-}
-.swagger-section #header a#logo:after {
-  content: "Dell Payments";
-  visibility: visible;
-  float: left;
 }
 .swagger-section #header form#api_selector {
   display: block;

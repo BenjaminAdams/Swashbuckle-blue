@@ -318,11 +318,6 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
 
 		var html = ''
 
-		if (schema.$ref) {
-			console.log('!!!!!!!!!!!!  Its a ref', schema)
-				//html += '<div>' + addReference(schema, name) + '</div>';
-		}
-
 		html += '<h4><strong>' + name + '</strong></h4>'
 
 		if (schema.description) {
@@ -339,9 +334,6 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
 		//var tmp = _.map(schema.properties, function(property, name) {
 		_.each(schema.properties, function(property, name) {
 			var model;
-
-			console.log('prop=', property)
-			console.log('name=', name)
 
 			var cProperty = _.cloneDeep(property);
 			//var cProperty = $.extend(true, {}, property);

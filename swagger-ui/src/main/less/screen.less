@@ -86,36 +86,28 @@
 
 #header {
     background-color: #0085c3;
-    padding: 14px;
-    a#logo {
+    padding: 17px;
+    min-height: 25px;
+    #logo {
         font-size: 1.5em;
         font-weight: bold;
         text-decoration: none;
-        background: transparent url(http://i.imgur.com/KYTDg9n.png) no-repeat left center;
-        padding: 20px 0 20px 40px;
+        // background: transparent url(http://i.imgur.com/KYTDg9n.png) no-repeat left center;
+        
         color: white;
-        visibility: hidden;
+        float:left;
     }
 
-a#logo:before {
-    content: " ";
-    visibility: visible;
-    background: transparent url(http://i.imgur.com/KYTDg9n.png) no-repeat left center;
-    float: left;
-    height: 49px;
-    width: 49px;
-    margin-top: -12px;
-    margin-right: 12px;
-}
+    #pageTopTitle {
+        float:left;
+        padding: 0px 0 0px 5px;
+    }
 
-a#logo:after {
-  content: "Dell Payments";
-  visibility: visible;
-  float: left;
-}
-
-
-
+    #logo img {
+        float:left;
+        margin-top: -12px;
+        margin-right: 12px;
+    }
 
     form#api_selector {
         display: block;

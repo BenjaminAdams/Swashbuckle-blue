@@ -1,14 +1,20 @@
 'use strict';
 
 SwaggerUi.Views.MainView = Backbone.View.extend({
-  apisSorter : {
-    alpha   : function(a,b){ return a.name.localeCompare(b.name); }
+  apisSorter: {
+    alpha: function(a, b) {
+      return a.name.localeCompare(b.name);
+    }
   },
-  operationsSorters : {
-    alpha   : function(a,b){ return a.path.localeCompare(b.path); },
-    method  : function(a,b){ return a.method.localeCompare(b.method); }
+  operationsSorters: {
+    alpha: function(a, b) {
+      return a.path.localeCompare(b.path);
+    },
+    method: function(a, b) {
+      return a.method.localeCompare(b.method);
+    }
   },
-  initialize: function(opts){
+  initialize: function(opts) {
     var sorterOption, sorterFn, key, value;
     opts = opts || {};
 
@@ -54,6 +60,12 @@ SwaggerUi.Views.MainView = Backbone.View.extend({
       });
     }
 
+    //todo make this a config setting, also the CSS
+    // document.title = "SmartPayments API - Documention and Examples";
+    console.log(this.model)
+    document.title = this.model.info.title
+    $('#pageTopTitle').text(this.model.info.title)
+
     if ('validatorUrl' in opts.swaggerOptions) {
       // Validator URL specified explicitly
       this.model.validatorUrl = opts.swaggerOptions.validatorUrl;
@@ -62,28 +74,33 @@ SwaggerUi.Views.MainView = Backbone.View.extend({
       this.model.validatorUrl = null;
     } else {
       // Default validator
-      if(window.location.protocol === 'https:') {
+      if (window.location.protocol === 'https:') {
         this.model.validatorUrl = 'https://online.swagger.io/validator';
-      }
-      else {
+      } else {
         this.model.validatorUrl = 'http://online.swagger.io/validator';
       }
     }
   },
 
-  render: function(){
+  render: function() {
     if (this.model.securityDefinitions) {
       for (var name in this.model.securityDefinitions) {
         var auth = this.model.securityDefinitions[name];
         var button;
 
         if (auth.type === 'apiKey' && $('#apikey_button').length === 0) {
-          button = new SwaggerUi.Views.ApiKeyButton({model: auth, router:  this.router}).render().el;
+          button = new SwaggerUi.Views.ApiKeyButton({
+            model: auth,
+            router: this.router
+          }).render().el;
           $('.auth_main_container').append(button);
         }
 
         if (auth.type === 'basicAuth' && $('#basic_auth_button').length === 0) {
-          button = new SwaggerUi.Views.BasicAuthButton({model: auth, router: this.router}).render().el;
+          button = new SwaggerUi.Views.BasicAuthButton({
+            model: auth,
+            router: this.router
+          }).render().el;
           $('.auth_main_container').append(button);
         }
       }
@@ -108,15 +125,15 @@ SwaggerUi.Views.MainView = Backbone.View.extend({
       this.addResource(resource, this.model.auths);
     }
 
-    $('.propWrap').hover(function onHover(){
+    $('.propWrap').hover(function onHover() {
       $('.optionsWrapper', $(this)).show();
-    }, function offhover(){
+    }, function offhover() {
       $('.optionsWrapper', $(this)).hide();
     });
     return this;
   },
 
-  addResource: function(resource, auths){
+  addResource: function(resource, auths) {
     // Render a resource and add it to resources li
     resource.id = resource.id.replace(/\s/g, '_');
     var resourceView = new SwaggerUi.Views.ResourceView({
@@ -131,7 +148,7 @@ SwaggerUi.Views.MainView = Backbone.View.extend({
     $('#resources', this.el).append(resourceView.render().el);
   },
 
-  clear: function(){
+  clear: function() {
     $(this.el).html('');
   }
 });

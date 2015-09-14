@@ -10,15 +10,12 @@ window.SwaggerUi = Backbone.Router.extend({
   headerView: null,
   mainView: null,
 
-  // SwaggerUi accepts all the same options as SwaggerApi
+  // SwaggerUi accepts all the same options as SwaggerApi 
   initialize: function(options) {
     options = options || {};
     if (!options.highlightSizeThreshold) {
       options.highlightSizeThreshold = 100000;
     }
-
-    //todo make this a config setting, also the CSS
-    document.title = "SmartPayments API - Documention and Examples";
 
     // Allow dom_id to be overridden
     if (options.dom_id) {

@@ -160,15 +160,11 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
     }
     signatureModel = null;
 
-    //console.log('successResponse=', this.model.successResponse) 
     console.log('model====', this.model)
 
     _.each(this.model.parameters, function(param) {
-      // console.log('inside of a param=', param)
       if (!param || !param.schema || param.isBody === false) return
-
       inputSignatureHtml += window.getMockSignatureFromParamAsTable(param.schema, self.model.models, null)
-        //console.log('I generated this inputSig=', inputSignatureHtml)
     })
 
     if (this.model.successResponse) {
@@ -242,9 +238,6 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
           } else {
             type = ref;
           }
-
-          console.log('!!!!Param=', type, ref)
-
         }
       }
       if (type && type.toLowerCase() === 'file') {
@@ -270,18 +263,6 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
       this.addStatusCode(statusCode);
     }
 
-    // if (signatureModel) {
-
-    // setTimeout(function() { 
-    //  console.log('found=', $(self.el).find('.model-desc'))
-    // $(self.el).find('.model-desc').first().html(signatureModel.signature)
-    // $(self.el).find('.model-desc').html(signatureModel.signature)
-    // $(self.el).find('.model-desc').first().html('test')
-    // $('.model-desc', $(self.el)).html(signatureModel.signature);
-    //}, 100)
-    // } else {
-    //   console.log('we had no signature model')
-    // }
     return this;
   },
   createSignatureTable: function(value) {
