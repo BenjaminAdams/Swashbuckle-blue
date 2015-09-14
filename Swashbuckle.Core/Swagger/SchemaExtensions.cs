@@ -1,7 +1,7 @@
-﻿using System;
-using System.Reflection;
+﻿using Newtonsoft.Json.Serialization;
+using System;
 using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json.Serialization;
+using System.Reflection;
 
 namespace Swashbuckle.Swagger
 {
@@ -37,6 +37,12 @@ namespace Swashbuckle.Swagger
                     schema.maxLength = length.MaximumLength;
                     schema.minLength = length.MinimumLength;
                 }
+
+                //var maxLength = attribute as MaxLengthAttribute;
+                //if (maxLength != null)
+                //{
+                //    schema.maxLength = maxLength.MaximumLength;
+                //}
             }
 
             if (!jsonProperty.Writable)
