@@ -13,9 +13,12 @@ window.SwaggerUi = Backbone.Router.extend({
   // SwaggerUi accepts all the same options as SwaggerApi
   initialize: function(options) {
     options = options || {};
-    if(!options.highlightSizeThreshold) {
+    if (!options.highlightSizeThreshold) {
       options.highlightSizeThreshold = 100000;
     }
+
+    //todo make this a config setting
+    document.title = "SmartPayments API - Documention and Examples";
 
     // Allow dom_id to be overridden
     if (options.dom_id) {
@@ -23,7 +26,7 @@ window.SwaggerUi = Backbone.Router.extend({
       delete options.dom_id;
     }
 
-    if (!options.supportedSubmitMethods){
+    if (!options.supportedSubmitMethods) {
       options.supportedSubmitMethods = [
         'get',
         'put',
@@ -40,23 +43,33 @@ window.SwaggerUi = Backbone.Router.extend({
     }
 
     // Create an empty div which contains the dom_id
-    if (! $('#' + this.dom_id).length){
-      $('body').append('<div id="' + this.dom_id + '"></div>') ;
+    if (!$('#' + this.dom_id).length) {
+      $('body').append('<div id="' + this.dom_id + '"></div>');
     }
 
     this.options = options;
 
     // set marked options
-    marked.setOptions({gfm: true});
+    marked.setOptions({
+      gfm: true
+    });
 
     // Set the callbacks
     var that = this;
-    this.options.success = function() { return that.render(); };
-    this.options.progress = function(d) { return that.showMessage(d); };
-    this.options.failure = function(d) { return that.onLoadFailure(d); };
+    this.options.success = function() {
+      return that.render();
+    };
+    this.options.progress = function(d) {
+      return that.showMessage(d);
+    };
+    this.options.failure = function(d) {
+      return that.onLoadFailure(d);
+    };
 
     // Create view to handle the header inputs
-    this.headerView = new SwaggerUi.Views.HeaderView({el: $('#header')});
+    this.headerView = new SwaggerUi.Views.HeaderView({
+      el: $('#header')
+    });
 
     // Event handler for when the baseUrl/apiKey is entered by user
     this.headerView.on('update-swagger-ui', function(data) {
@@ -75,13 +88,13 @@ window.SwaggerUi = Backbone.Router.extend({
   },
 
   // Event handler for when url/key is received from user
-  updateSwaggerUi: function(data){
+  updateSwaggerUi: function(data) {
     this.options.url = data.url;
     this.load();
   },
 
   // Create an api and render
-  load: function(){
+  load: function() {
     // Initialize the API object
     if (this.mainView) {
       this.mainView.clear();
@@ -90,7 +103,7 @@ window.SwaggerUi = Backbone.Router.extend({
     if (url && url.indexOf('http') !== 0) {
       url = this.buildUrl(window.location.href.toString(), url);
     }
-    if(this.api) {
+    if (this.api) {
       this.options.authorizations = this.api.clientAuthorizations.authz;
     }
     this.options.url = url;
@@ -100,23 +113,23 @@ window.SwaggerUi = Backbone.Router.extend({
   },
 
   // collapse all sections
-  collapseAll: function(){
+  collapseAll: function() {
     Docs.collapseEndpointListForResource('');
   },
 
   // list operations for all sections
-  listAll: function(){
+  listAll: function() {
     Docs.collapseOperationsForResource('');
   },
 
   // expand operations for all sections
-  expandAll: function(){
+  expandAll: function() {
     Docs.expandOperationsForResource('');
   },
 
   // This is bound to success handler for SwaggerApi
   //  so it gets called when SwaggerApi completes loading
-  render: function(){
+  render: function() {
     this.showMessage('Finished Loading Resource Information. Rendering Swagger UI...');
     this.mainView = new SwaggerUi.Views.MainView({
       model: this.api,
@@ -127,22 +140,24 @@ window.SwaggerUi = Backbone.Router.extend({
     this.showMessage();
     switch (this.options.docExpansion) {
       case 'full':
-        this.expandAll(); break;
+        this.expandAll();
+        break;
       case 'list':
-        this.listAll(); break;
+        this.listAll();
+        break;
       default:
         break;
     }
     this.renderGFM();
 
-    if (this.options.onComplete){
+    if (this.options.onComplete) {
       this.options.onComplete(this.api, this);
     }
 
     setTimeout(Docs.shebang.bind(this), 100);
   },
 
-  buildUrl: function(base, url){
+  buildUrl: function(base, url) {
     if (url.indexOf('/') === 0) {
       var parts = base.split('/');
       base = parts[0] + '//' + parts[2];
@@ -150,17 +165,17 @@ window.SwaggerUi = Backbone.Router.extend({
     } else {
       var endOfPath = base.length;
 
-      if (base.indexOf('?') > -1){
+      if (base.indexOf('?') > -1) {
         endOfPath = Math.min(endOfPath, base.indexOf('?'));
       }
 
-      if (base.indexOf('#') > -1){
+      if (base.indexOf('#') > -1) {
         endOfPath = Math.min(endOfPath, base.indexOf('#'));
       }
 
       base = base.substring(0, endOfPath);
 
-      if (base.indexOf('/', base.length - 1 ) !== -1){
+      if (base.indexOf('/', base.length - 1) !== -1) {
         return base + url;
       }
 
@@ -169,7 +184,7 @@ window.SwaggerUi = Backbone.Router.extend({
   },
 
   // Shows message on topbar of the ui
-  showMessage: function(data){
+  showMessage: function(data) {
     if (data === undefined) {
       data = '';
     }
@@ -177,13 +192,13 @@ window.SwaggerUi = Backbone.Router.extend({
     $msgbar.removeClass('message-fail');
     $msgbar.addClass('message-success');
     $msgbar.html(data);
-    if(window.SwaggerTranslator) {
+    if (window.SwaggerTranslator) {
       window.SwaggerTranslator.translate($msgbar);
     }
   },
 
   // shows message in red
-  onLoadFailure: function(data){
+  onLoadFailure: function(data) {
     if (data === undefined) {
       data = '';
     }
@@ -200,12 +215,12 @@ window.SwaggerUi = Backbone.Router.extend({
   },
 
   // Renders GFM for elements with 'markdown' class
-  renderGFM: function(){
-    $('.markdown').each(function(){
+  renderGFM: function() {
+    $('.markdown').each(function() {
       $(this).html(marked($(this).html()));
     });
 
-    $('.propDesc', '.model-signature .description').each(function () {
+    $('.propDesc', '.model-signature .description').each(function() {
       $(this).html(marked($(this).html())).addClass('markdown');
     });
   }
@@ -215,7 +230,7 @@ window.SwaggerUi = Backbone.Router.extend({
 window.SwaggerUi.Views = {};
 
 // don't break backward compatibility with previous versions and warn users to upgrade their code
-(function(){
+(function() {
   window.authorizations = {
     add: function() {
       warn('Using window.authorizations is deprecated. Please use SwaggerUi.api.clientAuthorizations.add().');
@@ -247,23 +262,22 @@ window.SwaggerUi.Views = {};
   }
 })();
 
-
 // UMD
-(function (root, factory) {
-    if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
-        define(['b'], function (b) {
-            return (root.SwaggerUi = factory(b));
-        });
-    } else if (typeof exports === 'object') {
-        // Node. Does not work with strict CommonJS, but
-        // only CommonJS-like environments that support module.exports,
-        // like Node.
-        module.exports = factory(require('b'));
-    } else {
-        // Browser globals
-        root.SwaggerUi = factory(root.b);
-    }
-}(this, function () {
-    return SwaggerUi;
+(function(root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    // AMD. Register as an anonymous module.
+    define(['b'], function(b) {
+      return (root.SwaggerUi = factory(b));
+    });
+  } else if (typeof exports === 'object') {
+    // Node. Does not work with strict CommonJS, but
+    // only CommonJS-like environments that support module.exports,
+    // like Node.
+    module.exports = factory(require('b'));
+  } else {
+    // Browser globals
+    root.SwaggerUi = factory(root.b);
+  }
+}(this, function() {
+  return SwaggerUi;
 }));
