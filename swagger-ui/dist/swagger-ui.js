@@ -31762,7 +31762,7 @@ SwaggerUi.Views.MainView = Backbone.View.extend({
         this.model.apisArray.sort(sorterFn);
       }
     }
-    // Sort operations of each API
+    // Sort operations of each API 
     if (opts.swaggerOptions.operationsSorter) {
       sorterOption = opts.swaggerOptions.operationsSorter;
       if (_.isFunction(sorterOption)) {
