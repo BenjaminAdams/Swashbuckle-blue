@@ -39,9 +39,14 @@ namespace Swashbuckle.Application
             // Use some custom versions to support config and extensionless paths
             var thisAssembly = GetType().Assembly;
             CustomAsset("index", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.index.html");
-            //CustomAsset("css/screen-css", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.screen.css");
+            CustomAsset("css/screen-css", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.css.screen.css");
+            CustomAsset("css/highlight-css", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.css.highlight.css");
             CustomAsset("css/typography-css", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.typography.css");
             CustomAsset("lib/swagger-oauth-js", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.swagger-oauth.js");
+
+            CustomAsset("images/favicon.ico", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.images.favicon.ico");
+            CustomAsset("swagger-ui-js", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.swagger-ui.js");
+            CustomAsset("lib/highlight-7-3-pack-js", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.lib.highlight.js");
         }
 
         public void InjectStylesheet(Assembly resourceAssembly, string resourceName, string media = "screen")

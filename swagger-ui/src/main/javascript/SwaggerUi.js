@@ -9,7 +9,7 @@ window.SwaggerUi = Backbone.Router.extend({
     headerView: null,
     mainView: null,
 
-    // SwaggerUi accepts all the same options as SwaggerApi
+    // SwaggerUi accepts all the same options as SwaggerApi 
     initialize: function (options) {
         options = options || {};
         if (!options.highlightSizeThreshold) {
