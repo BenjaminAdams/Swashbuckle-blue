@@ -169,6 +169,12 @@ namespace $rootnamespace$
                     })
                 .EnableSwaggerUi(c =>
                     {
+
+						//add a custom logo
+						//Example:
+						c.CustomLogo("http://i.dell.com/images/global/brand/ui/logo-wt-bl.png");
+
+
                         // Use the "InjectStylesheet" option to enrich the UI with one or more additional CSS stylesheets.
                         // The file must be included in your project as an "Embedded Resource", and then the resource's
                         // "Logical Name" is passed to the method as shown below.

@@ -1,14 +1,14 @@
-﻿using System;
+﻿using Swashbuckle.Application;
+using Swashbuckle.Dummy.App_Start;
+using Swashbuckle.Dummy.Controllers;
+using Swashbuckle.Dummy.SwaggerExtensions;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Web.Http;
-using System.Collections.Generic;
 using System.Web.Http.Description;
 using System.Web.Http.Routing.Constraints;
-using Swashbuckle.Application;
-using Swashbuckle.Dummy.Controllers;
-using Swashbuckle.Dummy.SwaggerExtensions;
-using Swashbuckle.Dummy.App_Start;
 
 namespace Swashbuckle.Dummy
 {
@@ -18,7 +18,7 @@ namespace Swashbuckle.Dummy
         {
             var thisAssembly = typeof(SwaggerConfig).Assembly;
 
-            httpConfig 
+            httpConfig
                 .EnableSwagger(c =>
                     {
                         // By default, the service root url is inferred from the request used to access the docs.
@@ -131,7 +131,7 @@ namespace Swashbuckle.Dummy
                         c.SchemaFilter<ApplySchemaVendorExtensions>();
 
                         // Set this flag to omit schema property descriptions for any type properties decorated with the
-                        // Obsolete attribute 
+                        // Obsolete attribute
                         c.IgnoreObsoleteProperties();
 
                         // In a Swagger 2.0 document, complex types are typically declared globally and referenced by unique
@@ -146,7 +146,7 @@ namespace Swashbuckle.Dummy
                         // You can change the serializer behavior by configuring the StringToEnumConverter globally or for a given
                         // enum type. Swashbuckle will honor this change out-of-the-box. However, if you use a different
                         // approach to serialize enums as strings, you can also force Swashbuckle to describe them as strings.
-                        // 
+                        //
                         c.DescribeAllEnumsAsStrings();
 
                         // Similar to Schema filters, Swashbuckle also supports Operation and Document filters:
@@ -177,7 +177,7 @@ namespace Swashbuckle.Dummy
                         // In contrast to WebApi, Swagger 2.0 does not include the query string component when mapping a URL
                         // to an action. As a result, Swashbuckle will raise an exception if it encounters multiple actions
                         // with the same path (sans query string) and HTTP method. You can workaround this by providing a
-                        // custom strategy to pick a winner or merge the descriptions for the purposes of the Swagger docs 
+                        // custom strategy to pick a winner or merge the descriptions for the purposes of the Swagger docs
                         //
                         c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
 
@@ -188,6 +188,8 @@ namespace Swashbuckle.Dummy
                     })
                 .EnableSwaggerUi(c =>
                     {
+                        c.CustomLogo("http://i.dell.com/images/global/brand/ui/logo-wt-bl.png");
+
                         // Use the "InjectStylesheet" option to enrich the UI with one or more additional CSS stylesheets.
                         // The file must be included in your project as an "Embedded Resource", and then the resource's
                         // "Logical Name" is passed to the method as shown below.

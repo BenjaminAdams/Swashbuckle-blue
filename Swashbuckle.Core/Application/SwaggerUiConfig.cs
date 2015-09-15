@@ -25,6 +25,7 @@ namespace Swashbuckle.Application
                 { "%(BooleanValues)", "true|false" },
                 { "%(ValidatorUrl)", "" },
                 { "%(CustomScripts)", "" },
+                { "%(CustomLogo)", "images/logo_small-png" },
                 { "%(DocExpansion)", "none" },
                 { "%(OAuth2Enabled)", "false" },
                 { "%(OAuth2ClientId)", "" },
@@ -48,6 +49,11 @@ namespace Swashbuckle.Application
             CustomAsset("images/favicon.ico", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.images.favicon.ico");
             CustomAsset("swagger-ui-js", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.swagger-ui.js");
             CustomAsset("lib/highlight-7-3-pack-js", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.lib.highlight.js");
+        }
+
+        public void CustomLogo(string url)
+        {
+            _templateParams["%(CustomLogo)"] = url;
         }
 
         public void InjectStylesheet(Assembly resourceAssembly, string resourceName, string media = "screen")
