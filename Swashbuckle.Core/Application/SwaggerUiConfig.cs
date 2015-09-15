@@ -40,6 +40,7 @@ namespace Swashbuckle.Application
             var thisAssembly = GetType().Assembly;
             CustomAsset("index", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.index.html");
             CustomAsset("css/screen-css", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.css.screen.css");
+            CustomAsset("css/screen-css", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.css.screen.css");
             CustomAsset("css/highlight-css", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.css.highlight.css");
             CustomAsset("css/typography-css", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.typography.css");
             CustomAsset("lib/swagger-oauth-js", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.swagger-oauth.js");
