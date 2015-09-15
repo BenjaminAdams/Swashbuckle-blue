@@ -314,6 +314,7 @@
 .swagger-section .swagger-ui-wrap .body-textarea {
   width: 300px;
   height: 225px;
+  font-weight: normal;
   border: 1px solid #aaa;
 }
 .swagger-section .swagger-ui-wrap .markdown p code,
@@ -458,6 +459,12 @@
 .swagger-section .swagger-ui-wrap ul#resources {
   font-family: "Droid Sans", sans-serif;
   font-size: 0.9em;
+}
+.swagger-section .swagger-ui-wrap ul#resources .requiredParam {
+  color: red;
+}
+.swagger-section .swagger-ui-wrap ul#resources .propName {
+  font-weight: bold;
 }
 .swagger-section .swagger-ui-wrap ul#resources li.resource {
   border-bottom: 1px solid #dddddd;
