@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Linq;
-using NUnit.Framework;
+﻿using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Converters;
-using Swashbuckle.Dummy.Controllers;
+using NUnit.Framework;
 using Swashbuckle.Application;
-using Swashbuckle.Swagger;
+using Swashbuckle.Dummy.Controllers;
 using Swashbuckle.Dummy.SwaggerExtensions;
+using Swashbuckle.Swagger;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
 
 namespace Swashbuckle.Tests.Swagger
 {
@@ -73,7 +73,7 @@ namespace Swashbuckle.Tests.Swagger
         public void It_provides_validation_properties_for_annotated_types()
         {
             SetUpDefaultRouteFor<AnnotatedTypesController>();
-            
+
             var swagger = GetContent<JObject>("http://tempuri.org/swagger/docs/v1");
             var definitions = swagger["definitions"];
             Assert.IsNotNull(definitions);
@@ -200,7 +200,7 @@ namespace Swashbuckle.Tests.Swagger
             SetUpDefaultRouteFor<JsonAnnotatedTypesController>();
 
             var swagger = GetContent<JObject>("http://tempuri.org/swagger/docs/v1");
-            
+
             var definitions = swagger["definitions"];
             Assert.IsNotNull(definitions);
 
@@ -287,6 +287,24 @@ namespace Swashbuckle.Tests.Swagger
 
         [Test]
         public void It_exposes_config_to_ignore_all_properties_that_are_obsolete()
+        {
+            SetUpDefaultRouteFor<ObsoletePropertiesController>();
+            SetUpHandler(c => c.IgnoreObsoleteProperties());
+
+            var swagger = GetContent<JObject>("http://tempuri.org/swagger/docs/v1");
+            var calendarProps = swagger["definitions"]["Event"]["properties"];
+            var expectedProps = JObject.FromObject(new Dictionary<string, object>
+                {
+                    {
+                        "Name", new { type = "string" }
+                    }
+                });
+
+            Assert.AreEqual(expectedProps.ToString(), calendarProps.ToString());
+        }
+
+        [Test]
+        public void It_exposes_config_to_ignore_all_properties_that_are_swagger_ignore()
         {
             SetUpDefaultRouteFor<ObsoletePropertiesController>();
             SetUpHandler(c => c.IgnoreObsoleteProperties());
@@ -417,12 +435,12 @@ namespace Swashbuckle.Tests.Swagger
                     //ListOfSelf = new
                     //{
                     //    type = "array",
-                    //    items = JObject.Parse("{ $ref: \"ListOfSelf\" }") 
+                    //    items = JObject.Parse("{ $ref: \"ListOfSelf\" }")
                     //},
                     DictionaryOfSelf = new
                     {
                         type = "object",
-                        additionalProperties = JObject.Parse("{ $ref: \"#/definitions/DictionaryOfSelf\" }") 
+                        additionalProperties = JObject.Parse("{ $ref: \"#/definitions/DictionaryOfSelf\" }")
                     }
                 });
             Assert.AreEqual(expected.ToString(), definitions.ToString());
@@ -439,7 +457,7 @@ namespace Swashbuckle.Tests.Swagger
             var expected = JObject.FromObject(new
                 {
                     type = "array",
-                    items = new 
+                    items = new
                     {
                         type = "array",
                         items = new

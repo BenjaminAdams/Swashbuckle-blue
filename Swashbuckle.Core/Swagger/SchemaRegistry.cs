@@ -1,17 +1,17 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Dynamic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Formatting;
 using System.Reflection;
 using System.Text;
 using System.Web.Http;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Serialization;
-using Newtonsoft.Json.Converters;
-using System.Net.Http.Formatting;
 
 namespace Swashbuckle.Swagger
 {
@@ -29,11 +29,12 @@ namespace Swashbuckle.Swagger
         private readonly IContractResolver _contractResolver;
 
         private IDictionary<Type, SchemaInfo> _referencedTypes;
+
         private class SchemaInfo
         {
             public string SchemaId;
             public Schema Schema;
-        } 
+        }
 
         public SchemaRegistry(
             JsonSerializerSettings jsonSerializerSettings,
@@ -139,22 +140,29 @@ namespace Swashbuckle.Swagger
                 case "System.Int32":
                 case "System.UInt32":
                     return new Schema { type = "integer", format = "int32" };
+
                 case "System.Int64":
                 case "System.UInt64":
                     return new Schema { type = "integer", format = "int64" };
+
                 case "System.Single":
                     return new Schema { type = "number", format = "float" };
+
                 case "System.Double":
                 case "System.Decimal":
                     return new Schema { type = "number", format = "double" };
+
                 case "System.Byte":
                 case "System.SByte":
                     return new Schema { type = "string", format = "byte" };
+
                 case "System.Boolean":
                     return new Schema { type = "boolean" };
+
                 case "System.DateTime":
                 case "System.DateTimeOffset":
                     return new Schema { type = "string", format = "date-time" };
+
                 default:
                     return new Schema { type = "string" };
             }
@@ -212,6 +220,7 @@ namespace Swashbuckle.Swagger
             var properties = jsonContract.Properties
                 .Where(p => !p.Ignored)
                 .Where(p => !(_ignoreObsoleteProperties && p.IsObsolete()))
+                .Where(p => !p.IsSwaggerIgnore())
                 .ToDictionary(
                     prop => prop.PropertyName,
                     prop => CreateInlineSchema(prop.PropertyType).WithValidationProperties(prop)
@@ -247,7 +256,7 @@ namespace Swashbuckle.Swagger
         {
             if (!_referencedTypes.ContainsKey(type))
             {
-                var schemaId = _schemaIdSelector(type); 
+                var schemaId = _schemaIdSelector(type);
                 if (_referencedTypes.Any(entry => entry.Value.SchemaId == schemaId))
                 {
                     var conflictingType = _referencedTypes.First(entry => entry.Value.SchemaId == schemaId).Key;

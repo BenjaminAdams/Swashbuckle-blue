@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Swashbuckle.Swagger.Attributes;
+using System;
 using System.Web.Http;
 
 namespace Swashbuckle.Dummy.Controllers
@@ -17,5 +18,8 @@ namespace Swashbuckle.Dummy.Controllers
         public int Id { get; set; }
 
         public string Name { get; set; }
+
+        [SwaggerIgnore]
+        public string PropThatShouldBeIgnored { get; set; }
     }
 }

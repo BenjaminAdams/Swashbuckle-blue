@@ -1,7 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json.Serialization;
+using Swashbuckle.Swagger.Attributes;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
-using Newtonsoft.Json.Serialization;
 
 namespace Swashbuckle.Swagger
 {
@@ -17,15 +18,20 @@ namespace Swashbuckle.Swagger
             return jsonProperty.HasAttribute<ObsoleteAttribute>();
         }
 
+        public static bool IsSwaggerIgnore(this JsonProperty jsonProperty)
+        {
+            return jsonProperty.HasAttribute<SwaggerIgnore>();
+        }
+
         public static bool HasAttribute<T>(this JsonProperty jsonProperty)
         {
             var propInfo = jsonProperty.PropertyInfo();
-            return propInfo != null && Attribute.IsDefined(propInfo, typeof (T));
+            return propInfo != null && Attribute.IsDefined(propInfo, typeof(T));
         }
 
         public static PropertyInfo PropertyInfo(this JsonProperty jsonProperty)
         {
-            if(jsonProperty.UnderlyingName == null) return null;
+            if (jsonProperty.UnderlyingName == null) return null;
             return jsonProperty.DeclaringType.GetProperty(jsonProperty.UnderlyingName, jsonProperty.PropertyType);
         }
     }

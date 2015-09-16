@@ -1,5 +1,16 @@
-Swashbuckle 5.0
+Swashbuckle.Blue
 =========
+
+
+Changed some things the current Swashbuckle/Swagger projects
+* Upgraded the .net version from 4.0 to 4.5.1
+* Added better presentation of your HTTP post payloads and the descriptions of each parameter.
+* Utilizing the XML comment from the top of the class model
+* Adding parsing for [MaxLength] and [MinLength], before it only read values from [StringLength] attribute
+* Customize the logo, header title, and page title
+* Night theme for code display
+* Added [SwaggerIgnore] attribute to hide properties from appearing in documentation
+
 
 Seamlessly adds a [Swagger](http://swagger.io/) to WebApi projects! Combines ApiExplorer and Swagger/swagger-ui to provide a rich discovery, documentation and playground experience to your API consumers.
 
