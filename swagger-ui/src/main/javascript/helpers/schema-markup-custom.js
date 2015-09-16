@@ -220,6 +220,7 @@ function getSchemaFromRef(schema, models) {
 }
 
 window.getMockSignatureFromParamAsTable = function (schema, models) {
+    if (!schema) return ''
     name = Helpers.simpleRef(schema.$ref);
     schema = getSchemaFromRef(schema, models)
     return schemaToHTMLAsTable(name, schema, models, null);
@@ -239,6 +240,8 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
     }
 
     models = models || {};
+
+    if (!schema) return ''
 
     // Resolve the schema (Handle nested schemas)
     schema = Helpers.resolveSchema(schema);
@@ -325,7 +328,6 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
         html += '<th style="width:10%;">Required</th>'
         html += '</tr></thead><tbody class="model-desc">'
 
-        //var tmp = _.map(schema.properties, function(property, name) {
         _.each(schema.properties, function (property, name) {
             var model;
 

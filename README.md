@@ -1,7 +1,6 @@
 Swashbuckle.Blue
 =========
 
-
 Changed some things the current Swashbuckle/Swagger projects
 * Upgraded the .net version from 4.0 to 4.5.1
 * Added better presentation of your HTTP post payloads and the descriptions of each parameter.
