@@ -1,6 +1,7 @@
-﻿using System;
-using System.Linq;
+﻿using Swashbuckle.Swagger.Attributes;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http.Description;
 
 namespace Swashbuckle.Swagger
@@ -67,8 +68,13 @@ namespace Swashbuckle.Swagger
             return apiDescription.ActionDescriptor.GetCustomAttributes<ObsoleteAttribute>().Any();
         }
 
+        public static bool IsSwaggerIgnore(this ApiDescription apiDescription)
+        {
+            return apiDescription.ActionDescriptor.GetCustomAttributes<SwaggerIgnore>().Any();
+        }
+
         public static IEnumerable<TAttribute> GetControllerAndActionAttributes<TAttribute>(this ApiDescription apiDesc)
-            where TAttribute : class 
+            where TAttribute : class
         {
             var controllerAttributes = apiDesc.ActionDescriptor.ControllerDescriptor
                 .GetCustomAttributes<TAttribute>();

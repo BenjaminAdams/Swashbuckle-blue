@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Swashbuckle.Swagger;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,6 @@ using System.Text.RegularExpressions;
 using System.Web.Http.Controllers;
 using System.Web.Http.Description;
 using System.Xml.XPath;
-using Swashbuckle.Swagger;
 
 namespace Swashbuckle.Swagger.XmlComments
 {
@@ -17,7 +17,7 @@ namespace Swashbuckle.Swagger.XmlComments
         private const string RemarksExpression = "remarks";
         private const string ParameterExpression = "param";
         private const string ResponseExpression = "response";
-        
+
         private readonly XPathNavigator _navigator;
 
         public ApplyXmlActionComments(string xmlCommentsPath)
@@ -43,7 +43,7 @@ namespace Swashbuckle.Swagger.XmlComments
             ApplyResponseComments(operation, methodNode);
         }
 
-		private static string XPathFor(HttpActionDescriptor actionDescriptor)
+        private static string XPathFor(HttpActionDescriptor actionDescriptor)
         {
             var controllerName = actionDescriptor.ControllerDescriptor.ControllerType.XmlLookupName();
             var reflectedActionDescriptor = actionDescriptor as ReflectedHttpActionDescriptor;

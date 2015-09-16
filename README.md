@@ -9,7 +9,7 @@ Changed some things the current Swashbuckle/Swagger projects
 * Adding parsing for [MaxLength] and [MinLength], before it only read values from [StringLength] attribute
 * Customize the logo, header title, and page title
 * Night theme for code display
-* Added [SwaggerIgnore] attribute to hide properties from appearing in documentation
+* Added [SwaggerIgnore] attribute to hide properties/controller routes from appearing in documentation
 
 
 Seamlessly adds a [Swagger](http://swagger.io/) to WebApi projects! Combines ApiExplorer and Swagger/swagger-ui to provide a rich discovery, documentation and playground experience to your API consumers.

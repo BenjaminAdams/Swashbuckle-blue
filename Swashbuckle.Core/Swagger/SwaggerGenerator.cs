@@ -1,10 +1,10 @@
-﻿using System.Linq;
-using System.Collections.Generic;
-using System.Web.Http.Description;
-using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http.Formatting;
+using System.Web.Http.Description;
 
 namespace Swashbuckle.Swagger
 {
@@ -46,6 +46,7 @@ namespace Swashbuckle.Swagger
 
             var paths = GetApiDescriptionsFor(apiVersion)
                 .Where(apiDesc => !(_options.IgnoreObsoleteActions && apiDesc.IsObsolete()))
+                .Where(apiDesc => !apiDesc.IsSwaggerIgnore())
                 .OrderBy(_options.GroupingKeySelector, _options.GroupingKeyComparer)
                 .GroupBy(apiDesc => apiDesc.RelativePathSansQueryString())
                 .ToDictionary(group => "/" + group.Key, group => CreatePathItem(group, schemaRegistry));
@@ -64,7 +65,7 @@ namespace Swashbuckle.Swagger
                 securityDefinitions = _options.SecurityDefinitions
             };
 
-            foreach(var filter in _options.DocumentFilters)
+            foreach (var filter in _options.DocumentFilters)
             {
                 filter.Apply(swaggerDoc, schemaRegistry, _apiExplorer);
             }
@@ -100,21 +101,27 @@ namespace Swashbuckle.Swagger
                     case "get":
                         pathItem.get = CreateOperation(apiDescription, schemaRegistry);
                         break;
+
                     case "put":
                         pathItem.put = CreateOperation(apiDescription, schemaRegistry);
                         break;
+
                     case "post":
                         pathItem.post = CreateOperation(apiDescription, schemaRegistry);
                         break;
+
                     case "delete":
                         pathItem.delete = CreateOperation(apiDescription, schemaRegistry);
                         break;
+
                     case "options":
                         pathItem.options = CreateOperation(apiDescription, schemaRegistry);
                         break;
+
                     case "head":
                         pathItem.head = CreateOperation(apiDescription, schemaRegistry);
                         break;
+
                     case "patch":
                         pathItem.patch = CreateOperation(apiDescription, schemaRegistry);
                         break;
@@ -142,8 +149,8 @@ namespace Swashbuckle.Swagger
                 responses.Add("200", new Response { description = "OK", schema = schemaRegistry.GetOrRegister(responseType) });
 
             var operation = new Operation
-            { 
-                tags = new [] { _options.GroupingKeySelector(apiDescription) },
+            {
+                tags = new[] { _options.GroupingKeySelector(apiDescription) },
                 operationId = apiDescription.FriendlyId(),
                 produces = apiDescription.Produces().ToList(),
                 consumes = apiDescription.Consumes().ToList(),
@@ -176,7 +183,7 @@ namespace Swashbuckle.Swagger
             {
                 parameter.type = "string";
                 parameter.required = true;
-                return parameter; 
+                return parameter;
             }
 
             parameter.required = inPath || !paramDesc.ParameterDescriptor.IsOptional;
