@@ -129,16 +129,8 @@
     <EmbeddedResource Include="SwaggerUi\CustomAssets\css\screen.css" />
     <EmbeddedResource Include="SwaggerUi\CustomAssets\css\style.css" />
     <EmbeddedResource Include="SwaggerUi\CustomAssets\css\typography.css" />
-    <Content Include="SwaggerUi\CustomAssets\fonts\droid-sans-v6-latin-700.svg" />
-    <Content Include="SwaggerUi\CustomAssets\fonts\droid-sans-v6-latin-regular.svg" />
-    <EmbeddedResource Include="SwaggerUi\CustomAssets\images\explorer_icons.png" />
-    <EmbeddedResource Include="SwaggerUi\CustomAssets\images\favicon-16x16.png" />
-    <EmbeddedResource Include="SwaggerUi\CustomAssets\images\favicon-32x32.png" />
     <EmbeddedResource Include="SwaggerUi\CustomAssets\images\favicon.ico" />
     <EmbeddedResource Include="SwaggerUi\CustomAssets\images\logo_small.png" />
-    <EmbeddedResource Include="SwaggerUi\CustomAssets\images\pet_store_api.png" />
-    <EmbeddedResource Include="SwaggerUi\CustomAssets\images\throbber.gif" />
-    <EmbeddedResource Include="SwaggerUi\CustomAssets\images\wordnik_api.png" />
     <Content Include="SwaggerUi\CustomAssets\lang\en.js" />
     <Content Include="SwaggerUi\CustomAssets\lang\es.js" />
     <Content Include="SwaggerUi\CustomAssets\lang\pt.js" />
@@ -166,14 +158,6 @@
     <EmbeddedResource Include="SwaggerUi\CustomAssets\swagger-oauth.js" />
     <EmbeddedResource Include="SwaggerUi\CustomAssets\typography.css" />
     <None Include="packages.config" />
-    <None Include="SwaggerUi\CustomAssets\fonts\droid-sans-v6-latin-700.eot" />
-    <None Include="SwaggerUi\CustomAssets\fonts\droid-sans-v6-latin-700.ttf" />
-    <None Include="SwaggerUi\CustomAssets\fonts\droid-sans-v6-latin-700.woff" />
-    <None Include="SwaggerUi\CustomAssets\fonts\droid-sans-v6-latin-700.woff2" />
-    <None Include="SwaggerUi\CustomAssets\fonts\droid-sans-v6-latin-regular.eot" />
-    <None Include="SwaggerUi\CustomAssets\fonts\droid-sans-v6-latin-regular.ttf" />
-    <None Include="SwaggerUi\CustomAssets\fonts\droid-sans-v6-latin-regular.woff" />
-    <None Include="SwaggerUi\CustomAssets\fonts\droid-sans-v6-latin-regular.woff2" />
     <None Include="Swashbuckle.Core.snk" />
   </ItemGroup>
   <!-- Automatically embed swagger-ui files. Construct name so resource can be retrieved by swagger-ui relative path -->
