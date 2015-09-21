@@ -499,6 +499,11 @@ function schemaToJSON(schema, models, modelsToIgnore, modelPropertyMacro) {
 };
 
 function getSchemaFromRef(schema, models) {
+    if (schema.type === 'array' && schema.items && schema.items.$ref !== null) {
+        schema.$ref = schema.items.$ref
+        schema.type = 'object'
+    }
+
     if (typeof schema.$ref === 'string') {
         name = Helpers.simpleRef(schema.$ref);
         schema = models[name];
@@ -541,6 +546,11 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
     if (_.isEmpty(schema)) {
         //return strongOpen + 'Empty' + strongClose;
         return ''
+    }
+
+    if (schema.type === 'array' && schema.items && schema.items.$ref !== null) {
+        schema.$ref = schema.items.$ref
+        schema.type = 'object'
     }
 
     // Dereference $ref from 'models'
@@ -595,14 +605,14 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
 
     return html;
 
-    ////////////////////////////////////
+    //////////////////////////////////////
 
     function processModelAsTable(schema, name) {
         if (name) {
             seenModels.push(name);
         }
 
-        if (!schema || !schema.properties || schema.type !== 'object') return ''
+        if (!schema || !schema.properties) return ''
 
         var html = ''
 
@@ -32048,7 +32058,7 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
         console.log('model====', this.model)
 
         _.each(this.model.parameters, function (param) {
-            if (!param || !param.schema || param.isBody === false) return
+            if (!param || !param.schema) return
             inputSignatureHtml += window.getMockSignatureFromParamAsTable(param.schema, self.model.models, null)
         })
 

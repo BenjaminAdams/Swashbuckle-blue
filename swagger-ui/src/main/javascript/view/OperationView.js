@@ -162,7 +162,7 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
         console.log('model====', this.model)
 
         _.each(this.model.parameters, function (param) {
-            if (!param || !param.schema || param.isBody === false) return
+            if (!param || !param.schema) return
             inputSignatureHtml += window.getMockSignatureFromParamAsTable(param.schema, self.model.models, null)
         })
 
