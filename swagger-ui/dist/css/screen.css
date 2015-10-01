@@ -1084,10 +1084,39 @@
   margin-top: -4px;
   cursor: pointer;
 }
+.swagger-section #swagger-ui-container {
+  padding-left: 155px;
+}
+.swagger-section #sidebar {
+  position: fixed;
+  top: 58px;
+  left: 155px;
+  width: 155px;
+  height: 100%;
+  margin-left: -155px;
+  padding-top: 25px;
+  border: none;
+  border-radius: 0;
+  overflow-y: auto;
+  background-color: #0085c3;
+  color: white;
+}
+.swagger-section #sidebar li {
+  padding: 5px;
+}
+.swagger-section #sidebar .sidebarChild {
+  margin-left: 5px;
+  font-size: 12px;
+}
+.swagger-section #sidebar .sidebarParent {
+  font-weight: bold;
+  font-size: 16px;
+}
 .swagger-section #header {
   background-color: #0085c3;
   padding: 17px;
   min-height: 25px;
+  padding-left: 155px;
 }
 .swagger-section #header #logo {
   font-size: 1.5em;

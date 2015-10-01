@@ -1,3 +1,19 @@
+#swagger-ui-container {
+  padding-left: 155px;
+}
+#sidebar {
+  position: fixed;
+  /*top: 51px;*/
+  left: 155px;
+  width: 155px;
+  height: 100%;
+  margin-left: -155px;
+  padding-top: 25px;
+  border: none;
+  border-radius: 0;
+  overflow-y: auto;
+  background-color: #0085c3;
+}
 .swagger-section .swagger-ui-wrap {
   line-height: 1;
   font-family: "Droid Sans", sans-serif;

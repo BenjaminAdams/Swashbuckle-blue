@@ -32057,6 +32057,23 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
 
         console.log('model====', this.model)
 
+        var $sidebar = $('#sidebar')
+
+        if (!window.lastParentId || this.model.parentId !== window.lastParentId) {
+            //show endpoint title
+            $sidebar.append('<li class="sidebarParent">' + this.model.parentId + '</li>')
+            window.lastParentId = this.model.parentId
+        }
+
+        //the link we use to send the user to the correct route
+        var link = '!#' + this.model.parentId + '/' + this.model.nickname
+
+        var methodBtn = '<span class="methodBtn' + this.model.method + '">' + this.model.method + '</span>'
+
+        var str = '<li class="sidebarChild">' + methodBtn + '<a href="#!/' + link + '" >' + this.model.path + '</a></li>'
+
+        $sidebar.append(str)
+
         _.each(this.model.parameters, function (param) {
             if (!param || !param.schema) return
             inputSignatureHtml += window.getMockSignatureFromParamAsTable(param.schema, self.model.models, null)
