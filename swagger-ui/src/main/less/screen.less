@@ -90,35 +90,98 @@
     }
 
     #swagger-ui-container {
-        padding-left: 155px;
+        padding-left: 200px;
     }
 
     #sidebar {
         position: fixed;
-        top: 58px;
-        left: 155px;
-        width: 155px;
+        left: 200px;
+        width: 200px;
         height: 100%;
-        margin-left: -155px;
-        padding-top: 25px;
+        margin-left: -200px;
+        padding-top: 45px;
         border: none;
         border-radius: 0;
         overflow-y: auto;
         background-color: #0085c3;
         color: white;
 
-        li {
-            padding: 5px;
-        }
-
-        .sidebarChild {
+        li.sidebarChild {
             margin-left: 5px;
             font-size: 12px;
+            margin-top: 3px;
+            cursor: pointer;
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* Internet Explorer */
+            -khtml-user-select: none; /* KHTML browsers (e.g. Konqueror) */
+            -webkit-user-select: none; /* Chrome, Safari, and Opera */
+            -webkit-touch-callout: none; /* Disable Android and iOS callouts*/
         }
 
-        .sidebarParent {
+        li.sidebarParent {
             font-weight: bold;
-            font-size: 16px;
+            font-size: 18px;
+            margin-top: 15px;
+        }
+
+        li {
+            padding: 5px;
+            white-space: nowrap;
+
+            a {
+                color: white;
+                text-decoration: none;
+            }
+
+            .methodBtn {
+                padding: 3px 4px;
+                margin-right: 4px;
+                color: #0085c3;
+                font-size: 11px;
+                font-weight: bold;
+                background-color: white;
+                text-align: center;
+                text-transform: uppercase;
+                text-decoration: none;
+                -moz-border-radius: 3px;
+                -webkit-border-radius: 3px;
+                -o-border-radius: 3px;
+                -ms-border-radius: 3px;
+                -khtml-border-radius: 3px;
+                border-radius: 3px;
+            }
+
+            .btn-post {
+                color: #10a54a;
+            }
+
+            .btn-get {
+                color: #0f6ab4;
+            }
+
+            .btn-put {
+                color: #c5862b;
+            }
+
+            .btn-delete {
+                color: #a41e22;
+            }
+
+            .btn-post {
+                color: #10a54a;
+            }
+
+            .btn-patch {
+                color: #d38042;
+            }
+
+            .btn-options {
+                color: #0f6ab4;
+            }
+
+            .btn-head {
+                color: #ffd20f;
+            }
         }
     }
 
@@ -126,7 +189,7 @@
         background-color: #0085c3;
         padding: 17px;
         min-height: 25px;
-        padding-left: 155px;
+        padding-left: 200px;
 
         #logo {
             font-size: 1.5em;

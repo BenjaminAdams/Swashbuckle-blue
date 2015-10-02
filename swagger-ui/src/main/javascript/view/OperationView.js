@@ -161,22 +161,7 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
 
         console.log('model====', this.model)
 
-        var $sidebar = $('#sidebar')
-
-        if (!window.lastParentId || this.model.parentId !== window.lastParentId) {
-            //show endpoint title
-            $sidebar.append('<li class="sidebarParent">' + this.model.parentId + '</li>')
-            window.lastParentId = this.model.parentId
-        }
-
-        //the link we use to send the user to the correct route
-        var link = '!#' + this.model.parentId + '/' + this.model.nickname
-
-        var methodBtn = '<span class="methodBtn' + this.model.method + '">' + this.model.method + '</span>'
-
-        var str = '<li class="sidebarChild">' + methodBtn + '<a href="#!/' + link + '" >' + this.model.path + '</a></li>'
-
-        $sidebar.append(str)
+        this.addModelToSidebar(this.model)
 
         _.each(this.model.parameters, function (param) {
             if (!param || !param.schema) return
@@ -411,6 +396,31 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
             }
         }
         return map;
+    },
+
+    addModelToSidebar: function (model) {
+        var $sidebar = $('#sidebar')
+
+        if (!window.lastParentId || model.parentId !== window.lastParentId) {
+            //show endpoint title only if its new
+            $sidebar.append('<li class="sidebarParent">' + model.parentId + '</li>')
+            window.lastParentId = model.parentId
+        }
+
+        var methodBtn = '<span class="methodBtn btn-' + model.method + '">' + model.method + '</span>'
+
+        var $routeLink = $('<li class="sidebarChild" title="' + model.path + '"   >' + methodBtn + model.path + '</li>')
+
+        $sidebar.append($routeLink)
+
+        $routeLink.click(function () {
+            var $routeContent = $('.content-' + model.parentId + model.nickname)
+            $routeContent.slideDown("slow", function () {
+                $('html, body').animate({
+                    scrollTop: $routeContent.offset().top - 65
+                }, 100);
+            });
+        })
     },
 
     isFileUpload: function (form) {

@@ -42,204 +42,193 @@ this["Handlebars"]["templates"]["content_type"] = Handlebars.template({"1":funct
 },"useData":true});
 'use strict';
 
+$(function () {
+    // Helper function for vertically aligning DOM elements
+    // http://www.seodenver.com/simple-vertical-align-plugin-for-jquery/
+    $.fn.vAlign = function () {
+        return this.each(function () {
+            var ah = $(this).height();
+            var ph = $(this).parent().height();
+            var mh = (ph - ah) / 2;
+            $(this).css('margin-top', mh);
+        });
+    };
 
-$(function() {
+    $.fn.stretchFormtasticInputWidthToParent = function () {
+        return this.each(function () {
+            var p_width = $(this).closest("form").innerWidth();
+            var p_padding = parseInt($(this).closest("form").css('padding-left'), 10) + parseInt($(this).closest('form').css('padding-right'), 10);
+            var this_padding = parseInt($(this).css('padding-left'), 10) + parseInt($(this).css('padding-right'), 10);
+            $(this).css('width', p_width - p_padding - this_padding);
+        });
+    };
 
-	// Helper function for vertically aligning DOM elements
-	// http://www.seodenver.com/simple-vertical-align-plugin-for-jquery/
-	$.fn.vAlign = function() {
-		return this.each(function(){
-			var ah = $(this).height();
-			var ph = $(this).parent().height();
-			var mh = (ph - ah) / 2;
-			$(this).css('margin-top', mh);
-		});
-	};
+    $('form.formtastic li.string input, form.formtastic textarea').stretchFormtasticInputWidthToParent();
 
-	$.fn.stretchFormtasticInputWidthToParent = function() {
-		return this.each(function(){
-			var p_width = $(this).closest("form").innerWidth();
-			var p_padding = parseInt($(this).closest("form").css('padding-left') ,10) + parseInt($(this).closest('form').css('padding-right'), 10);
-			var this_padding = parseInt($(this).css('padding-left'), 10) + parseInt($(this).css('padding-right'), 10);
-			$(this).css('width', p_width - p_padding - this_padding);
-		});
-	};
+    // Vertically center these paragraphs
+    // Parent may need a min-height for this to work..
+    $('ul.downplayed li div.content p').vAlign();
 
-	$('form.formtastic li.string input, form.formtastic textarea').stretchFormtasticInputWidthToParent();
+    // When a sandbox form is submitted..
+    $("form.sandbox").submit(function () {
+        var error_free = true;
 
-	// Vertically center these paragraphs
-	// Parent may need a min-height for this to work..
-	$('ul.downplayed li div.content p').vAlign();
+        // Cycle through the forms required inputs
+        $(this).find("input.required").each(function () {
+            // Remove any existing error styles from the input
+            $(this).removeClass('error');
 
-	// When a sandbox form is submitted..
-	$("form.sandbox").submit(function(){
+            // Tack the error style on if the input is empty..
+            if ($(this).val() === '') {
+                $(this).addClass('error');
+                $(this).wiggle();
+                error_free = false;
+            }
+        });
 
-		var error_free = true;
-
-		// Cycle through the forms required inputs
- 		$(this).find("input.required").each(function() {
-
-			// Remove any existing error styles from the input
-			$(this).removeClass('error');
-
-			// Tack the error style on if the input is empty..
-			if ($(this).val() === '') {
-				$(this).addClass('error');
-				$(this).wiggle();
-				error_free = false;
-			}
-
-		});
-
-		return error_free;
-	});
-
+        return error_free;
+    });
 });
 
 function clippyCopiedCallback() {
-  $('#api_key_copied').fadeIn().delay(1000).fadeOut();
+    $('#api_key_copied').fadeIn().delay(1000).fadeOut();
 
-  // var b = $("#clippy_tooltip_" + a);
-  // b.length != 0 && (b.attr("title", "copied!").trigger("tipsy.reload"), setTimeout(function() {
-  //   b.attr("title", "copy to clipboard")
-  // },
-  // 500))
+    // var b = $("#clippy_tooltip_" + a);
+    // b.length != 0 && (b.attr("title", "copied!").trigger("tipsy.reload"), setTimeout(function() {
+    //   b.attr("title", "copy to clipboard")
+    // },
+    // 500))
 }
 
 // Logging function that accounts for browsers that don't have window.console
-function log(){
-  log.history = log.history || [];
-  log.history.push(arguments);
-  if(this.console){
-    console.log( Array.prototype.slice.call(arguments)[0] );
-  }
+function log() {
+    log.history = log.history || [];
+    log.history.push(arguments);
+    if (this.console) {
+        console.log(Array.prototype.slice.call(arguments)[0]);
+    }
 }
 
 // Handle browsers that do console incorrectly (IE9 and below, see http://stackoverflow.com/a/5539378/7913)
 if (Function.prototype.bind && console && typeof console.log === "object") {
     [
-      "log","info","warn","error","assert","dir","clear","profile","profileEnd"
+	  "log", "info", "warn", "error", "assert", "dir", "clear", "profile", "profileEnd"
     ].forEach(function (method) {
         console[method] = this.bind(console[method], console);
     }, Function.prototype.call);
 }
 
 window.Docs = {
+    shebang: function () {
+        // If shebang has an operation nickname in it..
+        // e.g. /docs/#!/words/get_search
+        var fragments = $.param.fragment().split('/');
+        fragments.shift(); // get rid of the bang
 
-	shebang: function() {
+        switch (fragments.length) {
+            case 1:
+                if (fragments[0].length > 0) { // prevent matching "#/"
+                    // Expand all operations for the resource and scroll to it
+                    var dom_id = 'resource_' + fragments[0];
 
-		// If shebang has an operation nickname in it..
-		// e.g. /docs/#!/words/get_search
-		var fragments = $.param.fragment().split('/');
-		fragments.shift(); // get rid of the bang
+                    Docs.expandEndpointListForResource(fragments[0]);
+                    $("#" + dom_id).slideto({ highlight: false });
+                }
+                break;
+            case 2:
+                // Refer to the endpoint DOM element, e.g. #words_get_search
 
-		switch (fragments.length) {
-			case 1:
-        if (fragments[0].length > 0) { // prevent matching "#/"
-          // Expand all operations for the resource and scroll to it
-          var dom_id = 'resource_' + fragments[0];
+                // Expand Resource
+                Docs.expandEndpointListForResource(fragments[0]);
+                $("#" + dom_id).slideto({ highlight: false });
 
-          Docs.expandEndpointListForResource(fragments[0]);
-          $("#"+dom_id).slideto({highlight: false});
+                // Expand operation
+                var li_dom_id = fragments.join('_');
+                var li_content_dom_id = li_dom_id + "_content";
+
+                Docs.expandOperation($('#' + li_content_dom_id));
+                $('#' + li_dom_id).slideto({ highlight: false });
+                break;
         }
-				break;
-			case 2:
-				// Refer to the endpoint DOM element, e.g. #words_get_search
+    },
 
-        // Expand Resource
-        Docs.expandEndpointListForResource(fragments[0]);
-        $("#"+dom_id).slideto({highlight: false});
+    toggleEndpointListForResource: function (resource) {
+        var elem = $('li#resource_' + Docs.escapeResourceName(resource) + ' ul.endpoints');
+        if (elem.is(':visible')) {
+            Docs.collapseEndpointListForResource(resource);
+        } else {
+            Docs.expandEndpointListForResource(resource);
+        }
+    },
 
-        // Expand operation
-				var li_dom_id = fragments.join('_');
-				var li_content_dom_id = li_dom_id + "_content";
+    // Expand resource
+    expandEndpointListForResource: function (resource) {
+        var resource = Docs.escapeResourceName(resource);
+        if (resource == '') {
+            $('.resource ul.endpoints').slideDown();
+            return;
+        }
 
+        $('li#resource_' + resource).addClass('active');
 
-				Docs.expandOperation($('#'+li_content_dom_id));
-				$('#'+li_dom_id).slideto({highlight: false});
-				break;
-		}
+        var elem = $('li#resource_' + resource + ' ul.endpoints');
+        elem.slideDown();
+    },
 
-	},
+    // Collapse resource and mark as explicitly closed
+    collapseEndpointListForResource: function (resource) {
+        var resource = Docs.escapeResourceName(resource);
+        if (resource == '') {
+            $('.resource ul.endpoints').slideUp();
+            return;
+        }
 
-	toggleEndpointListForResource: function(resource) {
-		var elem = $('li#resource_' + Docs.escapeResourceName(resource) + ' ul.endpoints');
-		if (elem.is(':visible')) {
-			Docs.collapseEndpointListForResource(resource);
-		} else {
-			Docs.expandEndpointListForResource(resource);
-		}
-	},
+        $('li#resource_' + resource).removeClass('active');
 
-	// Expand resource
-	expandEndpointListForResource: function(resource) {
-		var resource = Docs.escapeResourceName(resource);
-		if (resource == '') {
-			$('.resource ul.endpoints').slideDown();
-			return;
-		}
+        var elem = $('li#resource_' + resource + ' ul.endpoints');
+        elem.slideUp();
+    },
 
-		$('li#resource_' + resource).addClass('active');
+    expandOperationsForResource: function (resource) {
+        // Make sure the resource container is open..
+        Docs.expandEndpointListForResource(resource);
 
-		var elem = $('li#resource_' + resource + ' ul.endpoints');
-		elem.slideDown();
-	},
+        if (resource == '') {
+            $('.resource ul.endpoints li.operation div.content').slideDown();
+            return;
+        }
 
-	// Collapse resource and mark as explicitly closed
-	collapseEndpointListForResource: function(resource) {
-		var resource = Docs.escapeResourceName(resource);
-		if (resource == '') {
-			$('.resource ul.endpoints').slideUp();
-			return;
-		}
+        $('li#resource_' + Docs.escapeResourceName(resource) + ' li.operation div.content').each(function () {
+            Docs.expandOperation($(this));
+        });
+    },
 
-		$('li#resource_' + resource).removeClass('active');
+    collapseOperationsForResource: function (resource) {
+        // Make sure the resource container is open..
+        Docs.expandEndpointListForResource(resource);
 
-		var elem = $('li#resource_' + resource + ' ul.endpoints');
-		elem.slideUp();
-	},
+        if (resource == '') {
+            $('.resource ul.endpoints li.operation div.content').slideUp();
+            return;
+        }
 
-	expandOperationsForResource: function(resource) {
-		// Make sure the resource container is open..
-		Docs.expandEndpointListForResource(resource);
+        $('li#resource_' + Docs.escapeResourceName(resource) + ' li.operation div.content').each(function () {
+            Docs.collapseOperation($(this));
+        });
+    },
 
-		if (resource == '') {
-			$('.resource ul.endpoints li.operation div.content').slideDown();
-			return;
-		}
+    escapeResourceName: function (resource) {
+        return resource.replace(/[!"#$%&'()*+,.\/:;<=>?@\[\\\]\^`{|}~]/g, "\\$&");
+    },
 
-		$('li#resource_' + Docs.escapeResourceName(resource) + ' li.operation div.content').each(function() {
-			Docs.expandOperation($(this));
-		});
-	},
+    expandOperation: function (elem) {
+        elem.slideDown();
+    },
 
-	collapseOperationsForResource: function(resource) {
-		// Make sure the resource container is open..
-		Docs.expandEndpointListForResource(resource);
-
-		if (resource == '') {
-			$('.resource ul.endpoints li.operation div.content').slideUp();
-			return;
-		}
-
-		$('li#resource_' + Docs.escapeResourceName(resource) + ' li.operation div.content').each(function() {
-			Docs.collapseOperation($(this));
-		});
-	},
-
-	escapeResourceName: function(resource) {
-		return resource.replace(/[!"#$%&'()*+,.\/:;<=>?@\[\\\]\^`{|}~]/g, "\\$&");
-	},
-
-	expandOperation: function(elem) {
-		elem.slideDown();
-	},
-
-	collapseOperation: function(elem) {
-		elem.slideUp();
-	}
+    collapseOperation: function (elem) {
+        elem.slideUp();
+    }
 };
-
 'use strict';
 
 Handlebars.registerHelper('sanitize', function(html) {
@@ -1061,7 +1050,7 @@ this["Handlebars"]["templates"]["main"] = Handlebars.template({"1":function(dept
 this["Handlebars"]["templates"]["operation"] = Handlebars.template({"1":function(depth0,helpers,partials,data) {
   return "deprecated";
   },"3":function(depth0,helpers,partials,data) {
-  return "            <h4>Warning: Deprecated</h4>\n";
+  return "            <h4>Warning: Deprecated</h4>r\n";
   },"5":function(depth0,helpers,partials,data) {
   var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, buffer = "        <h4>Implementation Notes</h4>\n        <div class=\"markdown\">";
   stack1 = ((helper = (helper = helpers.description || (depth0 != null ? depth0.description : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"description","hash":{},"data":data}) : helper));
@@ -1139,7 +1128,10 @@ this["Handlebars"]["templates"]["operation"] = Handlebars.template({"1":function
     + "' class=\"toggleOperation\">";
   stack1 = ((helper = (helper = helpers.summary || (depth0 != null ? depth0.summary : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"summary","hash":{},"data":data}) : helper));
   if (stack1 != null) { buffer += stack1; }
-  buffer += "</a>\n        </li>\n      </ul>\n    </div>\n    <div class='content' id='"
+  buffer += "</a>\n        </li>\n      </ul>\n    </div>\n    <div class='content content-"
+    + escapeExpression(((helper = (helper = helpers.encodedParentId || (depth0 != null ? depth0.encodedParentId : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"encodedParentId","hash":{},"data":data}) : helper)))
+    + escapeExpression(((helper = (helper = helpers.nickname || (depth0 != null ? depth0.nickname : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"nickname","hash":{},"data":data}) : helper)))
+    + "' id='"
     + escapeExpression(((helper = (helper = helpers.parentId || (depth0 != null ? depth0.parentId : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"parentId","hash":{},"data":data}) : helper)))
     + "_"
     + escapeExpression(((helper = (helper = helpers.nickname || (depth0 != null ? depth0.nickname : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"nickname","hash":{},"data":data}) : helper)))
@@ -32057,22 +32049,7 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
 
         console.log('model====', this.model)
 
-        var $sidebar = $('#sidebar')
-
-        if (!window.lastParentId || this.model.parentId !== window.lastParentId) {
-            //show endpoint title
-            $sidebar.append('<li class="sidebarParent">' + this.model.parentId + '</li>')
-            window.lastParentId = this.model.parentId
-        }
-
-        //the link we use to send the user to the correct route
-        var link = '!#' + this.model.parentId + '/' + this.model.nickname
-
-        var methodBtn = '<span class="methodBtn' + this.model.method + '">' + this.model.method + '</span>'
-
-        var str = '<li class="sidebarChild">' + methodBtn + '<a href="#!/' + link + '" >' + this.model.path + '</a></li>'
-
-        $sidebar.append(str)
+        this.addModelToSidebar(this.model)
 
         _.each(this.model.parameters, function (param) {
             if (!param || !param.schema) return
@@ -32307,6 +32284,31 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
             }
         }
         return map;
+    },
+
+    addModelToSidebar: function (model) {
+        var $sidebar = $('#sidebar')
+
+        if (!window.lastParentId || model.parentId !== window.lastParentId) {
+            //show endpoint title only if its new
+            $sidebar.append('<li class="sidebarParent">' + model.parentId + '</li>')
+            window.lastParentId = model.parentId
+        }
+
+        var methodBtn = '<span class="methodBtn btn-' + model.method + '">' + model.method + '</span>'
+
+        var $routeLink = $('<li class="sidebarChild" title="' + model.path + '"   >' + methodBtn + model.path + '</li>')
+
+        $sidebar.append($routeLink)
+
+        $routeLink.click(function () {
+            var $routeContent = $('.content-' + model.parentId + model.nickname)
+            $routeContent.slideDown("slow", function () {
+                $('html, body').animate({
+                    scrollTop: $routeContent.offset().top - 65
+                }, 100);
+            });
+        })
     },
 
     isFileUpload: function (form) {
