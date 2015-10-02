@@ -107,7 +107,6 @@
         color: white;
 
         li.sidebarChild {
-            margin-left: 5px;
             font-size: 12px;
             margin-top: 3px;
             cursor: pointer;
@@ -126,6 +125,7 @@
 
         li {
             padding: 5px;
+            clear: both;
             white-space: nowrap;
 
             a {
@@ -138,6 +138,8 @@
                 margin-right: 4px;
                 color: #0085c3;
                 font-size: 11px;
+                display: inline-block;
+                vertical-align: top;
                 font-weight: bold;
                 background-color: white;
                 text-align: center;
@@ -149,6 +151,13 @@
                 -ms-border-radius: 3px;
                 -khtml-border-radius: 3px;
                 border-radius: 3px;
+            }
+
+            .childTxt {
+                width: 150px;
+                display: inline-block;
+                vertical-align: top;
+                white-space: normal;
             }
 
             .btn-post {

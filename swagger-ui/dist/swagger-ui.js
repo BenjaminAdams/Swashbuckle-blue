@@ -32295,15 +32295,15 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
             window.lastParentId = model.parentId
         }
 
-        var methodBtn = '<span class="methodBtn btn-' + model.method + '">' + model.method + '</span>'
+        var methodBtn = '<div class="methodBtn btn-' + model.method + '">' + model.method + '</div>'
 
-        var $routeLink = $('<li class="sidebarChild" title="' + model.path + '"   >' + methodBtn + model.path + '</li>')
+        var $routeLink = $('<li class="sidebarChild" title="' + model.path + '"   >' + methodBtn + '<div class="childTxt">' + model.path + '</div></li>')
 
         $sidebar.append($routeLink)
 
         $routeLink.click(function () {
             var $routeContent = $('.content-' + model.parentId + model.nickname)
-            $routeContent.slideDown("slow", function () {
+            $routeContent.slideDown("fast", function () {
                 $('html, body').animate({
                     scrollTop: $routeContent.offset().top - 65
                 }, 100);

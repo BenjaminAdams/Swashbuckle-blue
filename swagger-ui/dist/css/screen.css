@@ -1101,7 +1101,6 @@
   color: white;
 }
 .swagger-section #sidebar li.sidebarChild {
-  margin-left: 5px;
   font-size: 12px;
   margin-top: 3px;
   cursor: pointer;
@@ -1123,6 +1122,7 @@
 }
 .swagger-section #sidebar li {
   padding: 5px;
+  clear: both;
   white-space: nowrap;
 }
 .swagger-section #sidebar li a {
@@ -1134,6 +1134,8 @@
   margin-right: 4px;
   color: #0085c3;
   font-size: 11px;
+  display: inline-block;
+  vertical-align: top;
   font-weight: bold;
   background-color: white;
   text-align: center;
@@ -1145,6 +1147,12 @@
   -ms-border-radius: 3px;
   -khtml-border-radius: 3px;
   border-radius: 3px;
+}
+.swagger-section #sidebar li .childTxt {
+  width: 150px;
+  display: inline-block;
+  vertical-align: top;
+  white-space: normal;
 }
 .swagger-section #sidebar li .btn-post {
   color: #10a54a;
