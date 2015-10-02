@@ -407,7 +407,8 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
             window.lastParentId = model.parentId
         }
 
-        var methodBtn = '<div class="methodBtn btn-' + model.method + '">' + model.method + '</div>'
+        var srtLbl = this.shortMethod(model.method)
+        var methodBtn = '<div class="methodBtn btn-' + model.method + '">' + srtLbl + '</div>'
 
         var $routeLink = $('<li class="sidebarChild" title="' + model.path + '"   >' + methodBtn + '<div class="childTxt">' + model.path + '</div></li>')
 
@@ -421,6 +422,16 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
                 }, 100);
             });
         })
+    },
+
+    shortMethod: function (meth) {
+        if (meth === 'options') {
+            return 'opt'
+        } else if (meth === 'delete') {
+            return 'del'
+        } else {
+            return meth
+        }
     },
 
     isFileUpload: function (form) {

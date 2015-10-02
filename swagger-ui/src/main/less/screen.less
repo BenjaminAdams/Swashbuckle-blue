@@ -90,16 +90,16 @@
     }
 
     #swagger-ui-container {
-        padding-left: 200px;
+        padding-left: 250px;
     }
 
     #sidebar {
         position: fixed;
-        left: 200px;
-        width: 200px;
+        left: 250px;
+        width: 250px;
         height: 100%;
-        margin-left: -200px;
-        padding-top: 45px;
+        margin-left: -250px;
+        padding-top: 30px;
         border: none;
         border-radius: 0;
         overflow-y: auto;
@@ -120,11 +120,13 @@
         li.sidebarParent {
             font-weight: bold;
             font-size: 18px;
-            margin-top: 15px;
+            margin-top: 30px;
+            padding-bottom: 0px;
+            margin-bottom: -3px;
         }
 
         li {
-            padding: 5px;
+            padding: 5px 0px 5px 5px;
             clear: both;
             white-space: nowrap;
 
@@ -134,11 +136,12 @@
             }
 
             .methodBtn {
-                padding: 3px 4px;
+                padding: 4px 4px;
                 margin-right: 4px;
                 color: #0085c3;
                 font-size: 11px;
-                display: inline-block;
+                display: block;
+                float: left;
                 vertical-align: top;
                 font-weight: bold;
                 background-color: white;
@@ -154,10 +157,16 @@
             }
 
             .childTxt {
-                width: 150px;
-                display: inline-block;
+                width: 200px;
+                display: block;
                 vertical-align: top;
                 white-space: normal;
+                float: left;
+                overflow-wrap: break-word;
+                word-wrap: break-word;
+                -ms-word-break: break-all;
+                word-break: break-all;
+                word-break: break-word;
             }
 
             .btn-post {
