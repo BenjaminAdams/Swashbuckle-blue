@@ -42,6 +42,11 @@
         <form accept-charset='UTF-8' class='sandbox'>
           <div style='margin:0;padding:0;display:inline'></div>
           {{#if parameters}}
+            {{#if inputSignatureHtml}}
+                <h4>Input Parameters</h4>
+                {{{inputSignatureHtml}}}
+                <div style='margin-bottom:15px;'></div>
+            {{/if}}
           <h4 data-sw-translate=''>Parameters</h4>
           <table class='fullwidth'>
           <thead>
@@ -65,12 +70,6 @@
             <a href='#' class='response_hider' style='display:none' data-sw-translate=''>Hide Response</a>
             <span class='response_throbber' style='display:none'></span>
           </div>
-          {{/if}}
-
-          {{#if inputSignatureHtml}}
-              <h4>Input Parameters</h4>
-              {{{inputSignatureHtml}}}
-              <div style='margin-bottom:15px;'></div>
           {{/if}}
 
           {{#if type}}

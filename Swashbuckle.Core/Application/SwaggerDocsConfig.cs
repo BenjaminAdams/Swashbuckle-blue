@@ -1,15 +1,15 @@
-﻿using System;
+﻿using Newtonsoft.Json.Converters;
+using Swashbuckle.Swagger;
+using Swashbuckle.Swagger.Annotations;
+using Swashbuckle.Swagger.FromUriParams;
+using Swashbuckle.Swagger.XmlComments;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
-using Newtonsoft.Json.Converters;
-using Swashbuckle.Swagger;
-using Swashbuckle.Swagger.FromUriParams;
-using Swashbuckle.Swagger.Annotations;
-using Swashbuckle.Swagger.XmlComments;
 
 namespace Swashbuckle.Application
 {
@@ -94,6 +94,11 @@ namespace Swashbuckle.Application
             return schemeBuilder;
         }
 
+        public SecuritySchemeBuilder GetApiKeyDetails()
+        {
+            return _securitySchemeBuilders["apiKey"];
+        }
+
         public OAuth2SchemeBuilder OAuth2(string name)
         {
             var schemeBuilder = new OAuth2SchemeBuilder();
@@ -133,7 +138,7 @@ namespace Swashbuckle.Application
         }
 
         // NOTE: In next major version, ModelFilter will completely replace SchemaFilter
-        internal  void ModelFilter<TFilter>()
+        internal void ModelFilter<TFilter>()
             where TFilter : IModelFilter, new()
         {
             ModelFilter(() => new TFilter());
@@ -265,7 +270,7 @@ namespace Swashbuckle.Application
 
             var httpConfiguration = request.GetConfiguration();
             var virtualPathRoot = httpConfiguration.VirtualPathRoot.TrimEnd('/');
-            
+
             return string.Format("{0}://{1}:{2}{3}", scheme, host, port, virtualPathRoot);
         }
 

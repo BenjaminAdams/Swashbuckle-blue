@@ -71,21 +71,21 @@ namespace Swashbuckle.Dummy
                         //c.BasicAuth("basic")
                         //    .Description("Basic HTTP Authentication");
                         //
-                        //c.ApiKey("apiKey")
-                        //    .Description("API Key Authentication")
-                        //    .Name("apiKey")
-                        //    .In("header");
-                        //
-                        c.OAuth2("oauth2")
-                            .Description("OAuth2 Implicit Grant")
-                            .Flow("implicit")
-                            .AuthorizationUrl("http://petstore.swagger.io/api/oauth/dialog")
-                            //.TokenUrl("https://tempuri.org/token")
-                            .Scopes(scopes =>
-                            {
-                                scopes.Add("read", "Read access to protected resources");
-                                scopes.Add("write", "Write access to protected resources");
-                            });
+                        c.ApiKey("apiKey")
+                            .Description("API Key Authentication")
+                            .Name("yourApiKeyHeaderName")
+                            .In("header");
+
+                        //c.OAuth2("oauth2")
+                        //    .Description("OAuth2 Implicit Grant")
+                        //    .Flow("implicit")
+                        //    .AuthorizationUrl("http://petstore.swagger.io/api/oauth/dialog")
+                        //    //.TokenUrl("https://tempuri.org/token")
+                        //    .Scopes(scopes =>
+                        //    {
+                        //        scopes.Add("read", "Read access to protected resources");
+                        //        scopes.Add("write", "Write access to protected resources");
+                        //    });
 
                         // Set this flag to omit descriptions for any actions decorated with the Obsolete attribute
                         //c.IgnoreObsoleteActions();

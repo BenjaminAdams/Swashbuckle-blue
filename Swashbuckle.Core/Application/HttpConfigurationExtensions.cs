@@ -12,21 +12,19 @@ namespace Swashbuckle.Application
     public static class HttpConfigurationExtensions
     {
         private static readonly string DefaultRouteTemplate = "swagger/docs/{apiVersion}";
+        private static SwaggerDocsConfig _cnfg;
 
-        public static SwaggerEnabledConfiguration EnableSwagger(
-            this HttpConfiguration httpConfig,
-            Action<SwaggerDocsConfig> configure = null)
+        public static SwaggerEnabledConfiguration EnableSwagger(this HttpConfiguration httpConfig, Action<SwaggerDocsConfig> configure = null)
         {
             return EnableSwagger(httpConfig, DefaultRouteTemplate, configure);
         }
 
-        public static SwaggerEnabledConfiguration EnableSwagger(
-            this HttpConfiguration httpConfig,
-            string routeTemplate,
-            Action<SwaggerDocsConfig> configure = null)
+        public static SwaggerEnabledConfiguration EnableSwagger(this HttpConfiguration httpConfig, string routeTemplate, Action<SwaggerDocsConfig> configure = null)
         {
             var config = new SwaggerDocsConfig();
             if (configure != null) configure(config);
+
+            _cnfg = config;
 
             httpConfig.Routes.MapHttpRoute(
                 name: "swagger_docs",
@@ -39,7 +37,7 @@ namespace Swashbuckle.Application
             return new SwaggerEnabledConfiguration(
                 httpConfig,
                 config.GetRootUrl,
-                config.GetApiVersions().Select(version => routeTemplate.Replace("{apiVersion}", version)));
+                config.GetApiVersions().Select(version => routeTemplate.Replace("{apiVersion}", version)), config);
         }
 
         internal static JsonSerializerSettings SerializerSettingsOrDefault(this HttpConfiguration httpConfig)
@@ -59,12 +57,12 @@ namespace Swashbuckle.Application
         private readonly HttpConfiguration _httpConfig;
         private readonly Func<HttpRequestMessage, string> _rootUrlResolver;
         private readonly IEnumerable<string> _discoveryPaths;
+        private readonly SwaggerDocsConfig _swaggerDocsConfig;
 
-        public SwaggerEnabledConfiguration(
-            HttpConfiguration httpConfig,
-            Func<HttpRequestMessage, string> rootUrlResolver,
-            IEnumerable<string> discoveryPaths)
+        public SwaggerEnabledConfiguration(HttpConfiguration httpConfig, Func<HttpRequestMessage, string> rootUrlResolver,
+            IEnumerable<string> discoveryPaths, SwaggerDocsConfig swaggerDocsConfig)
         {
+            _swaggerDocsConfig = swaggerDocsConfig;
             _httpConfig = httpConfig;
             _rootUrlResolver = rootUrlResolver;
             _discoveryPaths = discoveryPaths;
@@ -75,12 +73,13 @@ namespace Swashbuckle.Application
             EnableSwaggerUi(DefaultRouteTemplate, configure);
         }
 
-        public void EnableSwaggerUi(
-            string routeTemplate,
-            Action<SwaggerUiConfig> configure = null)
+        public void EnableSwaggerUi(string routeTemplate, Action<SwaggerUiConfig> configure = null)
         {
             var config = new SwaggerUiConfig(_discoveryPaths, _rootUrlResolver);
             if (configure != null) configure(config);
+
+            var apiKey = _swaggerDocsConfig.GetApiKeyDetails();
+            config.SetApiKeyDetails(apiKey);
 
             _httpConfig.Routes.MapHttpRoute(
                 name: "swagger_ui",

@@ -494,10 +494,10 @@ function getSchemaFromRef(schema, models) {
     }
 
     if (typeof schema.$ref === 'string') {
-        name = Helpers.simpleRef(schema.$ref);
+        var name = Helpers.simpleRef(schema.$ref);
         schema = models[name];
         if (typeof schema === 'undefined') {
-            return strongOpen + name + ' is not defined!' + strongClose;
+            return name + ' is not defined!';
         }
     }
 
@@ -506,7 +506,7 @@ function getSchemaFromRef(schema, models) {
 
 window.getMockSignatureFromParamAsTable = function (schema, models) {
     if (!schema) return ''
-    name = Helpers.simpleRef(schema.$ref);
+    var name = Helpers.simpleRef(schema.$ref);
     schema = getSchemaFromRef(schema, models)
     return schemaToHTMLAsTable(name, schema, models, null);
 }
@@ -533,7 +533,7 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
 
     // Return for empty object
     if (_.isEmpty(schema)) {
-        //return strongOpen + 'Empty' + strongClose;
+        //return  'Empty' ;
         return ''
     }
 
@@ -547,7 +547,7 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
         name = Helpers.simpleRef(schema.$ref);
         schema = models[name];
         if (typeof schema === 'undefined') {
-            //return strongOpen + name + ' is not defined!' + strongClose;
+            //return  name + ' is not defined!' ;
             return ''
         }
     }
@@ -666,7 +666,7 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
 
                 html += '</td>'
             } else {
-                html += "<td></td>"
+                html += '<td></td>'
             }
 
             // html += primitiveToHTML(cProperty);
@@ -691,7 +691,7 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
     function processModel(schema, name) {
         var type = schema.type || 'object';
         var isArray = schema.type === 'array';
-        var html = strongOpen + name + ' ' + (isArray ? '[' : '{') + strongClose;
+        var html = name + ' ' + (isArray ? '[' : '{');
 
         if (name) {
             seenModels.push(name);
@@ -791,7 +791,7 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
             }
         }
 
-        return html + strongOpen + (isArray ? ']' : '}') + strongClose;
+        return html + (isArray ? ']' : '}');
     };
 
     function addReference(schema, name, skipRef) {
@@ -1075,29 +1075,32 @@ this["Handlebars"]["templates"]["operation"] = Handlebars.template({"1":function
   },"14":function(depth0,helpers,partials,data) {
   return "        <div class='access'>\n          <span class=\"api-ic ic-off\" title=\"click to authenticate\"></span>\n        </div>\n";
   },"16":function(depth0,helpers,partials,data) {
-  return "          <h4 data-sw-translate=''>Parameters</h4>\n          <table class='fullwidth'>\n          <thead>\n            <tr>\n            <th style=\"width: 100px; max-width: 100px\" data-sw-translate=\"\">Parameter</th>\n            <th style=\"width: 310px; max-width: 310px\" data-sw-translate=\"\">Value</th>\n            <th style=\"width: 200px; max-width: 200px\" data-sw-translate=\"\">Description</th>\n            <th style=\"width: 100px; max-width: 100px\" data-sw-translate=\"\">Parameter Type</th>\n            <th style=\"width: 220px; max-width: 230px\" data-sw-translate=\"\">Data Type</th>\n            </tr>\n          </thead>\n          <tbody class=\"operation-params\">\n          </tbody>\n          </table>\n";
-  },"18":function(depth0,helpers,partials,data) {
-  return "";
-},"20":function(depth0,helpers,partials,data) {
-  return "          <div class='sandbox_header'>\n            <input class='submit' type='button' value='Try it out!' data-sw-translate='' />\n            <a href='#' class='response_hider' style='display:none' data-sw-translate=''>Hide Response</a>\n            <span class='response_throbber' style='display:none'></span>\n          </div>\n";
-  },"22":function(depth0,helpers,partials,data) {
-  var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, buffer = "              <h4>Input Parameters</h4>\n              ";
+  var stack1, buffer = "";
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.inputSignatureHtml : depth0), {"name":"if","hash":{},"fn":this.program(17, data),"inverse":this.noop,"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  return buffer + "          <h4 data-sw-translate=''>Parameters</h4>\n          <table class='fullwidth'>\n          <thead>\n            <tr>\n            <th style=\"width: 100px; max-width: 100px\" data-sw-translate=\"\">Parameter</th>\n            <th style=\"width: 310px; max-width: 310px\" data-sw-translate=\"\">Value</th>\n            <th style=\"width: 200px; max-width: 200px\" data-sw-translate=\"\">Description</th>\n            <th style=\"width: 100px; max-width: 100px\" data-sw-translate=\"\">Parameter Type</th>\n            <th style=\"width: 220px; max-width: 230px\" data-sw-translate=\"\">Data Type</th>\n            </tr>\n          </thead>\n          <tbody class=\"operation-params\">\n          </tbody>\n          </table>\n";
+},"17":function(depth0,helpers,partials,data) {
+  var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, buffer = "                <h4>Input Parameters</h4>\n                ";
   stack1 = ((helper = (helper = helpers.inputSignatureHtml || (depth0 != null ? depth0.inputSignatureHtml : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"inputSignatureHtml","hash":{},"data":data}) : helper));
   if (stack1 != null) { buffer += stack1; }
-  return buffer + "\n              <div style='margin-bottom:15px;'></div>\n";
-},"24":function(depth0,helpers,partials,data) {
+  return buffer + "\n                <div style='margin-bottom:15px;'></div>\n";
+},"19":function(depth0,helpers,partials,data) {
+  return "";
+},"21":function(depth0,helpers,partials,data) {
+  return "          <div class='sandbox_header'>\n            <input class='submit' type='button' value='Try it out!' data-sw-translate='' />\n            <a href='#' class='response_hider' style='display:none' data-sw-translate=''>Hide Response</a>\n            <span class='response_throbber' style='display:none'></span>\n          </div>\n";
+  },"23":function(depth0,helpers,partials,data) {
   var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
   return "            <h4><span data-sw-translate=''>Response Class</span> (<span data-sw-translate=''>Status</span> "
     + escapeExpression(((helper = (helper = helpers.successCode || (depth0 != null ? depth0.successCode : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"successCode","hash":{},"data":data}) : helper)))
     + ")</h4>\n            <p><span class=\"model-signature\" /></p>\n            <br />\n            <div class=\"response-content-type\" />\n";
-},"26":function(depth0,helpers,partials,data) {
+},"25":function(depth0,helpers,partials,data) {
   var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, buffer = "              <h4>Response Parameters</h4>\n              ";
   stack1 = ((helper = (helper = helpers.responseSignatureHtml || (depth0 != null ? depth0.responseSignatureHtml : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"responseSignatureHtml","hash":{},"data":data}) : helper));
   if (stack1 != null) { buffer += stack1; }
   return buffer + "\n              <div style='margin-bottom:15px;'></div>\n";
-},"28":function(depth0,helpers,partials,data) {
+},"27":function(depth0,helpers,partials,data) {
   return "          <div style='margin:0;padding:0;display:inline'></div>\n          <h4 data-sw-translate=''>Response Messages</h4>\n          <table class='fullwidth'>\n            <thead>\n            <tr>\n              <th data-sw-translate=''>HTTP Status Code</th>\n              <th data-sw-translate=''>Reason</th>\n              <th data-sw-translate=''>Response Model</th>\n              <th data-sw-translate=''>Headers</th>\n            </tr>\n            </thead>\n            <tbody class=\"operation-status\">\n            </tbody>\n          </table>\n";
-  },"30":function(depth0,helpers,partials,data) {
+  },"29":function(depth0,helpers,partials,data) {
   return "          <h4 data-sw-translate=''>Request Headers</h4>\n          <div class='block request_headers'></div>\n";
   },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
   var stack1, helper, options, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, blockHelperMissing=helpers.blockHelperMissing, buffer = "<ul class='operations'>\n  <li class='"
@@ -1158,22 +1161,19 @@ this["Handlebars"]["templates"]["operation"] = Handlebars.template({"1":function
   stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.parameters : depth0), {"name":"if","hash":{},"fn":this.program(16, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
   buffer += "\n";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.isReadOnly : depth0), {"name":"if","hash":{},"fn":this.program(18, data),"inverse":this.program(20, data),"data":data});
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.isReadOnly : depth0), {"name":"if","hash":{},"fn":this.program(19, data),"inverse":this.program(21, data),"data":data});
   if (stack1 != null) { buffer += stack1; }
   buffer += "\n";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.inputSignatureHtml : depth0), {"name":"if","hash":{},"fn":this.program(22, data),"inverse":this.noop,"data":data});
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.type : depth0), {"name":"if","hash":{},"fn":this.program(23, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
   buffer += "\n";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.type : depth0), {"name":"if","hash":{},"fn":this.program(24, data),"inverse":this.noop,"data":data});
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.responseSignatureHtml : depth0), {"name":"if","hash":{},"fn":this.program(25, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
   buffer += "\n";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.responseSignatureHtml : depth0), {"name":"if","hash":{},"fn":this.program(26, data),"inverse":this.noop,"data":data});
-  if (stack1 != null) { buffer += stack1; }
-  buffer += "\n";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.responseMessages : depth0), {"name":"if","hash":{},"fn":this.program(28, data),"inverse":this.noop,"data":data});
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.responseMessages : depth0), {"name":"if","hash":{},"fn":this.program(27, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
   buffer += "        </form>\n        <div class='response' style='display:none'>\n          <h4>Curl</h4>\n          <div class='block curl'></div>\n          <h4 data-sw-translate=''>Request URL</h4>\n          <div class='block request_url'></div>\n";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.showRequestHeaders : depth0), {"name":"if","hash":{},"fn":this.program(30, data),"inverse":this.noop,"data":data});
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.showRequestHeaders : depth0), {"name":"if","hash":{},"fn":this.program(29, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
   return buffer + "          <h4 data-sw-translate=''>Response Body</h4>\n          <div class='block response_body'></div>\n          <h4 data-sw-translate=''>Response Code</h4>\n          <div class='block response_code'></div>\n          <h4 data-sw-translate=''>Response Headers</h4>\n          <div class='block response_headers'></div>\n        </div>\n      </div>\n  </li>\n</ul>";
 },"useData":true});
@@ -31380,6 +31380,7 @@ window.SwaggerUi = Backbone.Router.extend({
     // Event handler for when url/key is received from user
     updateSwaggerUi: function (data) {
         this.options.url = data.url;
+        this.options.apiKey = data.apiKey
         this.load();
     },
 
@@ -31535,7 +31536,6 @@ window.SwaggerUi.Views = {};
     };
 
     window.ApiKeyAuthorization = function () {
-        warn('window.ApiKeyAuthorization is deprecated. Please use SwaggerClient.ApiKeyAuthorization.');
         SwaggerClient.ApiKeyAuthorization.apply(window, arguments);
     };
 
@@ -31573,56 +31573,51 @@ window.SwaggerUi.Views = {};
 'use strict';
 
 SwaggerUi.Views.ApiKeyButton = Backbone.View.extend({ // TODO: append this to global SwaggerUi
+    events: {
+        'click #apikey_button': 'toggleApiKeyContainer',
+        'click #apply_api_key': 'applyApiKey'
+    },
 
-  events:{
-    'click #apikey_button' : 'toggleApiKeyContainer',
-    'click #apply_api_key' : 'applyApiKey'
-  },
+    initialize: function (opts) {
+        this.options = opts || {};
+        this.router = this.options.router;
+    },
 
-  initialize: function(opts){
-    this.options = opts || {};
-    this.router = this.options.router;
-  },
+    render: function () {
+        var template = this.template();
+        $(this.el).html(template(this.model));
 
-  render: function(){
-    var template = this.template();
-    $(this.el).html(template(this.model));
+        return this;
+    },
 
-    return this;
-  },
+    applyApiKey: function () {
+        var keyAuth = new SwaggerClient.ApiKeyAuthorization(
+          this.model.name,
+          $('#input_apiKey_entry').val(),
+          this.model.in
+        );
+        this.router.api.clientAuthorizations.add(this.model.name, keyAuth);
+        this.router.load();
+        $('#apikey_container').show();
+    },
 
+    toggleApiKeyContainer: function () {
+        if ($('#apikey_container').length) {
+            var elem = $('#apikey_container').first();
 
-  applyApiKey: function(){
-    var keyAuth = new SwaggerClient.ApiKeyAuthorization(
-      this.model.name,
-      $('#input_apiKey_entry').val(),
-      this.model.in
-    );
-    this.router.api.clientAuthorizations.add(this.model.name, keyAuth);
-    this.router.load();
-    $('#apikey_container').show();
-  },
+            if (elem.is(':visible')) {
+                elem.hide();
+            } else {
+                // hide others
+                $('.auth_container').hide();
+                elem.show();
+            }
+        }
+    },
 
-  toggleApiKeyContainer: function(){
-    if ($('#apikey_container').length) {
-
-      var elem = $('#apikey_container').first();
-
-      if (elem.is(':visible')){
-        elem.hide();
-      } else {
-
-        // hide others
-        $('.auth_container').hide();
-        elem.show();
-      }
+    template: function () {
+        return Handlebars.templates.apikey_button_view;
     }
-  },
-
-  template: function(){
-    return Handlebars.templates.apikey_button_view;
-  }
-
 });
 'use strict';
 
@@ -31687,52 +31682,51 @@ SwaggerUi.Views.ContentTypeView = Backbone.View.extend({
 'use strict';
 
 SwaggerUi.Views.HeaderView = Backbone.View.extend({
-  events: {
-    'click #show-pet-store-icon'    : 'showPetStore',
-    'click #explore'                : 'showCustom',
-    'keyup #input_baseUrl'          : 'showCustomOnKeyup',
-    'keyup #input_apiKey'           : 'showCustomOnKeyup'
-  },
+    events: {
+        'click #show-pet-store-icon': 'showPetStore',
+        'click #explore': 'showCustom',
+        'keyup #input_baseUrl': 'showCustomOnKeyup',
+        'keyup #input_apiKey': 'showCustomOnKeyup'
+    },
 
-  initialize: function(){},
+    initialize: function () { },
 
-  showPetStore: function(){
-    this.trigger('update-swagger-ui', {
-      url:'http://petstore.swagger.io/v2/swagger.json'
-    });
-  },
+    showPetStore: function () {
+        this.trigger('update-swagger-ui', {
+            url: 'http://petstore.swagger.io/v2/swagger.json'
+        });
+    },
 
-  showCustomOnKeyup: function(e){
-    if (e.keyCode === 13) {
-      this.showCustom();
+    showCustomOnKeyup: function (e) {
+        if (e.keyCode === 13) {
+            this.showCustom();
+        }
+    },
+
+    showCustom: function (e) {
+        if (e) {
+            e.preventDefault();
+        }
+
+        this.trigger('update-swagger-ui', {
+            url: $('#input_baseUrl').val(),
+            apiKey: $('#input_apiKey').val()
+        });
+    },
+
+    update: function (url, apiKey, trigger) {
+        if (trigger === undefined) {
+            trigger = false;
+        }
+
+        $('#input_baseUrl').val(url);
+
+        //$('#input_apiKey').val(apiKey);
+        if (trigger) {
+            this.trigger('update-swagger-ui', { url: url });
+        }
     }
-  },
-
-  showCustom: function(e){
-    if (e) {
-      e.preventDefault();
-    }
-
-    this.trigger('update-swagger-ui', {
-      url: $('#input_baseUrl').val(),
-      apiKey: $('#input_apiKey').val()
-    });
-  },
-
-  update: function(url, apiKey, trigger){
-    if (trigger === undefined) {
-      trigger = false;
-    }
-
-    $('#input_baseUrl').val(url);
-
-    //$('#input_apiKey').val(apiKey);
-    if (trigger) {
-      this.trigger('update-swagger-ui', {url:url});
-    }
-  }
 });
-
 'use strict';
 
 SwaggerUi.Views.MainView = Backbone.View.extend({
@@ -32052,10 +32046,6 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
 
         console.log('model====', this.model)
 
-        //this.addModelToSidebar(this.model)
-
-        // SwaggerUi.addModelToSidebar(this.model)
-
         _.each(this.model.parameters, function (param) {
             if (!param || !param.schema) return
             inputSignatureHtml += window.getMockSignatureFromParamAsTable(param.schema, self.model.models, null)
@@ -32290,43 +32280,6 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
         }
         return map;
     },
-
-    //addModelToSidebar: function (model) {
-    //    var $sidebar = $('#sidebar')
-
-    //    if (!window.lastParentId || model.parentId !== window.lastParentId) {
-    //        //show endpoint title only if its new
-    //        $sidebar.append('<li class="sidebarParent">' + model.parentId + '</li>')
-    //        window.lastParentId = model.parentId
-    //    }
-
-    //    var srtLbl = this.shortMethod(model.method)
-    //    var methodBtn = '<div class="methodBtn btn-' + model.method + '">' + srtLbl + '</div>'
-
-    //    var $routeLink = $('<li class="sidebarChild" title="' + model.path + '"   >' + methodBtn + '<div class="childTxt">' + model.path + '</div></li>')
-
-    //    $sidebar.append($routeLink)
-
-    //    $routeLink.click(function () {
-    //        var $routeContent = $('.content-' + model.parentId + model.nickname)
-    //        $routeContent.slideDown("fast", function () {
-    //            $('html, body').animate({
-    //                scrollTop: $routeContent.offset().top - 65
-    //            }, 100);
-    //        });
-    //    })
-    //},
-
-    //shortMethod: function (meth) {
-    //    if (meth === 'options') {
-    //        return 'opt'
-    //    } else if (meth === 'delete') {
-    //        return 'del'
-    //    } else {
-    //        return meth
-    //    }
-    //},
-
     isFileUpload: function (form) {
         var ref1, l, len, o;
         var isFileUpload = false;
@@ -32904,7 +32857,7 @@ SwaggerUi.Views.SidebarView = Backbone.View.extend({
         var srtLbl = this.shortMethod(model.method)
         var methodBtn = '<div class="methodBtn btn-' + model.method + '">' + srtLbl + '</div>'
 
-        var $routeLink = $('<li class="sidebarChild" title="' + model.path + '"   >' + methodBtn + '<div class="childTxt">' + model.path + '</div></li>')
+        var $routeLink = $('<li class="sidebarChild" title="' + model.path + '"   >' + methodBtn + '<div class="childTxt">' + model.nickname + '</div></li>')
 
         this.$el.append($routeLink)
 

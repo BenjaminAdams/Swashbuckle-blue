@@ -86,6 +86,7 @@ window.SwaggerUi = Backbone.Router.extend({
     // Event handler for when url/key is received from user
     updateSwaggerUi: function (data) {
         this.options.url = data.url;
+        this.options.apiKey = data.apiKey
         this.load();
     },
 
@@ -241,7 +242,6 @@ window.SwaggerUi.Views = {};
     };
 
     window.ApiKeyAuthorization = function () {
-        warn('window.ApiKeyAuthorization is deprecated. Please use SwaggerClient.ApiKeyAuthorization.');
         SwaggerClient.ApiKeyAuthorization.apply(window, arguments);
     };
 

@@ -28,7 +28,7 @@ SwaggerUi.Views.SidebarView = Backbone.View.extend({
         var srtLbl = this.shortMethod(model.method)
         var methodBtn = '<div class="methodBtn btn-' + model.method + '">' + srtLbl + '</div>'
 
-        var $routeLink = $('<li class="sidebarChild" title="' + model.path + '"   >' + methodBtn + '<div class="childTxt">' + model.path + '</div></li>')
+        var $routeLink = $('<li class="sidebarChild" title="' + model.path + '"   >' + methodBtn + '<div class="childTxt">' + model.nickname + '</div></li>')
 
         this.$el.append($routeLink)
 

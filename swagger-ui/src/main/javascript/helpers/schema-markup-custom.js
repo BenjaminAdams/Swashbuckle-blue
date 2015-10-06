@@ -214,7 +214,7 @@ function getSchemaFromRef(schema, models) {
     }
 
     if (typeof schema.$ref === 'string') {
-        name = Helpers.simpleRef(schema.$ref);
+        var name = Helpers.simpleRef(schema.$ref);
         schema = models[name];
         if (typeof schema === 'undefined') {
             return name + ' is not defined!';
@@ -226,7 +226,7 @@ function getSchemaFromRef(schema, models) {
 
 window.getMockSignatureFromParamAsTable = function (schema, models) {
     if (!schema) return ''
-    name = Helpers.simpleRef(schema.$ref);
+    var name = Helpers.simpleRef(schema.$ref);
     schema = getSchemaFromRef(schema, models)
     return schemaToHTMLAsTable(name, schema, models, null);
 }
@@ -386,7 +386,7 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
 
                 html += '</td>'
             } else {
-                html += "<td></td>"
+                html += '<td></td>'
             }
 
             // html += primitiveToHTML(cProperty);

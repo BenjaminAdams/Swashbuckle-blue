@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Swashbuckle.Dummy.SwaggerExtensions;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Web.Http;
-using System.Net.Http;
 using System.Net;
+using System.Net.Http;
+using System.Web.Http;
 
 namespace Swashbuckle.Dummy.Controllers
 {
@@ -17,7 +18,7 @@ namespace Swashbuckle.Dummy.Controllers
             throw new NotImplementedException();
         }
     }
-    
+
     public class Payment
     {
         [Required]

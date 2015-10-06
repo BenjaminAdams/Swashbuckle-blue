@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Swashbuckle.Swagger;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Swashbuckle.Swagger;
 
 namespace Swashbuckle.Application
 {
@@ -52,6 +52,11 @@ namespace Swashbuckle.Application
         {
             _in = @in;
             return this;
+        }
+
+        public string GetIn()
+        {
+            return _in;
         }
 
         internal override SecurityScheme Build()
