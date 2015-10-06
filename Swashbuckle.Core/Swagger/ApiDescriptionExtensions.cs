@@ -73,6 +73,11 @@ namespace Swashbuckle.Swagger
             return apiDescription.ActionDescriptor.GetCustomAttributes<SwaggerIgnore>().Any();
         }
 
+        public static bool IsSwaggerExample(this ApiDescription apiDescription)
+        {
+            return apiDescription.ActionDescriptor.GetCustomAttributes<SwaggerExample>().Any();
+        }
+
         public static IEnumerable<TAttribute> GetControllerAndActionAttributes<TAttribute>(this ApiDescription apiDesc)
             where TAttribute : class
         {

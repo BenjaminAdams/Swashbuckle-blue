@@ -1,18 +1,14 @@
 ﻿using Newtonsoft.Json.Serialization;
+using Swashbuckle.Swagger.Attributes;
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.Reflection;
 
 namespace Swashbuckle.Swagger
 {
     public static class SchemaExtensions
     {
-        public static Schema WithValidationProperties(this Schema schema, JsonProperty jsonProperty)
+        public static Schema GetAttributeDetails(Schema schema, System.Reflection.PropertyInfo propInfo)
         {
-            var propInfo = jsonProperty.PropertyInfo();
-            if (propInfo == null)
-                return schema;
-
             foreach (var attribute in propInfo.GetCustomAttributes(false))
             {
                 var regex = attribute as RegularExpressionAttribute;
@@ -49,10 +45,39 @@ namespace Swashbuckle.Swagger
                 {
                     schema.minLength = minLength.Length;
                 }
+
+                schema.example = "TODO: remove this example!";
+
+                var example = attribute as SwaggerExample;
+                if (example != null)
+                {
+                    schema.example = example.Example;
+                }
             }
+
+            return schema;
+        }
+
+        public static Schema WithValidationProperties(this Schema schema, JsonProperty jsonProperty)
+        {
+            var propInfo = jsonProperty.PropertyInfo();
+            if (propInfo == null)
+                return schema;
+
+            schema = GetAttributeDetails(schema, propInfo);
 
             if (!jsonProperty.Writable)
                 schema.readOnly = true;
+            return schema;
+        }
+
+        public static Schema WithValidationProperties(this Schema schema, JsonArrayContract jsonProperty)
+        {
+            var propInfo = jsonProperty.PropertyInfo();
+            if (propInfo == null)
+                return schema;
+
+            schema = GetAttributeDetails(schema, propInfo);
 
             return schema;
         }
@@ -70,6 +95,8 @@ namespace Swashbuckle.Swagger
                 partialSchema.items = new PartialSchema();
                 partialSchema.items.PopulateFrom(schema.items);
             }
+
+            partialSchema.example = schema.example;
 
             partialSchema.@default = schema.@default;
             partialSchema.maximum = schema.maximum;

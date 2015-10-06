@@ -23,6 +23,11 @@ namespace Swashbuckle.Swagger
             return jsonProperty.HasAttribute<SwaggerIgnore>();
         }
 
+        public static bool IsSwaggerExample(this JsonProperty jsonProperty)
+        {
+            return jsonProperty.HasAttribute<SwaggerExample>();
+        }
+
         public static bool HasAttribute<T>(this JsonProperty jsonProperty)
         {
             var propInfo = jsonProperty.PropertyInfo();
@@ -33,6 +38,12 @@ namespace Swashbuckle.Swagger
         {
             if (jsonProperty.UnderlyingName == null) return null;
             return jsonProperty.DeclaringType.GetProperty(jsonProperty.UnderlyingName, jsonProperty.PropertyType);
+        }
+
+        public static PropertyInfo PropertyInfo(this JsonArrayContract jsonProperty)
+        {
+            if (jsonProperty.UnderlyingType.FullName == null) return null;
+            return jsonProperty.UnderlyingType.GetProperty(jsonProperty.UnderlyingType.FullName, jsonProperty.UnderlyingType);
         }
     }
 }

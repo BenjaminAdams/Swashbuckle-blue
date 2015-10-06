@@ -181,6 +181,7 @@ namespace Swashbuckle.Swagger
                 return new Schema
                 {
                     type = "string",
+                    example = type.GetEnumNames().FirstOrDefault(),
                     @enum = camelCase
                         ? type.GetEnumNames().Select(name => name.ToCamelCase()).ToArray()
                         : type.GetEnumNames()
@@ -191,6 +192,7 @@ namespace Swashbuckle.Swagger
             {
                 type = "integer",
                 format = "int32",
+                example = type.GetEnumNames().FirstOrDefault(),
                 @enum = type.GetEnumValues().Cast<object>().ToArray()
             };
         }
@@ -211,7 +213,7 @@ namespace Swashbuckle.Swagger
             return new Schema
                 {
                     type = "array",
-                    items = CreateInlineSchema(itemType)
+                    items = CreateInlineSchema(itemType).WithValidationProperties(arrayContract)
                 };
         }
 

@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
 
 namespace Swashbuckle.Swagger
 {
@@ -231,7 +231,7 @@ namespace Swashbuckle.Swagger
     {
         public string type;
 
-        public string format; 
+        public string format;
 
         public PartialSchema items;
 
@@ -262,6 +262,7 @@ namespace Swashbuckle.Swagger
         public IList<object> @enum;
 
         public int? multipleOf;
+        public object example;
     }
 
     public class Response

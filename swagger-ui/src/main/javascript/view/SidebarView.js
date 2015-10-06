@@ -3,7 +3,6 @@
 SwaggerUi.Views.SidebarView = Backbone.View.extend({
     el: '#sidebar',
     initialize: function (opts) {
-        console.log('good el, passing in opts to sidebar view opt=', opts)
         _.bindAll(this, 'render', 'addModelToSidebar', 'shortMethod', 'addParentNameToSidebar');
         this.models = opts.models
         this.render()
