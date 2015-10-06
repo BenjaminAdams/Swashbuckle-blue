@@ -321,11 +321,11 @@ var simpleRef = Helpers.simpleRef = function (name) {
     } else {
         return name;
     }
-};
+}
 
 function optionHtml(label, value) {
     return '<tr><td class="optionName">' + label + ':</td><td>' + value + '</td></tr>';
-};
+}
 
 function typeFromJsonSchema(type, format) {
     var str;
@@ -353,7 +353,7 @@ function typeFromJsonSchema(type, format) {
     }
 
     return str;
-};
+}
 
 function getStringSignature(obj, baseComponent) {
     var str = '';
@@ -397,7 +397,7 @@ function getStringSignature(obj, baseComponent) {
     }
 
     return str;
-};
+}
 
 function schemaToJSON(schema, models, modelsToIgnore, modelPropertyMacro) {
     // Resolve the schema (Handle nested schemas)
@@ -485,7 +485,7 @@ function schemaToJSON(schema, models, modelsToIgnore, modelPropertyMacro) {
     }
 
     return output;
-};
+}
 
 function getSchemaFromRef(schema, models) {
     if (schema.type === 'array' && schema.items && schema.items.$ref !== null) {
@@ -813,7 +813,7 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
         }
 
         return modelName;
-    };
+    }
 
     function primitiveToHTML(schema) {
         var html = '<span class="propType">';
@@ -855,7 +855,7 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
         html += '</span>';
 
         return html;
-    };
+    }
 
     function primitiveToOptionsHTML(schema, html) {
         var options = '';
@@ -950,7 +950,7 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
         }
 
         return html;
-    };
+    }
 };
 this["Handlebars"]["templates"]["main"] = Handlebars.template({"1":function(depth0,helpers,partials,data) {
   var stack1, lambda=this.lambda, escapeExpression=this.escapeExpression, buffer = "  <div class=\"info_title\">"
@@ -31319,7 +31319,6 @@ window.SwaggerUi = Backbone.Router.extend({
         if (!options.supportedSubmitMethods) {
             options.supportedSubmitMethods = [
               'get',
-
               'put',
               'post',
               'delete',
@@ -31737,154 +31736,158 @@ SwaggerUi.Views.HeaderView = Backbone.View.extend({
 'use strict';
 
 SwaggerUi.Views.MainView = Backbone.View.extend({
-  apisSorter: {
-    alpha: function(a, b) {
-      return a.name.localeCompare(b.name);
-    }
-  },
-  operationsSorters: {
-    alpha: function(a, b) {
-      return a.path.localeCompare(b.path);
+    apisSorter: {
+        alpha: function (a, b) {
+            return a.name.localeCompare(b.name);
+        }
     },
-    method: function(a, b) {
-      return a.method.localeCompare(b.method);
-    }
-  },
-  initialize: function(opts) {
-    var sorterOption, sorterFn, key, value;
-    opts = opts || {};
-
-    this.router = opts.router;
-
-    // Sort APIs
-    if (opts.swaggerOptions.apisSorter) {
-      sorterOption = opts.swaggerOptions.apisSorter;
-      if (_.isFunction(sorterOption)) {
-        sorterFn = sorterOption;
-      } else {
-        sorterFn = this.apisSorter[sorterOption];
-      }
-      if (_.isFunction(sorterFn)) {
-        this.model.apisArray.sort(sorterFn);
-      }
-    }
-    // Sort operations of each API 
-    if (opts.swaggerOptions.operationsSorter) {
-      sorterOption = opts.swaggerOptions.operationsSorter;
-      if (_.isFunction(sorterOption)) {
-        sorterFn = sorterOption;
-      } else {
-        sorterFn = this.operationsSorters[sorterOption];
-      }
-      if (_.isFunction(sorterFn)) {
-        for (key in this.model.apisArray) {
-          this.model.apisArray[key].operationsArray.sort(sorterFn);
+    operationsSorters: {
+        alpha: function (a, b) {
+            return a.path.localeCompare(b.path);
+        },
+        method: function (a, b) {
+            return a.method.localeCompare(b.method);
         }
-      }
-    }
+    },
+    initialize: function (opts) {
+        var sorterOption, sorterFn, key, value;
+        opts = opts || {};
 
-    // set up the UI for input
-    this.model.auths = [];
+        this.router = opts.router;
 
-    for (key in this.model.securityDefinitions) {
-      value = this.model.securityDefinitions[key];
-
-      this.model.auths.push({
-        name: key,
-        type: value.type,
-        value: value
-      });
-    }
-
-    //enables custom header title and page title
-    document.title = this.model.info.title
-    $('#pageTopTitle').text(this.model.info.title)
-
-    if ('validatorUrl' in opts.swaggerOptions) {
-      // Validator URL specified explicitly
-      this.model.validatorUrl = opts.swaggerOptions.validatorUrl;
-    } else if (this.model.url.indexOf('localhost') > 0) {
-      // Localhost override
-      this.model.validatorUrl = null;
-    } else {
-      // Default validator
-      if (window.location.protocol === 'https:') {
-        this.model.validatorUrl = 'https://online.swagger.io/validator';
-      } else {
-        this.model.validatorUrl = 'http://online.swagger.io/validator';
-      }
-    }
-  },
-
-  render: function() {
-    if (this.model.securityDefinitions) {
-      for (var name in this.model.securityDefinitions) {
-        var auth = this.model.securityDefinitions[name];
-        var button;
-
-        if (auth.type === 'apiKey' && $('#apikey_button').length === 0) {
-          button = new SwaggerUi.Views.ApiKeyButton({
-            model: auth,
-            router: this.router
-          }).render().el;
-          $('.auth_main_container').append(button);
+        // Sort APIs
+        if (opts.swaggerOptions.apisSorter) {
+            sorterOption = opts.swaggerOptions.apisSorter;
+            if (_.isFunction(sorterOption)) {
+                sorterFn = sorterOption;
+            } else {
+                sorterFn = this.apisSorter[sorterOption];
+            }
+            if (_.isFunction(sorterFn)) {
+                this.model.apisArray.sort(sorterFn);
+            }
+        }
+        // Sort operations of each API
+        if (opts.swaggerOptions.operationsSorter) {
+            sorterOption = opts.swaggerOptions.operationsSorter;
+            if (_.isFunction(sorterOption)) {
+                sorterFn = sorterOption;
+            } else {
+                sorterFn = this.operationsSorters[sorterOption];
+            }
+            if (_.isFunction(sorterFn)) {
+                for (key in this.model.apisArray) {
+                    this.model.apisArray[key].operationsArray.sort(sorterFn);
+                }
+            }
         }
 
-        if (auth.type === 'basicAuth' && $('#basic_auth_button').length === 0) {
-          button = new SwaggerUi.Views.BasicAuthButton({
-            model: auth,
-            router: this.router
-          }).render().el;
-          $('.auth_main_container').append(button);
+        this.sidebarView = new SwaggerUi.Views.SidebarView({
+            models: this.model.apisArray
+        });
+
+        // set up the UI for input
+        this.model.auths = [];
+
+        for (key in this.model.securityDefinitions) {
+            value = this.model.securityDefinitions[key];
+
+            this.model.auths.push({
+                name: key,
+                type: value.type,
+                value: value
+            });
         }
-      }
+
+        //enables custom header title and page title
+        document.title = this.model.info.title
+        $('#pageTopTitle').text(this.model.info.title)
+
+        if ('validatorUrl' in opts.swaggerOptions) {
+            // Validator URL specified explicitly
+            this.model.validatorUrl = opts.swaggerOptions.validatorUrl;
+        } else if (this.model.url.indexOf('localhost') > 0) {
+            // Localhost override
+            this.model.validatorUrl = null;
+        } else {
+            // Default validator
+            if (window.location.protocol === 'https:') {
+                this.model.validatorUrl = 'https://online.swagger.io/validator';
+            } else {
+                this.model.validatorUrl = 'http://online.swagger.io/validator';
+            }
+        }
+    },
+
+    render: function () {
+        if (this.model.securityDefinitions) {
+            for (var name in this.model.securityDefinitions) {
+                var auth = this.model.securityDefinitions[name];
+                var button;
+
+                if (auth.type === 'apiKey' && $('#apikey_button').length === 0) {
+                    button = new SwaggerUi.Views.ApiKeyButton({
+                        model: auth,
+                        router: this.router
+                    }).render().el;
+                    $('.auth_main_container').append(button);
+                }
+
+                if (auth.type === 'basicAuth' && $('#basic_auth_button').length === 0) {
+                    button = new SwaggerUi.Views.BasicAuthButton({
+                        model: auth,
+                        router: this.router
+                    }).render().el;
+                    $('.auth_main_container').append(button);
+                }
+            }
+        }
+
+        // Render the outer container for resources
+        $(this.el).html(Handlebars.templates.main(this.model));
+
+        // Render each resource
+
+        var resources = {};
+        var counter = 0;
+        for (var i = 0; i < this.model.apisArray.length; i++) {
+            var resource = this.model.apisArray[i];
+            var id = resource.name;
+            while (typeof resources[id] !== 'undefined') {
+                id = id + '_' + counter;
+                counter += 1;
+            }
+            resource.id = id;
+            resources[id] = resource;
+            this.addResource(resource, this.model.auths);
+        }
+
+        $('.propWrap').hover(function onHover() {
+            $('.optionsWrapper', $(this)).show();
+        }, function offhover() {
+            $('.optionsWrapper', $(this)).hide();
+        });
+        return this;
+    },
+
+    addResource: function (resource, auths) {
+        // Render a resource and add it to resources li
+        resource.id = resource.id.replace(/\s/g, '_');
+        var resourceView = new SwaggerUi.Views.ResourceView({
+            model: resource,
+            router: this.router,
+            tagName: 'li',
+            id: 'resource_' + resource.id,
+            className: 'resource',
+            auths: auths,
+            swaggerOptions: this.options.swaggerOptions
+        });
+        $('#resources', this.el).append(resourceView.render().el);
+    },
+
+    clear: function () {
+        $(this.el).html('');
     }
-
-    // Render the outer container for resources
-    $(this.el).html(Handlebars.templates.main(this.model));
-
-    // Render each resource
-
-    var resources = {};
-    var counter = 0;
-    for (var i = 0; i < this.model.apisArray.length; i++) {
-      var resource = this.model.apisArray[i];
-      var id = resource.name;
-      while (typeof resources[id] !== 'undefined') {
-        id = id + '_' + counter;
-        counter += 1;
-      }
-      resource.id = id;
-      resources[id] = resource;
-      this.addResource(resource, this.model.auths);
-    }
-
-    $('.propWrap').hover(function onHover() {
-      $('.optionsWrapper', $(this)).show();
-    }, function offhover() {
-      $('.optionsWrapper', $(this)).hide();
-    });
-    return this;
-  },
-
-  addResource: function(resource, auths) {
-    // Render a resource and add it to resources li
-    resource.id = resource.id.replace(/\s/g, '_');
-    var resourceView = new SwaggerUi.Views.ResourceView({
-      model: resource,
-      router: this.router,
-      tagName: 'li',
-      id: 'resource_' + resource.id,
-      className: 'resource',
-      auths: auths,
-      swaggerOptions: this.options.swaggerOptions
-    });
-    $('#resources', this.el).append(resourceView.render().el);
-  },
-
-  clear: function() {
-    $(this.el).html('');
-  }
 });
 'use strict';
 
@@ -31897,7 +31900,7 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
         'click .response_hider': 'hideResponse',
         'click .toggleOperation': 'toggleOperationContent',
         'mouseenter .api-ic': 'mouseEnter',
-        'dblclick .curl': 'selectText',
+        'dblclick .curl': 'selectText'
     },
 
     initialize: function (opts) {
@@ -32049,7 +32052,9 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
 
         console.log('model====', this.model)
 
-        this.addModelToSidebar(this.model)
+        //this.addModelToSidebar(this.model)
+
+        // SwaggerUi.addModelToSidebar(this.model)
 
         _.each(this.model.parameters, function (param) {
             if (!param || !param.schema) return
@@ -32286,41 +32291,41 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
         return map;
     },
 
-    addModelToSidebar: function (model) {
-        var $sidebar = $('#sidebar')
+    //addModelToSidebar: function (model) {
+    //    var $sidebar = $('#sidebar')
 
-        if (!window.lastParentId || model.parentId !== window.lastParentId) {
-            //show endpoint title only if its new
-            $sidebar.append('<li class="sidebarParent">' + model.parentId + '</li>')
-            window.lastParentId = model.parentId
-        }
+    //    if (!window.lastParentId || model.parentId !== window.lastParentId) {
+    //        //show endpoint title only if its new
+    //        $sidebar.append('<li class="sidebarParent">' + model.parentId + '</li>')
+    //        window.lastParentId = model.parentId
+    //    }
 
-        var srtLbl = this.shortMethod(model.method)
-        var methodBtn = '<div class="methodBtn btn-' + model.method + '">' + srtLbl + '</div>'
+    //    var srtLbl = this.shortMethod(model.method)
+    //    var methodBtn = '<div class="methodBtn btn-' + model.method + '">' + srtLbl + '</div>'
 
-        var $routeLink = $('<li class="sidebarChild" title="' + model.path + '"   >' + methodBtn + '<div class="childTxt">' + model.path + '</div></li>')
+    //    var $routeLink = $('<li class="sidebarChild" title="' + model.path + '"   >' + methodBtn + '<div class="childTxt">' + model.path + '</div></li>')
 
-        $sidebar.append($routeLink)
+    //    $sidebar.append($routeLink)
 
-        $routeLink.click(function () {
-            var $routeContent = $('.content-' + model.parentId + model.nickname)
-            $routeContent.slideDown("fast", function () {
-                $('html, body').animate({
-                    scrollTop: $routeContent.offset().top - 65
-                }, 100);
-            });
-        })
-    },
+    //    $routeLink.click(function () {
+    //        var $routeContent = $('.content-' + model.parentId + model.nickname)
+    //        $routeContent.slideDown("fast", function () {
+    //            $('html, body').animate({
+    //                scrollTop: $routeContent.offset().top - 65
+    //            }, 100);
+    //        });
+    //    })
+    //},
 
-    shortMethod: function (meth) {
-        if (meth === 'options') {
-            return 'opt'
-        } else if (meth === 'delete') {
-            return 'del'
-        } else {
-            return meth
-        }
-    },
+    //shortMethod: function (meth) {
+    //    if (meth === 'options') {
+    //        return 'opt'
+    //    } else if (meth === 'delete') {
+    //        return 'del'
+    //    } else {
+    //        return meth
+    //    }
+    //},
 
     isFileUpload: function (form) {
         var ref1, l, len, o;
@@ -32868,6 +32873,59 @@ SwaggerUi.Views.ResponseContentTypeView = Backbone.View.extend({
     $(this.el).html(Handlebars.templates.response_content_type(this.model));
     return this;
   }
+});
+'use strict';
+
+SwaggerUi.Views.SidebarView = Backbone.View.extend({
+    el: '#sidebar',
+    initialize: function (opts) {
+        console.log('good el, passing in opts to sidebar view opt=', opts)
+        _.bindAll(this, 'render', 'addModelToSidebar', 'shortMethod', 'addParentNameToSidebar');
+        this.models = opts.models
+        this.render()
+    },
+
+    render: function () {
+        var self = this
+        this.$el.empty()
+
+        _.each(this.models, function (parent) {
+            self.addParentNameToSidebar(parent)
+
+            _.each(parent.operationsArray, function (model) {
+                self.addModelToSidebar(model)
+            })
+        })
+    },
+    addParentNameToSidebar: function (parent) {
+        this.$el.append('<li class="sidebarParent">' + parent.name + '</li>')
+    },
+    addModelToSidebar: function (model) {
+        var srtLbl = this.shortMethod(model.method)
+        var methodBtn = '<div class="methodBtn btn-' + model.method + '">' + srtLbl + '</div>'
+
+        var $routeLink = $('<li class="sidebarChild" title="' + model.path + '"   >' + methodBtn + '<div class="childTxt">' + model.path + '</div></li>')
+
+        this.$el.append($routeLink)
+
+        $routeLink.click(function () {
+            var $routeContent = $('.content-' + model.parentId + model.nickname)
+            $routeContent.slideDown('fast', function () {
+                $('html, body').animate({
+                    scrollTop: $routeContent.offset().top - 65
+                }, 100);
+            });
+        })
+    },
+    shortMethod: function (meth) {
+        if (meth === 'options') {
+            return 'opt'
+        } else if (meth === 'delete') {
+            return 'del'
+        } else {
+            return meth
+        }
+    },
 });
 'use strict';
 

@@ -9,7 +9,7 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
         'click .response_hider': 'hideResponse',
         'click .toggleOperation': 'toggleOperationContent',
         'mouseenter .api-ic': 'mouseEnter',
-        'dblclick .curl': 'selectText',
+        'dblclick .curl': 'selectText'
     },
 
     initialize: function (opts) {
@@ -160,8 +160,6 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
         signatureModel = null;
 
         console.log('model====', this.model)
-
-        this.addModelToSidebar(this.model)
 
         _.each(this.model.parameters, function (param) {
             if (!param || !param.schema) return
@@ -397,43 +395,6 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
         }
         return map;
     },
-
-    addModelToSidebar: function (model) {
-        var $sidebar = $('#sidebar')
-
-        if (!window.lastParentId || model.parentId !== window.lastParentId) {
-            //show endpoint title only if its new
-            $sidebar.append('<li class="sidebarParent">' + model.parentId + '</li>')
-            window.lastParentId = model.parentId
-        }
-
-        var srtLbl = this.shortMethod(model.method)
-        var methodBtn = '<div class="methodBtn btn-' + model.method + '">' + srtLbl + '</div>'
-
-        var $routeLink = $('<li class="sidebarChild" title="' + model.path + '"   >' + methodBtn + '<div class="childTxt">' + model.path + '</div></li>')
-
-        $sidebar.append($routeLink)
-
-        $routeLink.click(function () {
-            var $routeContent = $('.content-' + model.parentId + model.nickname)
-            $routeContent.slideDown("fast", function () {
-                $('html, body').animate({
-                    scrollTop: $routeContent.offset().top - 65
-                }, 100);
-            });
-        })
-    },
-
-    shortMethod: function (meth) {
-        if (meth === 'options') {
-            return 'opt'
-        } else if (meth === 'delete') {
-            return 'del'
-        } else {
-            return meth
-        }
-    },
-
     isFileUpload: function (form) {
         var ref1, l, len, o;
         var isFileUpload = false;

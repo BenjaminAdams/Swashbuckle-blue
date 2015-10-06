@@ -41,11 +41,11 @@ var simpleRef = Helpers.simpleRef = function (name) {
     } else {
         return name;
     }
-};
+}
 
 function optionHtml(label, value) {
     return '<tr><td class="optionName">' + label + ':</td><td>' + value + '</td></tr>';
-};
+}
 
 function typeFromJsonSchema(type, format) {
     var str;
@@ -73,7 +73,7 @@ function typeFromJsonSchema(type, format) {
     }
 
     return str;
-};
+}
 
 function getStringSignature(obj, baseComponent) {
     var str = '';
@@ -117,7 +117,7 @@ function getStringSignature(obj, baseComponent) {
     }
 
     return str;
-};
+}
 
 function schemaToJSON(schema, models, modelsToIgnore, modelPropertyMacro) {
     // Resolve the schema (Handle nested schemas)
@@ -205,7 +205,7 @@ function schemaToJSON(schema, models, modelsToIgnore, modelPropertyMacro) {
     }
 
     return output;
-};
+}
 
 function getSchemaFromRef(schema, models) {
     if (schema.type === 'array' && schema.items && schema.items.$ref !== null) {
@@ -217,7 +217,7 @@ function getSchemaFromRef(schema, models) {
         name = Helpers.simpleRef(schema.$ref);
         schema = models[name];
         if (typeof schema === 'undefined') {
-            return strongOpen + name + ' is not defined!' + strongClose;
+            return name + ' is not defined!';
         }
     }
 
@@ -253,7 +253,7 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
 
     // Return for empty object
     if (_.isEmpty(schema)) {
-        //return strongOpen + 'Empty' + strongClose;
+        //return  'Empty' ;
         return ''
     }
 
@@ -267,7 +267,7 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
         name = Helpers.simpleRef(schema.$ref);
         schema = models[name];
         if (typeof schema === 'undefined') {
-            //return strongOpen + name + ' is not defined!' + strongClose;
+            //return  name + ' is not defined!' ;
             return ''
         }
     }
@@ -411,7 +411,7 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
     function processModel(schema, name) {
         var type = schema.type || 'object';
         var isArray = schema.type === 'array';
-        var html = strongOpen + name + ' ' + (isArray ? '[' : '{') + strongClose;
+        var html = name + ' ' + (isArray ? '[' : '{');
 
         if (name) {
             seenModels.push(name);
@@ -511,7 +511,7 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
             }
         }
 
-        return html + strongOpen + (isArray ? ']' : '}') + strongClose;
+        return html + (isArray ? ']' : '}');
     };
 
     function addReference(schema, name, skipRef) {
@@ -533,7 +533,7 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
         }
 
         return modelName;
-    };
+    }
 
     function primitiveToHTML(schema) {
         var html = '<span class="propType">';
@@ -575,7 +575,7 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
         html += '</span>';
 
         return html;
-    };
+    }
 
     function primitiveToOptionsHTML(schema, html) {
         var options = '';
@@ -670,5 +670,5 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
         }
 
         return html;
-    };
+    }
 };

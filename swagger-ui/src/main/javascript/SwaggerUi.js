@@ -25,7 +25,6 @@ window.SwaggerUi = Backbone.Router.extend({
         if (!options.supportedSubmitMethods) {
             options.supportedSubmitMethods = [
               'get',
-
               'put',
               'post',
               'delete',

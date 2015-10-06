@@ -59,11 +59,8 @@ function templates() {
  */
 gulp.task('lint', function () {
     return gulp.src('./src/main/javascript/**/*.js')
-      .pipe(jshint())
-      .pipe(jshint.reporter('jshint-stylish', {
-          undef: true,
-          asi: false
-      }));
+      .pipe(jshint({asi: true}))
+      .pipe(jshint.reporter('jshint-stylish'));
 });
 
 /**
