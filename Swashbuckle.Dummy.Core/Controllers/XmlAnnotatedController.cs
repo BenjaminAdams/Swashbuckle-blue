@@ -1,7 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Swashbuckle.Swagger.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Web.Http;
-using Newtonsoft.Json;
 
 namespace Swashbuckle.Dummy.Controllers
 {
@@ -30,7 +31,7 @@ namespace Swashbuckle.Dummy.Controllers
         }
 
         /// <summary>
-        /// Search all registered accounts by keywords 
+        /// Search all registered accounts by keywords
         /// </summary>
         /// <remarks>Restricted to admin users only</remarks>
         /// <param name="keywords">List of search keywords</param>
@@ -49,7 +50,7 @@ namespace Swashbuckle.Dummy.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("filter")]
-        public IEnumerable<Account> Filter(string q, [FromUri]Page page)
+        public IEnumerable<Account> Filter([SwaggerExample("123")] string q, [FromUri]Page page)
         {
             throw new NotImplementedException();
         }
@@ -59,7 +60,7 @@ namespace Swashbuckle.Dummy.Controllers
         /// </summary>
         [HttpPut]
         [ActionName("put-on-hold")]
-        public void PutOnHold(int id)
+        public void PutOnHold([SwaggerExample("333333")]  int id)
         {
             throw new NotImplementedException();
         }
@@ -70,7 +71,7 @@ namespace Swashbuckle.Dummy.Controllers
         /// <param name="reward"></param>
         [HttpPut]
         [Route("{id}/add-reward")]
-        public void AddReward(int id, Reward<string> reward)
+        public void AddReward([SwaggerExample("3333388883")] int id, Reward<string> reward)
         {
             throw new NotImplementedException();
         }
@@ -81,11 +82,13 @@ namespace Swashbuckle.Dummy.Controllers
         /// <summary>
         /// The maximum number of accounts to return
         /// </summary>
+        [SwaggerExample("50")]
         public int Limit { get; set; }
 
         /// <summary>
         /// Offset into the result
         /// </summary>
+        [SwaggerExample("0")]
         public int Offset { get; set; }
     }
 
@@ -97,16 +100,19 @@ namespace Swashbuckle.Dummy.Controllers
         /// <summary>
         /// The ID for Accounts is 5 digits long.
         /// </summary>
+        [SwaggerExample("abc12333333")]
         public virtual int AccountID { get; set; }
-        
+
         /// <summary>
         /// Uniquely identifies the account
         /// </summary>
+        [SwaggerExample("Benjamin Adams")]
         public string Username { get; set; }
 
         /// <summary>
         /// For authentication
         /// </summary>
+        [SwaggerExample("my secret pw")]
         public string Password { get; set; }
 
         public AccountPreferences Preferences { get; set; }
@@ -116,13 +122,15 @@ namespace Swashbuckle.Dummy.Controllers
             /// <summary>
             /// Provide a display name to use instead of Username when signed in
             /// </summary>
+            [SwaggerExample("Benjamin")]
             public string DisplayName { get; set; }
 
             /// <summary>
             /// Flag to indicate if marketing emails may be sent
             /// </summary>
+            [SwaggerExample("Hey its a working example guy")]
             [JsonProperty("allow-marketing-emails")]
-            public string AllowMarketingEmails { get; set; }            
+            public string AllowMarketingEmails { get; set; }
         }
     }
 
@@ -134,6 +142,7 @@ namespace Swashbuckle.Dummy.Controllers
         /// <summary>
         /// The Account ID for SubAccounts should be 7 digits.
         /// </summary>
+        [SwaggerExample("123777")]
         public override int AccountID { get; set; }
     }
 
@@ -144,13 +153,15 @@ namespace Swashbuckle.Dummy.Controllers
     public class Reward<T>
     {
         /// <summary>
-        /// The monetary value of the reward 
+        /// The monetary value of the reward
         /// </summary>
+        [SwaggerExample("some kinda value")]
         public decimal value;
 
         /// <summary>
         /// The reward type
         /// </summary>
+        [SwaggerExample("some kinda type")]
         public T RewardType { get; set; }
     }
 }

@@ -1,11 +1,11 @@
-﻿using System;
-using System.Xml.XPath;
-using System.Linq;
-using System.Collections.Generic;
-using System.Text;
-using System.Reflection;
-using Newtonsoft.Json.Serialization;
+﻿using Newtonsoft.Json.Serialization;
 using Swashbuckle.Swagger;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Xml.XPath;
 
 namespace Swashbuckle.Swagger.XmlComments
 {
@@ -38,6 +38,8 @@ namespace Swashbuckle.Swagger.XmlComments
             {
                 var jsonProperty = context.JsonObjectContract.Properties[entry.Key];
                 if (jsonProperty == null) continue;
+
+                entry.Value.WithValidationProperties(jsonProperty);
 
                 ApplyPropertyComments(entry.Value, jsonProperty.PropertyInfo());
             }

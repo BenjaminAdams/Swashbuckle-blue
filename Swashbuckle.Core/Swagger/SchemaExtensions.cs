@@ -9,6 +9,10 @@ namespace Swashbuckle.Swagger
     {
         public static Schema GetAttributeDetails(Schema schema, System.Reflection.PropertyInfo propInfo)
         {
+            if (schema == null || propInfo == null)
+            {
+                return schema;
+            }
             foreach (var attribute in propInfo.GetCustomAttributes(false))
             {
                 var regex = attribute as RegularExpressionAttribute;
@@ -46,12 +50,12 @@ namespace Swashbuckle.Swagger
                     schema.minLength = minLength.Length;
                 }
 
-                schema.example = "TODO: remove this example!";
+                //schema.example = "TODO: remove this example!";
 
                 var example = attribute as SwaggerExample;
                 if (example != null)
                 {
-                    schema.example = example.Example;
+                    schema.example = example.GetExample();
                 }
             }
 
@@ -82,6 +86,17 @@ namespace Swashbuckle.Swagger
             return schema;
         }
 
+        //public static Schema WithValidationProperties(this Schema schema, JsonContract jsonProperty)
+        //{
+        //    var propInfo = jsonProperty.PropertyInfo();
+        //    if (propInfo == null)
+        //        return schema;
+
+        //    schema = GetAttributeDetails(schema, propInfo);
+
+        //    return schema;
+        //}
+
         public static void PopulateFrom(this PartialSchema partialSchema, Schema schema)
         {
             if (schema == null) return;
@@ -96,7 +111,8 @@ namespace Swashbuckle.Swagger
                 partialSchema.items.PopulateFrom(schema.items);
             }
 
-            partialSchema.example = schema.example;
+            //partialSchema.example = schema.example;
+            //partialSchema.example = "test";
 
             partialSchema.@default = schema.@default;
             partialSchema.maximum = schema.maximum;

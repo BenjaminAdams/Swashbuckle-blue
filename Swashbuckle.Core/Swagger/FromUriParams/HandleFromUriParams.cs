@@ -1,7 +1,7 @@
-﻿using System.Linq;
-using System.Web.Http.Description;
-using Swashbuckle.Swagger;
+﻿using Swashbuckle.Swagger;
 using System.Collections.Generic;
+using System.Linq;
+using System.Web.Http.Description;
 
 namespace Swashbuckle.Swagger.FromUriParams
 {
@@ -42,8 +42,10 @@ namespace Swashbuckle.Swagger.FromUriParams
                 var refSchema = schemaRegistry.GetOrRegister(type);
                 var schema = schemaRegistry.Definitions[refSchema.@ref.Replace("#/definitions/", "")];
 
+                SchemaExtensions.GetAttributeDetails(schema, type.GetProperty(objectParam.name));
+
                 var qualifier = string.IsNullOrEmpty(objectParam.name) ? "" : (objectParam.name + ".");
-                ExtractAndAddQueryParams(schema, qualifier, objectParam.required, schemaRegistry, operation.parameters);
+                ExtractAndAddQueryParams(schema, qualifier, objectParam.required, schemaRegistry, operation.parameters, apiDescription);
                 operation.parameters.Remove(objectParam);
             }
         }
@@ -53,7 +55,7 @@ namespace Swashbuckle.Swagger.FromUriParams
             string sourceQualifier,
             bool? sourceRequired,
             SchemaRegistry schemaRegistry,
-            IList<Parameter> operationParams)
+            IList<Parameter> operationParams, ApiDescription apiDescription)
         {
             foreach (var entry in sourceSchema.properties)
             {
@@ -61,26 +63,35 @@ namespace Swashbuckle.Swagger.FromUriParams
                 if (propertySchema.readOnly == true) continue;
 
                 var required = (sourceRequired == true)
-                    && sourceSchema.required != null && sourceSchema.required.Contains(entry.Key); 
+                    && sourceSchema.required != null && sourceSchema.required.Contains(entry.Key);
 
                 if (propertySchema.@ref != null)
                 {
+                    var objName = propertySchema.@ref.Replace("#/definitions/", "");
+
+                    var type = apiDescription.ParameterDescriptions
+                    .Single(paramDesc => paramDesc.Name == objName)
+                    .ParameterDescriptor.ParameterType;
+
                     var schema = schemaRegistry.Definitions[propertySchema.@ref.Replace("#/definitions/", "")];
+                    SchemaExtensions.GetAttributeDetails(schema, type.GetProperty(objName));
+
                     ExtractAndAddQueryParams(
                         schema,
                         sourceQualifier + entry.Key.ToCamelCase() + ".",
                         required,
                         schemaRegistry,
-                        operationParams);
+                        operationParams, apiDescription);
                 }
                 else
                 {
                     var param = new Parameter
                     {
-                        name =  sourceQualifier + entry.Key.ToCamelCase(),
+                        name = sourceQualifier + entry.Key.ToCamelCase(),
                         @in = "query",
                         required = required,
-                        description = entry.Value.description
+                        description = entry.Value.description,
+                        example = entry.Value.example
                     };
                     param.PopulateFrom(entry.Value);
                     if (param.type == "array")

@@ -71,6 +71,12 @@ namespace Swashbuckle.Swagger
                 var schemaInfo = typeMapping.Value;
 
                 schemaInfo.Schema = CreateDefinitionSchema(typeMapping.Key);
+
+                //foreach (var prop in schemaInfo.Schema.properties)
+                //{
+                //    prop = new KeyValuePair<string, Schema>(prop.Key, SchemaExtensions.GetAttributeDetails(schema, type.GetProperty(prop.Key)));
+                //}
+
                 Definitions.Add(schemaInfo.SchemaId, schemaInfo.Schema);
             }
 
@@ -87,7 +93,11 @@ namespace Swashbuckle.Swagger
             var jsonContract = _contractResolver.ResolveContract(type);
 
             if (jsonContract is JsonPrimitiveContract)
-                return CreatePrimitiveSchema((JsonPrimitiveContract)jsonContract);
+            {
+                var schema = CreatePrimitiveSchema((JsonPrimitiveContract)jsonContract);
+                // SchemaExtensions.GetAttributeDetails(schema, type.GetProperty(jsonContract));
+                return schema;
+            }
 
             var dictionaryContract = jsonContract as JsonDictionaryContract;
             if (dictionaryContract != null)
@@ -111,16 +121,31 @@ namespace Swashbuckle.Swagger
 
         private Schema CreateDefinitionSchema(Type type)
         {
+            Schema schema;
             var jsonContract = _contractResolver.ResolveContract(type);
 
             if (jsonContract is JsonDictionaryContract)
-                return CreateDictionarySchema((JsonDictionaryContract)jsonContract);
+            {
+                schema = CreateDictionarySchema((JsonDictionaryContract)jsonContract);
+                schema = SchemaExtensions.GetAttributeDetails(schema, type.GetProperty(jsonContract.UnderlyingType.Name));
+
+                //schema.example = type.GetProperty(jsonContract.UnderlyingType.Name).GetCustomAttributesData();
+                return schema;
+            }
 
             if (jsonContract is JsonArrayContract)
-                return CreateArraySchema((JsonArrayContract)jsonContract);
+            {
+                schema = CreateArraySchema((JsonArrayContract)jsonContract);
+                schema = SchemaExtensions.GetAttributeDetails(schema, type.GetProperty(jsonContract.UnderlyingType.Name));
+                return schema;
+            }
 
             if (jsonContract is JsonObjectContract)
-                return CreateObjectSchema((JsonObjectContract)jsonContract);
+            {
+                schema = CreateObjectSchema((JsonObjectContract)jsonContract);
+                schema = SchemaExtensions.GetAttributeDetails(schema, type.GetProperty(jsonContract.UnderlyingType.Name));
+                return schema;
+            }
 
             throw new InvalidOperationException(
                 String.Format("Unsupported type - {0} for Defintitions. Must be Dictionary, Array or Object", type));
@@ -128,6 +153,7 @@ namespace Swashbuckle.Swagger
 
         private Schema CreatePrimitiveSchema(JsonPrimitiveContract primitiveContract)
         {
+            Schema schema;
             var type = Nullable.GetUnderlyingType(primitiveContract.UnderlyingType) ?? primitiveContract.UnderlyingType;
 
             if (type.IsEnum)
@@ -139,33 +165,43 @@ namespace Swashbuckle.Swagger
                 case "System.UInt16":
                 case "System.Int32":
                 case "System.UInt32":
-                    return new Schema { type = "integer", format = "int32" };
+                    schema = new Schema { type = "integer", format = "int32" };
+                    break;
 
                 case "System.Int64":
                 case "System.UInt64":
-                    return new Schema { type = "integer", format = "int64" };
+                    schema = new Schema { type = "integer", format = "int64" };
+                    break;
 
                 case "System.Single":
-                    return new Schema { type = "number", format = "float" };
+                    schema = new Schema { type = "number", format = "float" };
+                    break;
 
                 case "System.Double":
                 case "System.Decimal":
-                    return new Schema { type = "number", format = "double" };
+                    schema = new Schema { type = "number", format = "double" };
+                    break;
 
                 case "System.Byte":
                 case "System.SByte":
-                    return new Schema { type = "string", format = "byte" };
+                    schema = new Schema { type = "string", format = "byte" };
+                    break;
 
                 case "System.Boolean":
-                    return new Schema { type = "boolean" };
+                    schema = new Schema { type = "boolean" };
+                    break;
 
                 case "System.DateTime":
                 case "System.DateTimeOffset":
-                    return new Schema { type = "string", format = "date-time" };
+                    schema = new Schema { type = "string", format = "date-time" };
+                    break;
 
                 default:
-                    return new Schema { type = "string" };
+                    schema = new Schema { type = "string" };
+                    break;
             }
+
+            return schema;
         }
 
         private Schema CreateEnumSchema(JsonPrimitiveContract primitiveContract, Type type)
