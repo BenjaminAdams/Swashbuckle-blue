@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>Swashbuckle.Blue</id>
-    <version>5.23</version>
+    <version>5.24</version>
     <title>Swashbuckle.Blue - Swagger for WebApi</title>
     <authors>Benjamin Adams</authors>
     <licenseUrl>http://opensource.org/licenses/BSD-3-Clause</licenseUrl>
@@ -27,7 +27,7 @@ Changed some things the current Swashbuckle/Swagger projects
     <dependencies>
       <dependency id="Microsoft.AspNet.WebApi.WebHost" version="5.2.3" />
       <dependency id="WebActivatorEx" />
-      <dependency id="Swashbuckle.Blue.Core" version="5.23" />
+      <dependency id="Swashbuckle.Blue.Core" version="5.24" />
     </dependencies>
   </metadata>
   <files>

@@ -14,7 +14,7 @@ namespace Swashbuckle.Dummy.Controllers
 
         [HttpPut]
         [Route("{apiVersion:regex(v2)}/todos/{id}")]
-        public void Update(int id, [FromBody, SwaggerExample("this is an example description")]   string description)
+        public void Update([SwaggerExample("12333")] int id, [FromBody, SwaggerExample("this is an example description")]   string description)
         {
             throw new NotImplementedException();
         }

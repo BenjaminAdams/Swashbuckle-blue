@@ -24,8 +24,7 @@ namespace Swashbuckle.Swagger.XmlComments
 
         public void Apply(Schema model, ModelFilterContext context)
         {
-            var typeNode = _navigator.SelectSingleNode(
-                String.Format(TypeExpression, context.SystemType.XmlLookupName()));
+            var typeNode = _navigator.SelectSingleNode(String.Format(TypeExpression, context.SystemType.XmlLookupName()));
 
             if (typeNode != null)
             {

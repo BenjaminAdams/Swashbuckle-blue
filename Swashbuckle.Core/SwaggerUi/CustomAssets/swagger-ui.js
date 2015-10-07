@@ -231,21 +231,27 @@ window.Docs = {
 };
 'use strict';
 
-Handlebars.registerHelper('sanitize', function(html) {
+Handlebars.registerHelper('sanitize', function (html) {
     // Strip the script tags from the html, and return it as a Handlebars.SafeString
     html = html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
     return new Handlebars.SafeString(html);
 });
 
-Handlebars.registerHelper('renderTextParam', function(param) {
+Handlebars.registerHelper('renderTextParam', function (param) {
     var result, type = 'text', idAtt = '';
     var isArray = param.type.toLowerCase() === 'array' || param.allowMultiple;
     var defaultValue = isArray && Array.isArray(param.default) ? param.default.join('\n') : param.default;
+    var exampleValue = isArray && Array.isArray(param.example) ? param.default.join('\n') : param.example;
 
-    var dataVendorExtensions = Object.keys(param).filter(function(property) {
+    if (typeof exampleValue === 'undefined' && typeof param.schema !== 'undefined' && typeof param.schema.example !== 'undefined') {
+        exampleValue = param.schema.example
+    }
+    // console.log('param in handlebars =', param, exampleValue)
+
+    var dataVendorExtensions = Object.keys(param).filter(function (property) {
         // filter X-data- properties
         return property.match(/^X-data-/i) !== null;
-    }).reduce(function(result, property) {
+    }).reduce(function (result, property) {
         // remove X- from property name, so it results in html attributes like data-foo='bar'
         return result += ' ' + property.substring(2, property.length) + '=\'' + param[property] + '\'';
     }, '');
@@ -254,30 +260,33 @@ Handlebars.registerHelper('renderTextParam', function(param) {
         defaultValue = '';
     }
 
-    if(param.format && param.format === 'password') {
+    if (typeof exampleValue !== 'undefined') {
+        defaultValue = exampleValue
+    }
+
+    if (param.format && param.format === 'password') {
         type = 'password';
     }
 
-    if(param.valueId) {
+    if (param.valueId) {
         idAtt = ' id=\'' + param.valueId + '\'';
     }
 
-    if(isArray) {
+    if (isArray) {
         result = '<textarea class=\'body-textarea' + (param.required ? ' required' : '') + '\' name=\'' + param.name + '\'' + idAtt + dataVendorExtensions;
         result += ' placeholder=\'Provide multiple values in new lines' + (param.required ? ' (at least one required).' : '.') + '\'>';
         result += defaultValue + '</textarea>';
     } else {
         var parameterClass = 'parameter';
-        if(param.required) {
-          parameterClass += ' required';
+        if (param.required) {
+            parameterClass += ' required';
         }
         result = '<input class=\'' + parameterClass + '\' minlength=\'' + (param.required ? 1 : 0) + '\'';
-        result += ' name=\'' + param.name +'\' placeholder=\'' + (param.required ? '(required)' : '') + '\'' + idAtt + dataVendorExtensions;
+        result += ' name=\'' + param.name + '\' placeholder=\'' + (param.required ? '(required)' : '') + '\'' + idAtt + dataVendorExtensions;
         result += ' type=\'' + type + '\' value=\'' + defaultValue + '\'/>';
     }
     return new Handlebars.SafeString(result);
 });
-
 'use strict';
 
 var Helpers = {}
@@ -1050,7 +1059,7 @@ this["Handlebars"]["templates"]["main"] = Handlebars.template({"1":function(dept
 this["Handlebars"]["templates"]["operation"] = Handlebars.template({"1":function(depth0,helpers,partials,data) {
   return "deprecated";
   },"3":function(depth0,helpers,partials,data) {
-  return "            <h4>Warning: Deprecated</h4>r\n";
+  return "            <h4>Warning: Deprecated</h4>\n";
   },"5":function(depth0,helpers,partials,data) {
   var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, buffer = "        <h4>Implementation Notes</h4>\n        <div class=\"markdown\">";
   stack1 = ((helper = (helper = helpers.description || (depth0 != null ? depth0.description : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"description","hash":{},"data":data}) : helper));
@@ -1331,7 +1340,7 @@ this["Handlebars"]["templates"]["param_required"] = Handlebars.template({"1":fun
     + escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"name","hash":{},"data":data}) : helper)))
     + "' id='"
     + escapeExpression(((helper = (helper = helpers.valueId || (depth0 != null ? depth0.valueId : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"valueId","hash":{},"data":data}) : helper)))
-    + "'/>\n";
+    + "' />\n";
 },"4":function(depth0,helpers,partials,data) {
   var stack1, buffer = "";
   stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0['default'] : depth0), {"name":"if","hash":{},"fn":this.program(5, data),"inverse":this.program(7, data),"data":data});
@@ -1352,7 +1361,9 @@ this["Handlebars"]["templates"]["param_required"] = Handlebars.template({"1":fun
     + escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"name","hash":{},"data":data}) : helper)))
     + "' id='"
     + escapeExpression(((helper = (helper = helpers.valueId || (depth0 != null ? depth0.valueId : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"valueId","hash":{},"data":data}) : helper)))
-    + "'></textarea>\n				<br />\n				<div class=\"parameter-content-type\" />\n";
+    + "'>"
+    + escapeExpression(((helper = (helper = helpers.example || (depth0 != null ? depth0.example : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"example","hash":{},"data":data}) : helper)))
+    + "</textarea>\n				<br />\n				<div class=\"parameter-content-type\" />\n";
 },"9":function(depth0,helpers,partials,data) {
   var stack1, buffer = "";
   stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.isFile : depth0), {"name":"if","hash":{},"fn":this.program(10, data),"inverse":this.program(12, data),"data":data});
@@ -1364,7 +1375,7 @@ this["Handlebars"]["templates"]["param_required"] = Handlebars.template({"1":fun
     + escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"name","hash":{},"data":data}) : helper)))
     + "' id='"
     + escapeExpression(((helper = (helper = helpers.valueId || (depth0 != null ? depth0.valueId : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"valueId","hash":{},"data":data}) : helper)))
-    + "'/>\n";
+    + "' />\n";
 },"12":function(depth0,helpers,partials,data) {
   var stack1, helperMissing=helpers.helperMissing, buffer = "";
   stack1 = ((helpers.renderTextParam || (depth0 && depth0.renderTextParam) || helperMissing).call(depth0, depth0, {"name":"renderTextParam","hash":{},"fn":this.program(13, data),"inverse":this.noop,"data":data}));
@@ -1373,20 +1384,20 @@ this["Handlebars"]["templates"]["param_required"] = Handlebars.template({"1":fun
 },"13":function(depth0,helpers,partials,data) {
   return "";
 },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, buffer = "<td class='code required'><label for='"
+  var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, buffer = "<td class='code required'>\n  <label for='"
     + escapeExpression(((helper = (helper = helpers.valueId || (depth0 != null ? depth0.valueId : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"valueId","hash":{},"data":data}) : helper)))
     + "'>"
     + escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"name","hash":{},"data":data}) : helper)))
-    + "</label></td>\n<td>\n";
+    + "</label>\n</td>\n<td>\n";
   stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.isBody : depth0), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.program(9, data),"data":data});
   if (stack1 != null) { buffer += stack1; }
-  buffer += "</td>\n<td>\n	<strong><span class=\"markdown\">";
+  buffer += "</td>\n<td>\n  <strong>\n    <span class=\"markdown\">";
   stack1 = ((helper = (helper = helpers.description || (depth0 != null ? depth0.description : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"description","hash":{},"data":data}) : helper));
   if (stack1 != null) { buffer += stack1; }
-  buffer += "</span></strong>\n</td>\n<td>";
+  buffer += "</span>\n  </strong>\n</td>\n<td>";
   stack1 = ((helper = (helper = helpers.paramType || (depth0 != null ? depth0.paramType : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"paramType","hash":{},"data":data}) : helper));
   if (stack1 != null) { buffer += stack1; }
-  return buffer + "</td>\n<td><span class=\"model-signature\"></span></td>\n";
+  return buffer + "</td>\n<td>\n  <span class=\"model-signature\"></span>\n</td>";
 },"useData":true});
 this["Handlebars"]["templates"]["param"] = Handlebars.template({"1":function(depth0,helpers,partials,data) {
   var stack1, buffer = "";
@@ -1399,7 +1410,7 @@ this["Handlebars"]["templates"]["param"] = Handlebars.template({"1":function(dep
     + escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"name","hash":{},"data":data}) : helper)))
     + "' id='"
     + escapeExpression(((helper = (helper = helpers.valueId || (depth0 != null ? depth0.valueId : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"valueId","hash":{},"data":data}) : helper)))
-    + "'/>\n			<div class=\"parameter-content-type\" />\n";
+    + "' />\n			<div class=\"parameter-content-type\" />\n";
 },"4":function(depth0,helpers,partials,data) {
   var stack1, buffer = "";
   stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0['default'] : depth0), {"name":"if","hash":{},"fn":this.program(5, data),"inverse":this.program(7, data),"data":data});
@@ -1420,7 +1431,9 @@ this["Handlebars"]["templates"]["param"] = Handlebars.template({"1":function(dep
     + escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"name","hash":{},"data":data}) : helper)))
     + "' id='"
     + escapeExpression(((helper = (helper = helpers.valueId || (depth0 != null ? depth0.valueId : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"valueId","hash":{},"data":data}) : helper)))
-    + "'></textarea>\n				<br />\n				<div class=\"parameter-content-type\" />\n";
+    + "'>"
+    + escapeExpression(((helper = (helper = helpers.example || (depth0 != null ? depth0.example : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"example","hash":{},"data":data}) : helper)))
+    + "</textarea>\n				<br />\n				<div class=\"parameter-content-type\" />\n";
 },"9":function(depth0,helpers,partials,data) {
   var stack1, buffer = "";
   stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.isFile : depth0), {"name":"if","hash":{},"fn":this.program(2, data),"inverse":this.program(10, data),"data":data});
@@ -1434,20 +1447,20 @@ this["Handlebars"]["templates"]["param"] = Handlebars.template({"1":function(dep
 },"11":function(depth0,helpers,partials,data) {
   return "";
 },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, buffer = "<td class='code'><label for='"
+  var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, buffer = "<td class='code'>\n  <label for='"
     + escapeExpression(((helper = (helper = helpers.valueId || (depth0 != null ? depth0.valueId : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"valueId","hash":{},"data":data}) : helper)))
     + "'>"
     + escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"name","hash":{},"data":data}) : helper)))
-    + "</label></td>\n<td>\n\n";
+    + "</label>\n</td>\n<td>\n\n";
   stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.isBody : depth0), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.program(9, data),"data":data});
   if (stack1 != null) { buffer += stack1; }
-  buffer += "\n</td>\n<td class=\"markdown\">";
+  buffer += "</td>\n<td class=\"markdown\">";
   stack1 = ((helper = (helper = helpers.description || (depth0 != null ? depth0.description : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"description","hash":{},"data":data}) : helper));
   if (stack1 != null) { buffer += stack1; }
   buffer += "</td>\n<td>";
   stack1 = ((helper = (helper = helpers.paramType || (depth0 != null ? depth0.paramType : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"paramType","hash":{},"data":data}) : helper));
   if (stack1 != null) { buffer += stack1; }
-  return buffer + "</td>\n<td>\n	<span class=\"model-signature\"></span>\n</td>\n";
+  return buffer + "</td>\n<td>\n  <span class=\"model-signature\"></span>\n</td>";
 },"useData":true});
 this["Handlebars"]["templates"]["parameter_content_type"] = Handlebars.template({"1":function(depth0,helpers,partials,data) {
   var stack1, buffer = "";
@@ -32638,112 +32651,117 @@ SwaggerUi.Views.ParameterContentTypeView = Backbone.View.extend({
 'use strict';
 
 SwaggerUi.Views.ParameterView = Backbone.View.extend({
-  initialize: function(){
-    Handlebars.registerHelper('isArray', function(param, opts) {
-      if (param.type.toLowerCase() === 'array' || param.allowMultiple) {
-        return opts.fn(this);
-      } else {
-        return opts.inverse(this);
-      }
-    });
-  },
+    initialize: function () {
+        Handlebars.registerHelper('isArray', function (param, opts) {
+            if (param.type.toLowerCase() === 'array' || param.allowMultiple) {
+                return opts.fn(this);
+            } else {
+                return opts.inverse(this);
+            }
+        });
+    },
 
-  render: function() {
-    var type = this.model.type || this.model.dataType;
+    render: function () {
+        var type = this.model.type || this.model.dataType;
 
-    if (typeof type === 'undefined') {
-      var schema = this.model.schema;
-      if (schema && schema.$ref) {
-        var ref = schema.$ref;
-        if (ref.indexOf('#/definitions/') === 0) {
-          type = ref.substring('#/definitions/'.length);
-        } else {
-          type = ref;
+        if (typeof type === 'undefined') {
+            var schema = this.model.schema;
+            if (schema && schema.$ref) {
+                var ref = schema.$ref;
+                if (ref.indexOf('#/definitions/') === 0) {
+                    type = ref.substring('#/definitions/'.length);
+                } else {
+                    type = ref;
+                }
+            }
         }
-      }
-    }
 
-    this.model.type = type;
-    this.model.paramType = this.model.in || this.model.paramType;
-    this.model.isBody = this.model.paramType === 'body' || this.model.in === 'body';
-    this.model.isFile = type && type.toLowerCase() === 'file';
+        // console.log('xxxmodel in paramView', this.model)
 
-    // Allow for default === false
-    if(typeof this.model.default === 'undefined') {
-      this.model.default = this.model.defaultValue;
-    }
+        this.model.type = type;
+        this.model.paramType = this.model.in || this.model.paramType;
+        this.model.isBody = this.model.paramType === 'body' || this.model.in === 'body';
+        this.model.isFile = type && type.toLowerCase() === 'file';
 
-    this.model.hasDefault = (typeof this.model.default !== 'undefined');
-    this.model.valueId = 'm' + this.model.name + Math.random();
-
-    if (this.model.allowableValues) {
-      this.model.isList = true;
-    }
-
-    var template = this.template();
-    $(this.el).html(template(this.model));
-
-    var signatureModel = {
-      sampleJSON: this.model.sampleJSON,
-      isParam: true,
-      signature: this.model.signature
-    };
-
-    if (this.model.sampleJSON) {
-      var signatureView = new SwaggerUi.Views.SignatureView({model: signatureModel, tagName: 'div'});
-      $('.model-signature', $(this.el)).append(signatureView.render().el);
-    }
-    else {
-      $('.model-signature', $(this.el)).html(this.model.signature);
-    }
-
-    var isParam = false;
-
-    if (this.model.isBody) {
-      isParam = true;
-    }
-
-    var contentTypeModel = {
-      isParam: isParam
-    };
-
-    contentTypeModel.consumes = this.model.consumes;
-
-    if (isParam) {
-      var parameterContentTypeView = new SwaggerUi.Views.ParameterContentTypeView({model: contentTypeModel});
-      $('.parameter-content-type', $(this.el)).append(parameterContentTypeView.render().el);
-    }
-
-    else {
-      var responseContentTypeView = new SwaggerUi.Views.ResponseContentTypeView({model: contentTypeModel});
-      $('.response-content-type', $(this.el)).append(responseContentTypeView.render().el);
-    }
-
-    return this;
-  },
-
-  // Return an appropriate template based on if the parameter is a list, readonly, required
-  template: function(){
-    if (this.model.isList) {
-      return Handlebars.templates.param_list;
-    } else {
-      if (this.options.readOnly) {
-        if (this.model.required) {
-          return Handlebars.templates.param_readonly_required;
-        } else {
-          return Handlebars.templates.param_readonly;
+        // Allow for default === false
+        if (typeof this.model.default === 'undefined') {
+            this.model.default = this.model.defaultValue;
         }
-      } else {
-        if (this.model.required) {
-          return Handlebars.templates.param_required;
-        } else {
-          return Handlebars.templates.param;
+
+        if (typeof this.model.example === 'undefined' && typeof this.model.schema !== 'undefined' && typeof this.model.schema.example !== 'undefined') {
+            this.model.example = this.model.schema.example
         }
-      }
+
+        this.model.hasDefault = (typeof this.model.default !== 'undefined');
+        this.model.valueId = 'm' + this.model.name + Math.random();
+
+        if (this.model.allowableValues) {
+            this.model.isList = true;
+        }
+
+        var template = this.template();
+        $(this.el).html(template(this.model));
+
+        var signatureModel = {
+            sampleJSON: this.model.sampleJSON,
+            isParam: true,
+            signature: this.model.signature
+        };
+
+        if (this.model.sampleJSON) {
+            var signatureView = new SwaggerUi.Views.SignatureView({ model: signatureModel, tagName: 'div' });
+            $('.model-signature', $(this.el)).append(signatureView.render().el);
+        }
+        else {
+            $('.model-signature', $(this.el)).html(this.model.signature);
+        }
+
+        var isParam = false;
+
+        if (this.model.isBody) {
+            isParam = true;
+        }
+
+        var contentTypeModel = {
+            isParam: isParam
+        };
+
+        contentTypeModel.consumes = this.model.consumes;
+
+        if (isParam) {
+            var parameterContentTypeView = new SwaggerUi.Views.ParameterContentTypeView({ model: contentTypeModel });
+            $('.parameter-content-type', $(this.el)).append(parameterContentTypeView.render().el);
+        }
+
+        else {
+            var responseContentTypeView = new SwaggerUi.Views.ResponseContentTypeView({ model: contentTypeModel });
+            $('.response-content-type', $(this.el)).append(responseContentTypeView.render().el);
+        }
+
+        return this;
+    },
+
+    // Return an appropriate template based on if the parameter is a list, readonly, required
+    template: function () {
+        if (this.model.isList) {
+            return Handlebars.templates.param_list;
+        } else {
+            if (this.options.readOnly) {
+                if (this.model.required) {
+                    return Handlebars.templates.param_readonly_required;
+                } else {
+                    return Handlebars.templates.param_readonly;
+                }
+            } else {
+                if (this.model.required) {
+                    return Handlebars.templates.param_required;
+                } else {
+                    return Handlebars.templates.param;
+                }
+            }
+        }
     }
-  }
 });
-
 'use strict';
 
 SwaggerUi.Views.ResourceView = Backbone.View.extend({
@@ -32832,7 +32850,6 @@ SwaggerUi.Views.ResponseContentTypeView = Backbone.View.extend({
 SwaggerUi.Views.SidebarView = Backbone.View.extend({
     el: '#sidebar',
     initialize: function (opts) {
-        console.log('good el, passing in opts to sidebar view opt=', opts)
         _.bindAll(this, 'render', 'addModelToSidebar', 'shortMethod', 'addParentNameToSidebar');
         this.models = opts.models
         this.render()
@@ -32883,73 +32900,77 @@ SwaggerUi.Views.SidebarView = Backbone.View.extend({
 'use strict';
 
 SwaggerUi.Views.SignatureView = Backbone.View.extend({
-  events: {
-    'click a.description-link': 'switchToDescription',
-    'click a.snippet-link': 'switchToSnippet',
-    'mousedown .snippet': 'snippetToTextArea'
-  },
+    events: {
+        'click a.description-link': 'switchToDescription',
+        'click a.snippet-link': 'switchToSnippet',
+        'mousedown .snippet': 'snippetToTextArea'
+    },
 
-  initialize: function() {
+    initialize: function () {
+    },
 
-  },
+    render: function () {
+        var self = this
 
-  render: function() {
+        $(this.el).html(Handlebars.templates.signature(this.model));
 
-    $(this.el).html(Handlebars.templates.signature(this.model));
+        // $('.model-desc').html(this.model.signature)
 
-    // $('.model-desc').html(this.model.signature)
+        this.switchToSnippet();
 
-    this.switchToSnippet();
+        this.isParam = this.model.isParam;
+        //console.log('model=', this.model)
 
-    this.isParam = this.model.isParam;
-    //console.log('model=', this.model)
+        if (this.isParam) {
+            $('.notice', $(this.el)).text('Click to set as parameter value');
+            setTimeout(function () {
+                // $('.snippet', $(self.el)).click()
+                self.snippetToTextArea()
+            }, 100)
+        }
 
-    if (this.isParam) {
-      $('.notice', $(this.el)).text('Click to set as parameter value');
+        return this;
+    },
+
+    // handler for show signature
+    switchToDescription: function (e) {
+        if (e) {
+            e.preventDefault();
+        }
+
+        $('.snippet', $(this.el)).hide();
+        $('.description', $(this.el)).show();
+        $('.description-link', $(this.el)).addClass('selected');
+        $('.snippet-link', $(this.el)).removeClass('selected');
+    },
+
+    // handler for show sample
+    switchToSnippet: function (e) {
+        if (e) {
+            e.preventDefault();
+        }
+
+        $('.description', $(this.el)).hide();
+        $('.snippet', $(this.el)).show();
+        $('.snippet-link', $(this.el)).addClass('selected');
+        $('.description-link', $(this.el)).removeClass('selected');
+    },
+
+    // handler for snippet to text area
+    snippetToTextArea: function (e) {
+        if (this.isParam) {
+            if (e) {
+                e.preventDefault();
+            }
+
+            var textArea = $('textarea', $(this.el.parentNode.parentNode.parentNode));
+
+            // Fix for bug in IE 10/11 which causes placeholder text to be copied to "value"
+            if ($.trim(textArea.val()) === '' || textArea.prop('placeholder') === textArea.val()) {
+                textArea.val(this.model.sampleJSON);
+            }
+        }
     }
-
-    return this;
-  },
-
-  // handler for show signature
-  switchToDescription: function(e) {
-    if (e) {
-      e.preventDefault();
-    }
-
-    $('.snippet', $(this.el)).hide();
-    $('.description', $(this.el)).show();
-    $('.description-link', $(this.el)).addClass('selected');
-    $('.snippet-link', $(this.el)).removeClass('selected');
-  },
-
-  // handler for show sample
-  switchToSnippet: function(e) {
-    if (e) {
-      e.preventDefault();
-    }
-
-    $('.description', $(this.el)).hide();
-    $('.snippet', $(this.el)).show();
-    $('.snippet-link', $(this.el)).addClass('selected');
-    $('.description-link', $(this.el)).removeClass('selected');
-  },
-
-  // handler for snippet to text area
-  snippetToTextArea: function(e) {
-    if (this.isParam) {
-      if (e) {
-        e.preventDefault();
-      }
-
-      var textArea = $('textarea', $(this.el.parentNode.parentNode.parentNode));
-
-      // Fix for bug in IE 10/11 which causes placeholder text to be copied to "value"
-      if ($.trim(textArea.val()) === '' || textArea.prop('placeholder') === textArea.val()) {
-        textArea.val(this.model.sampleJSON);
-      }
-    }
-  }
 });
 'use strict';
 

@@ -127,8 +127,8 @@ namespace Swashbuckle.Swagger
             if (jsonContract is JsonDictionaryContract)
             {
                 schema = CreateDictionarySchema((JsonDictionaryContract)jsonContract);
-                schema = SchemaExtensions.GetAttributeDetails(schema, type.GetProperty(jsonContract.UnderlyingType.Name));
-
+                //schema = SchemaExtensions.GetAttributeDetails(schema, type.GetProperty(jsonContract.UnderlyingType.Name));
+                schema.WithValidationProperties(jsonContract);
                 //schema.example = type.GetProperty(jsonContract.UnderlyingType.Name).GetCustomAttributesData();
                 return schema;
             }
@@ -136,14 +136,16 @@ namespace Swashbuckle.Swagger
             if (jsonContract is JsonArrayContract)
             {
                 schema = CreateArraySchema((JsonArrayContract)jsonContract);
-                schema = SchemaExtensions.GetAttributeDetails(schema, type.GetProperty(jsonContract.UnderlyingType.Name));
+                schema.WithValidationProperties(jsonContract);
+                //schema = SchemaExtensions.GetAttributeDetails(schema, type.GetProperty(jsonContract.UnderlyingType.Name));
                 return schema;
             }
 
             if (jsonContract is JsonObjectContract)
             {
                 schema = CreateObjectSchema((JsonObjectContract)jsonContract);
-                schema = SchemaExtensions.GetAttributeDetails(schema, type.GetProperty(jsonContract.UnderlyingType.Name));
+                //schema = SchemaExtensions.GetAttributeDetails(schema, type.GetProperty(jsonContract.UnderlyingType.Name));
+                schema.WithValidationProperties(jsonContract);
                 return schema;
             }
 
@@ -200,6 +202,8 @@ namespace Swashbuckle.Swagger
                     schema = new Schema { type = "string" };
                     break;
             }
+
+            schema.WithValidationProperties(primitiveContract);
 
             return schema;
         }

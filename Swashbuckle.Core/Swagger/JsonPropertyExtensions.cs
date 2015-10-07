@@ -45,5 +45,11 @@ namespace Swashbuckle.Swagger
             if (jsonProperty.UnderlyingType.FullName == null) return null;
             return jsonProperty.UnderlyingType.GetProperty(jsonProperty.UnderlyingType.FullName, jsonProperty.UnderlyingType);
         }
+
+        public static PropertyInfo PropertyInfo(this JsonContract jsonProperty)
+        {
+            if (jsonProperty.UnderlyingType.FullName == null) return null;
+            return jsonProperty.UnderlyingType.GetProperty(jsonProperty.UnderlyingType.FullName, jsonProperty.UnderlyingType);
+        }
     }
 }

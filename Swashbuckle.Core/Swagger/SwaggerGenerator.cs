@@ -2,8 +2,11 @@
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net.Http.Formatting;
+using System.Reflection;
+using System.Web.Http.Controllers;
 using System.Web.Http.Description;
 
 namespace Swashbuckle.Swagger
@@ -14,6 +17,7 @@ namespace Swashbuckle.Swagger
         private readonly JsonSerializerSettings _jsonSerializerSettings;
         private readonly IDictionary<string, Info> _apiVersions;
         private readonly SwaggerGeneratorOptions _options;
+        private readonly IContractResolver _contractResolver;
 
         public SwaggerGenerator(
             IApiExplorer apiExplorer,
@@ -23,6 +27,7 @@ namespace Swashbuckle.Swagger
         {
             _apiExplorer = apiExplorer;
             _jsonSerializerSettings = jsonSerializerSettings;
+            _contractResolver = jsonSerializerSettings.ContractResolver ?? new DefaultContractResolver();
             _apiVersions = apiVersions;
             _options = options ?? new SwaggerGeneratorOptions();
         }
@@ -190,6 +195,16 @@ namespace Swashbuckle.Swagger
             parameter.@default = paramDesc.ParameterDescriptor.DefaultValue;
 
             var schema = schemaRegistry.GetOrRegister(paramDesc.ParameterDescriptor.ParameterType);
+
+            // var jsonContract = _contractResolver.ResolveContract(paramDesc.ParameterDescriptor.ParameterType);
+            //schema.WithValidationProperties(jsonContract);
+
+            var reflected = (ReflectedHttpParameterDescriptor)paramDesc.ParameterDescriptor;
+
+            foreach (var attribute in reflected.ParameterInfo.GetCustomAttributes(true))
+            {
+                SchemaExtensions.SetSchemaDetails(schema, attribute);
+            }
 
             SchemaExtensions.GetAttributeDetails(schema, paramDesc.ParameterDescriptor.ParameterType.GetProperty(paramDesc.Name));
 

@@ -7,6 +7,53 @@ namespace Swashbuckle.Swagger
 {
     public static class SchemaExtensions
     {
+        public static Schema SetSchemaDetails(Schema schema, Object attribute)
+        {
+            var regex = attribute as RegularExpressionAttribute;
+            if (regex != null)
+                schema.pattern = regex.Pattern;
+
+            var range = attribute as RangeAttribute;
+            if (range != null)
+            {
+                int maximum;
+                if (Int32.TryParse(range.Maximum.ToString(), out maximum))
+                    schema.maximum = maximum;
+
+                int minimum;
+                if (Int32.TryParse(range.Minimum.ToString(), out minimum))
+                    schema.minimum = minimum;
+            }
+
+            var length = attribute as StringLengthAttribute;
+            if (length != null)
+            {
+                schema.maxLength = length.MaximumLength;
+                schema.minLength = length.MinimumLength;
+            }
+
+            var maxLength = attribute as MaxLengthAttribute;
+            if (maxLength != null)
+            {
+                schema.maxLength = maxLength.Length;
+            }
+
+            var minLength = attribute as MinLengthAttribute;
+            if (minLength != null)
+            {
+                schema.minLength = minLength.Length;
+            }
+
+            //schema.example = "TODO: remove this example!";
+
+            var example = attribute as SwaggerExample;
+            if (example != null)
+            {
+                schema.example = example.GetExample();
+            }
+            return schema;
+        }
+
         public static Schema GetAttributeDetails(Schema schema, System.Reflection.PropertyInfo propInfo)
         {
             if (schema == null || propInfo == null)
@@ -15,48 +62,7 @@ namespace Swashbuckle.Swagger
             }
             foreach (var attribute in propInfo.GetCustomAttributes(false))
             {
-                var regex = attribute as RegularExpressionAttribute;
-                if (regex != null)
-                    schema.pattern = regex.Pattern;
-
-                var range = attribute as RangeAttribute;
-                if (range != null)
-                {
-                    int maximum;
-                    if (Int32.TryParse(range.Maximum.ToString(), out maximum))
-                        schema.maximum = maximum;
-
-                    int minimum;
-                    if (Int32.TryParse(range.Minimum.ToString(), out minimum))
-                        schema.minimum = minimum;
-                }
-
-                var length = attribute as StringLengthAttribute;
-                if (length != null)
-                {
-                    schema.maxLength = length.MaximumLength;
-                    schema.minLength = length.MinimumLength;
-                }
-
-                var maxLength = attribute as MaxLengthAttribute;
-                if (maxLength != null)
-                {
-                    schema.maxLength = maxLength.Length;
-                }
-
-                var minLength = attribute as MinLengthAttribute;
-                if (minLength != null)
-                {
-                    schema.minLength = minLength.Length;
-                }
-
-                //schema.example = "TODO: remove this example!";
-
-                var example = attribute as SwaggerExample;
-                if (example != null)
-                {
-                    schema.example = example.GetExample();
-                }
+                SetSchemaDetails(schema, attribute);
             }
 
             return schema;
@@ -86,16 +92,16 @@ namespace Swashbuckle.Swagger
             return schema;
         }
 
-        //public static Schema WithValidationProperties(this Schema schema, JsonContract jsonProperty)
-        //{
-        //    var propInfo = jsonProperty.PropertyInfo();
-        //    if (propInfo == null)
-        //        return schema;
+        public static Schema WithValidationProperties(this Schema schema, JsonContract jsonProperty)
+        {
+            var propInfo = jsonProperty.PropertyInfo();
+            if (propInfo == null)
+                return schema;
 
-        //    schema = GetAttributeDetails(schema, propInfo);
+            schema = GetAttributeDetails(schema, propInfo);
 
-        //    return schema;
-        //}
+            return schema;
+        }
 
         public static void PopulateFrom(this PartialSchema partialSchema, Schema schema)
         {
@@ -111,8 +117,7 @@ namespace Swashbuckle.Swagger
                 partialSchema.items.PopulateFrom(schema.items);
             }
 
-            //partialSchema.example = schema.example;
-            //partialSchema.example = "test";
+            partialSchema.example = schema.example;
 
             partialSchema.@default = schema.@default;
             partialSchema.maximum = schema.maximum;
