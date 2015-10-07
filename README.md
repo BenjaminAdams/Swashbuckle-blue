@@ -10,6 +10,8 @@ Changed some things the current Swashbuckle/Swagger projects
 * Customize the logo, header title, and page title
 * Night theme for code display
 * Added [SwaggerIgnore] attribute to hide properties/controller routes from appearing in documentation
+* Added [SwaggerExample] attribute.  You can add an example value that will be used as a placeholder in the input fields when the page loads
+* Putting API keys in the header now works.  In SwaggerConfig.cs set c.ApiKey("apiKey").Name("apiKey").In("header") or "query" for the api key in a query param
 
 
 Seamlessly adds a [Swagger](http://swagger.io/) to WebApi projects! Combines ApiExplorer and Swagger/swagger-ui to provide a rich discovery, documentation and playground experience to your API consumers.
