@@ -69,12 +69,12 @@ namespace Swashbuckle.Swagger.FromUriParams
                 {
                     var objName = propertySchema.@ref.Replace("#/definitions/", "");
 
-                    var type = apiDescription.ParameterDescriptions
-                    .Single(paramDesc => paramDesc.Name == objName)
-                    .ParameterDescriptor.ParameterType;
+                    //var type = apiDescription.ParameterDescriptions
+                    //.Single(paramDesc => paramDesc.Name == objName)
+                    //.ParameterDescriptor.ParameterType;
 
                     var schema = schemaRegistry.Definitions[propertySchema.@ref.Replace("#/definitions/", "")];
-                    SchemaExtensions.GetAttributeDetails(schema, type.GetProperty(objName));
+                    //SchemaExtensions.GetAttributeDetails(schema, type.GetProperty(objName));
 
                     ExtractAndAddQueryParams(
                         schema,

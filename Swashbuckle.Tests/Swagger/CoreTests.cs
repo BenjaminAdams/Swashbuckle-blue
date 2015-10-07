@@ -1,15 +1,15 @@
 ﻿using Newtonsoft.Json.Linq;
-using System;
 using NUnit.Framework;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
-using System.Linq;
 using Swashbuckle.Application;
 using Swashbuckle.Dummy;
 using Swashbuckle.Dummy.Controllers;
 using Swashbuckle.Dummy.SwaggerExtensions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
 
 namespace Swashbuckle.Tests.Swagger
 {
@@ -77,7 +77,7 @@ namespace Swashbuckle.Tests.Swagger
             var basePath = swagger["basePath"];
             Assert.AreEqual("/foobar", basePath.ToString());
         }
-        
+
         [Test]
         public void It_provides_a_description_for_each_path_in_the_api()
         {
@@ -211,7 +211,8 @@ namespace Swashbuckle.Tests.Swagger
                                         required = true,
                                         type = "integer",
                                         format = "int32",
-                                        @enum = new[] { 2, 4 }
+                                        @enum = new[] { 2, 4 },
+                                        example = "Book"
                                     }
                                 },
                                 responses = new Dictionary<string, object>
@@ -412,7 +413,7 @@ namespace Swashbuckle.Tests.Swagger
                 .Select(prop => prop.Name);
 
             CollectionAssert.AreEqual(new[] { "/products", "/products/{id}", "/customers", "/customers/{id}" }, paths);
-       }
+        }
 
         [Test]
         public void It_exposes_config_to_post_modify_the_document()
@@ -454,7 +455,7 @@ namespace Swashbuckle.Tests.Swagger
                             vc.Version("v1", "Test API V1");
                         });
                 });
-            
+
             // 2.0
             var swagger = GetContent<JObject>("http://tempuri.org/swagger/docs/v2");
             var info = swagger["info"];
@@ -466,7 +467,7 @@ namespace Swashbuckle.Tests.Swagger
             Assert.AreEqual(expected.ToString(), info.ToString());
             Assert.IsNotNull(swagger["paths"]["/{apiVersion}/todos"]);
             Assert.IsNotNull(swagger["paths"]["/{apiVersion}/todos/{id}"]);
-            
+
             // 1.0
             swagger = GetContent<JObject>("http://tempuri.org/swagger/docs/v1");
             info = swagger["info"];
@@ -510,7 +511,8 @@ namespace Swashbuckle.Tests.Swagger
                         required = true,
                         type = "integer",
                         format = "int32",
-                        @enum = new[] { 2, 4 }
+                        @enum = new[] { 2, 4 },
+                        example = "Book"
                     },
                     new
                     {

@@ -52,7 +52,8 @@ namespace Swashbuckle.Tests.Swagger
                             {
                                 format = "int32",
                                 @enum = new[] { 2, 4 },
-                                type = "integer"
+                                type = "integer",
+                                example = "Book"
                             },
                             Description = new
                             {
@@ -218,7 +219,8 @@ namespace Swashbuckle.Tests.Swagger
                             Category = new
                             {
                                 @enum = new[] { "A", "B" },
-                                type = "string"
+                                type = "string",
+                                example = "A"
                             }
                         }
                     }
@@ -239,7 +241,8 @@ namespace Swashbuckle.Tests.Swagger
             var expected = JObject.FromObject(new
                 {
                     @enum = new[] { "book", "album" },
-                    type = "string"
+                    type = "string",
+                    example = "Book"
                 });
             Assert.AreEqual(expected.ToString(), typeSchema.ToString());
         }
