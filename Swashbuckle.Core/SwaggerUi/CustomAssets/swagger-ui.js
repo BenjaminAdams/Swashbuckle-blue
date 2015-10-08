@@ -32559,19 +32559,24 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
             pre = $('<pre class="json" />').append(code);
         }
         var response_body = pre;
-        $('.request_url', $(this.el)).html('<pre></pre>');
-        $('.request_url pre', $(this.el)).text(url);
-        $('.response_code', $(this.el)).html('<pre>' + response.status + '</pre>');
+        $('.request_url', $(this.el)).html('<pre class="http"><code></code></pre>');
+        $('.request_url code', $(this.el)).text(url);
+        $('.response_code', $(this.el)).html('<pre class="json"><code>' + response.status + '</code></pre>');
         $('.response_body', $(this.el)).html(response_body);
-        $('.response_headers', $(this.el)).html('<pre>' + _.escape(JSON.stringify(response.headers, null, '  ')).replace(/\n/g, '<br>') + '</pre>');
+        $('.response_headers', $(this.el)).html('<pre class="json"><code>' + _.escape(JSON.stringify(response.headers, null, '  ')).replace(/\n/g, '<br>') + '</code></pre>');
         $('.response', $(this.el)).slideDown();
         $('.response_hider', $(this.el)).show();
         $('.response_throbber', $(this.el)).hide();
 
+        hljs.highlightBlock($('.request_url code', $(this.el)).get(0));
+        hljs.highlightBlock($('.response_code code', $(this.el)).get(0));
+        hljs.highlightBlock($('.response_headers code', $(this.el)).get(0));
+
         //adds curl output
         var curlCommand = this.model.asCurl(this.map);
         curlCommand = curlCommand.replace('!', '&#33;');
-        $('.curl', $(this.el)).html('<pre>' + curlCommand + '</pre>');
+        $('.curl', $(this.el)).html('<pre class="bash"><code>' + curlCommand + '</code></pre>');
+        hljs.highlightBlock($('.curl', $(this.el)).get(0));
 
         // only highlight the response if response is less than threshold, default state is highlight response
         var opts = this.options.swaggerOptions;
