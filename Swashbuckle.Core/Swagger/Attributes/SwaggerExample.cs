@@ -14,6 +14,15 @@ namespace Swashbuckle.Swagger.Attributes
 
         public string GetExample()
         {
+            if (_example.ToUpper() == "GUID")
+            {
+                return Guid.NewGuid().ToString();
+            }
+            else if (_example.ToUpper() == "RANDOM" || _example.ToUpper() == "RAND")
+            {
+                return new Random().Next(int.MaxValue).ToString();
+            }
+
             return _example;
         }
     }

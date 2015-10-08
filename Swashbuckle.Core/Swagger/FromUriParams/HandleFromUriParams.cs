@@ -42,10 +42,8 @@ namespace Swashbuckle.Swagger.FromUriParams
                 var refSchema = schemaRegistry.GetOrRegister(type);
                 var schema = schemaRegistry.Definitions[refSchema.@ref.Replace("#/definitions/", "")];
 
-                SchemaExtensions.GetAttributeDetails(schema, type.GetProperty(objectParam.name));
-
                 var qualifier = string.IsNullOrEmpty(objectParam.name) ? "" : (objectParam.name + ".");
-                ExtractAndAddQueryParams(schema, qualifier, objectParam.required, schemaRegistry, operation.parameters, apiDescription);
+                ExtractAndAddQueryParams(schema, qualifier, objectParam.required, schemaRegistry, operation.parameters);
                 operation.parameters.Remove(objectParam);
             }
         }
@@ -55,7 +53,7 @@ namespace Swashbuckle.Swagger.FromUriParams
             string sourceQualifier,
             bool? sourceRequired,
             SchemaRegistry schemaRegistry,
-            IList<Parameter> operationParams, ApiDescription apiDescription)
+            IList<Parameter> operationParams)
         {
             foreach (var entry in sourceSchema.properties)
             {
@@ -67,21 +65,14 @@ namespace Swashbuckle.Swagger.FromUriParams
 
                 if (propertySchema.@ref != null)
                 {
-                    var objName = propertySchema.@ref.Replace("#/definitions/", "");
-
-                    //var type = apiDescription.ParameterDescriptions
-                    //.Single(paramDesc => paramDesc.Name == objName)
-                    //.ParameterDescriptor.ParameterType;
-
                     var schema = schemaRegistry.Definitions[propertySchema.@ref.Replace("#/definitions/", "")];
-                    //SchemaExtensions.GetAttributeDetails(schema, type.GetProperty(objName));
 
                     ExtractAndAddQueryParams(
                         schema,
                         sourceQualifier + entry.Key.ToCamelCase() + ".",
                         required,
                         schemaRegistry,
-                        operationParams, apiDescription);
+                        operationParams);
                 }
                 else
                 {

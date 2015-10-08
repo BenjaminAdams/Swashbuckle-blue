@@ -196,17 +196,12 @@ namespace Swashbuckle.Swagger
 
             var schema = schemaRegistry.GetOrRegister(paramDesc.ParameterDescriptor.ParameterType);
 
-            // var jsonContract = _contractResolver.ResolveContract(paramDesc.ParameterDescriptor.ParameterType);
-            //schema.WithValidationProperties(jsonContract);
+            var reflectedDescriptor = (ReflectedHttpParameterDescriptor)paramDesc.ParameterDescriptor;
 
-            var reflected = (ReflectedHttpParameterDescriptor)paramDesc.ParameterDescriptor;
-
-            foreach (var attribute in reflected.ParameterInfo.GetCustomAttributes(true))
+            foreach (var attribute in reflectedDescriptor.ParameterInfo.GetCustomAttributes(true))
             {
                 SchemaExtensions.SetSchemaDetails(schema, attribute);
             }
-
-            SchemaExtensions.GetAttributeDetails(schema, paramDesc.ParameterDescriptor.ParameterType.GetProperty(paramDesc.Name));
 
             if (parameter.@in == "body")
                 parameter.schema = schema;

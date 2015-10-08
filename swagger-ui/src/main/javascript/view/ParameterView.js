@@ -26,8 +26,6 @@ SwaggerUi.Views.ParameterView = Backbone.View.extend({
             }
         }
 
-        // console.log('xxxmodel in paramView', this.model)
-
         this.model.type = type;
         this.model.paramType = this.model.in || this.model.paramType;
         this.model.isBody = this.model.paramType === 'body' || this.model.in === 'body';
@@ -88,7 +86,48 @@ SwaggerUi.Views.ParameterView = Backbone.View.extend({
             $('.response-content-type', $(this.el)).append(responseContentTypeView.render().el);
         }
 
+        this.initAceEditor()
+
         return this;
+    },
+    initAceEditor: function () {
+        var self = this
+
+        if (this.model.isBody && (this.model.signature !== 'integer' && this.model.signature !== 'string')) {
+            var textarea = $('.body-textarea', $(this.el));
+
+            if (textarea && textarea.length) {
+                setTimeout(function () {
+                    var editDiv = $('<div>', {
+                        position: 'absolute',
+                        width: textarea.width(),
+                        height: textarea.height(),
+                        fontFamily: "monospace",
+                        'class': textarea.attr('class')
+                    }).insertBefore(textarea);
+                    textarea.css('visibility', 'hidden');
+                    textarea.css('height', '10px');
+                    var editor = ace.edit(editDiv[0]);
+
+                    //editor.container.style.fontFamily = "monospace !important"
+                    editor.$blockScrolling = Infinity
+
+                    editor.renderer.setShowGutter(false);
+                    editor.getSession().setValue(textarea.val());
+                    editor.getSession().setMode("ace/mode/json");
+                    editor.setTheme("ace/theme/twilight");
+
+                    // copy back to textarea on form submit...
+                    textarea.closest('form').submit(function () {
+                        textarea.val(editor.getSession().getValue());
+                    })
+
+                    editor.getSession().on('change', function (e) {
+                        textarea.val(editor.getSession().getValue());
+                    });
+                }, 200)
+            }
+        }
     },
 
     // Return an appropriate template based on if the parameter is a list, readonly, required

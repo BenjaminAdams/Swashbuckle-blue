@@ -71,7 +71,7 @@ namespace Swashbuckle.Dummy.Controllers
         /// <param name="reward"></param>
         [HttpPut]
         [Route("{id}/add-reward")]
-        public void AddReward([SwaggerExample("3333388883")] int id, Reward<string> reward)
+        public void AddReward([SwaggerExample("GUID")] int id, Reward<string> reward)
         {
             throw new NotImplementedException();
         }
@@ -142,7 +142,7 @@ namespace Swashbuckle.Dummy.Controllers
         /// <summary>
         /// The Account ID for SubAccounts should be 7 digits.
         /// </summary>
-        [SwaggerExample("123777")]
+        [SwaggerExample("RAND")]
         public override int AccountID { get; set; }
     }
 
