@@ -1098,19 +1098,19 @@ this["Handlebars"]["templates"]["operation"] = Handlebars.template({"1":function
 },"21":function(depth0,helpers,partials,data) {
   return "          <div class='sandbox_header'>\n            <input class='submit' type='button' value='Try it out!' data-sw-translate='' />\n            <a href='#' class='response_hider' style='display:none' data-sw-translate=''>Hide Response</a>\n            <span class='response_throbber' style='display:none'></span>\n          </div>\n";
   },"23":function(depth0,helpers,partials,data) {
+  return "          <h4 data-sw-translate=''>Request Headers</h4>\n          <div class='block request_headers'></div>\n";
+  },"25":function(depth0,helpers,partials,data) {
   var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
   return "            <h4><span data-sw-translate=''>Response Class</span> (<span data-sw-translate=''>Status</span> "
     + escapeExpression(((helper = (helper = helpers.successCode || (depth0 != null ? depth0.successCode : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"successCode","hash":{},"data":data}) : helper)))
     + ")</h4>\n            <p><span class=\"model-signature\" /></p>\n            <br />\n            <div class=\"response-content-type\" />\n";
-},"25":function(depth0,helpers,partials,data) {
+},"27":function(depth0,helpers,partials,data) {
   var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, buffer = "              <h4>Response Parameters</h4>\n              ";
   stack1 = ((helper = (helper = helpers.responseSignatureHtml || (depth0 != null ? depth0.responseSignatureHtml : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"responseSignatureHtml","hash":{},"data":data}) : helper));
   if (stack1 != null) { buffer += stack1; }
   return buffer + "\n              <div style='margin-bottom:15px;'></div>\n";
-},"27":function(depth0,helpers,partials,data) {
+},"29":function(depth0,helpers,partials,data) {
   return "          <div style='margin:0;padding:0;display:inline'></div>\n          <h4 data-sw-translate=''>Response Messages</h4>\n          <table class='fullwidth'>\n            <thead>\n            <tr>\n              <th data-sw-translate=''>HTTP Status Code</th>\n              <th data-sw-translate=''>Reason</th>\n              <th data-sw-translate=''>Response Model</th>\n              <th data-sw-translate=''>Headers</th>\n            </tr>\n            </thead>\n            <tbody class=\"operation-status\">\n            </tbody>\n          </table>\n";
-  },"29":function(depth0,helpers,partials,data) {
-  return "          <h4 data-sw-translate=''>Request Headers</h4>\n          <div class='block request_headers'></div>\n";
   },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
   var stack1, helper, options, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, blockHelperMissing=helpers.blockHelperMissing, buffer = "<ul class='operations'>\n  <li class='"
     + escapeExpression(((helper = (helper = helpers.method || (depth0 != null ? depth0.method : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"method","hash":{},"data":data}) : helper)))
@@ -1172,19 +1172,19 @@ this["Handlebars"]["templates"]["operation"] = Handlebars.template({"1":function
   buffer += "\n";
   stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.isReadOnly : depth0), {"name":"if","hash":{},"fn":this.program(19, data),"inverse":this.program(21, data),"data":data});
   if (stack1 != null) { buffer += stack1; }
-  buffer += "\n";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.type : depth0), {"name":"if","hash":{},"fn":this.program(23, data),"inverse":this.noop,"data":data});
+  buffer += "\n          <div class='response' style='display:none'>\n          <h4 data-sw-translate=''>Response Body</h4>\n          <div class='block response_body'></div>\n          <h4 data-sw-translate=''>Response Code</h4>\n          <div class='block response_code'></div>\n          <h4 data-sw-translate=''>Response Headers</h4>\n          <div class='block response_headers'></div>\n          <h4>Curl</h4>\n          <div class='block curl'></div>\n          <h4 data-sw-translate=''>Request URL</h4>\n          <div class='block request_url'></div>\n";
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.showRequestHeaders : depth0), {"name":"if","hash":{},"fn":this.program(23, data),"inverse":this.noop,"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  buffer += "          </div>\n\n";
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.type : depth0), {"name":"if","hash":{},"fn":this.program(25, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
   buffer += "\n";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.responseSignatureHtml : depth0), {"name":"if","hash":{},"fn":this.program(25, data),"inverse":this.noop,"data":data});
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.responseSignatureHtml : depth0), {"name":"if","hash":{},"fn":this.program(27, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
   buffer += "\n";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.responseMessages : depth0), {"name":"if","hash":{},"fn":this.program(27, data),"inverse":this.noop,"data":data});
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.responseMessages : depth0), {"name":"if","hash":{},"fn":this.program(29, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
-  buffer += "        </form>\n        <div class='response' style='display:none'>\n          <h4>Curl</h4>\n          <div class='block curl'></div>\n          <h4 data-sw-translate=''>Request URL</h4>\n          <div class='block request_url'></div>\n";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.showRequestHeaders : depth0), {"name":"if","hash":{},"fn":this.program(29, data),"inverse":this.noop,"data":data});
-  if (stack1 != null) { buffer += stack1; }
-  return buffer + "          <h4 data-sw-translate=''>Response Body</h4>\n          <div class='block response_body'></div>\n          <h4 data-sw-translate=''>Response Code</h4>\n          <div class='block response_code'></div>\n          <h4 data-sw-translate=''>Response Headers</h4>\n          <div class='block response_headers'></div>\n        </div>\n      </div>\n  </li>\n</ul>";
+  return buffer + "        </form>\n      </div>\n  </li>\n</ul>";
 },"useData":true});
 this["Handlebars"]["templates"]["param_list"] = Handlebars.template({"1":function(depth0,helpers,partials,data) {
   return " required";
@@ -32761,6 +32761,7 @@ SwaggerUi.Views.ParameterView = Backbone.View.extend({
 
                     //editor.container.style.fontFamily = "monospace !important"
                     editor.$blockScrolling = Infinity
+                    editor.autoScrollEditorIntoView = true,
 
                     editor.renderer.setShowGutter(false);
                     editor.getSession().setValue(textarea.val());

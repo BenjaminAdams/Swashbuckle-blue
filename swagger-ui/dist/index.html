@@ -84,6 +84,10 @@
                         });
                     }
 
+                    if (typeof Storage !== "undefined" && typeof localStorage.lastKeyUsed !== "undefined") {
+                        $('#input_apiKey').val(localStorage.lastKeyUsed)
+                    }
+
                     if (window.SwaggerTranslator) {
                         window.SwaggerTranslator.translate();
                     }
@@ -118,6 +122,10 @@
                 if (key && key.trim() != "") {
                     var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization(window.swashbuckleConfig.apiKeyName, key, window.swashbuckleConfig.apiKeyLocation);
                     window.swaggerUi.api.clientAuthorizations.add(window.swashbuckleConfig.apiKeyName, apiKeyAuth);
+
+                    if (typeof (Storage) !== "undefined") {
+                        localStorage.lastKeyUsed = key;
+                    }
 
                     log("added key " + key);
                 }

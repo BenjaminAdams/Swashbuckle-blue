@@ -111,6 +111,7 @@ SwaggerUi.Views.ParameterView = Backbone.View.extend({
 
                     //editor.container.style.fontFamily = "monospace !important"
                     editor.$blockScrolling = Infinity
+                    editor.autoScrollEditorIntoView = true,
 
                     editor.renderer.setShowGutter(false);
                     editor.getSession().setValue(textarea.val());
