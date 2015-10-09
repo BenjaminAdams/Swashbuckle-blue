@@ -84,10 +84,6 @@
                         });
                     }
 
-                    if (typeof Storage !== "undefined" && typeof localStorage.lastKeyUsed !== "undefined") {
-                        $('#input_apiKey').val(localStorage.lastKeyUsed)
-                    }
-
                     if (window.SwaggerTranslator) {
                         window.SwaggerTranslator.translate();
                     }

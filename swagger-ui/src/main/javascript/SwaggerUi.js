@@ -16,6 +16,8 @@ window.SwaggerUi = Backbone.Router.extend({
             options.highlightSizeThreshold = 100000;
         }
 
+        this.loadApiKey()
+
         // Allow dom_id to be overridden
         if (options.dom_id) {
             this.dom_id = options.dom_id;
@@ -71,6 +73,11 @@ window.SwaggerUi = Backbone.Router.extend({
         this.headerView.on('update-swagger-ui', function (data) {
             return that.updateSwaggerUi(data);
         });
+    },
+    loadApiKey: function () {
+        if (typeof Storage !== "undefined" && typeof localStorage.lastKeyUsed !== "undefined") {
+            $('#input_apiKey').val(localStorage.lastKeyUsed)
+        }
     },
 
     // Set an option after initializing
