@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Net.Http;
 using System.Web.Http;
 
 namespace Swashbuckle.Dummy.Controllers
@@ -9,7 +8,7 @@ namespace Swashbuckle.Dummy.Controllers
     public class FromUriParamsController : ApiController
     {
         [HttpHead]
-        public bool SupportsCurrencies([FromUri]IEnumerable<string> currencies)
+        public bool SupportsCurrencies([FromUri] IEnumerable<string> currencies)
         {
             throw new NotImplementedException();
         }
@@ -17,14 +16,14 @@ namespace Swashbuckle.Dummy.Controllers
         [HttpGet]
         public decimal CalculateTax(
             int id,
-            [FromUri(Name="trx")]Transaction transaction,
-            [FromUri(Name="")]BillingInfo billingInfo)
+            [FromUri(Name = "trx")] Transaction transaction,
+            [FromUri(Name = "")] BillingInfo billingInfo)
         {
             throw new NotImplementedException();
         }
 
         [HttpGet]
-        public IEnumerable<Transaction> SearchTransactions([FromUri]TransactionSearch search)
+        public IEnumerable<Transaction> SearchTransactions([FromUri] TransactionSearch search)
         {
             throw new NotImplementedException();
         }

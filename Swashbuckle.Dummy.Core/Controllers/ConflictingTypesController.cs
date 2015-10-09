@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using Swashbuckle.Dummy.Controllers.Requests;
+using System;
 using System.Web.Http;
 
 namespace Swashbuckle.Dummy.Controllers
 {
     public class ConflictingTypesController : ApiController
     {
-        public int Create(Requests.Blog blog)
+        public int Create(Blog blog)
         {
             throw new NotImplementedException();
         }
@@ -25,6 +24,7 @@ namespace Swashbuckle.Dummy.Controllers
             public string Text { get; set; }
         }
     }
+
     namespace Responses
     {
         public class Blog

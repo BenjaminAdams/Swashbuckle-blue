@@ -1,10 +1,9 @@
-﻿using System;
+﻿using Swashbuckle.Dummy.SwaggerExtensions;
+using Swashbuckle.Swagger.Annotations;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Web.Http;
-using Newtonsoft.Json.Linq;
-using Swashbuckle.Swagger.Annotations;
-using Swashbuckle.Dummy.SwaggerExtensions;
 
 namespace Swashbuckle.Dummy.Controllers
 {
@@ -13,7 +12,7 @@ namespace Swashbuckle.Dummy.Controllers
     {
         [SwaggerResponseRemoveDefaults]
         [SwaggerResponse(HttpStatusCode.Created, Type = typeof(int))]
-        [SwaggerResponse(HttpStatusCode.BadRequest, "Invalid message", typeof(HttpError))] 
+        [SwaggerResponse(HttpStatusCode.BadRequest, "Invalid message", typeof(HttpError))]
         public int Create(Message message)
         {
             throw new NotImplementedException();

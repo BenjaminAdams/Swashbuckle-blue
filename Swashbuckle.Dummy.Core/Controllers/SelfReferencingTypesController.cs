@@ -23,7 +23,7 @@ namespace Swashbuckle.Dummy.Controllers
             throw new NotImplementedException();
         }
     }
-    
+
     public class Component
     {
         public string Name { get; set; }
@@ -31,8 +31,10 @@ namespace Swashbuckle.Dummy.Controllers
     }
 
     public class ListOfSelf : List<ListOfSelf>
-    {}
+    {
+    }
 
     public class DictionaryOfSelf : Dictionary<Component, DictionaryOfSelf>
-    {}
-} 
+    {
+    }
+}

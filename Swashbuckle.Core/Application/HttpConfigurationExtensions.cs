@@ -40,11 +40,13 @@ namespace Swashbuckle.Application
                 config.GetApiVersions().Select(version => routeTemplate.Replace("{apiVersion}", version)), config);
         }
 
-        internal static JsonSerializerSettings SerializerSettingsOrDefault(this HttpConfiguration httpConfig)
+        public static JsonSerializerSettings SerializerSettingsOrDefault(this HttpConfiguration httpConfig)
         {
             var formatter = httpConfig.Formatters.JsonFormatter;
             if (formatter != null)
+            {
                 return formatter.SerializerSettings;
+            }
 
             return new JsonSerializerSettings();
         }

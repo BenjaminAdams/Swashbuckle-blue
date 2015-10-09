@@ -148,6 +148,12 @@
     <EmbeddedResource Include="SwaggerUi\CustomAssets\o2c.html" />
     <EmbeddedResource Include="SwaggerUi\CustomAssets\swagger-ui.js" />
     <EmbeddedResource Include="SwaggerUi\CustomAssets\swagger-ui.min.js" />
+    <EmbeddedResource Include="SwaggerUi\CustomAssets\images\throbber.gif" />
+    <Content Include="SwaggerUi\CustomAssets\images\explorer_icons.png" />
+    <Content Include="SwaggerUi\CustomAssets\images\favicon-16x16.png" />
+    <Content Include="SwaggerUi\CustomAssets\images\favicon-32x32.png" />
+    <Content Include="SwaggerUi\CustomAssets\images\pet_store_api.png" />
+    <Content Include="SwaggerUi\CustomAssets\images\wordnik_api.png" />
     <Content Include="Swashbuckle.Core.nuspec">
       <SubType>Designer</SubType>
     </Content>

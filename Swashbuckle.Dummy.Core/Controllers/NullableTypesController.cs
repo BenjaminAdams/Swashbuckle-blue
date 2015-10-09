@@ -14,7 +14,6 @@ namespace Swashbuckle.Dummy.Controllers
     public class Contact
     {
         public string Name { get; set; }
-
         public int? Phone { get; set; }
     }
 }

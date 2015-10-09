@@ -45,7 +45,7 @@ namespace Swashbuckle.Application
             CustomAsset("css/highlight-css", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.css.highlight.css");
             CustomAsset("css/typography-css", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.typography.css");
             CustomAsset("lib/swagger-oauth-js", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.swagger-oauth.js");
-
+            // CustomAsset("images/throbber.gif", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.images.throbber.gif");
             CustomAsset("images/favicon.ico", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.images.favicon.ico");
             CustomAsset("swagger-ui-js", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.swagger-ui.js");
             CustomAsset("lib/highlight-7-3-pack-js", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.lib.highlight.js");

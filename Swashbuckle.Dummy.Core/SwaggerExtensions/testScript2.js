@@ -1,1 +1,1 @@
-﻿var str2 = 'foobar';
+﻿var str2 = "foobar";

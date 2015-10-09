@@ -1,7 +1,7 @@
-﻿using System;
-using System.Web.Http;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using System;
+using System.Web.Http;
 
 namespace Swashbuckle.Dummy.Controllers
 {
@@ -10,7 +10,7 @@ namespace Swashbuckle.Dummy.Controllers
         public int Create(JsonRequest request)
         {
             throw new NotImplementedException();
-        } 
+        }
     }
 
     public class JsonRequest
@@ -28,6 +28,6 @@ namespace Swashbuckle.Dummy.Controllers
     public enum Category
     {
         A = 2,
-        B = 4 
+        B = 4
     }
 }

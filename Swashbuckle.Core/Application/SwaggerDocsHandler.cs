@@ -1,14 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Swashbuckle.Swagger;
+using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Formatting;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
-using System.Net.Http.Formatting;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using System.Collections.Generic;
-using Swashbuckle.Swagger;
-using System.Net;
 
 namespace Swashbuckle.Application
 {
@@ -42,24 +40,29 @@ namespace Swashbuckle.Application
         private HttpContent ContentFor(HttpRequestMessage request, SwaggerDocument swaggerDoc)
         {
             var negotiator = request.GetConfiguration().Services.GetContentNegotiator();
+
             var result = negotiator.Negotiate(typeof(SwaggerDocument), request, GetSupportedSwaggerFormatters());
 
             return new ObjectContent(typeof(SwaggerDocument), swaggerDoc, result.Formatter, result.MediaType);
+            //return new ObjectContent(typeof(SwaggerDocument), swaggerDoc, new JsonMediaTypeFormatter());
+            //return new ObjectContent(typeof(SwaggerDocument), swaggerDoc, result.Formatter, result.MediaType);
         }
 
-        private IEnumerable<MediaTypeFormatter> GetSupportedSwaggerFormatters()
+        private static dynamic GetSupportedSwaggerFormatters()
         {
-            var jsonFormatter = new JsonMediaTypeFormatter
+            // NOTE: The custom converter would not be neccessary in Newtonsoft.Json >= 5.0.5 as JsonExtensionData
+            // provides similar functionality. But, need to stick with older version for WebApi 5.0.0 compatibility
+            return new List<MediaTypeFormatter>()
             {
-                SerializerSettings = new JsonSerializerSettings
+                new JsonMediaTypeFormatter()
                 {
-                    NullValueHandling = NullValueHandling.Ignore,
-                    Converters = new[] { new VendorExtensionsConverter() }
+                    SerializerSettings = new JsonSerializerSettings()
+                    {
+                         NullValueHandling = NullValueHandling.Ignore,
+                         Converters = new List<JsonConverter>() {new VendorExtensionsConverter()}
+                    }
                 }
             };
-            // NOTE: The custom converter would not be neccessary in Newtonsoft.Json >= 5.0.5 as JsonExtensionData
-            // provides similar functionality. But, need to stick with older version for WebApi 5.0.0 compatibility 
-            return new[] { jsonFormatter };
         }
 
         private Task<HttpResponseMessage> TaskFor(HttpResponseMessage response)

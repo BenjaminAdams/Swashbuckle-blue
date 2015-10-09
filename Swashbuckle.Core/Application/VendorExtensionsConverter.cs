@@ -1,10 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using Swashbuckle.Swagger;
 
 namespace Swashbuckle.Application
 {
@@ -26,7 +24,7 @@ namespace Swashbuckle.Application
 
             writer.WriteStartObject();
 
-            foreach (var jsonProp in jsonContract.Properties) 
+            foreach (var jsonProp in jsonContract.Properties)
             {
                 var propValue = jsonProp.ValueProvider.GetValue(value);
                 if (propValue == null && serializer.NullValueHandling == NullValueHandling.Ignore)
@@ -35,7 +33,7 @@ namespace Swashbuckle.Application
                 if (jsonProp.PropertyName == "vendorExtensions")
                 {
                     var vendorExtensions = (IDictionary<string, object>)propValue;
-                    if (vendorExtensions.Any()) 
+                    if (vendorExtensions != null && vendorExtensions.Any())
                     {
                         foreach (var entry in vendorExtensions)
                         {

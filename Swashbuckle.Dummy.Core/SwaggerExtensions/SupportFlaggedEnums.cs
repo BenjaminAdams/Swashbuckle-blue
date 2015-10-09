@@ -1,6 +1,6 @@
-﻿using System.Linq;
+﻿using Swashbuckle.Swagger;
+using System.Linq;
 using System.Web.Http.Description;
-using Swashbuckle.Swagger;
 
 namespace Swashbuckle.Dummy.SwaggerExtensions
 {
@@ -20,6 +20,6 @@ namespace Swashbuckle.Dummy.SwaggerExtensions
                 param.type = "array";
                 param.collectionFormat = "csv";
             }
-        } 
+        }
     }
 }
