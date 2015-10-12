@@ -96,7 +96,19 @@ namespace Swashbuckle.Application
 
         public SecuritySchemeBuilder GetApiKeyDetails()
         {
-            return _securitySchemeBuilders["apiKey"];
+            SecuritySchemeBuilder key;
+            var status = _securitySchemeBuilders.TryGetValue("apiKey", out key);
+
+            if (status)
+            {
+                return key;
+            }
+            else
+            {
+                return null;
+            }
+
+            //return _securitySchemeBuilders["apiKey"];
         }
 
         public OAuth2SchemeBuilder OAuth2(string name)
