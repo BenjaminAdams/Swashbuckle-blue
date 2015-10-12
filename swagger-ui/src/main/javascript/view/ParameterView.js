@@ -137,7 +137,7 @@ SwaggerUi.Views.ParameterView = Backbone.View.extend({
     calculateHeightOfEditor: function (sig) {
         var minHeight = 150
         var numOfFields = (sig.match(/propName/g) || []).length
-        var height = (numOfFields * 12) + 30  //px for each field, and some extra spacing
+        var height = (numOfFields * 14.5) + 30  //px for each field, and some extra spacing
         if (height < minHeight) {
             return minHeight
         } else {
