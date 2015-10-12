@@ -1,17 +1,17 @@
-﻿using System.Net;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using Swashbuckle.Application;
+using Swashbuckle.Dummy.Controllers;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using System.Threading;
 using System.Web.Http;
 using System.Web.Http.Hosting;
 using System.Web.Http.Routing;
-using Swashbuckle.Dummy.Controllers;
-using System.Reflection;
 
 namespace Swashbuckle.Tests
 {
@@ -21,7 +21,7 @@ namespace Swashbuckle.Tests
     {
         private string _routeTemplate;
 
-        protected HttpMessageHandlerTestBase(string routeTemplate) 
+        protected HttpMessageHandlerTestBase(string routeTemplate)
         {
             _routeTemplate = routeTemplate;
         }
@@ -53,7 +53,7 @@ namespace Swashbuckle.Tests
         {
             SetUpDefaultRoutesFor(new[] { typeof(TController) });
         }
-        
+
         protected void SetUpCustomRouteFor<TController>(string routeTemplate)
             where TController : ApiController
         {
@@ -66,7 +66,7 @@ namespace Swashbuckle.Tests
 
         protected void SetUpAttributeRoutesFrom(Assembly assembly)
         {
-            // assembly isn't used but requiring it ensures that it's loaded and, therefore, scanned for attribute routes 
+            // assembly isn't used but requiring it ensures that it's loaded and, therefore, scanned for attribute routes
             Configuration.MapHttpAttributeRoutes();
             Configuration.EnsureInitialized();
         }
