@@ -639,7 +639,7 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
             //Resolve the schema (Handle nested schemas)
             cProperty = Helpers.resolveSchema(cProperty);
 
-            //We need to handle property references to primitives(Issue 339)
+            //We need to handle property references
             if (!_.isUndefined(cProperty.$ref)) {
                 addReference(cProperty, Helpers.simpleRef(cProperty.$ref))
 
@@ -32834,7 +32834,7 @@ SwaggerUi.Views.ParameterView = Backbone.View.extend({
     calculateHeightOfEditor: function (sig) {
         var minHeight = 150
         var numOfFields = (sig.match(/propName/g) || []).length
-        var height = (numOfFields * 12) + 30  //px for each field, and some extra spacing
+        var height = (numOfFields * 14.5) + 30  //px for each field, and some extra spacing
         if (height < minHeight) {
             return minHeight
         } else {
