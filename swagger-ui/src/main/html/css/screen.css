@@ -309,10 +309,14 @@
   clear: both;
 }
 .swagger-section .swagger-ui-wrap .body-textarea {
-  width: 300px;
+  display: block;
+  min-width: 300px;
   height: 225px;
   font-weight: normal !important;
   border: 1px solid #aaa;
+}
+.swagger-section .swagger-ui-wrap .fullWidth {
+  width: 100%;
 }
 .swagger-section .swagger-ui-wrap .markdown p code,
 .swagger-section .swagger-ui-wrap .markdown li code {

@@ -1,35 +1,38 @@
-<td class='code'>
+<td class='code {{#if required}}required{{/if}}'>
   <label for='{{valueId}}'>{{name}}</label>
 </td>
-<td>
+{{#if isBody}}
+{{#if sampleJSON}}
 
-	{{#if isBody}}
-		{{#if isFile}}
-			<input type="file" name='{{name}}' id='{{valueId}}' />
-			<div class="parameter-content-type" />
-		{{else}}
-			{{#if default}}
-				<textarea class='body-textarea' name='{{name}}' id='{{valueId}}'>{{default}}</textarea>
-        <br />
-        <div class="parameter-content-type" />
-			{{else}}
-				<textarea class='body-textarea' name='{{name}}' id='{{valueId}}'>{{example}}</textarea>
+      <td colspan="2" title="{{name}}">
+				<textarea class='body-textarea {{#if required}}required{{/if}} fullWidth' name='{{name}}' id='{{valueId}}'>{{example}}</textarea>
 				<br />
 				<div class="parameter-content-type" />
-			{{/if}}
-		{{/if}}
-	{{else}}
-		{{#if isFile}}
-			<input type="file" name='{{name}}' id='{{valueId}}' />
-			<div class="parameter-content-type" />
-		{{else}}
-			{{#renderTextParam this}}
-			{{/renderTextParam}}
-		{{/if}}
+      </td>
+      <td class="markdown">{{{description}}}</td>
+      <td colspan="0">{{{paramType}}}</td>
+      <td colspan="0" style="display:none;">
+        <span class="model-signature"></span>
+      </td>
+
+   {{else}}
+      <td title="{{name}}">
+				<textarea class='body-textarea {{#if required}}required{{/if}}' name='{{name}}' id='{{valueId}}'>{{example}}</textarea>
+				<br />
+				<div class="parameter-content-type" />
+      </td>
+      <td class="markdown">{{{description}}}</td>
+      <td>{{{paramType}}}</td>
+      <td>
+        <span class="model-signature"></span>
+      </td>
+  {{/if}}
+
+{{else}}
+		<td>{{#renderTextParam this}}{{/renderTextParam}}</td>
+    <td class="markdown">{{{description}}}</td>
+    <td>{{{paramType}}}</td>
+    <td>
+      <span class="model-signature"></span>
+    </td>
 	{{/if}}
-</td>
-<td class="markdown">{{{description}}}</td>
-<td>{{{paramType}}}</td>
-<td>
-  <span class="model-signature"></span>
-</td>

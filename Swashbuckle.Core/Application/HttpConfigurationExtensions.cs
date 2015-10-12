@@ -42,11 +42,11 @@ namespace Swashbuckle.Application
 
         public static JsonSerializerSettings SerializerSettingsOrDefault(this HttpConfiguration httpConfig)
         {
-            var formatter = httpConfig.Formatters.JsonFormatter;
-            if (formatter != null)
-            {
-                return formatter.SerializerSettings;
-            }
+            //var formatter = httpConfig.Formatters.JsonFormatter;
+            //if (formatter != null)
+            //{
+            //    return formatter.SerializerSettings;
+            //}
 
             return new JsonSerializerSettings();
         }

@@ -7,35 +7,33 @@
 }
 
 .swagger-section {
+    .swagger-ui-wrap {
+        .model-signature pre {
+            max-height: none;
+        }
 
-.swagger-ui-wrap {
+        .body-textarea {
+            width: 400px;
+        }
 
-    .model-signature pre {
-        max-height: none;
-    }
+        input.parameter {
+            width: 100px;
+        }
 
-    .body-textarea {
-        width: 100px;
-    }
+        ul#resources {
+            li.resource {
+                div.heading ul.options {
+                    display: none;
+                }
 
-    input.parameter {
-        width: 100px;
-    }
-    
-    ul#resources {
-        li.resource {
-            div.heading ul.options {
-                display: none;
-            }
-            ul.endpoints {
-                display: block !important;
-                li.endpoint ul.operations li.operation div.content {
+                ul.endpoints {
                     display: block !important;
+
+                    li.endpoint ul.operations li.operation div.content {
+                        display: block !important;
+                    }
                 }
             }
         }
     }
-
-}
-
 }

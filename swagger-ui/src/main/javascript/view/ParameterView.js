@@ -38,6 +38,9 @@ SwaggerUi.Views.ParameterView = Backbone.View.extend({
 
         if (typeof this.model.example === 'undefined' && typeof this.model.schema !== 'undefined' && typeof this.model.schema.example !== 'undefined') {
             this.model.example = this.model.schema.example
+        } else if (typeof this.model.example === 'undefined' || this.model.example === null || this.model.example === '') {
+            //only set example to default when example is empty
+            this.model.example = this.model.default
         }
 
         this.model.hasDefault = (typeof this.model.default !== 'undefined');
@@ -101,7 +104,8 @@ SwaggerUi.Views.ParameterView = Backbone.View.extend({
                     var editDiv = $('<div>', {
                         position: 'absolute',
                         width: textarea.width(),
-                        height: textarea.height(),
+                        // height: textarea.height(),
+                        height: self.calculateHeightOfEditor(self.model.signature),
                         fontFamily: "monospace",
                         'class': textarea.attr('class')
                     }).insertBefore(textarea);
@@ -109,7 +113,6 @@ SwaggerUi.Views.ParameterView = Backbone.View.extend({
                     textarea.css('height', '10px');
                     var editor = ace.edit(editDiv[0]);
 
-                    //editor.container.style.fontFamily = "monospace !important"
                     editor.$blockScrolling = Infinity
                     editor.autoScrollEditorIntoView = true,
 
@@ -118,16 +121,27 @@ SwaggerUi.Views.ParameterView = Backbone.View.extend({
                     editor.getSession().setMode("ace/mode/json");
                     editor.setTheme("ace/theme/twilight");
 
-                    // copy back to textarea on form submit...
+                    // copy back to textarea on form submit
                     textarea.closest('form').submit(function () {
                         textarea.val(editor.getSession().getValue());
                     })
 
+                    // copy back to textarea on change
                     editor.getSession().on('change', function (e) {
                         textarea.val(editor.getSession().getValue());
                     });
                 }, 200)
             }
+        }
+    },
+    calculateHeightOfEditor: function (sig) {
+        var minHeight = 150
+        var numOfFields = (sig.match(/propName/g) || []).length
+        var height = (numOfFields * 12) + 30  //px for each field, and some extra spacing
+        if (height < minHeight) {
+            return minHeight
+        } else {
+            return height
         }
     },
 
@@ -143,8 +157,9 @@ SwaggerUi.Views.ParameterView = Backbone.View.extend({
                     return Handlebars.templates.param_readonly;
                 }
             } else {
-                if (this.model.required) {
-                    return Handlebars.templates.param_required;
+                //depricated required template
+                if (this.model.isFile) {
+                    return Handlebars.templates.param_file;
                 } else {
                     return Handlebars.templates.param;
                 }
