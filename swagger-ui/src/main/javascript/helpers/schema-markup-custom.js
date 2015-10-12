@@ -296,21 +296,21 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
     var html = processModelAsTable(schema, name);
 
     // Generate references HTML
-    // while (_.keys(references).length > 0) {
-    // 	/* jshint ignore:start */
-    // 	_.forEach(references, function(schema, name) {
-    // 		var seenModel = _.indexOf(seenModels, name) > -1;
+    while (_.keys(references).length > 0) {
+        /* jshint ignore:start */
+        _.forEach(references, function (schema, name) {
+            var seenModel = _.indexOf(seenModels, name) > -1;
 
-    // 		delete references[name];
+            delete references[name];
 
-    // 		if (!seenModel) {
-    // 			seenModels.push(name);
+            if (!seenModel) {
+                seenModels.push(name);
 
-    // 			html += '<br />' + processModelAsTable(schema, name);
-    // 		}
-    // 	});
-    // 	/* jshint ignore:end */
-    // }
+                html += '<br />' + processModelAsTable(schema, name);
+            }
+        });
+        /* jshint ignore:end */
+    }
 
     return html;
 
@@ -350,8 +350,10 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
             //Resolve the schema (Handle nested schemas)
             cProperty = Helpers.resolveSchema(cProperty);
 
-            //We need to handle property references to primitives(Issue 339)
+            //We need to handle property references
             if (!_.isUndefined(cProperty.$ref)) {
+                addReference(cProperty, Helpers.simpleRef(cProperty.$ref))
+
                 model = models[Helpers.simpleRef(cProperty.$ref)];
 
                 if (!_.isUndefined(model) && _.indexOf([undefined, 'array', 'object'], model.definition.type) === -1) {

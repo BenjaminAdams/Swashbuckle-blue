@@ -585,21 +585,21 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
     var html = processModelAsTable(schema, name);
 
     // Generate references HTML
-    // while (_.keys(references).length > 0) {
-    // 	/* jshint ignore:start */
-    // 	_.forEach(references, function(schema, name) {
-    // 		var seenModel = _.indexOf(seenModels, name) > -1;
+    while (_.keys(references).length > 0) {
+        /* jshint ignore:start */
+        _.forEach(references, function (schema, name) {
+            var seenModel = _.indexOf(seenModels, name) > -1;
 
-    // 		delete references[name];
+            delete references[name];
 
-    // 		if (!seenModel) {
-    // 			seenModels.push(name);
+            if (!seenModel) {
+                seenModels.push(name);
 
-    // 			html += '<br />' + processModelAsTable(schema, name);
-    // 		}
-    // 	});
-    // 	/* jshint ignore:end */
-    // }
+                html += '<br />' + processModelAsTable(schema, name);
+            }
+        });
+        /* jshint ignore:end */
+    }
 
     return html;
 
@@ -641,6 +641,8 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
 
             //We need to handle property references to primitives(Issue 339)
             if (!_.isUndefined(cProperty.$ref)) {
+                addReference(cProperty, Helpers.simpleRef(cProperty.$ref))
+
                 model = models[Helpers.simpleRef(cProperty.$ref)];
 
                 if (!_.isUndefined(model) && _.indexOf([undefined, 'array', 'object'], model.definition.type) === -1) {
@@ -1089,7 +1091,7 @@ this["Handlebars"]["templates"]["operation"] = Handlebars.template({"1":function
   if (stack1 != null) { buffer += stack1; }
   return buffer + "          <h4 data-sw-translate=''>Parameters</h4>\n          <table class='fullwidth'>\n          <thead>\n            <tr>\n            <th style=\"width: 100px; max-width: 100px\" data-sw-translate=\"\">Parameter</th>\n            <th style=\"width: 310px; max-width: 310px\" data-sw-translate=\"\">Value</th>\n            <th style=\"width: 200px; max-width: 200px\" data-sw-translate=\"\">Description</th>\n            <th style=\"width: 100px; max-width: 100px\" data-sw-translate=\"\">Parameter Type</th>\n            <th style=\"width: 220px; max-width: 230px\" data-sw-translate=\"\">Data Type</th>\n            </tr>\n          </thead>\n          <tbody class=\"operation-params\">\n          </tbody>\n          </table>\n";
 },"17":function(depth0,helpers,partials,data) {
-  var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, buffer = "                <h4>Input Parameters</h4>\n                ";
+  var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, buffer = "                <h4>Input Parameter Description</h4>\n                ";
   stack1 = ((helper = (helper = helpers.inputSignatureHtml || (depth0 != null ? depth0.inputSignatureHtml : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"inputSignatureHtml","hash":{},"data":data}) : helper));
   if (stack1 != null) { buffer += stack1; }
   return buffer + "\n                <div style='margin-bottom:15px;'></div>\n";
@@ -1105,7 +1107,7 @@ this["Handlebars"]["templates"]["operation"] = Handlebars.template({"1":function
     + escapeExpression(((helper = (helper = helpers.successCode || (depth0 != null ? depth0.successCode : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"successCode","hash":{},"data":data}) : helper)))
     + ")</h4>\n            <p><span class=\"model-signature\" /></p>\n            <br />\n            <div class=\"response-content-type\" />\n";
 },"27":function(depth0,helpers,partials,data) {
-  var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, buffer = "              <h4>Response Parameters</h4>\n              ";
+  var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, buffer = "              <h4>Response Parameter Description</h4>\n              ";
   stack1 = ((helper = (helper = helpers.responseSignatureHtml || (depth0 != null ? depth0.responseSignatureHtml : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"responseSignatureHtml","hash":{},"data":data}) : helper));
   if (stack1 != null) { buffer += stack1; }
   return buffer + "\n              <div style='margin-bottom:15px;'></div>\n";
