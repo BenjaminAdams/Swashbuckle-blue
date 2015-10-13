@@ -69,7 +69,6 @@
   <ItemGroup>
     <Compile Include="App_Start\CachingSwaggerProvider.cs" />
     <Compile Include="App_Start\CustomCorsPolicyProvider.cs" />
-    <EmbeddedResource Include="App_Start\CustomSwagUrl.txt" />
     <Compile Include="Controllers\ConflictingTypesController.cs" />
     <Compile Include="Controllers\FileDownloadController.cs" />
     <Compile Include="Controllers\FileUploadController.cs" />

@@ -261,18 +261,22 @@ namespace Swashbuckle.Dummy
                 : versionConstraint.Pattern.Split('|').Contains(targetApiVersion);
         }
 
+        //Use this in combination with .gitignore to have a custom swagger URL that won't get checked in
         private static string LoadCustomSwagUrl()
         {
-            //place a url in a text file to load custom url for testing
+            //place a url in a text file to load custom url for testing purposes
             try
             {
-                var resourceName = "Swashbuckle.Dummy.App_Start.CustomSwagUrl.txt";
+                var reader = new StreamReader("C:\\CustomSwagUrl.txt");
+                return reader.ReadToEnd();
 
-                using (var reader = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName)))
-                {
-                    var str = reader.ReadToEnd();
-                    return str;
-                }
+                //var resourceName = "CustomSwagUrl.txt";
+
+                //using (var reader = new StreamReader(resourceName))
+                //{
+                //    var str = reader.ReadToEnd();
+                //    return str;
+                //}
             }
             catch
             {
