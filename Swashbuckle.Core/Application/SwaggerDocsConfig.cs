@@ -33,8 +33,8 @@ namespace Swashbuckle.Application
         private readonly IList<Func<IDocumentFilter>> _documentFilters;
         private Func<IEnumerable<ApiDescription>, ApiDescription> _conflictingActionsResolver;
         private Func<HttpRequestMessage, string> _rootUrlResolver;
-
         private Func<ISwaggerProvider, ISwaggerProvider> _customProviderFactory;
+        private string _custSwagUrl;
 
         public SwaggerDocsConfig()
         {

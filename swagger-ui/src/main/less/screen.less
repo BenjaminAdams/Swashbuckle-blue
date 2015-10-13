@@ -110,6 +110,7 @@
         li.sidebarChild {
             font-size: 12px;
             margin-top: 3px;
+            margin-left: 10px;
             cursor: pointer;
             -moz-user-select: none; /* Firefox */
             -ms-user-select: none; /* Internet Explorer */
@@ -127,7 +128,7 @@
         }
 
         li {
-            padding: 5px 0px 5px 5px;
+            padding: 5px 0px 5px 2px;
             clear: both;
             white-space: nowrap;
 
@@ -158,7 +159,7 @@
             }
 
             .childTxt {
-                width: 200px;
+                width: 193px;
                 display: block;
                 vertical-align: top;
                 white-space: normal;
@@ -296,4 +297,19 @@
         text-align: center;
         padding-top: 10px;
     }
+}
+
+#sidebar::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+
+#sidebar::-webkit-scrollbar-track {
+    background-color: rgb(180, 178, 202);
+    -webkit-border-radius: 5px;
+}
+
+#sidebar::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.7);
+    -webkit-border-radius: 9px;
 }

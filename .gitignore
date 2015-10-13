@@ -16,3 +16,4 @@ _ReSharper.*
 !*.proj 
 
 node_modules
+CustomSwagUrl.txt

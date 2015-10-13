@@ -22,6 +22,7 @@ namespace Swashbuckle.Application
             {
                 { "%(StylesheetIncludes)", "" },
                 { "%(DiscoveryPaths)", String.Join("|", discoveryPaths) },
+                { "%(CustomSwagDocLocation)", "" },
                 { "%(BooleanValues)", "true|false" },
                 { "%(ValidatorUrl)", "" },
                 { "%(CustomScripts)", "" },
@@ -54,6 +55,11 @@ namespace Swashbuckle.Application
         public void CustomLogo(string url)
         {
             _templateParams["%(CustomLogo)"] = url;
+        }
+
+        public void CustomSwagDocLocation(string url)
+        {
+            _templateParams["%(CustomSwagDocLocation)"] = url;
         }
 
         public void InjectStylesheet(Assembly resourceAssembly, string resourceName, string media = "screen")

@@ -2,7 +2,9 @@
 using Swashbuckle.Dummy.App_Start;
 using Swashbuckle.Dummy.SwaggerExtensions;
 using System;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Web.Http;
 using System.Web.Http.Description;
 using System.Web.Http.Routing.Constraints;
@@ -13,8 +15,6 @@ namespace Swashbuckle.Dummy
     {
         public static void Register(HttpConfiguration httpConfig)
         {
-            var thisAssembly = typeof(SwaggerConfig).Assembly;
-
             httpConfig
                 .EnableSwagger(c =>
                 {
@@ -68,10 +68,10 @@ namespace Swashbuckle.Dummy
                     //c.BasicAuth("basic")
                     //    .Description("Basic HTTP Authentication");
                     //
-                    //c.ApiKey("apiKey")
-                    //    .Description("API Key Authentication")
-                    //    .Name("yourApiKeyHeaderName")
-                    //    .In("header");
+                    c.ApiKey("apiKey")
+                        .Description("API Key Authentication")
+                        .Name("yourApiKeyHeaderName")
+                        .In("header");
 
                     //c.OAuth2("oauth2")
                     //    .Description("OAuth2 Implicit Grant")
@@ -185,6 +185,12 @@ namespace Swashbuckle.Dummy
                 })
                 .EnableSwaggerUi(c =>
                 {
+                    var customSwagUrl = LoadCustomSwagUrl();
+                    if (customSwagUrl != null)
+                    {
+                        c.CustomSwagDocLocation(customSwagUrl);
+                    }
+
                     c.CustomLogo("http://i.dell.com/images/global/brand/ui/logo-wt-bl.png");
 
                     // Use the "InjectStylesheet" option to enrich the UI with one or more additional CSS stylesheets.
@@ -215,7 +221,7 @@ namespace Swashbuckle.Dummy
                     // It can be set to "None" (default), "List" (shows operations for each resource),
                     // or "Full" (fully expanded: shows operations and their details).
                     //
-                    c.DocExpansion(DocExpansion.List);
+                    //c.DocExpansion(DocExpansion.List);
 
                     // Use the CustomAsset option to provide your own version of assets used in the swagger-ui.
                     // It's typically used to instruct Swashbuckle to return your version instead of the default
@@ -253,6 +259,25 @@ namespace Swashbuckle.Dummy
             return (versionConstraint == null)
                 ? false
                 : versionConstraint.Pattern.Split('|').Contains(targetApiVersion);
+        }
+
+        private static string LoadCustomSwagUrl()
+        {
+            //place a url in a text file to load custom url for testing
+            try
+            {
+                var resourceName = "Swashbuckle.Dummy.App_Start.CustomSwagUrl.txt";
+
+                using (var reader = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName)))
+                {
+                    var str = reader.ReadToEnd();
+                    return str;
+                }
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }

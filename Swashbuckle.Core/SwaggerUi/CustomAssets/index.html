@@ -50,6 +50,7 @@
             window.swashbuckleConfig = {
                 rootUrl: '%(RootUrl)',
                 discoveryPaths: arrayFrom('%(DiscoveryPaths)'),
+                customSwagDocLocation: stringOrNullFrom('%(CustomSwagDocLocation)'),
                 booleanValues: arrayFrom('%(BooleanValues)'),
                 validatorUrl: stringOrNullFrom('%(ValidatorUrl)'),
                 customScripts: arrayFrom('%(CustomScripts)'),
@@ -69,8 +70,14 @@
                 window.SwaggerTranslator.translate();
             }
 
+            if (window.swashbuckleConfig.customSwagDocLocation) {
+                url = window.swashbuckleConfig.customSwagDocLocation
+            } else {
+                url = swashbuckleConfig.rootUrl + "/" + swashbuckleConfig.discoveryPaths[0]
+            }
+
             window.swaggerUi = new SwaggerUi({
-                url: swashbuckleConfig.rootUrl + "/" + swashbuckleConfig.discoveryPaths[0],
+                url: url,
                 dom_id: "swagger-ui-container",
                 booleanValues: swashbuckleConfig.booleanValues,
                 onComplete: function (swaggerApi, swaggerUi) {
