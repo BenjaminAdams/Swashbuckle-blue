@@ -205,12 +205,13 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
         }
 
         $(this.el).html(Handlebars.templates.operation(this.model));
-        if (signatureModel) {
+        if (signatureModel && signatureModel.sampleJSON !== '{}') {
             responseSignatureView = new SwaggerUi.Views.SignatureView({
                 model: signatureModel,
                 router: this.router,
                 tagName: 'div'
             });
+
             $('.model-signature', $(this.el)).append(responseSignatureView.render().el);
         } else {
             this.model.responseClassSignature = 'string';

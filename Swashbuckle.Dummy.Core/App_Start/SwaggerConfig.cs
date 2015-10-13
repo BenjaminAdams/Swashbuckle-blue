@@ -269,14 +269,6 @@ namespace Swashbuckle.Dummy
             {
                 var reader = new StreamReader("C:\\CustomSwagUrl.txt");
                 return reader.ReadToEnd();
-
-                //var resourceName = "CustomSwagUrl.txt";
-
-                //using (var reader = new StreamReader(resourceName))
-                //{
-                //    var str = reader.ReadToEnd();
-                //    return str;
-                //}
             }
             catch
             {

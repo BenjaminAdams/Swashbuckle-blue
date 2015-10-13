@@ -174,7 +174,7 @@ namespace $rootnamespace$
 
 						//add a custom logo
 						//Example:
-						c.CustomLogo("http://i.dell.com/images/global/brand/ui/logo-wt-bl.png");
+						//c.CustomLogo("http://example.com/logo.png");
 
 
                         // Use the "InjectStylesheet" option to enrich the UI with one or more additional CSS stylesheets.

@@ -576,6 +576,13 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
         name = schema.title || 'Inline Model';
     }
 
+    console.log('name=', name)
+
+    if (name === 'Object') {
+        //prevent empty params from display a table
+        return ''
+    }
+
     var references = {};
     var seenModels = [];
     var inlineModels = 0;
@@ -32145,12 +32152,13 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
         }
 
         $(this.el).html(Handlebars.templates.operation(this.model));
-        if (signatureModel) {
+        if (signatureModel && signatureModel.sampleJSON !== '{}') {
             responseSignatureView = new SwaggerUi.Views.SignatureView({
                 model: signatureModel,
                 router: this.router,
                 tagName: 'div'
             });
+
             $('.model-signature', $(this.el)).append(responseSignatureView.render().el);
         } else {
             this.model.responseClassSignature = 'string';
@@ -32800,7 +32808,8 @@ SwaggerUi.Views.ParameterView = Backbone.View.extend({
                 setTimeout(function () {
                     var editDiv = $('<div>', {
                         position: 'absolute',
-                        width: textarea.width(),
+                        // width: textarea.width() + 100,
+                        width: '450',
                         // height: textarea.height(),
                         height: self.calculateHeightOfEditor(self.model.signature),
                         fontFamily: "monospace",

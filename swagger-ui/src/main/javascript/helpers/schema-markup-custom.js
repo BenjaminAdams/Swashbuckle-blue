@@ -287,6 +287,13 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
         name = schema.title || 'Inline Model';
     }
 
+    console.log('name=', name)
+
+    if (name === 'Object') {
+        //prevent empty params from display a table
+        return ''
+    }
+
     var references = {};
     var seenModels = [];
     var inlineModels = 0;
