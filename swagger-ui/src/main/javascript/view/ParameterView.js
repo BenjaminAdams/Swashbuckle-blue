@@ -103,9 +103,8 @@ SwaggerUi.Views.ParameterView = Backbone.View.extend({
                 setTimeout(function () {
                     var editDiv = $('<div>', {
                         position: 'absolute',
-                        // width: textarea.width() + 100,
-                        width: '450',
-                        // height: textarea.height(),
+                        // width: textarea.width(),
+                        width: '500',
                         height: self.calculateHeightOfEditor(self.model.signature),
                         fontFamily: "monospace",
                         'class': textarea.attr('class')
