@@ -34,9 +34,11 @@ namespace Swashbuckle.Tests.Swagger
                     type = "array",
                     items = new
                     {
-                        type = "string"
+                        type = "string",
+                        ignore = false
                     },
-                    collectionFormat = "multi"
+                    collectionFormat = "multi",
+                    ignore = false
                 }
             });
 
@@ -57,14 +59,16 @@ namespace Swashbuckle.Tests.Swagger
                     @in = "path",
                     required = true,
                     type = "integer",
-                    format = "int32"
+                    format = "int32",
+                    ignore = false
                 },
                 new
                 {
                     name = "trx.currency",
                     @in = "query",
                     required = true,
-                    type = "string"
+                    type = "string",
+                    ignore = false
                 },
                 new
                 {
@@ -72,35 +76,40 @@ namespace Swashbuckle.Tests.Swagger
                     @in = "query",
                     required = true,
                     type = "number",
-                    format = "double"
+                    format = "double",
+                    ignore = false
                 },
                 new
                 {
                     name = "billTo.country",
                     @in = "query",
                     required = true,
-                    type = "string"
+                    type = "string",
+                    ignore = false
                 },
                 new
                 {
                     name = "billTo.city",
                     @in = "query",
                     required = false,
-                    type = "string"
+                    type = "string",
+                    ignore = false
                 },
                 new
                 {
                    name = "shipTo.country",
                    @in = "query",
                    required = false,
-                   type = "string"
+                   type = "string",
+                   ignore = false
                 },
                 new
                 {
                     name = "shipTo.city",
                     @in = "query",
                     required = false,
-                    type = "string"
+                    type = "string",
+                    ignore = false
                 }
             });
 
@@ -124,9 +133,11 @@ namespace Swashbuckle.Tests.Swagger
                     items = new
                     {
                         type = "integer",
-                        format = "int32"
+                        format = "int32",
+                        ignore = false
                     },
-                    collectionFormat = "multi"
+                    collectionFormat = "multi",
+                    ignore = false
                 }
             });
 

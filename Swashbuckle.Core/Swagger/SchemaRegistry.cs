@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
+using Swashbuckle.Swagger.Attributes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -71,11 +72,6 @@ namespace Swashbuckle.Swagger
                 var schemaInfo = typeMapping.Value;
 
                 schemaInfo.Schema = CreateDefinitionSchema(typeMapping.Key);
-
-                //foreach (var prop in schemaInfo.Schema.properties)
-                //{
-                //    prop = new KeyValuePair<string, Schema>(prop.Key, SchemaExtensions.GetAttributeDetails(schema, type.GetProperty(prop.Key)));
-                //}
 
                 Definitions.Add(schemaInfo.SchemaId, schemaInfo.Schema);
             }
@@ -156,6 +152,17 @@ namespace Swashbuckle.Swagger
         private Schema CreatePrimitiveSchema(JsonPrimitiveContract primitiveContract)
         {
             Schema schema;
+
+            if (primitiveContract.PropertyInfo() != null && primitiveContract.PropertyInfo().CustomAttributes != null)
+            {
+                //var isIgnored = primitiveContract.PropertyInfo().CustomAttributes.FirstOrDefault(x => x.AttributeType == typeof(SwaggerIgnore));
+                var isIgnored = primitiveContract.PropertyInfo().GetCustomAttribute<SwaggerIgnore>();
+                if (isIgnored != null)
+                {
+                    return null;
+                }
+            }
+
             var type = Nullable.GetUnderlyingType(primitiveContract.UnderlyingType) ?? primitiveContract.UnderlyingType;
 
             if (type.IsEnum)

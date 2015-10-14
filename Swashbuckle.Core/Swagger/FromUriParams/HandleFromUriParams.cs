@@ -1,4 +1,5 @@
 ﻿using Swashbuckle.Swagger;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http.Description;
@@ -84,6 +85,7 @@ namespace Swashbuckle.Swagger.FromUriParams
                         description = entry.Value.description,
                         example = entry.Value.example
                     };
+
                     param.PopulateFrom(entry.Value);
                     if (param.type == "array")
                         param.collectionFormat = "multi";

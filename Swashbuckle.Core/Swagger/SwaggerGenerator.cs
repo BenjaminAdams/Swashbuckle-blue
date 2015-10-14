@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Swashbuckle.Swagger.Attributes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -142,6 +143,7 @@ namespace Swashbuckle.Swagger
                 .Select(paramDesc =>
                     {
                         var inPath = apiDescription.RelativePathSansQueryString().Contains("{" + paramDesc.Name + "}");
+
                         return CreateParameter(paramDesc, inPath, schemaRegistry);
                     })
                  .ToList();
@@ -197,11 +199,20 @@ namespace Swashbuckle.Swagger
             var schema = schemaRegistry.GetOrRegister(paramDesc.ParameterDescriptor.ParameterType);
 
             var reflectedDescriptor = (ReflectedHttpParameterDescriptor)paramDesc.ParameterDescriptor;
-
             foreach (var attribute in reflectedDescriptor.ParameterInfo.GetCustomAttributes(true))
             {
                 SchemaExtensions.SetSchemaDetails(schema, attribute);
             }
+
+            //if (paramDesc.ParameterDescriptor.ActionDescriptor != null)
+            //{
+            //    var actionIgnore = paramDesc.ParameterDescriptor.ActionDescriptor.GetCustomAttributes<SwaggerIgnore>();
+
+            //    if (actionIgnore != null)
+            //    {
+            //        parameter.ignore = true;
+            //    }
+            //}
 
             if (parameter.@in == "body")
                 parameter.schema = schema;

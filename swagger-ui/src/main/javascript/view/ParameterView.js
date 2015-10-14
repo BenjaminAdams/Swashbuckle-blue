@@ -2,6 +2,10 @@
 
 SwaggerUi.Views.ParameterView = Backbone.View.extend({
     initialize: function () {
+        if (this.model.ignore === true) {
+            return
+        }
+
         Handlebars.registerHelper('isArray', function (param, opts) {
             if (param.type.toLowerCase() === 'array' || param.allowMultiple) {
                 return opts.fn(this);
@@ -30,6 +34,10 @@ SwaggerUi.Views.ParameterView = Backbone.View.extend({
         this.model.paramType = this.model.in || this.model.paramType;
         this.model.isBody = this.model.paramType === 'body' || this.model.in === 'body';
         this.model.isFile = type && type.toLowerCase() === 'file';
+
+        if (this.model.ignore === true) {
+            return
+        }
 
         // Allow for default === false
         if (typeof this.model.default === 'undefined') {

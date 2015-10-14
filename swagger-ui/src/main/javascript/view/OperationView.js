@@ -265,6 +265,10 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
     createSignatureTable: function (value) {
     },
     addParameter: function (param, consumes) {
+        if (param.ignore === true) {
+            return
+        }
+
         // Render a parameter
         param.consumes = consumes;
         var paramView = new SwaggerUi.Views.ParameterView({

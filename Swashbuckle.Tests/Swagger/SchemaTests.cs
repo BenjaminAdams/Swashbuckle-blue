@@ -27,50 +27,6 @@ namespace Swashbuckle.Tests.Swagger
         }
 
         [Test]
-        public void It_provides_definition_schemas_for_complex_types()
-        {
-            SetUpDefaultRouteFor<ProductsController>();
-
-            var swagger = GetContent<JObject>("http://tempuri.org/swagger/docs/v1");
-            var definitions = swagger["definitions"];
-            Assert.IsNotNull(definitions);
-
-            var expected = JObject.FromObject(new
-                {
-                    Product = new
-                    {
-                        type = "object",
-                        properties = new
-                        {
-                            Id = new
-                            {
-                                format = "int32",
-                                type = "integer",
-                                readOnly = true
-                            },
-                            Type = new
-                            {
-                                format = "int32",
-                                @enum = new[] { 2, 4 },
-                                type = "integer",
-                                example = "Book"
-                            },
-                            Description = new
-                            {
-                                type = "string"
-                            },
-                            UnitPrice = new
-                            {
-                                format = "double",
-                                type = "number"
-                            }
-                        }
-                    }
-                });
-            Assert.AreEqual(expected.ToString(), definitions.ToString());
-        }
-
-        [Test]
         public void It_provides_validation_properties_for_annotated_types()
         {
             SetUpDefaultRouteFor<AnnotatedTypesController>();
@@ -91,11 +47,13 @@ namespace Swashbuckle.Tests.Swagger
                             {
                                 format = "double",
                                 type = "number",
+                                ignore = false
                             },
                             CardNumber = new
                             {
                                 pattern = "^[3-6]?\\d{12,15}$",
-                                type = "string"
+                                type = "string",
+                                ignore = false
                             },
                             ExpMonth = new
                             {
@@ -103,6 +61,7 @@ namespace Swashbuckle.Tests.Swagger
                                 maximum = 12,
                                 minimum = 1,
                                 type = "integer",
+                                ignore = false
                             },
                             ExpYear = new
                             {
@@ -110,60 +69,17 @@ namespace Swashbuckle.Tests.Swagger
                                 maximum = 99,
                                 minimum = 14,
                                 type = "integer",
+                                ignore = false
                             },
                             Note = new
                             {
                                 maxLength = 500,
                                 minLength = 10,
-                                type = "string"
+                                type = "string",
+                                ignore = false
                             }
-                        }
-                    }
-                });
-            Assert.AreEqual(expected.ToString(), definitions.ToString());
-        }
-
-        [Test]
-        public void It_includes_inherited_properties_for_sub_types()
-        {
-            SetUpDefaultRouteFor<PolymorphicTypesController>();
-
-            var swagger = GetContent<JObject>("http://tempuri.org/swagger/docs/v1");
-            var definitions = swagger["definitions"];
-            Assert.IsNotNull(definitions);
-
-            var expected = JObject.FromObject(new
-                {
-                    Elephant = new
-                    {
-                        type = "object",
-                        properties = new
-                        {
-                            TrunkLength = new
-                            {
-                                format = "int32",
-                                type = "integer"
-                            },
-                            HairColor = new
-                            {
-                                type = "string"
-                            },
-                            Type = new
-                            {
-                                type = "string"
-                            }
-                        }
-                    },
-                    Animal = new
-                    {
-                        type = "object",
-                        properties = new
-                        {
-                            Type = new
-                            {
-                                type = "string"
-                            }
-                        }
+                        },
+                        ignore = false
                     }
                 });
             Assert.AreEqual(expected.ToString(), definitions.ToString());
@@ -187,9 +103,11 @@ namespace Swashbuckle.Tests.Swagger
                             TotalEntries = new
                             {
                                 format = "int32",
-                                type = "integer"
+                                type = "integer",
+                                ignore = false
                             }
-                        }
+                        },
+                        ignore = false
                     }
                 });
             Assert.AreEqual(expected.ToString(), definitions.ToString());
@@ -214,15 +132,18 @@ namespace Swashbuckle.Tests.Swagger
                         {
                             foobar = new
                             {
-                                type = "string"
+                                type = "string",
+                                ignore = false
                             },
                             Category = new
                             {
                                 @enum = new[] { "A", "B" },
                                 type = "string",
+                                ignore = false,
                                 example = "A"
                             }
-                        }
+                        },
+                        ignore = false
                     }
                 });
             Assert.AreEqual(expected.ToString(), definitions.ToString());
@@ -242,6 +163,7 @@ namespace Swashbuckle.Tests.Swagger
                 {
                     @enum = new[] { "book", "album" },
                     type = "string",
+                    ignore = false,
                     example = "Book"
                 });
             Assert.AreEqual(expected.ToString(), typeSchema.ToString());
@@ -270,7 +192,8 @@ namespace Swashbuckle.Tests.Swagger
                     type = "integer",
                     format = "int32",
                     maximum = 2,
-                    minimum = 1
+                    minimum = 1,
+                    ignore = false
                 });
             Assert.AreEqual(expected.ToString(), parameter.ToString());
         }
@@ -299,7 +222,7 @@ namespace Swashbuckle.Tests.Swagger
             var expectedProps = JObject.FromObject(new Dictionary<string, object>
                 {
                     {
-                        "Name", new { type = "string" }
+                        "Name", new { type = "string", ignore = false }
                     }
                 });
 
@@ -317,7 +240,7 @@ namespace Swashbuckle.Tests.Swagger
             var expectedProps = JObject.FromObject(new Dictionary<string, object>
                 {
                     {
-                        "Name", new { type = "string" }
+                        "Name", new { type = "string", ignore = false }
                     }
                 });
 
@@ -381,9 +304,11 @@ namespace Swashbuckle.Tests.Swagger
                             LineItems = new
                             {
                                 type = "array",
-                                items = JObject.Parse("{ $ref: \"#/definitions/LineItem\" }")
+                                items = JObject.Parse("{ $ref: \"#/definitions/LineItem\",\"ignore\": false }"),
+                                ignore = false
                             }
-                        }
+                        },
+                        ignore = false
                     },
                     LineItem = new
                     {
@@ -393,57 +318,17 @@ namespace Swashbuckle.Tests.Swagger
                             ProductId = new
                             {
                                 format = "int32",
-                                type = "integer"
+                                type = "integer",
+                                ignore = false
                             },
                             Quantity = new
                             {
                                 format = "int32",
-                                type = "integer"
+                                type = "integer",
+                                ignore = false
                             }
-                        }
-                    }
-                });
-            Assert.AreEqual(expected.ToString(), definitions.ToString());
-        }
-
-        [Test]
-        public void It_handles_self_referencing_types()
-        {
-            SetUpDefaultRouteFor<SelfReferencingTypesController>();
-
-            var swagger = GetContent<JObject>("http://tempuri.org/swagger/docs/v1");
-
-            var definitions = swagger["definitions"];
-            Assert.IsNotNull(definitions);
-
-            var expected = JObject.FromObject(new
-                {
-                    Component = new
-                    {
-                        type = "object",
-                        properties = new
-                        {
-                            Name = new
-                            {
-                                type = "string"
-                            },
-                            SubComponents = new
-                            {
-                                type = "array",
-                                items = JObject.Parse("{ $ref: \"#/definitions/Component\" }")
-                            }
-                        }
-                    },
-                    // Breaks current swagger-ui
-                    //ListOfSelf = new
-                    //{
-                    //    type = "array",
-                    //    items = JObject.Parse("{ $ref: \"ListOfSelf\" }")
-                    //},
-                    DictionaryOfSelf = new
-                    {
-                        type = "object",
-                        additionalProperties = JObject.Parse("{ $ref: \"#/definitions/DictionaryOfSelf\" }")
+                        },
+                        ignore = false
                     }
                 });
             Assert.AreEqual(expected.ToString(), definitions.ToString());
@@ -466,9 +351,12 @@ namespace Swashbuckle.Tests.Swagger
                         items = new
                         {
                             format = "int32",
-                            type = "integer"
-                        }
-                    }
+                            type = "integer",
+                            ignore = false
+                        },
+                        ignore = false
+                    },
+                    ignore = false
                 });
             Assert.AreEqual(expected.ToString(), schema.ToString());
         }
@@ -488,39 +376,8 @@ namespace Swashbuckle.Tests.Swagger
                         "Object", new
                         {
                             type = "object",
-                            properties = new Dictionary<string, Schema>()
-                        }
-                    }
-                });
-            Assert.AreEqual(expected.ToString(), definitions.ToString());
-        }
-
-        [Test]
-        public void It_handles_nullable_types()
-        {
-            SetUpDefaultRouteFor<NullableTypesController>();
-
-            var swagger = GetContent<JObject>("http://tempuri.org/swagger/docs/v1");
-            var definitions = swagger["definitions"];
-
-            var expected = JObject.FromObject(new Dictionary<string, object>
-                {
-                    {
-                        "Contact", new
-                        {
-                            type = "object",
-                            properties = new
-                            {
-                                Name = new
-                                {
-                                    type = "string"
-                                },
-                                Phone = new
-                                {
-                                    format = "int32",
-                                    type = "integer"
-                                }
-                            }
+                            properties = new Dictionary<string, Schema>(),
+                            ignore= false
                         }
                     }
                 });

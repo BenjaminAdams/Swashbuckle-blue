@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using Swashbuckle.Dummy.Controllers;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Swashbuckle.Tests.Swagger
 {
@@ -21,6 +21,18 @@ namespace Swashbuckle.Tests.Swagger
 
             // Default set-up
             SetUpHandler();
+        }
+
+        [Test]
+        public void test_url()
+        {
+            var swagger = GetContent<JObject>("http://tempuri.org/swagger/docs/v1");
+
+            var putOperation = swagger["paths"]["/swaggerannotated/{id}"]["put"];
+
+            Assert.AreEqual("UpdateMessage", putOperation["operationId"].ToString());
+            Assert.AreEqual(JArray.FromObject(new[] { "messages" }).ToString(), putOperation["tags"].ToString());
+            Assert.AreEqual(JArray.FromObject(new[] { "ws" }).ToString(), putOperation["schemes"].ToString());
         }
 
         [Test]
@@ -50,7 +62,8 @@ namespace Swashbuckle.Tests.Swagger
                             schema = new
                             {
                                 format = "int32",
-                                type = "integer"
+                                type = "integer",
+                                ignore= false
                             }
                         }
                     },
@@ -61,7 +74,8 @@ namespace Swashbuckle.Tests.Swagger
                             schema = new
                             {
                                 type = "object",
-                                additionalProperties = JObject.Parse("{ $ref: \"#/definitions/Object\" }") 
+                                additionalProperties = JObject.Parse("{ $ref: \"#/definitions/Object\",\"ignore\": false }"),
+                                ignore= false
                             }
                         }
                     }
@@ -78,7 +92,8 @@ namespace Swashbuckle.Tests.Swagger
                             schema = new
                             {
                                 type = "array",
-                                items = JObject.Parse("{ $ref: \"#/definitions/Message\" }") 
+                                items = JObject.Parse("{ $ref: \"#/definitions/Message\",\"ignore\": false }"),
+                                ignore = false
                             }
                         }
                     },

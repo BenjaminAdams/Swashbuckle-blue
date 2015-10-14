@@ -50,7 +50,7 @@ namespace Swashbuckle.Dummy.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("filter")]
-        public IEnumerable<Account> Filter([SwaggerExample("123")] string q, [FromUri] Page page)
+        public IEnumerable<Account> Filter([SwaggerIgnore][SwaggerExample("123")] string q, [SwaggerIgnore][FromUri] Page page)
         {
             throw new NotImplementedException();
         }
@@ -77,6 +77,7 @@ namespace Swashbuckle.Dummy.Controllers
         }
     }
 
+    [SwaggerIgnore]
     public class Page
     {
         /// <summary>
@@ -89,6 +90,7 @@ namespace Swashbuckle.Dummy.Controllers
         ///     Offset into the result
         /// </summary>
         [SwaggerExample("0")]
+        [SwaggerIgnore]
         public int Offset { get; set; }
     }
 

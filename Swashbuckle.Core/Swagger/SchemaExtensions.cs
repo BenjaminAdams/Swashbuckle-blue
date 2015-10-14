@@ -44,13 +44,18 @@ namespace Swashbuckle.Swagger
                 schema.minLength = minLength.Length;
             }
 
-            //schema.example = "TODO: remove this example!";
-
             var example = attribute as SwaggerExample;
             if (example != null)
             {
                 schema.example = example.GetExample();
             }
+
+            var ignore = attribute as SwaggerIgnore;
+            if (ignore != null)
+            {
+                schema.ignore = true;
+            }
+
             return schema;
         }
 
@@ -118,6 +123,7 @@ namespace Swashbuckle.Swagger
             }
 
             partialSchema.example = schema.example;
+            partialSchema.ignore = schema.ignore;
 
             partialSchema.@default = schema.@default;
             partialSchema.maximum = schema.maximum;

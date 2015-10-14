@@ -218,6 +218,8 @@ namespace Swashbuckle.Swagger
 
         public bool? readOnly;
 
+        public bool ignore;
+
         public Xml xml;
 
         public ExternalDocs externalDocs;
@@ -263,6 +265,7 @@ namespace Swashbuckle.Swagger
 
         public int? multipleOf;
         public object example;
+        public bool ignore;
     }
 
     public class Response

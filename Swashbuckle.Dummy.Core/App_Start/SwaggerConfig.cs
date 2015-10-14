@@ -188,7 +188,7 @@ namespace Swashbuckle.Dummy
                     var customSwagUrl = LoadCustomSwagUrl();
                     if (customSwagUrl != null)
                     {
-                        c.CustomSwagDocLocation(customSwagUrl);
+                        //c.CustomSwagDocLocation(customSwagUrl);
                     }
 
                     c.CustomLogo("http://i.dell.com/images/global/brand/ui/logo-wt-bl.png");
