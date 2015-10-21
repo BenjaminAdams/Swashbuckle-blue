@@ -173,7 +173,6 @@ namespace $rootnamespace$
 						//c.CustomSwagDocLocation(customSwagUrl);
 
 						//add a custom logo
-						//Example:
 						//c.CustomLogo("http://example.com/logo.png");
 
 

@@ -1081,6 +1081,8 @@
 }
 .swagger-section #swagger-ui-container {
   padding-left: 255px;
+  margin-top: 50px;
+  word-wrap: break-word;
 }
 .swagger-section #sidebar {
   position: fixed;

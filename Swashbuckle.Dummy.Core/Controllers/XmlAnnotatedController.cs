@@ -50,7 +50,7 @@ namespace Swashbuckle.Dummy.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("filter")]
-        public IEnumerable<Account> Filter([SwaggerIgnore][SwaggerExample("123")] string q, [SwaggerIgnore][FromUri] Page page)
+        public IEnumerable<Account> Filter([SwaggerExample("123")] string q, [SwaggerIgnore][FromUri] Page page)
         {
             throw new NotImplementedException();
         }

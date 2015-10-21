@@ -31409,8 +31409,8 @@ window.SwaggerUi = Backbone.Router.extend({
         this.options.progress = function (d) {
             return that.showMessage(d);
         };
-        this.options.failure = function (d) {
-            return that.onLoadFailure(d);
+        this.options.failure = function (d, x, y) {
+            return that.onLoadFailure(d, x, y);
         };
 
         // Create view to handle the header inputs
@@ -31551,7 +31551,7 @@ window.SwaggerUi = Backbone.Router.extend({
     },
 
     // shows message in red
-    onLoadFailure: function (data) {
+    onLoadFailure: function (data, x, y) {
         if (data === undefined) {
             data = '';
         }
@@ -31561,7 +31561,7 @@ window.SwaggerUi = Backbone.Router.extend({
         var val = $('#message-bar').text(data);
 
         if (this.options.onFailure) {
-            this.options.onFailure(data);
+            this.options.onFailure(data, x, y);
         }
 
         return val;

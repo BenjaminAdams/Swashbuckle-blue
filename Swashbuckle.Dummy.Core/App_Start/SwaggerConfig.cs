@@ -191,7 +191,7 @@ namespace Swashbuckle.Dummy
                         //c.CustomSwagDocLocation(customSwagUrl);
                     }
 
-                    c.CustomLogo("http://i.dell.com/images/global/brand/ui/logo-wt-bl.png");
+                    c.CustomLogo("http://i.imgur.com/2QS9HX9.png");
 
                     // Use the "InjectStylesheet" option to enrich the UI with one or more additional CSS stylesheets.
                     // The file must be included in your project as an "Embedded Resource", and then the resource's
@@ -252,13 +252,9 @@ namespace Swashbuckle.Dummy
 
         public static bool ResolveVersionSupportByRouteConstraint(ApiDescription apiDesc, string targetApiVersion)
         {
-            var versionConstraint = (apiDesc.Route.Constraints.ContainsKey("apiVersion"))
-                ? apiDesc.Route.Constraints["apiVersion"] as RegexRouteConstraint
-                : null;
+            var versionConstraint = (apiDesc.Route.Constraints.ContainsKey("apiVersion")) ? apiDesc.Route.Constraints["apiVersion"] as RegexRouteConstraint : null;
 
-            return (versionConstraint == null)
-                ? false
-                : versionConstraint.Pattern.Split('|').Contains(targetApiVersion);
+            return (versionConstraint == null) ? false : versionConstraint.Pattern.Split('|').Contains(targetApiVersion);
         }
 
         //Use this in combination with .gitignore to have a custom swagger URL that won't get checked in

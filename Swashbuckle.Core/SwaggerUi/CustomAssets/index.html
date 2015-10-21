@@ -108,8 +108,11 @@
                         $.getScript(script);
                     });
                 },
-                onFailure: function (data) {
-                    log("Unable to Load SwaggerUI");
+                onFailure: function (data, x, y) {
+                    log('Unable to Load SwaggerUI', data);
+
+                    $('#swagger-ui-container').html(data);
+
                 },
                 docExpansion: swashbuckleConfig.docExpansion,
                 apisSorter: "alpha",
@@ -167,7 +170,7 @@
             </form>
         </div>
     </div>
-    <div id="message-bar" class="swagger-ui-wrap" data-sw-translate>&nbsp;</div>
+<pre id="message-bar" class="swagger-ui-wrap" data-sw-translate></pre>
     <div id="swagger-ui-container" class="swagger-ui-wrap"></div>
 </body>
 </html>
