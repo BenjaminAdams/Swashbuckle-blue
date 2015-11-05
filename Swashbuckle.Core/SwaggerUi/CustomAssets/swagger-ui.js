@@ -317,6 +317,10 @@ var resolveSchema = Helpers.resolveSchema = function (schema) {
         schema = resolveSchema(schema.schema);
     }
 
+    if (schema.type === 'array' && schema.items && schema.items.$ref) {
+        schema.$ref = schema.items.$ref
+    }
+
     return schema;
 };
 
@@ -567,7 +571,7 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
 
     // If we are a Model object... adjust accordingly
     if (schema.definition) {
-        console.log('we are adjusting a model, sending the definition to the root schema', schema)
+        // console.log('we are adjusting a model, sending the definition to the root schema', schema)
         schema = schema.definition;
     }
 
@@ -591,8 +595,9 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
     var seenModels = [];
     var inlineModels = 0;
 
+    console.log('generating base schema=', schema)
+
     // Generate current HTML
-    //var html = processModel(schema, name);
     var html = processModelAsTable(schema, name);
 
     // Generate references HTML
@@ -652,6 +657,8 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
 
             //Resolve the schema (Handle nested schemas)
             cProperty = Helpers.resolveSchema(cProperty);
+
+            console.log('we just resolved a property=', cProperty)
 
             //We need to handle property references
             if (!_.isUndefined(cProperty.$ref)) {

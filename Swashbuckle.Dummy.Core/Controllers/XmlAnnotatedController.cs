@@ -88,8 +88,14 @@ namespace Swashbuckle.Dummy.Controllers
         }
     }
 
+    /// <summary>
+    ///     SoMuch bro
+    /// </summary>
     public class SoMuch
     {
+        /// <summary>
+        ///     An array of funs!
+        /// </summary>
         public List<CoolThings> Funs { get; set; }
     }
 

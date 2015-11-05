@@ -51,6 +51,16 @@
             </summary>
             <param name="funs"></param>
         </member>
+        <member name="T:Swashbuckle.Dummy.Controllers.SoMuch">
+            <summary>
+                SoMuch bro
+            </summary>
+        </member>
+        <member name="P:Swashbuckle.Dummy.Controllers.SoMuch.Funs">
+            <summary>
+                An array of funs!
+            </summary>
+        </member>
         <member name="T:Swashbuckle.Dummy.Controllers.CoolThings">
             <summary>
                 Cool things we can do!
