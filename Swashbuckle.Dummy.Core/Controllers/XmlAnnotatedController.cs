@@ -75,6 +75,40 @@ namespace Swashbuckle.Dummy.Controllers
         {
             throw new NotImplementedException();
         }
+
+        /// <summary>
+        ///    So much funs! .So we can verify an array schema serializes properly
+        /// </summary>
+        /// <param name="funs"></param>
+        [HttpPost]
+        [Route("yay")]
+        public void AddFuns(SoMuch soMuch)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class SoMuch
+    {
+        public List<CoolThings> Funs { get; set; }
+    }
+
+    /// <summary>
+    ///     Cool things we can do!
+    /// </summary>
+    public class CoolThings
+    {
+        /// <summary>
+        ///     The Id of the thing
+        /// </summary>
+        [SwaggerExample("123123")]
+        public int Id { get; set; }
+
+        /// <summary>
+        ///     The name of the cool thing we did
+        /// </summary>
+        [SwaggerExample("Kayaking")]
+        public string Name { get; set; }
     }
 
     [SwaggerIgnore]

@@ -149,13 +149,11 @@
     <EmbeddedResource Include="SwaggerUi\CustomAssets\swagger-ui.js" />
     <EmbeddedResource Include="SwaggerUi\CustomAssets\swagger-ui.min.js" />
     <EmbeddedResource Include="SwaggerUi\CustomAssets\images\throbber.gif" />
+    <EmbeddedResource Include="SwaggerUi\CustomAssets\swagger-oauth.js" />
     <Content Include="Swashbuckle.Core.nuspec">
       <SubType>Designer</SubType>
     </Content>
-    <EmbeddedResource Include="SwaggerUi\CustomAssets\discoveryUrlSelector.js" />
     <EmbeddedResource Include="SwaggerUi\CustomAssets\index.html" />
-    <EmbeddedResource Include="SwaggerUi\CustomAssets\swagger-oauth.js" />
-    <EmbeddedResource Include="SwaggerUi\CustomAssets\typography.css" />
     <None Include="packages.config" />
     <None Include="Swashbuckle.Core.snk" />
   </ItemGroup>
@@ -169,7 +167,8 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /E /Y "$(SolutionDir)swagger-ui\dist"  "$(SolutionDir)Swashbuckle.Core\SwaggerUi\CustomAssets"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

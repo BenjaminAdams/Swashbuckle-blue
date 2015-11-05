@@ -1,4 +1,4 @@
-var appName;
+﻿var appName;
 var popupMask;
 var popupDialog;
 var clientId;

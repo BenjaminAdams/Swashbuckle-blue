@@ -81,6 +81,7 @@ gulp.task('dist', ['clean', 'lint'], function () {
           pkg: pkg
       }))
       .pipe(gulp.dest('./dist'))
+	  .pipe(gulp.dest('../Swashbuckle.Core/SwaggerUi/CustomAssets'))
       .pipe(uglify())
       .on('error', log)
       .pipe(rename({
@@ -88,7 +89,9 @@ gulp.task('dist', ['clean', 'lint'], function () {
       }))
       .on('error', log)
       .pipe(gulp.dest('./dist'))
+	  .pipe(gulp.dest('../Swashbuckle.Core/SwaggerUi/CustomAssets'))
       .pipe(connect.reload());
+	  //  gulp.start('copyToCoreProj');
 });
 
 /**
@@ -116,7 +119,10 @@ gulp.task('copy', ['less'], function () {
     gulp
       .src(['./lib/**/*.{js,map}'])
       .pipe(gulp.dest('./dist/lib'))
+	  .pipe(gulp.dest('../Swashbuckle.Core/SwaggerUi/CustomAssets/lib'))
       .on('error', log);
+	  
+	  //xcopy /E /Y "$(SolutionDir)swagger-ui\dist"  "$(SolutionDir)Swashbuckle.Core\SwaggerUi\CustomAssets"
 
     // copy `lang` for translations
     //gulp
@@ -128,15 +134,27 @@ gulp.task('copy', ['less'], function () {
     gulp
       .src(['./src/main/html/**/*'])
       .pipe(gulp.dest('./dist'))
+	  .pipe(gulp.dest('../Swashbuckle.Core/SwaggerUi/CustomAssets'))
       .on('error', log);
 
     // copy the ./dist folder to the Swashbuckle.Core project
     //    gulp
     //      .src(['./dist'])
-    //      .pipe(gulp.dest('../../Swashbuckle.Core/SwaggerUi/CustomAssets'))
+    //      .pipe(gulp.dest('../Swashbuckle.Core/SwaggerUi/CustomAssets'))
     //      .on('error', log);
 });
 
+
+gulp.task('copyToCoreProj', function () {
+    // copy JS and LESS files to Core project
+
+    gulp
+      .src(['./dist/*'])
+	  .pipe(gulp.dest('../Swashbuckle.Core/SwaggerUi/CustomAssets'))
+      .on('error', log);
+
+
+});
 /**
  * Watch for changes and recompile
  */

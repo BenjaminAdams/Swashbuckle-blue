@@ -209,8 +209,10 @@ function schemaToJSON(schema, models, modelsToIgnore, modelPropertyMacro) {
 
 function getSchemaFromRef(schema, models) {
     if (schema.type === 'array' && schema.items && schema.items.$ref !== null) {
-        schema.$ref = schema.items.$ref
-        schema.type = 'object'
+        console.log('its an arary', schema)
+
+        // schema.$ref = schema.items.$ref
+        // schema.type = 'object'
     }
 
     if (typeof schema.$ref === 'string') {
@@ -258,8 +260,9 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
     }
 
     if (schema.type === 'array' && schema.items && schema.items.$ref !== null) {
-        schema.$ref = schema.items.$ref
-        schema.type = 'object'
+        //console.log('found an array=', schema)
+        //  schema.$ref = schema.items.$ref
+        // schema.type = 'object'
     }
 
     // Dereference $ref from 'models'
@@ -268,12 +271,14 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
         schema = models[name];
         if (typeof schema === 'undefined') {
             //return  name + ' is not defined!' ;
+            console.log(name + ' is not defined!, not displaying this')
             return ''
         }
     }
 
     // If we are a Model object... adjust accordingly
     if (schema.definition) {
+        console.log('we are adjusting a model, sending the definition to the root schema', schema)
         schema = schema.definition;
     }
 
@@ -287,10 +292,9 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
         name = schema.title || 'Inline Model';
     }
 
-    console.log('name=', name)
-
     if (name === 'Object') {
         //prevent empty params from display a table
+        console.log('FOUND AN OBJECT!!! this will not get displayed', schema)
         return ''
     }
 
@@ -299,7 +303,6 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
     var inlineModels = 0;
 
     // Generate current HTML
-    //var html = processModel(schema, name);
     var html = processModelAsTable(schema, name);
 
     // Generate references HTML
@@ -328,7 +331,10 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
             seenModels.push(name);
         }
 
-        if (!schema || !schema.properties) return ''
+        if (!schema || !schema.properties) {
+            console.log('schema or schema properties are false', schema)
+            return ''
+        }
 
         var html = ''
 

@@ -45,6 +45,27 @@
             </summary>
             <param name="reward"></param>
         </member>
+        <member name="M:Swashbuckle.Dummy.Controllers.XmlAnnotatedController.AddFuns(Swashbuckle.Dummy.Controllers.SoMuch)">
+            <summary>
+               So much funs! .So we can verify an array schema serializes properly
+            </summary>
+            <param name="funs"></param>
+        </member>
+        <member name="T:Swashbuckle.Dummy.Controllers.CoolThings">
+            <summary>
+                Cool things we can do!
+            </summary>
+        </member>
+        <member name="P:Swashbuckle.Dummy.Controllers.CoolThings.Id">
+            <summary>
+                The Id of the thing
+            </summary>
+        </member>
+        <member name="P:Swashbuckle.Dummy.Controllers.CoolThings.Name">
+            <summary>
+                The name of the cool thing we did
+            </summary>
+        </member>
         <member name="P:Swashbuckle.Dummy.Controllers.Page.Limit">
             <summary>
                 The maximum number of accounts to return
