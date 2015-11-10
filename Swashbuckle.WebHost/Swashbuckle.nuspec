@@ -12,7 +12,7 @@
     <releaseNotes>
 Changed some things the current Swashbuckle/Swagger projects
 * Left sidebar navigation
-* Upgraded the .net version from 4.0 to 4.5.1typography-css
+* Upgraded the .net version from 4.0 to 4.5.1
 * Added better presentation of your HTTP post payloads and the descriptions of each parameter.
 * Utilizing the XML comment from the top of the class model
 * Adding parsing for [MaxLength] and [MinLength], before it only read values from [StringLength] attribute
