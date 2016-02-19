@@ -33,7 +33,8 @@ namespace Swashbuckle.Application
                 { "%(OAuth2ClientSecret)", "" },
                 { "%(OAuth2Realm)", "" },
                 { "%(OAuth2AppName)", "" },
-                { "%(ApiKeyLocation)", "header" }
+                { "%(ApiKeyLocation)", "header" },
+                { "%(ApiKeyName)", "none" }
             };
             _rootUrlResolver = rootUrlResolver;
 
@@ -79,6 +80,11 @@ namespace Swashbuckle.Application
             var built = sec.Build();
             _templateParams["%(ApiKeyLocation)"] = built.@in;
             _templateParams["%(ApiKeyName)"] = built.name;
+
+            if (string.IsNullOrWhiteSpace(_templateParams["%(ApiKeyName)"]))
+            {
+                _templateParams["%(ApiKeyName)"] = "none";
+            }
         }
 
         public void BooleanValues(IEnumerable<string> values)

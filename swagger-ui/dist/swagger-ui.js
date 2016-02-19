@@ -658,7 +658,7 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
             //Resolve the schema (Handle nested schemas)
             cProperty = Helpers.resolveSchema(cProperty);
 
-            console.log('we just resolved a property=', cProperty)
+            //console.log('we just resolved a property=', cProperty)
 
             //We need to handle property references
             if (!_.isUndefined(cProperty.$ref)) {

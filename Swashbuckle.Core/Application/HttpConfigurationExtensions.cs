@@ -81,7 +81,10 @@ namespace Swashbuckle.Application
             if (configure != null) configure(config);
 
             var apiKey = _swaggerDocsConfig.GetApiKeyDetails();
-            config.SetApiKeyDetails(apiKey);
+            if (apiKey != null)
+            {
+                config.SetApiKeyDetails(apiKey);
+            }
 
             _httpConfig.Routes.MapHttpRoute(
                 name: "swagger_ui",
