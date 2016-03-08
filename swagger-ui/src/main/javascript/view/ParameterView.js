@@ -30,6 +30,8 @@ SwaggerUi.Views.ParameterView = Backbone.View.extend({
             }
         }
 
+        //console.log('xxxxxrendering one param in ParameterView', this.model)
+
         this.model.type = type;
         this.model.paramType = this.model.in || this.model.paramType;
         this.model.isBody = this.model.paramType === 'body' || this.model.in === 'body';
@@ -72,7 +74,31 @@ SwaggerUi.Views.ParameterView = Backbone.View.extend({
             $('.model-signature', $(this.el)).append(signatureView.render().el);
         }
         else {
-            $('.model-signature', $(this.el)).html(this.model.signature);
+            var sig;
+
+            if (this.model.enum) {
+                sig = 'Enum <span class="propVals">[\'' + this.model.enum.join('\', \'') + '\']</span>';
+            } else {
+                sig = this.model.signature
+            }
+
+            if (typeof this.model.minLength !== 'undefined') {
+                sig += '<div title="min length">minLength: <span class="propVals">' + this.model.minLength + '</span></div>';
+            }
+
+            if (this.model.maxLength) {
+                sig += '<div title="max length">maxLength: <span class="propVals">' + this.model.maxLength + '</span></div>';
+            }
+
+            if (typeof this.model.minimum !== 'undefined') {
+                sig += '<div title="min length">minValue: <span class="propVals">' + this.model.minimum + '</span></div>';
+            }
+
+            if (this.model.maximum) {
+                sig += '<div title="max length">maxValue: <span class="propVals">' + this.model.maximum + '</span></div>';
+            }
+
+            $('.model-signature', $(this.el)).html(sig);
         }
 
         var isParam = false;

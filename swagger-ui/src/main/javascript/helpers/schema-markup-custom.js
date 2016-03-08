@@ -399,12 +399,20 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
                     html += cProperty.type
                 }
 
-                if (cProperty.minLength) {
-                    html += '<div title="min length">min: <span class="propVals">' + cProperty.minLength + '</span></div>';
+                if (typeof cProperty.minLength !== 'undefined') {
+                    html += '<div title="min length">minLength: <span class="propVals">' + cProperty.minLength + '</span></div>';
                 }
 
-                if (cProperty.minLength) {
-                    html += '<div title="max length">max: <span class="propVals">' + cProperty.maxLength + '</span></div>';
+                if (cProperty.maxLength) {
+                    html += '<div title="max length">maxLength: <span class="propVals">' + cProperty.maxLength + '</span></div>';
+                }
+
+                if (typeof cProperty.minimum !== 'undefined') {
+                    html += '<div title="min length">minValue: <span class="propVals">' + cProperty.minimum + '</span></div>';
+                }
+
+                if (cProperty.maximum) {
+                    html += '<div title="max length">maxValue: <span class="propVals">' + cProperty.maximum + '</span></div>';
                 }
 
                 html += '</td>'

@@ -1010,8 +1010,11 @@
 .swagger-section .api-popup-actions {
   padding-top: 10px;
 }
-* {
-  font-family: Arial, Helvetica, sans-serif;
+html,
+body,
+.resource,
+#sidebar {
+  font-family: Arial, Helvetica, sans-serif !important;
 }
 .swagger-section .access {
   float: right;
@@ -1088,7 +1091,6 @@
   position: fixed;
   left: 250px;
   width: 250px;
-  font-family: Arial, Helvetica, sans-serif !important;
   height: 80%;
   margin-left: -250px;
   padding-top: 50px;
