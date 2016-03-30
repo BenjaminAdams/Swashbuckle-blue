@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Swashbuckle.Swagger.Attributes;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Net.Http;
@@ -33,5 +34,8 @@ namespace Swashbuckle.Dummy.Controllers
 
         [StringLength(500, MinimumLength = 10)]
         public string Note { get; set; }
+
+        [SwaggerIgnore]
+        public string IgnoredAttr { get; set; }
     }
 }

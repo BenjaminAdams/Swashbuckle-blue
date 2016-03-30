@@ -2610,7 +2610,7 @@ SuperagentHttpClient.prototype.execute = function (obj) {
       var possibleObj;
 
       // Already parsed by by superagent?
-      if(res.body && Object.keys(res.body).length > 0) {
+      if(res.body && typeof res.body === 'object' && Object.keys(res.body).length > 0) {
         possibleObj = res.body;
       } else {
           try {
