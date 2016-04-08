@@ -115,6 +115,12 @@ namespace Swashbuckle.Dummy.Controllers
         /// </summary>
         [SwaggerExample("Kayaking")]
         public string Name { get; set; }
+
+        /// <summary>
+        ///     This is a test to see if [SwaggerExample("null")] will make the field null in the example payload
+        /// </summary>
+        [SwaggerExample("null")]
+        public string SwaggerExampleNullTest { get; set; }
     }
 
     [SwaggerIgnore]

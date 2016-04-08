@@ -1,55 +1,29 @@
 'use strict';
 
-var Helpers = {}
+var Helpers = require('./helpers');
 
-Helpers.__bind = function (fn, me) {
-    return function () {
-        return fn.apply(me, arguments);
-    };
+var _ = {
+    isPlainObject: require('lodash-compat/lang/isPlainObject'),
+    isUndefined: require('lodash-compat/lang/isUndefined'),
+    isArray: require('lodash-compat/lang/isArray'),
+    isObject: require('lodash-compat/lang/isObject'),
+    isEmpty: require('lodash-compat/lang/isEmpty'),
+    map: require('lodash-compat/collection/map'),
+    indexOf: require('lodash-compat/array/indexOf'),
+    cloneDeep: require('lodash-compat/lang/cloneDeep'),
+    keys: require('lodash-compat/object/keys'),
+    forEach: require('lodash-compat/collection/forEach')
 };
 
-var log = Helpers.log = function () {
-    // Only log if available and we're not testing
-    if (console && process.env.NODE_ENV !== 'test') {
-        console.log(Array.prototype.slice.call(arguments)[0]);
-    }
-};
-
-Helpers.fail = function (message) {
-    log(message);
-};
-
-var optionHtml = Helpers.optionHtml = function (label, value) {
-    return '<tr><td class="optionName">' + label + ':</td><td>' + value + '</td></tr>';
-};
-
-var resolveSchema = Helpers.resolveSchema = function (schema) {
-    if (window.$.isPlainObject(schema.schema)) {
-        schema = resolveSchema(schema.schema);
-    }
-
-    if (schema.type === 'array' && schema.items && schema.items.$ref) {
-        schema.$ref = schema.items.$ref
-    }
-
-    return schema;
-};
-
-var simpleRef = Helpers.simpleRef = function (name) {
-    if (typeof name === 'undefined') {
-        return null;
-    }
-
-    if (name.indexOf('#/definitions/') === 0) {
-        return name.substring('#/definitions/'.length);
-    } else {
-        return name;
-    }
-}
+module.exports.optionHtml = optionHtml;
+module.exports.typeFromJsonSchema = typeFromJsonSchema;
+module.exports.getStringSignature = getStringSignature;
+module.exports.schemaToHTML = schemaToHTML;
+module.exports.schemaToJSON = schemaToJSON;
 
 function optionHtml(label, value) {
     return '<tr><td class="optionName">' + label + ':</td><td>' + value + '</td></tr>';
-}
+};
 
 function typeFromJsonSchema(type, format) {
     var str;
@@ -77,7 +51,7 @@ function typeFromJsonSchema(type, format) {
     }
 
     return str;
-}
+};
 
 function getStringSignature(obj, baseComponent) {
     var str = '';
@@ -121,7 +95,7 @@ function getStringSignature(obj, baseComponent) {
     }
 
     return str;
-}
+};
 
 function schemaToJSON(schema, models, modelsToIgnore, modelPropertyMacro) {
     // Resolve the schema (Handle nested schemas)
@@ -132,6 +106,8 @@ function schemaToJSON(schema, models, modelsToIgnore, modelPropertyMacro) {
             return (prop || {}).default;
         }
     }
+
+    console.log('got here', schema)
 
     modelsToIgnore = modelsToIgnore || {};
 
@@ -184,7 +160,6 @@ function schemaToJSON(schema, models, modelsToIgnore, modelPropertyMacro) {
 
             _.forEach(schema.properties, function (property, name) {
                 var cProperty = _.cloneDeep(property);
-                //var cProperty = $.extend(true, {}, property);
 
                 // Allow macro to set the default value
                 cProperty.default = modelPropertyMacro(property);
@@ -208,45 +183,18 @@ function schemaToJSON(schema, models, modelsToIgnore, modelPropertyMacro) {
         }
     }
 
-    console.log('11schema', schema)
+    console.log('dont edit nodeModules files.... schema', schema)
     if (schema.example === 'NULL') {
         output = null
     }
 
     return output;
-}
+};
 
-function getSchemaFromRef(schema, models) {
-    if (schema.type === 'array' && schema.items && schema.items.$ref !== null) {
-        console.log('its an arary', schema)
+function schemaToHTML(name, schema, models, modelPropertyMacro) {
+    var strongOpen = '<span class="strong">';
+    var strongClose = '</span>';
 
-        // schema.$ref = schema.items.$ref
-        // schema.type = 'object'
-    }
-
-    if (typeof schema.$ref === 'string') {
-        var name = Helpers.simpleRef(schema.$ref);
-        schema = models[name];
-        if (typeof schema === 'undefined') {
-            return name + ' is not defined!';
-        }
-    }
-
-    return schema;
-}
-
-window.getMockSignatureFromParamAsTable = function (schema, models) {
-    if (!schema) return ''
-    var name = Helpers.simpleRef(schema.$ref);
-    schema = getSchemaFromRef(schema, models)
-    return schemaToHTMLAsTable(name, schema, models, null);
-}
-
-window.getMockSignatureAsTable = function (value) {
-    return schemaToHTMLAsTable(value.name, value.definition, value.models, value.modelPropertyMacro);
-}
-
-function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
     // Allow for ignoring the 'name' argument.... shifting the rest
     if (_.isObject(arguments[0])) {
         name = void 0;
@@ -257,21 +205,12 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
 
     models = models || {};
 
-    if (!schema) return ''
-
     // Resolve the schema (Handle nested schemas)
     schema = Helpers.resolveSchema(schema);
 
     // Return for empty object
     if (_.isEmpty(schema)) {
-        //return  'Empty' ;
-        return ''
-    }
-
-    if (schema.type === 'array' && schema.items && schema.items.$ref !== null) {
-        //console.log('found an array=', schema)
-        //  schema.$ref = schema.items.$ref
-        // schema.type = 'object'
+        return strongOpen + 'Empty' + strongClose;
     }
 
     // Dereference $ref from 'models'
@@ -279,15 +218,16 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
         name = Helpers.simpleRef(schema.$ref);
         schema = models[name];
         if (typeof schema === 'undefined') {
-            //return  name + ' is not defined!' ;
-            console.log(name + ' is not defined!, not displaying this')
-            return ''
+            return strongOpen + name + ' is not defined!' + strongClose;
         }
+    }
+
+    if (typeof name !== 'string') {
+        name = schema.title || 'Inline Model';
     }
 
     // If we are a Model object... adjust accordingly
     if (schema.definition) {
-        // console.log('we are adjusting a model, sending the definition to the root schema', schema)
         schema = schema.definition;
     }
 
@@ -297,24 +237,12 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
         }
     }
 
-    if (typeof name !== 'string') {
-        name = schema.title || 'Inline Model';
-    }
-
-    if (name === 'Object') {
-        //prevent empty params from display a table
-        console.log('FOUND AN OBJECT!!! this will not get displayed', schema)
-        return ''
-    }
-
     var references = {};
     var seenModels = [];
     var inlineModels = 0;
 
-    console.log('generating base schema=', schema)
-
     // Generate current HTML
-    var html = processModelAsTable(schema, name);
+    var html = processModel(schema, name);
 
     // Generate references HTML
     while (_.keys(references).length > 0) {
@@ -327,7 +255,7 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
             if (!seenModel) {
                 seenModels.push(name);
 
-                html += '<br />' + processModelAsTable(schema, name);
+                html += '<br />' + processModel(schema, name);
             }
         });
         /* jshint ignore:end */
@@ -335,220 +263,7 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
 
     return html;
 
-    //////////////////////////////////////
-
-    function processModelAsTable(schema, name) {
-        if (name) {
-            seenModels.push(name);
-        }
-
-        if (!schema || !schema.properties) {
-            console.log('schema or schema properties are false', schema)
-            return ''
-        }
-
-        var html = ''
-
-        html += '<h4><strong>' + name + '</strong></h4>'
-
-        if (schema.description) {
-            html += '<small style="font-size:12px;color:#383535;">' + schema.description + '</small>'
-        }
-
-        html += '<table class="fullwidth"><thead><tr>'
-        html += '<th style="width:15%">Name</th>'
-        html += '<th style="width:38%;">Description</th>'
-        html += '<th style="width:12%;">Type</th>'
-        html += '<th style="width:10%;">Required</th>'
-        html += '</tr></thead><tbody class="model-desc">'
-
-        _.each(schema.properties, function (property, name) {
-            var model;
-
-            var cProperty = _.cloneDeep(property);
-            //var cProperty = $.extend(true, {}, property);
-
-            // Allow macro to set the default value
-            cProperty.default = modelPropertyMacro(cProperty);
-
-            //Resolve the schema (Handle nested schemas)
-            cProperty = Helpers.resolveSchema(cProperty);
-
-            //console.log('we just resolved a property=', cProperty)
-
-            //We need to handle property references
-            if (!_.isUndefined(cProperty.$ref)) {
-                addReference(cProperty, Helpers.simpleRef(cProperty.$ref))
-
-                model = models[Helpers.simpleRef(cProperty.$ref)];
-
-                if (!_.isUndefined(model) && _.indexOf([undefined, 'array', 'object'], model.definition.type) === -1) {
-                    // Use referenced schema
-                    cProperty = Helpers.resolveSchema(model.definition);
-                }
-            }
-
-            html += '<tr><td class="propName">' + name + '</td>'
-
-            if (!_.isUndefined(cProperty.description)) {
-                html += '<td>' + cProperty.description + '</td>'
-            } else {
-                html += '<td></td>'
-            }
-
-            if (!_.isUndefined(cProperty.type)) {
-                html += '<td>'
-                if (cProperty.enum) {
-                    html += 'Enum <span class="propVals">[\'' + cProperty.enum.join('\', \'') + '\']</span>';
-                } else {
-                    html += cProperty.type
-                }
-
-                if (typeof cProperty.minLength !== 'undefined') {
-                    html += '<div title="min length">minLength: <span class="propVals">' + cProperty.minLength + '</span></div>';
-                }
-
-                if (cProperty.maxLength) {
-                    html += '<div title="max length">maxLength: <span class="propVals">' + cProperty.maxLength + '</span></div>';
-                }
-
-                if (typeof cProperty.minimum !== 'undefined') {
-                    html += '<div title="min length">minValue: <span class="propVals">' + cProperty.minimum + '</span></div>';
-                }
-
-                if (cProperty.maximum) {
-                    html += '<div title="max length">maxValue: <span class="propVals">' + cProperty.maximum + '</span></div>';
-                }
-
-                html += '</td>'
-            } else {
-                html += '<td></td>'
-            }
-
-            // html += primitiveToHTML(cProperty);
-
-            var propertyIsRequired = (_.indexOf(schema.required, name) >= 0);
-            if (propertyIsRequired) {
-                html += '<td class="requiredParam">Y</td>'
-            } else {
-                html += '<td>N</td>'
-            }
-
-            return html;
-        })
-
-        html += '</tbody></table>'
-
-        return html
-    }
-
-    //////////////////////////////////
-
-    function processModel(schema, name) {
-        var type = schema.type || 'object';
-        var isArray = schema.type === 'array';
-        var html = name + ' ' + (isArray ? '[' : '{');
-
-        if (name) {
-            seenModels.push(name);
-        }
-
-        if (isArray) {
-            if (_.isArray(schema.items)) {
-                html += '<div>' + _.map(schema.items, function (item) {
-                    var type = item.type || 'object';
-
-                    if (_.isUndefined(item.$ref)) {
-                        if (_.indexOf(['array', 'object'], type) > -1) {
-                            if (type === 'object' && _.isUndefined(item.properties)) {
-                                return 'object';
-                            } else {
-                                return addReference(item);
-                            }
-                        } else {
-                            return primitiveToOptionsHTML(item, type);
-                        }
-                    } else {
-                        return addReference(item, Helpers.simpleRef(item.$ref));
-                    }
-                }).join(',</div><div>');
-            } else if (_.isPlainObject(schema.items)) {
-                if (_.isUndefined(schema.items.$ref)) {
-                    if (_.indexOf(['array', 'object'], schema.items.type || 'object') > -1) {
-                        if ((_.isUndefined(schema.items.type) || schema.items.type === 'object') && _.isUndefined(schema.items.properties)) {
-                            html += '<div>object</div>';
-                        } else {
-                            html += '<div>' + addReference(schema.items) + '</div>';
-                        }
-                    } else {
-                        html += '<div>' + primitiveToOptionsHTML(schema.items, schema.items.type) + '</div>';
-                    }
-                } else {
-                    html += '<div>' + addReference(schema.items, Helpers.simpleRef(schema.items.$ref)) + '</div>';
-                }
-            } else {
-                Helpers.log('Array type\'s \'items\' property is not an array or an object, cannot process');
-                html += '<div>object</div>';
-            }
-        } else {
-            if (schema.$ref) {
-                html += '<div>' + addReference(schema, name) + '</div>';
-            } else if (type === 'object') {
-                html = '';
-
-                if (_.isPlainObject(schema.properties)) {
-                    html += _.map(schema.properties, function (property, name) {
-                        var propertyIsRequired = (_.indexOf(schema.required, name) >= 0);
-                        var cProperty = _.cloneDeep(property);
-
-                        var requiredClass = propertyIsRequired ? 'required' : '';
-                        var html = '<span class="propName ' + requiredClass + '">' + name + '</span> (';
-                        var model;
-
-                        // Allow macro to set the default value
-                        cProperty.default = modelPropertyMacro(cProperty);
-
-                        // Resolve the schema (Handle nested schemas)
-                        cProperty = Helpers.resolveSchema(cProperty);
-
-                        // We need to handle property references to primitives (Issue 339)
-                        if (!_.isUndefined(cProperty.$ref)) {
-                            model = models[Helpers.simpleRef(cProperty.$ref)];
-
-                            if (!_.isUndefined(model) && _.indexOf([undefined, 'array', 'object'], model.definition.type) === -1) {
-                                // Use referenced schema
-                                cProperty = Helpers.resolveSchema(model.definition);
-                            }
-                        }
-
-                        html += primitiveToHTML(cProperty);
-
-                        if (!propertyIsRequired) {
-                            html += ', <span class="propOptKey">optional</span>';
-                        }
-
-                        html += ')';
-
-                        if (!_.isUndefined(cProperty.description)) {
-                            html += ': ' + '<span class="propDesc">' + cProperty.description + '</span>';
-                        }
-
-                        if (cProperty.enum) {
-                            html += ' = <span class="propVals">[\'' + cProperty.enum.join('\', \'') + '\']</span>';
-                        }
-
-                        return primitiveToOptionsHTML(cProperty, html);
-                    }).join(',</div><div>');
-                }
-
-                html += '</div>';
-            } else {
-                html += '<div>' + primitiveToOptionsHTML(schema, type) + '</div>';
-            }
-        }
-
-        return html + (isArray ? ']' : '}');
-    };
+    /////////////////////////////////
 
     function addReference(schema, name, skipRef) {
         var modelName = name;
@@ -559,9 +274,7 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
             model = models[modelName];
         } else if (_.isUndefined(name)) {
             modelName = schema.title || 'Inline Model ' + (++inlineModels);
-            model = {
-                definition: schema
-            };
+            model = { definition: schema };
         }
 
         if (skipRef !== true) {
@@ -569,7 +282,7 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
         }
 
         return modelName;
-    }
+    };
 
     function primitiveToHTML(schema) {
         var html = '<span class="propType">';
@@ -611,15 +324,14 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
         html += '</span>';
 
         return html;
-    }
-
+    };
     function primitiveToOptionsHTML(schema, html) {
         var options = '';
         var type = schema.type || 'object';
         var isArray = type === 'array';
 
         if (isArray) {
-            if (window.$.isPlainObject(schema.items) && !_.isUndefined(schema.items.type)) {
+            if (_.isPlainObject(schema.items) && !_.isUndefined(schema.items.type)) {
                 type = schema.items.type;
             } else {
                 type = 'object';
@@ -706,5 +418,110 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
         }
 
         return html;
-    }
+    };
+    function processModel(schema, name) {
+        var type = schema.type || 'object';
+        var isArray = schema.type === 'array';
+        var html = strongOpen + name + ' ' + (isArray ? '[' : '{') + strongClose;
+
+        if (name) {
+            seenModels.push(name);
+        }
+
+        if (isArray) {
+            if (_.isArray(schema.items)) {
+                html += '<div>' + _.map(schema.items, function (item) {
+                    var type = item.type || 'object';
+
+                    if (_.isUndefined(item.$ref)) {
+                        if (_.indexOf(['array', 'object'], type) > -1) {
+                            if (type === 'object' && _.isUndefined(item.properties)) {
+                                return 'object';
+                            } else {
+                                return addReference(item);
+                            }
+                        } else {
+                            return primitiveToOptionsHTML(item, type);
+                        }
+                    } else {
+                        return addReference(item, Helpers.simpleRef(item.$ref));
+                    }
+                }).join(',</div><div>');
+            } else if (_.isPlainObject(schema.items)) {
+                if (_.isUndefined(schema.items.$ref)) {
+                    if (_.indexOf(['array', 'object'], schema.items.type || 'object') > -1) {
+                        if ((_.isUndefined(schema.items.type) || schema.items.type === 'object') && _.isUndefined(schema.items.properties)) {
+                            html += '<div>object</div>';
+                        } else {
+                            html += '<div>' + addReference(schema.items) + '</div>';
+                        }
+                    } else {
+                        html += '<div>' + primitiveToOptionsHTML(schema.items, schema.items.type) + '</div>';
+                    }
+                } else {
+                    html += '<div>' + addReference(schema.items, Helpers.simpleRef(schema.items.$ref)) + '</div>';
+                }
+            } else {
+                Helpers.log('Array type\'s \'items\' property is not an array or an object, cannot process');
+                html += '<div>object</div>';
+            }
+        } else {
+            if (schema.$ref) {
+                html += '<div>' + addReference(schema, name) + '</div>';
+            } else if (type === 'object') {
+                html += '<div>';
+
+                if (_.isPlainObject(schema.properties)) {
+                    html += _.map(schema.properties, function (property, name) {
+                        var propertyIsRequired = (_.indexOf(schema.required, name) >= 0);
+                        var cProperty = _.cloneDeep(property);
+
+                        var requiredClass = propertyIsRequired ? 'required' : '';
+                        var html = '<span class="propName ' + requiredClass + '">' + name + '</span> (';
+                        var model;
+
+                        // Allow macro to set the default value
+                        cProperty.default = modelPropertyMacro(cProperty);
+
+                        // Resolve the schema (Handle nested schemas)
+                        cProperty = Helpers.resolveSchema(cProperty);
+
+                        // We need to handle property references to primitives (Issue 339)
+                        if (!_.isUndefined(cProperty.$ref)) {
+                            model = models[Helpers.simpleRef(cProperty.$ref)];
+
+                            if (!_.isUndefined(model) && _.indexOf([undefined, 'array', 'object'], model.definition.type) === -1) {
+                                // Use referenced schema
+                                cProperty = Helpers.resolveSchema(model.definition);
+                            }
+                        }
+
+                        html += primitiveToHTML(cProperty);
+
+                        if (!propertyIsRequired) {
+                            html += ', <span class="propOptKey">optional</span>';
+                        }
+
+                        html += ')';
+
+                        if (!_.isUndefined(cProperty.description)) {
+                            html += ': ' + '<span class="propDesc">' + cProperty.description + '</span>';
+                        }
+
+                        if (cProperty.enum) {
+                            html += ' = <span class="propVals">[\'' + cProperty.enum.join('\', \'') + '\']</span>';
+                        }
+
+                        return primitiveToOptionsHTML(cProperty, html);
+                    }).join(',</div><div>');
+                }
+
+                html += '</div>';
+            } else {
+                html += '<div>' + primitiveToOptionsHTML(schema, type) + '</div>';
+            }
+        }
+
+        return html + strongOpen + (isArray ? ']' : '}') + strongClose;
+    };
 };

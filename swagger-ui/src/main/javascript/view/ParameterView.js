@@ -30,7 +30,7 @@ SwaggerUi.Views.ParameterView = Backbone.View.extend({
             }
         }
 
-        //console.log('xxxxxrendering one param in ParameterView', this.model)
+        //console.log('yyyyyrendering one param in ParameterView', this.model)
 
         this.model.type = type;
         this.model.paramType = this.model.in || this.model.paramType;
@@ -62,6 +62,12 @@ SwaggerUi.Views.ParameterView = Backbone.View.extend({
 
         var template = this.template();
         $(this.el).html(template(this.model));
+
+        if (this.model.sampleJSON) {
+            console.log('attempting to replace NULL with null', this.model.sampleJSON)
+            //ugly hack to allow swaggerExample to show nulls
+            this.model.sampleJSON = this.model.sampleJSON.replace('"NULL"', 'null')
+        }
 
         var signatureModel = {
             sampleJSON: this.model.sampleJSON,

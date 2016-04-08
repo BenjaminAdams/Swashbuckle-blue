@@ -22,6 +22,10 @@ namespace Swashbuckle.Swagger.Attributes
             {
                 return new Random().Next(int.MaxValue).ToString();
             }
+            else if (_example.ToUpper() == "NULL")
+            {
+                return "NULL"; //we cant set it to null here, the JS in the UI makes it the default value of "string"
+            }
 
             return _example;
         }

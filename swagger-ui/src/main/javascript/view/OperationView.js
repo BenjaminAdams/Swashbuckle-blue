@@ -159,7 +159,7 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
         }
         signatureModel = null;
 
-        console.log('model====', this.model)
+        //console.log('model====', this.model)
 
         _.each(this.model.parameters, function (param) {
             if (!param || !param.schema) return
@@ -174,8 +174,16 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
 
                 if (typeof value === 'object' && typeof value.createJSONSample === 'function') {
                     responseSignatureHtml += window.getMockSignatureAsTable(value)
+
+                    var generatedJson = JSON.stringify(value.createJSONSample(), void 0, 2)
+                    if (generatedJson) {
+                        //console.log('attempting to replace NULL with null', generatedJson)
+                        //ugly hack to allow swaggerExample to show nulls
+                        generatedJson = generatedJson.replace('"NULL"', 'null')
+                    }
+
                     signatureModel = {
-                        sampleJSON: JSON.stringify(value.createJSONSample(), void 0, 2),
+                        sampleJSON: generatedJson,
                         isParam: false,
                         // signature: window.getMockSignatureCustom(value),
                         signature: value.getMockSignature()

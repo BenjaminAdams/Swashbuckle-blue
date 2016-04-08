@@ -76,6 +76,11 @@
                 The name of the cool thing we did
             </summary>
         </member>
+        <member name="P:Swashbuckle.Dummy.Controllers.CoolThings.SwaggerExampleNullTest">
+            <summary>
+                This is a test to see if [SwaggerExample("null")] will make the field null in the example payload
+            </summary>
+        </member>
         <member name="P:Swashbuckle.Dummy.Controllers.Page.Limit">
             <summary>
                 The maximum number of accounts to return
