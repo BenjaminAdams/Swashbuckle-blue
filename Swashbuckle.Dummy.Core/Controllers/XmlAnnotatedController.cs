@@ -97,6 +97,18 @@ namespace Swashbuckle.Dummy.Controllers
         ///     An array of funs!
         /// </summary>
         public List<CoolThings> Funs { get; set; }
+
+        public SubAccount NestedObjTest { get; set; }
+
+        public CatNames EumTest { get; set; }
+
+        public List<CatNames> EumTestList { get; set; }
+    }
+
+    public enum CatNames
+    {
+        Ziggy,
+        Mouse
     }
 
     /// <summary>

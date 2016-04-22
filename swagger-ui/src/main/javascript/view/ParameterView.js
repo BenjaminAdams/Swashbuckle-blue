@@ -30,7 +30,7 @@ SwaggerUi.Views.ParameterView = Backbone.View.extend({
             }
         }
 
-        //console.log('yyyyyrendering one param in ParameterView', this.model)
+        console.log('yyyyyrendering one param in ParameterView', this.model)
 
         this.model.type = type;
         this.model.paramType = this.model.in || this.model.paramType;
@@ -39,6 +39,10 @@ SwaggerUi.Views.ParameterView = Backbone.View.extend({
 
         if (this.model.ignore === true) {
             return
+        }
+
+        if (this.model.schema && typeof this.model.schema.$ref === 'string') {
+            this.model.type = this.getObjType(this.model.schema.$ref)
         }
 
         // Allow for default === false
@@ -64,7 +68,7 @@ SwaggerUi.Views.ParameterView = Backbone.View.extend({
         $(this.el).html(template(this.model));
 
         if (this.model.sampleJSON) {
-            console.log('attempting to replace NULL with null', this.model.sampleJSON)
+            //console.log('attempting to replace NULL with null', this.model.sampleJSON)
             //ugly hack to allow swaggerExample to show nulls
             this.model.sampleJSON = this.model.sampleJSON.replace('"NULL"', 'null')
         }
@@ -133,6 +137,33 @@ SwaggerUi.Views.ParameterView = Backbone.View.extend({
 
         return this;
     },
+
+    getObjType: function (name) {
+        var discoveredName = '';
+        if (typeof name === 'undefined') {
+            return null;
+        }
+
+        if (name.indexOf('#/definitions/') === 0) {
+            discoveredName = name.substring('#/definitions/'.length);
+        } else {
+            discoveredName = name;
+        }
+
+        discoveredName = discoveredName.replace('[System.String]', '')
+
+        if (discoveredName && discoveredName.indexOf('.') > -1) {
+            var split = discoveredName.split('.')
+            if (split) {
+                var lastName = split[split.length - 1]
+
+                return '<span title="' + discoveredName + '">' + lastName + '</span>'
+            }
+        }
+
+        return discoveredName;
+    },
+
     initAceEditor: function () {
         var self = this
 

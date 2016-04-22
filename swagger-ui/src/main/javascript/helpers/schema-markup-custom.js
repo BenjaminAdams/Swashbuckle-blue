@@ -47,6 +47,52 @@ var simpleRef = Helpers.simpleRef = function (name) {
     }
 }
 
+Helpers.simpleRefLastName = function (name) {
+    var discoveredName;
+    if (typeof name === 'undefined') {
+        return null;
+    }
+
+    if (name.indexOf('#/definitions/') === 0) {
+        discoveredName = name.substring('#/definitions/'.length);
+    } else {
+        discoveredName = name;
+    }
+
+    if (discoveredName && discoveredName.indexOf('.') > -1) {
+        var split = discoveredName.split('.')
+        if (split) {
+            discoveredName = split[split.length - 1]
+        }
+    }
+
+    return discoveredName;
+}
+
+Helpers.getObjType = function (name) {
+    var discoveredName;
+    if (typeof name === 'undefined') {
+        return null;
+    }
+
+    if (name.indexOf('#/definitions/') === 0) {
+        discoveredName = name.substring('#/definitions/'.length);
+    } else {
+        discoveredName = name;
+    }
+
+    if (discoveredName && discoveredName.indexOf('.') > -1) {
+        var split = discoveredName.split('.')
+        if (split) {
+            var lastName = split[split.length - 1]
+
+            return '<span title="' + discoveredName + '">' + lastName + '</span>'
+        }
+    }
+
+    return discoveredName;
+}
+
 function optionHtml(label, value) {
     return '<tr><td class="optionName">' + label + ':</td><td>' + value + '</td></tr>';
 }
@@ -208,7 +254,7 @@ function schemaToJSON(schema, models, modelsToIgnore, modelPropertyMacro) {
         }
     }
 
-    console.log('11schema', schema)
+    //console.log('11schema', schema)
     if (schema.example === 'NULL') {
         output = null
     }
@@ -269,7 +315,7 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
     }
 
     if (schema.type === 'array' && schema.items && schema.items.$ref !== null) {
-        //console.log('found an array=', schema)
+        console.log('found an array=', schema)
         //  schema.$ref = schema.items.$ref
         // schema.type = 'object'
     }
@@ -311,7 +357,7 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
     var seenModels = [];
     var inlineModels = 0;
 
-    console.log('generating base schema=', schema)
+    //console.log('generating base schema=', schema)
 
     // Generate current HTML
     var html = processModelAsTable(schema, name);
@@ -396,13 +442,31 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
                 html += '<td></td>'
             }
 
+            // console.log('cprop=', cProperty)
+
+            //plain object
+            if (_.isUndefined(cProperty.type) && typeof cProperty.$ref === 'string') {
+                cProperty.type = Helpers.getObjType(cProperty.$ref)
+            }
+
+            //array of objects
+            if (cProperty.type === 'array' && typeof cProperty.$ref === 'string') {
+                cProperty.type = 'array[' + Helpers.getObjType(cProperty.$ref) + ']'
+            }
+
+            //array of enums
+            if (cProperty.type === 'array' && cProperty.items && cProperty.items.enum) {
+                cProperty.type = 'array[Enum <span class="propVals">[\'' + cProperty.items.enum.join('\', \'') + '\']</span>]'
+            }
+
+            //enums
+            if (cProperty.enum) {
+                cProperty.type = 'Enum <span class="propVals">[\'' + cProperty.enum.join('\', \'') + '\']</span>';
+            }
+
             if (!_.isUndefined(cProperty.type)) {
                 html += '<td>'
-                if (cProperty.enum) {
-                    html += 'Enum <span class="propVals">[\'' + cProperty.enum.join('\', \'') + '\']</span>';
-                } else {
-                    html += cProperty.type
-                }
+                html += cProperty.type
 
                 if (typeof cProperty.minLength !== 'undefined') {
                     html += '<div title="min length">minLength: <span class="propVals">' + cProperty.minLength + '</span></div>';
