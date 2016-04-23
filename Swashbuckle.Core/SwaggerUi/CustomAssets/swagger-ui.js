@@ -32625,8 +32625,6 @@ SwaggerUi.Views.SidebarView = Backbone.View.extend({
     addModelToSidebar: function (model) {
         var self = this
 
-        console.log('adding model to sidebar=', model)
-
         var srtLbl = this.shortMethod(model.method)
         var methodBtn = '<div class="methodBtn btn-' + model.method + '">' + srtLbl + '</div>'
 

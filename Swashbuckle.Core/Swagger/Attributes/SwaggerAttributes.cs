@@ -7,7 +7,7 @@ namespace Swashbuckle.Swagger.Attributes
     {
     }
 
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
+    [AttributeUsage(AttributeTargets.Method)]
     public class SwaggerRouteName : Attribute
     {
         private string _customRouteName { get; set; }
