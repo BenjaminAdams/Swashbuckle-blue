@@ -30,7 +30,7 @@ SwaggerUi.Views.ParameterView = Backbone.View.extend({
             }
         }
 
-        console.log('yyyyyrendering one param in ParameterView', this.model)
+        //console.log('yyyyyrendering one param in ParameterView', this.model)
 
         this.model.type = type;
         this.model.paramType = this.model.in || this.model.paramType;

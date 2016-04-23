@@ -108,6 +108,8 @@ namespace Swashbuckle.Swagger
 
         public string operationId;
 
+        //public string customRouteName;
+
         public IList<string> consumes;
 
         public IList<string> produces;

@@ -51,6 +51,11 @@
             </summary>
             <param name="funs"></param>
         </member>
+        <member name="M:Swashbuckle.Dummy.Controllers.XmlAnnotatedController.ThisShouldBeRenamed(Swashbuckle.Dummy.Controllers.SoMuch)">
+            <summary>
+               Testing [SwaggerCustomRoute] attribute
+            </summary>
+        </member>
         <member name="T:Swashbuckle.Dummy.Controllers.SoMuch">
             <summary>
                 SoMuch bro

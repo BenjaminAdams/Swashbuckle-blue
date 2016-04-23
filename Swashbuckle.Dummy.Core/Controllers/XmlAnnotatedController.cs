@@ -86,6 +86,18 @@ namespace Swashbuckle.Dummy.Controllers
         {
             throw new NotImplementedException();
         }
+
+        /// <summary>
+        ///    Testing [SwaggerCustomRoute] attribute
+        /// </summary>
+
+        [HttpPost]
+        [Route("CustomRouteTest")]
+        [SwaggerRouteName("YayRenameWorked")]
+        public void ThisShouldBeRenamed(SoMuch soMuch)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     /// <summary>

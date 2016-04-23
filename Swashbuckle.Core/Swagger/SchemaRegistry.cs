@@ -161,6 +161,12 @@ namespace Swashbuckle.Swagger
                 {
                     return null;
                 }
+
+                //var customRouteName = primitiveContract.PropertyInfo().GetCustomAttribute<SwaggerRouteName>();
+                //if (customRouteName != null)
+                //{
+                //    //
+                //}
             }
 
             var type = Nullable.GetUnderlyingType(primitiveContract.UnderlyingType) ?? primitiveContract.UnderlyingType;

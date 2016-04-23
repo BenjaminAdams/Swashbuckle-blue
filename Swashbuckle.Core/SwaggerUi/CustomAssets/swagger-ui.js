@@ -32300,7 +32300,7 @@ SwaggerUi.Views.ParameterView = Backbone.View.extend({
             }
         }
 
-        console.log('yyyyyrendering one param in ParameterView', this.model)
+        //console.log('yyyyyrendering one param in ParameterView', this.model)
 
         this.model.type = type;
         this.model.paramType = this.model.in || this.model.paramType;
@@ -32624,12 +32624,15 @@ SwaggerUi.Views.SidebarView = Backbone.View.extend({
     },
     addModelToSidebar: function (model) {
         var self = this
+
+        console.log('adding model to sidebar=', model)
+
         var srtLbl = this.shortMethod(model.method)
         var methodBtn = '<div class="methodBtn btn-' + model.method + '">' + srtLbl + '</div>'
 
-        var shortNick = this.getShortNickname(model.nickname)
+        // var shortNick = this.getShortNickname(model.nickname)  //moved this to SwaggerGenerator.cs
 
-        var $routeLink = $('<li class="sidebarChild" title="' + model.path + '"   >' + methodBtn + '<div class="childTxt">' + shortNick + '</div></li>')
+        var $routeLink = $('<li class="sidebarChild" title="' + model.path + '"   >' + methodBtn + '<div class="childTxt">' + model.nickname + '</div></li>')
 
         this.$el.append($routeLink)
 

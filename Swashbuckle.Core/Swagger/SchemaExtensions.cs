@@ -50,6 +50,12 @@ namespace Swashbuckle.Swagger
                 schema.example = example.GetExample();
             }
 
+            //var customRouteName = attribute as SwaggerRouteName;
+            //if (customRouteName != null)
+            //{
+            //    schema.customRouteName = customRouteName.GetNewRouteName();
+            //}
+
             var ignore = attribute as SwaggerIgnore;
             if (ignore != null)
             {

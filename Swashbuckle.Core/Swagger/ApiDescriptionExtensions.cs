@@ -10,9 +10,15 @@ namespace Swashbuckle.Swagger
     {
         public static string FriendlyId(this ApiDescription apiDescription)
         {
-            return String.Format("{0}_{1}",
-                apiDescription.ActionDescriptor.ControllerDescriptor.ControllerName,
-                apiDescription.ActionDescriptor.ActionName);
+            //get custom route name if it exists for [SwaggerRouteName]
+            var found = apiDescription.ActionDescriptor.GetCustomAttributes<SwaggerRouteName>().FirstOrDefault();
+            if (found != null)
+            {
+                return found.GetNewRouteName();
+            }
+
+            // return String.Format("{0}_{1}",apiDescription.ActionDescriptor.ControllerDescriptor.ControllerName, apiDescription.ActionDescriptor.ActionName);
+            return apiDescription.ActionDescriptor.ActionName;
         }
 
         public static IEnumerable<string> Consumes(this ApiDescription apiDescription)
@@ -71,6 +77,24 @@ namespace Swashbuckle.Swagger
         public static bool IsSwaggerIgnore(this ApiDescription apiDescription)
         {
             return apiDescription.ActionDescriptor.GetCustomAttributes<SwaggerIgnore>().Any();
+        }
+
+        public static bool IsSwaggerRouteName(this ApiDescription apiDescription)
+        {
+            return apiDescription.ActionDescriptor.GetCustomAttributes<SwaggerRouteName>().Any();
+        }
+
+        public static string GetSwaggerRouteName(this ApiDescription apiDescription)
+        {
+            var found = apiDescription.ActionDescriptor.GetCustomAttributes<SwaggerRouteName>().FirstOrDefault();
+            if (found != null)
+            {
+                return found.GetNewRouteName();
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public static bool IsSwaggerExample(this ApiDescription apiDescription)

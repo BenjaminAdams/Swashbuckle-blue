@@ -159,6 +159,7 @@ namespace Swashbuckle.Swagger
             {
                 tags = new[] { _options.GroupingKeySelector(apiDescription) },
                 operationId = apiDescription.FriendlyId(),
+                // customRouteName = apiDescription.GetSwaggerRouteName(),
                 produces = apiDescription.Produces().ToList(),
                 consumes = apiDescription.Consumes().ToList(),
                 parameters = parameters.Any() ? parameters : null, // parameters can be null but not empty
