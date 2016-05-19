@@ -44,7 +44,7 @@ namespace Swashbuckle.Swagger.Attributes
         {
             if (_example.ToUpper() == "GUID")
             {
-                return Guid.NewGuid().ToString();
+                return Guid.NewGuid().ToString().ToUpper();
             }
             else if (_example.ToUpper() == "RANDOM" || _example.ToUpper() == "RAND")
             {

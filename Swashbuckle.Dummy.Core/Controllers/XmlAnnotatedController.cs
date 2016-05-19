@@ -176,6 +176,12 @@ namespace Swashbuckle.Dummy.Controllers
         public virtual int AccountID { get; set; }
 
         /// <summary>
+        ///     a random guid
+        /// </summary>
+        [SwaggerExample("GUID")]
+        public Guid StupdSexyFlanders { get; set; }
+
+        /// <summary>
         ///     Uniquely identifies the account
         /// </summary>
         [SwaggerExample("Benjamin Adams")]

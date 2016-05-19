@@ -31679,7 +31679,9 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
                     if (generatedJson) {
                         //console.log('attempting to replace NULL with null', generatedJson)
                         //ugly hack to allow swaggerExample to show nulls
+                        //console.log('before=', generatedJson)
                         generatedJson = generatedJson.replace('"NULL"', 'null')
+                        // console.log('after=', generatedJson)
                     }
 
                     signatureModel = {
@@ -32340,7 +32342,10 @@ SwaggerUi.Views.ParameterView = Backbone.View.extend({
         if (this.model.sampleJSON) {
             //console.log('attempting to replace NULL with null', this.model.sampleJSON)
             //ugly hack to allow swaggerExample to show nulls
+            console.log('xbefore=', this.model.sampleJSON)
+
             this.model.sampleJSON = this.model.sampleJSON.replace('"NULL"', 'null')
+            console.log('xafter=', this.model.sampleJSON)
         }
 
         var signatureModel = {

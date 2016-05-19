@@ -179,7 +179,9 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
                     if (generatedJson) {
                         //console.log('attempting to replace NULL with null', generatedJson)
                         //ugly hack to allow swaggerExample to show nulls
+                        //console.log('before=', generatedJson)
                         generatedJson = generatedJson.replace('"NULL"', 'null')
+                        // console.log('after=', generatedJson)
                     }
 
                     signatureModel = {
