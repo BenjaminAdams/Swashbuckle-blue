@@ -16,10 +16,6 @@ Changed some things the current Swashbuckle/Swagger projects
 
 Seamlessly adds a [Swagger](http://swagger.io/) to WebApi projects! Combines ApiExplorer and Swagger/swagger-ui to provide a rich discovery, documentation and playground experience to your API consumers.
 
-In addition to its Swagger generator, Swashbuckle also contains an embedded version of [swagger-ui](https://github.com/swagger-api/swagger-ui) which it will automatically serve up once Swashbuckle is installed. This means you can compliment your API with a slick discovery UI to assist consumers with their integration efforts. Best of all, it requires minimal coding and maintenance, allowing you to focus on building an awesome API!
-
-And that's not all ...
-
 Once you have a Web API that can describe itself in Swagger, you've opened the treasure chest of Swagger-based tools including a client generator that can be targeted to a wide range of popular platforms. See [swagger-codegen](https://github.com/swagger-api/swagger-codegen) for more details.
 
 **Swashbuckle Core Features:**
@@ -28,13 +24,8 @@ Once you have a Web API that can describe itself in Swagger, you've opened the t
 * Seamless integration of swagger-ui
 * Reflection-based Schema generation for describing API types
 * Extensibility hooks for customizing the generated Swagger doc
-* Extensibility hooks for customizing the swagger-ui
 * Out-of-the-box support for leveraging Xml comments
 * Support for describing ApiKey, Basic Auth and OAuth2 schemes ... including UI support for the Implicit OAuth2 flow
-
-**\*Swashbuckle 5.0**
-
-Swashbuckle 5.0 makes the transition to Swagger 2.0. The 2.0 schema is significantly different to its predecessor - 1.2 and, as a result, the Swashbuckle config interface has undergone yet another overhaul. Checkout the [transition guide](#transitioning-to-swashbuckle-50) if you're upgrading from a prior version.
 
 ## Getting Started ##
 
@@ -373,37 +364,6 @@ See the following discusssion for more details:
 
 <https://github.com/domaindrivendev/Swashbuckle/issues/142>
 
-## Customizing the swagger-ui ##
-
-The swagger-ui is a JavaScript application hosted in a single HTML page (index.html), and it exposes several customization settings. Swashbuckle ships with an embedded version and includes corresponding config. methods for each of the UI settings. If you require further customization, you can also inject your own version of "index.html". Read on to learn more.
-
-### Customizations via Config. Interface ###
-
-If your happy with the basic look and feel but want to make some minor tweaks, the following options may be sufficient:
-
-    httpConfiguration
-        .EnableSwagger(c => c.SingleApiVersion("v1", "A title for your API")) co
-        .EnableSwaggerUi(c =>
-            {
-                c.InjectStylesheet(containingAssembly, "Swashbuckle.Dummy.SwaggerExtensions.testStyles1.css");
-
-                c.InjectJavaScript(containingAssembly, "Swashbuckle.Dummy.SwaggerExtensions.testScript1.js");
-
-                c.BooleanValues(new[] { "0", "1" });
-
-                c.SetValidatorUrl("http://localhost/validator");
-                c.DisableValidator();
-
-                c.DocExpansion(DocExpansion.List);
-            });
-
-#### InjectStylesheet ####
-
-Use this to enrich the UI with one or more additional CSS stylesheets. The file must be included in your project as an "Embedded Resource", and then the resource's "Logical Name" is passed to the method as shown above. See [Injecting Custom Content](#injecting-custom-content) for step by step instructions.
-
-#### InjectJavaScript ####
-
-Use this to invoke one or more custom JavaScripts after the swagger-ui has loaded. The file must be included in your project as an "Embedded Resource", and then the resource's "Logical Name" is passed to the method as shown above. See [Injecting Custom Content](#injecting-custom-content) for step by step instructions.
 
 #### BooleanValues ####
 
@@ -417,18 +377,6 @@ By default, swagger-ui will validate specs against swagger.io's online validator
 
 Use this option to control how the Operation listing is displayed. It can be set to "None" (default), "List" (shows operations for each resource), or "Full" (fully expanded: shows operations and their details).
 
-### Provide your own "index" file ###
-
-As an alternative, you can inject your own version of "index.html" and customize the markup and swagger-ui directly. Use the __CustomAsset__ option to instruct Swashbuckle to return your version instead of the default when a request is made for "index". As with all custom content, the file must be included in your project as an "Embedded Resource", and then the resource's "Logical Name" is passed to the method as shown below. See [Injecting Custom Content](#injecting-custom-content) for step by step instructions.
-
-For compatibility, you should base your custom "index.html" off [this version](https://github.com/domaindrivendev/Swashbuckle/blob/v5.2.1/Swashbuckle.Core/SwaggerUi/CustomAssets/index.html)
-
-    httpConfiguration
-        .EnableSwagger(c => c.SingleApiVersion("v1", "A title for your API"))
-        .EnableSwaggerUi(c =>
-            {
-                c.CustomAsset("index", yourAssembly, "YourWebApiProject.SwaggerExtensions.index.html");
-            });
 
 ### Injecting Custom Content ###
 
