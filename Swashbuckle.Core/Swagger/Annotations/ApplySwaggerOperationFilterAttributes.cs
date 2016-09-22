@@ -1,5 +1,4 @@
-﻿using Swashbuckle.Swagger.Attributes;
-using System;
+﻿using System;
 using System.Web.Http.Description;
 
 namespace Swashbuckle.Swagger.Annotations

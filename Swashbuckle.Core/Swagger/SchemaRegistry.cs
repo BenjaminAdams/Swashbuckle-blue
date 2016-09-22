@@ -2,7 +2,8 @@
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
-using Swashbuckle.Swagger.Attributes;
+using Swashbuckle.Annotations;
+using Swashbuckle.Annotations.AttributeTags;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

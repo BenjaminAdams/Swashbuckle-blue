@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Serialization;
-using Swashbuckle.Swagger.Attributes;
+using Swashbuckle.Annotations;
+using Swashbuckle.Annotations.AttributeTags;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
