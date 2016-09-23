@@ -3,6 +3,7 @@ using Swashbuckle.Annotations;
 using Swashbuckle.Annotations.AttributeTags;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Web.Http;
 
 namespace Swashbuckle.Dummy.Controllers
@@ -85,6 +86,18 @@ namespace Swashbuckle.Dummy.Controllers
         [Route("yay")]
         public void AddFuns(SoMuch soMuch)
         {
+            var results = new List<ValidationResult>();
+            var isValid = Validator.TryValidateObject(soMuch, new ValidationContext(soMuch, null, null), results, true);
+            Console.WriteLine("Validation resulted in " + isValid);
+
+            isValid = Validator.TryValidateObject(soMuch.NestedObjTest, new ValidationContext(soMuch.NestedObjTest, null, null), results, true);
+            Console.WriteLine("Validation resulted in " + isValid);
+
+            Validator.ValidateObject(soMuch, new ValidationContext(soMuch, null, null));
+            Validator.ValidateObject(soMuch.NestedObjTest, new ValidationContext(soMuch.NestedObjTest, null, null));
+
+            SwashValidator.Validate(soMuch);
+
             throw new NotImplementedException();
         }
 
@@ -109,6 +122,7 @@ namespace Swashbuckle.Dummy.Controllers
         /// <summary>
         ///     An array of funs!
         /// </summary>
+        [Required]
         public List<CoolThings> Funs { get; set; }
 
         public SubAccount NestedObjTest { get; set; }
@@ -146,6 +160,10 @@ namespace Swashbuckle.Dummy.Controllers
         /// </summary>
         [SwaggerExample("null")]
         public string SwaggerExampleNullTest { get; set; }
+
+        [RegExAttribute(ValidationType.Country)]
+        [SwaggerExample("US")]
+        public string Country { get; set; }
     }
 
     [SwaggerIgnore]
@@ -222,6 +240,7 @@ namespace Swashbuckle.Dummy.Controllers
         ///     The Account ID for SubAccounts should be 7 digits.
         /// </summary>
         [SwaggerExample("RAND")]
+        [Range(0, 3)]
         public override int AccountID { get; set; }
     }
 

@@ -50,7 +50,9 @@ namespace Swashbuckle.Annotations.AttributeTags
         /// <returns></returns>
         public static bool Validate(ValidationType keyName, string input)
         {
-            return string.IsNullOrWhiteSpace(input) ? false : Regex.IsMatch(input, RegexPatterns[keyName], RegexOptions.IgnoreCase);
+            if (string.IsNullOrWhiteSpace(input) == true) return false;
+
+            return Regex.IsMatch(input, RegexPatterns[keyName], RegexOptions.IgnoreCase);
         }
     }
 

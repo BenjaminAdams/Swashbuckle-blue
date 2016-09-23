@@ -28,7 +28,7 @@ namespace Swashbuckle.Tests
 
             try
             {
-                DataAnnotationsValidation.CheckDataAnnotations(m_TestObject);
+                SwashValidator.Validate(m_TestObject);
             }
             catch (Exception ex)
             {
@@ -55,7 +55,7 @@ namespace Swashbuckle.Tests
 
             try
             {
-                DataAnnotationsValidation.CheckDataAnnotations(m_TestObject);
+                SwashValidator.Validate(m_TestObject);
             }
             catch (Exception ex)
             {
@@ -82,7 +82,7 @@ namespace Swashbuckle.Tests
 
             try
             {
-                DataAnnotationsValidation.CheckDataAnnotations(m_TestObject);
+                SwashValidator.Validate(m_TestObject);
             }
             catch (Exception ex)
             {
@@ -108,7 +108,7 @@ namespace Swashbuckle.Tests
 
             try
             {
-                DataAnnotationsValidation.CheckDataAnnotations(m_TestObject);
+                SwashValidator.Validate(m_TestObject);
             }
             catch (Exception ex)
             {
@@ -135,7 +135,7 @@ namespace Swashbuckle.Tests
 
             try
             {
-                DataAnnotationsValidation.CheckDataAnnotations(m_TestObject);
+                SwashValidator.Validate(m_TestObject);
             }
             catch (Exception ex)
             {
@@ -160,7 +160,7 @@ namespace Swashbuckle.Tests
 
             try
             {
-                DataAnnotationsValidation.CheckDataAnnotations(m_TestObject);
+                SwashValidator.Validate(m_TestObject);
             }
             catch (Exception ex)
             {
@@ -187,7 +187,7 @@ namespace Swashbuckle.Tests
 
             try
             {
-                DataAnnotationsValidation.CheckDataAnnotations(m_TestObject);
+                SwashValidator.Validate(m_TestObject);
             }
             catch (Exception ex)
             {
@@ -213,7 +213,7 @@ namespace Swashbuckle.Tests
 
             try
             {
-                DataAnnotationsValidation.CheckDataAnnotations(m_TestObject);
+                SwashValidator.Validate(m_TestObject);
             }
             catch (Exception ex)
             {
@@ -239,7 +239,7 @@ namespace Swashbuckle.Tests
 
             try
             {
-                DataAnnotationsValidation.CheckDataAnnotations(m_TestObject);
+                SwashValidator.Validate(m_TestObject);
             }
             catch (Exception ex)
             {
@@ -265,7 +265,7 @@ namespace Swashbuckle.Tests
 
             try
             {
-                DataAnnotationsValidation.CheckDataAnnotations(m_TestObject);
+                SwashValidator.Validate(m_TestObject);
             }
             catch (Exception ex)
             {
@@ -292,7 +292,7 @@ namespace Swashbuckle.Tests
 
             try
             {
-                DataAnnotationsValidation.CheckDataAnnotations(m_TestObject);
+                SwashValidator.Validate(m_TestObject);
             }
             catch (Exception ex)
             {
@@ -317,7 +317,7 @@ namespace Swashbuckle.Tests
                 NullableGuidType = Guid.NewGuid()
             };
 
-            Assert.IsTrue(DataAnnotationsValidation.CheckDataAnnotations(m_TestObject));
+            Assert.IsTrue(SwashValidator.Validate(m_TestObject));
         }
 
         [TestMethod]
@@ -332,7 +332,7 @@ namespace Swashbuckle.Tests
 
             try
             {
-                DataAnnotationsValidation.CheckDataAnnotations(derivedObject);
+                SwashValidator.Validate(derivedObject);
             }
             catch (Exception ex)
             {
@@ -353,7 +353,7 @@ namespace Swashbuckle.Tests
 
             try
             {
-                DataAnnotationsValidation.CheckDataAnnotations(derivedObject);
+                SwashValidator.Validate(derivedObject);
             }
             catch (Exception ex)
             {
@@ -365,6 +365,55 @@ namespace Swashbuckle.Tests
         }
 
         [TestMethod]
+        public void TestTryValidateRequiredFieldForDerivedClassProperties()
+        {
+            var derivedObject = new RequiredFieldDerived()
+            {
+                BaseStringType = "Payments"
+            };
+
+            var msg = string.Empty;
+
+            var status = SwashValidator.TryValidate(derivedObject, out msg);
+            Assert.IsFalse(status);
+            Assert.AreEqual(msg, "Value cannot be null.\r\nParameter name: DerivedIntegerType is null".AppendJson(derivedObject));
+        }
+
+        [TestMethod]
+        public void TestSensitiveFields()
+        {
+            var derivedObject = new RequiredFieldDerived()
+            {
+                BaseStringType = "Payments",
+                SensitiveString = "this should be null",
+                SensitiveInt = 88888
+            };
+
+            var msg = string.Empty;
+
+            var status = SwashValidator.TryValidate(derivedObject, out msg);
+            Assert.IsFalse(status);
+
+            Assert.IsFalse(msg.Contains("this should be null"));
+            Assert.IsFalse(msg.Contains("88888"));
+        }
+
+        [TestMethod]
+        public void TestTryValidateRequiredFieldNoOutputJson()
+        {
+            var derivedObject = new RequiredFieldDerived()
+            {
+                BaseStringType = "Payments"
+            };
+
+            var msg = string.Empty;
+
+            var status = SwashValidator.TryValidate(derivedObject, out msg, false);
+            Assert.IsFalse(status);
+            Assert.AreEqual(msg, "Value cannot be null.\r\nParameter name: DerivedIntegerType is null");
+        }
+
+        [TestMethod]
         public void TestRequiredFieldHappyPathForInheritedClass()
         {
             RequiredFieldBase inheritedObject = new RequiredFieldDerived()
@@ -373,7 +422,22 @@ namespace Swashbuckle.Tests
                 DerivedIntegerType = 10
             };
 
-            Assert.IsTrue(DataAnnotationsValidation.CheckDataAnnotations(inheritedObject));
+            Assert.IsTrue(SwashValidator.Validate(inheritedObject));
+        }
+
+        [TestMethod]
+        public void TestTryValidateRequiredFieldHappyPathForInheritedClass()
+        {
+            var msg = "";
+            RequiredFieldBase inheritedObject = new RequiredFieldDerived()
+            {
+                BaseStringType = "Payments",
+                DerivedIntegerType = 10
+            };
+
+            var res = SwashValidator.TryValidate(inheritedObject, out msg);
+            Assert.IsTrue(res);
+            Assert.IsNull(msg);
         }
 
         [TestMethod]
@@ -385,7 +449,7 @@ namespace Swashbuckle.Tests
                 anotherStr = "123"
             };
 
-            Assert.IsTrue(obj1.CheckDataAnnotations());
+            Assert.IsTrue(SwashValidator.Validate(obj1));
 
             try
             {
@@ -394,7 +458,7 @@ namespace Swashbuckle.Tests
                     MinLengthOf3 = "12" //not long enough
                 };
 
-                obj2.CheckDataAnnotations(); //should throw exception
+                SwashValidator.Validate(obj2); //should throw exception
                 Assert.Fail(); // should not reach here because empty string threw exception
             }
             catch (Exception ex)
@@ -411,7 +475,7 @@ namespace Swashbuckle.Tests
                 MaxLengthOf3 = "14"
             };
 
-            Assert.IsTrue(obj1.CheckDataAnnotations());
+            Assert.IsTrue(SwashValidator.Validate(obj1));
 
             try
             {
@@ -420,7 +484,7 @@ namespace Swashbuckle.Tests
                     MaxLengthOf3 = "12444" //too long
                 };
 
-                obj2.CheckDataAnnotations(); //should throw exception
+                SwashValidator.Validate(obj2); //should throw exception
                 Assert.Fail(); // should not reach here because empty string threw exception
             }
             catch (Exception ex)
@@ -441,11 +505,11 @@ namespace Swashbuckle.Tests
                 {
                     Text = "US"
                 };
-                Assert.IsTrue(obj.CheckDataAnnotations());
+                Assert.IsTrue(SwashValidator.Validate(obj));
 
                 //Invalid Value
                 obj.Text = "PPP";
-                obj.CheckDataAnnotations(); //should throw exception
+                SwashValidator.Validate(obj); //should throw exception
                 Assert.Fail(); // should not reach here because empty string threw exception
             }
             catch (Exception ex)
@@ -464,11 +528,11 @@ namespace Swashbuckle.Tests
                 {
                     Text = "USD"
                 };
-                Assert.IsTrue(obj.CheckDataAnnotations());
+                Assert.IsTrue(SwashValidator.Validate(obj));
 
                 //Invalid Value
                 obj.Text = "OJY";
-                obj.CheckDataAnnotations();
+                SwashValidator.Validate(obj);
                 Assert.Fail();
             }
             catch (Exception ex)
@@ -487,11 +551,11 @@ namespace Swashbuckle.Tests
                 {
                     Text = "EMEA"
                 };
-                Assert.IsTrue(obj.CheckDataAnnotations());
+                Assert.IsTrue(SwashValidator.Validate(obj));
 
                 //Invalid Value
                 obj.Text = "AAA";
-                obj.CheckDataAnnotations();
+                SwashValidator.Validate(obj);
                 Assert.Fail();
             }
             catch (Exception ex)
@@ -510,11 +574,11 @@ namespace Swashbuckle.Tests
                 {
                     Text = "EN"
                 };
-                Assert.IsTrue(obj.CheckDataAnnotations());
+                Assert.IsTrue(SwashValidator.Validate(obj));
 
                 //Invalid Value
                 obj.Text = "XX";
-                obj.CheckDataAnnotations();
+                SwashValidator.Validate(obj);
                 Assert.Fail();
             }
             catch (Exception ex)
@@ -533,14 +597,14 @@ namespace Swashbuckle.Tests
                 {
                     Text = "http://dell.com"
                 };
-                Assert.IsTrue(obj.CheckDataAnnotations());
+                Assert.IsTrue(SwashValidator.Validate(obj));
 
                 obj.Text = "https://dell.com";
-                Assert.IsTrue(obj.CheckDataAnnotations());
+                Assert.IsTrue(SwashValidator.Validate(obj));
 
                 //Invalid Value
                 obj.Text = "dell.com";
-                obj.CheckDataAnnotations(); //should throw exception
+                SwashValidator.Validate(obj); //should throw exception
                 Assert.Fail(); // should not reach here because empty string threw exception
             }
             catch (Exception ex)
@@ -559,11 +623,11 @@ namespace Swashbuckle.Tests
                 {
                     Text = "test@test.com"
                 };
-                Assert.IsTrue(obj.CheckDataAnnotations());
+                Assert.IsTrue(SwashValidator.Validate(obj));
 
                 //Invalid Value
                 obj.Text = "test.com";
-                obj.CheckDataAnnotations();
+                SwashValidator.Validate(obj);
                 Assert.Fail();
             }
             catch (Exception ex)
@@ -582,11 +646,11 @@ namespace Swashbuckle.Tests
                 {
                     Text = "168.0.2.456"
                 };
-                Assert.IsTrue(obj.CheckDataAnnotations());
+                Assert.IsTrue(SwashValidator.Validate(obj));
 
                 //Invalid Value
                 obj.Text = "1098.3456.33.44";
-                obj.CheckDataAnnotations();
+                SwashValidator.Validate(obj);
                 Assert.Fail();
             }
             catch (Exception ex)
@@ -606,7 +670,7 @@ namespace Swashbuckle.Tests
                 ThisIsNotARequiredObj = null  //since this is not required this should not throw error
             };
 
-            Assert.IsTrue(obj1.CheckDataAnnotations());
+            Assert.IsTrue(SwashValidator.Validate(obj1));
         }
 
         [TestMethod]
@@ -620,7 +684,7 @@ namespace Swashbuckle.Tests
 
             try
             {
-                obj1.CheckDataAnnotations();
+                SwashValidator.Validate(obj1);
                 Assert.Fail(); // should not reach here
             }
             catch (Exception ex)
@@ -637,7 +701,7 @@ namespace Swashbuckle.Tests
                 SomeString = "as"
             };
 
-            Assert.IsTrue(obj1.CheckDataAnnotations());
+            Assert.IsTrue(SwashValidator.Validate(obj1));
 
             try
             {
@@ -646,7 +710,7 @@ namespace Swashbuckle.Tests
                     SomeString = "12234234234234" //too long
                 };
 
-                obj2.CheckDataAnnotations(); //should throw exception
+                SwashValidator.Validate(obj2); //should throw exception
                 Assert.Fail(); // should not reach here because empty string threw exception
             }
             catch (Exception ex)
@@ -663,7 +727,7 @@ namespace Swashbuckle.Tests
                 SomeString = "as44"
             };
 
-            Assert.IsTrue(obj1.CheckDataAnnotations());
+            Assert.IsTrue(SwashValidator.Validate(obj1));
 
             try
             {
@@ -672,7 +736,7 @@ namespace Swashbuckle.Tests
                     SomeString = "1" //too short
                 };
 
-                obj2.CheckDataAnnotations(); //should throw exception
+                SwashValidator.Validate(obj2); //should throw exception
                 Assert.Fail(); // should not reach here because empty string threw exception
             }
             catch (Exception ex)
@@ -687,7 +751,7 @@ namespace Swashbuckle.Tests
                     SomeString = "1324234234234234" //too long
                 };
 
-                obj2.CheckDataAnnotations(); //should throw exception
+                SwashValidator.Validate(obj2); //should throw exception
                 Assert.Fail(); // should not reach here because empty string threw exception
             }
             catch (Exception ex)
@@ -704,7 +768,7 @@ namespace Swashbuckle.Tests
                 SomeInt = 5
             };
 
-            Assert.IsTrue(obj1.CheckDataAnnotations());
+            Assert.IsTrue(SwashValidator.Validate(obj1));
 
             try
             {
@@ -713,7 +777,7 @@ namespace Swashbuckle.Tests
                     SomeInt = 1
                 };
 
-                obj2.CheckDataAnnotations(); //should throw exception
+                SwashValidator.Validate(obj2); //should throw exception
                 Assert.Fail(); // should not reach here because empty string threw exception
             }
             catch (Exception ex)
@@ -728,7 +792,7 @@ namespace Swashbuckle.Tests
                     SomeInt = 1123123
                 };
 
-                obj3.CheckDataAnnotations(); //should throw exception
+                SwashValidator.Validate(obj3); //should throw exception
                 Assert.Fail(); // should not reach here because empty string threw exception
             }
             catch (Exception ex)
@@ -751,7 +815,7 @@ namespace Swashbuckle.Tests
                 OptionalStringCollection = new List<string>() { "Test" },
             };
 
-            Assert.IsTrue(obj1.CheckDataAnnotations());
+            Assert.IsTrue(SwashValidator.Validate(obj1));
         }
 
         /// <summary>
@@ -763,7 +827,7 @@ namespace Swashbuckle.Tests
         {
             var obj2 = new ObjWithOptionalList(); // Empty string list
 
-            Assert.IsTrue(obj2.CheckDataAnnotations());
+            Assert.IsTrue(SwashValidator.Validate(obj2));
         }
 
         /// <summary>
@@ -778,7 +842,7 @@ namespace Swashbuckle.Tests
                 RequiredStringCollection = new List<string>() { "Test" }
             };
 
-            Assert.IsTrue(obj3.CheckDataAnnotations());
+            Assert.IsTrue(SwashValidator.Validate(obj3));
         }
 
         /// <summary>
@@ -792,7 +856,7 @@ namespace Swashbuckle.Tests
             {
                 var obj4 = new ObjWithRequiredList(); //empty string list test
 
-                obj4.CheckDataAnnotations(); //should throw exception
+                SwashValidator.Validate(obj4); //should throw exception
                 Assert.Fail(); // should not reach here because empty string threw exception
             }
             catch (Exception ex)
@@ -816,7 +880,7 @@ namespace Swashbuckle.Tests
                 }
             };
 
-            Assert.IsTrue(obj5.CheckDataAnnotations());
+            Assert.IsTrue(SwashValidator.Validate(obj5));
         }
 
         /// <summary>
@@ -828,7 +892,7 @@ namespace Swashbuckle.Tests
         {
             var obj6 = new ComplexTypeWithOptionalList(); // Empty object list
 
-            Assert.IsTrue(obj6.CheckDataAnnotations());
+            Assert.IsTrue(SwashValidator.Validate(obj6));
         }
 
         /// <summary>
@@ -846,7 +910,7 @@ namespace Swashbuckle.Tests
                 }
             };
 
-            Assert.IsTrue(obj7.CheckDataAnnotations());
+            Assert.IsTrue(SwashValidator.Validate(obj7));
         }
 
         /// <summary>
@@ -860,7 +924,7 @@ namespace Swashbuckle.Tests
             {
                 var obj8 = new ComplexTypeWithRequiredList(); //empty list test
 
-                obj8.CheckDataAnnotations(); //should throw exception
+                SwashValidator.Validate(obj8); //should throw exception
                 Assert.Fail(); // should not reach here because empty string threw exception
             }
             catch (Exception ex)
@@ -910,6 +974,12 @@ namespace Swashbuckle.Tests
 
         [Required]
         public int DerivedIntegerType { get; set; }
+
+        [SensitiveData]
+        public string SensitiveString { get; set; }
+
+        [SensitiveData]
+        public int SensitiveInt { get; set; }
     }
 
     public class ObjWithOptionalList

@@ -4,23 +4,43 @@ using System.Collections;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
 
 namespace Swashbuckle.Annotations
 {
     /// <summary>
-    ///
+    /// Validates the attribute tag validations declared on the class
     /// </summary>
-    public static class DataAnnotationsValidation
+    public static class SwashValidator
     {
+        /// <summary>
+        /// Validates the attribute tag validations declared on the class.  Returns false if validation rules are not met and returns the error message in the errorMessage (out) parameter
+        /// </summary>
+        /// <param name="input">The object you wish to validate</param>
+        /// <param name="errorMessage">The error message</param>
+        /// <param name="outputJsonPayload">If you want the error message to contain the values in the object we are validating</param>
+        /// <returns></returns>
+        public static bool TryValidate(object input, out string errorMessage, bool outputJsonPayload = true)
+        {
+            errorMessage = null;
+            try
+            {
+                Validate(input, outputJsonPayload);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                errorMessage = ex.Message;
+                return false;
+            }
+        }
+
         ///  <summary>
-        ///
+        ///  Validates the attribute tag validations declared on the class.  Throws an ArgumentNullException if any validation rules are met
         ///  </summary>
-        ///  <param name="input">The object you are testing</param>
-        /// <param name="outputJsonPayload">If true will output the contents of input payload in the exception</param>
-        /// <param name="propName">Used for nested properties when doing a null check. Do not set propName if you are calling from code base</param>
+        ///  <param name="input">The object you wish to validate</param>
+        ///  <param name="outputJsonPayload">If true will output the contents of input payload in the exception</param>
         ///  <exception cref="ArgumentNullException"></exception>
-        public static bool CheckDataAnnotations(this object input, bool outputJsonPayload = true, string propName = null)
+        public static bool Validate(object input, bool outputJsonPayload = true)
         {
             if (input == null) return false;
             if (IsPrimitiveType(input) == true) return true;
@@ -32,7 +52,7 @@ namespace Swashbuckle.Annotations
 
                 if (typeof(IList).IsAssignableFrom(prp.PropertyType)) // Property is collection
                 {
-                    CheckListProperty(input, prp, outputJsonPayload, prp.Name);
+                    CheckListProperty(input, prp, outputJsonPayload);
                 }
                 else
                 {
@@ -47,21 +67,21 @@ namespace Swashbuckle.Annotations
                     if (prp.PropertyType.Assembly == input.GetType().Assembly)
                     {
                         //check nested classes
-                        CheckDataAnnotations(prp.GetValue(input, null), outputJsonPayload, prp.Name);
+                        Validate(prp.GetValue(input, null), outputJsonPayload);
                     }
                 }
             }
             return true;
         }
 
-        private static void CheckListProperty(object input, PropertyInfo prp, bool outputJsonPayload = true, string propName = null)
+        private static void CheckListProperty(object input, PropertyInfo prp, bool outputJsonPayload = true)
         {
             var propValue = prp.GetValue(input, null);
             var listvalue = (IList)propValue;
 
             if (listvalue != null && listvalue.Count > 0) // Has values then iterate
             {
-                CheckList(listvalue, outputJsonPayload, propName);
+                CheckList(listvalue, outputJsonPayload);
             }
             else  // validate for required attribute
             {
@@ -86,7 +106,7 @@ namespace Swashbuckle.Annotations
         }
 
         //if the root object is a list we need to check each element
-        private static bool CheckList(object input, bool outputJsonPayload = true, string propName = null)
+        private static bool CheckList(object input, bool outputJsonPayload = true)
         {
             var elems = input as IList;
             if (elems != null)
@@ -94,7 +114,7 @@ namespace Swashbuckle.Annotations
                 //check nested arrays
                 foreach (var item in elems)
                 {
-                    CheckDataAnnotations(item, outputJsonPayload, propName);
+                    Validate(item, outputJsonPayload);
                 }
                 return true;
             }
