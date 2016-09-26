@@ -57,12 +57,42 @@ c.IncludeXmlComments(string.Format(@"{0}\XmlDocs\ApiDocs.XML", AppDomain.Current
 ### Creating a Good intro ###
 At the top of the Swagger page you can give an intro to your API and tell a little bit about your project to the consumers.
 
-You can either do it in the `/ApiProject/App_Start/SwaggerConfig.cs` as a string, or put it in a HTML page outside of the configuration.
+In the `/ApiProject/App_Start/SwaggerConfig.cs` file you can edit the intro.
 
 ```csharp
 c.SingleApiVersion("v3", "The Test API - Documention and Examples")
      .Description("<h1>Welcome to the test API</h1> <p>Thanks for reading our documentation!</p>");
 ```
+
+It is recomended to store this introduction text in a HTML file outside of swagger.
+
+```csharp
+var intro = "";
+using (var reader = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("Api.Content.swaggerIntro.html")))
+{
+    intro = reader.ReadToEnd();
+}
+c.SingleApiVersion("v3", "SmartPayments API - Documention and Examples")
+    .Description(intro);
+```
+
+# Customizing your Payloads #
+
+We have created attribute tags to help describe your API payloads in greater detail
+
+#### [SwaggerExample] ####
+
+Defines a value to use as the default in your payload.  It will default to something basic such as "string" or 0.
+The goal of [SwaggerExample] is to define your Payloads so well that all the user has to do is click "Try it out" when they load the page.  It could take the user minutes filling out proper values for your payloads if you do not define good example data for them to use.
+
+```csharp
+/// <summary>
+/// The customers first and last name
+/// </summary>
+[SwaggerExample("Benjamin Adams")]
+public string CustomerName { get; set; }
+```
+
 
 ### IIS Hosted ###
 
