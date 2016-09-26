@@ -12,11 +12,18 @@ Changed some things the current Swashbuckle/Swagger projects
 * Added [SwaggerIgnore] attribute to hide properties/controller routes from appearing in documentation
 * Added [SwaggerExample] attribute.  You can add an example value that will be used as a placeholder in the input fields when the page loads.  Example: [SwaggerExample("myValue")], [SwaggerExample("GUID")] generates a new guid for you,  [SwaggerExample(RANDOM)] generates a random integer
 * Putting API keys in the header now works.  In SwaggerConfig.cs set c.ApiKey("apiKey").Name("apiKey").In("header") or "query" for the api key in a query param
+* Added code to validate DataAnnotation attribute tags.  Use `SwashValidator.Validate(inputObject);` or `SwashValidator.TryValidate(inputObject, out errorMsg);`
 
 
 Seamlessly adds a [Swagger](http://swagger.io/) to WebApi projects! Combines ApiExplorer and Swagger/swagger-ui to provide a rich discovery, documentation and playground experience to your API consumers.
 
 Once you have a Web API that can describe itself in Swagger, you've opened the treasure chest of Swagger-based tools including a client generator that can be targeted to a wide range of popular platforms. See [swagger-codegen](https://github.com/swagger-api/swagger-codegen) for more details.
+
+## Things you need to do to have good documentation ##
+
+* [Setting up the XML documentation files](#generating-the-xml-docs-file)
+* [Create a Swagger Intro](#creating-a-good-intro)
+
 
 **Swashbuckle Core Features:**
 
