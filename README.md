@@ -124,23 +124,7 @@ public async Task<IHttpActionResult> Register(RegisterInput input)
     return Content(HttpStatusCode.OK, new RegistrationResponse());
 }
 ```
-This is useful if you have an endpoint that the client doesn't necessarily need to know about.
-
-```csharp
-/// <summary>
-/// This endpoint is used to register 
-/// </summary>
-/// <param name="input"></param>
-/// <returns></returns>
-[HttpPost]
-[Route("Register")]
-[SwaggerIgnore]  //this will hide the Register endpoint from the Swagger page
-[ResponseType(typeof(RegistrationResponse))]
-public async Task<IHttpActionResult> Register(RegisterInput input)
-{
-    return Content(HttpStatusCode.OK, new RegistrationResponse());
-}
-```
+This is useful if you have an endpoint or property that the client doesn't necessarily need to know about.
 
 #### SwaggerRouteName ####
 If you want the route name to be displayed differently than how the function name is declared.
@@ -181,7 +165,7 @@ public string CustomerName { get; set; }
 
 #### [MaxLength] ####
 
-The max length a string can contain.  This will also inform the user of the MaxLength. ![MaxLengthExample](http://i.imgur.com/QWenCqx.png)
+The max length a string can contain.  This will also inform the user of the MaxLength.
 
 ```csharp
 /// <summary>
@@ -191,6 +175,51 @@ The max length a string can contain.  This will also inform the user of the MaxL
 [SwaggerExample("Homer Simpson")]
 public string CustomerName { get; set; }
 ```
+
+#### [MinLength] ####
+
+The min length a string can contain.  This will also inform the user of the MinLength. 
+
+```csharp
+/// <summary>
+/// The customers first and last name
+/// </summary>
+[MinLength(5)] //CustomerName will have a min length of 5 characters
+[SwaggerExample("Homer Simpson")]
+public string CustomerName { get; set; }
+```
+
+#### [StringLength] ####
+
+Define a min and max length in one attribute tag.  This will also inform the user of the length requirements. 
+
+```csharp
+/// <summary>
+/// The customers first and last name
+/// </summary>
+[StringLength(50, MinimumLength = 5)] //CustomerName will have a min length of 5 characters and a max length of 50 characters
+[SwaggerExample("Homer Simpson")]
+public string CustomerName { get; set; }
+```
+
+#### [Range] ####
+
+For numeric types only, define a min and max value
+
+```csharp
+/// <summary>
+/// The customers age
+/// </summary>
+[Range(18,200)] //Age will only allow values between 18 and 200
+[SwaggerExample("18")]
+public int Age { get; set; }
+```
+
+If your type is a numeric type with a decimal value `floats`, `doubles` you should specify decimal values
+```csharp
+[Range(18.0,200.0)]
+```
+
 
 ##### Custom Error Messages #####
 You can define a custom error message to display to the user when they fail to meet the requirements 
