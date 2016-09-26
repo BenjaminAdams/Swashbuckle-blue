@@ -96,7 +96,7 @@ namespace Swashbuckle.Dummy.Controllers
             Validator.ValidateObject(soMuch, new ValidationContext(soMuch, null, null));
             Validator.ValidateObject(soMuch.NestedObjTest, new ValidationContext(soMuch.NestedObjTest, null, null));
 
-            SwashValidator.Validate(soMuch);
+            SwagValidator.Validate(soMuch);
 
             throw new NotImplementedException();
         }

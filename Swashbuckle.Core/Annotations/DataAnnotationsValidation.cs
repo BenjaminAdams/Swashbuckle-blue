@@ -10,7 +10,7 @@ namespace Swashbuckle.Annotations
     /// <summary>
     /// Validates the attribute tag validations declared on the class
     /// </summary>
-    public static class SwashValidator
+    public static class SwagValidator
     {
         /// <summary>
         /// Validates the attribute tag validations declared on the class.  Returns false if validation rules are not met and returns the error message in the errorMessage (out) parameter

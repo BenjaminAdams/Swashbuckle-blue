@@ -7,22 +7,8 @@ using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace Swashbuckle.Annotations
+namespace Swashbuckle.Tests
 {
-    public static class SwashHelper
-    {
-        /// <summary>
-        /// Converts an Object to a JSON value. Any fields marked with the [SensitiveData] attribute tag will be nulled out.
-        /// </summary>
-        /// <typeparam name="T">The type of </typeparam>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        public static string ObjToJson<T>(T input)
-        {
-            return StringExtensions.ObjToJson<T>(input);
-        }
-    }
-
     internal static class StringExtensions
     {
         public static void ThrowIfNullOrEmpty(this string str, string variableName)
@@ -68,12 +54,6 @@ namespace Swashbuckle.Annotations
             return str;
         }
 
-        /// <summary>
-        /// Converts an Object to a JSON value. Any fields marked with the [SensitiveData] attribute tag will be nulled out.
-        /// </summary>
-        /// <typeparam name="T">The type of </typeparam>
-        /// <param name="input"></param>
-        /// <returns></returns>
         public static string ObjToJson<T>(this T input)
         {
             if (input == null) return null;
@@ -115,6 +95,12 @@ namespace Swashbuckle.Annotations
             {
                 return cloned;
             }
+        }
+
+        public static bool IsValidUrl(this string str)
+        {
+            Uri uriResult;
+            return Uri.TryCreate(str, UriKind.Absolute, out uriResult) && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
         }
 
         public static string ObjToXmlString<T>(this T value)

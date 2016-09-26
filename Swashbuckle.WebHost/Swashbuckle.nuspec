@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>Swashbuckle.Blue</id>
-    <version>5.6</version>
+    <version>5.7.5</version>
     <title>Swashbuckle.Blue - Swagger for WebApi</title>
     <authors>Benjamin Adams</authors>
     <licenseUrl>http://opensource.org/licenses/BSD-3-Clause</licenseUrl>
@@ -22,6 +22,8 @@ Changed some things the current Swashbuckle/Swagger projects
 * Added [SwaggerExample] attribute.  You can add an example value that will be used as a placeholder in the input fields when the page loads.  Example: [SwaggerExample("myValue")], [SwaggerExample("GUID")] generates a new guid for you,  [SwaggerExample(RANDOM)] generates a random integer
 * Putting API keys in the header now works.  In SwaggerConfig.cs set c.ApiKey("apiKey").Name("apiKey").In("header") or "query" for the api key in a query param
 * Added code to validate DataAnnotation attribute tags.  Use `SwashValidator.Validate(inputObject);` or `SwashValidator.TryValidate(inputObject, out errorMsg);`
+
+For help getting started please read the documentation located at https://github.com/BenjaminAdams/Swashbuckle-blue
     </releaseNotes>
     <summary>Combines ApiExplorer and Swagger/swagger-ui to provide a rich discovery, documentation and playground experience to your API consumers</summary>
     <copyright>Copyright 2015</copyright>
@@ -29,7 +31,7 @@ Changed some things the current Swashbuckle/Swagger projects
     <dependencies>
       <dependency id="Microsoft.AspNet.WebApi.WebHost" version="5.2.3" />
       <dependency id="WebActivatorEx" />
-      <dependency id="Swashbuckle.Blue.Core" version="5.6" />
+      <dependency id="Swashbuckle.Blue.Core" version="5.7.5" />
     </dependencies>
   </metadata>
   <files>
