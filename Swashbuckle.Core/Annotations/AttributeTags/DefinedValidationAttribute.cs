@@ -5,11 +5,10 @@ using System.Text.RegularExpressions;
 namespace Swashbuckle.Annotations.AttributeTags
 {
     /// <summary>
-    /// Regular Experssion Data Annotation Attribute
+    /// Defined validations with Regular Experssions
     /// </summary>
-    /// <seealso cref="System.Attribute"},
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-    public class RegExAttribute : Attribute
+    public class DefinedValidationAttribute : Attribute
     {
         /// <summary>
         /// Regular expersssion patterns
@@ -26,10 +25,10 @@ namespace Swashbuckle.Annotations.AttributeTags
         };
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RegExAttribute"/> class.
+        /// Initializes a new instance of the <see cref="DefinedValidationAttribute"/> class.
         /// </summary>
         /// <param name="input">The input.</param>
-        public RegExAttribute(ValidationType input)
+        public DefinedValidationAttribute(ValidationType input)
         {
             this.KeyName = input;
         }

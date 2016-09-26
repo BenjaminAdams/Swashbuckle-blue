@@ -67,7 +67,7 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Annotations\AttributeTags\RegExAttribute.cs" />
+    <Compile Include="Annotations\AttributeTags\DefinedValidationAttribute.cs" />
     <Compile Include="Annotations\AttributeTags\SensitiveData.cs" />
     <Compile Include="Annotations\AttributeTags\SwaggerExample.cs" />
     <Compile Include="Annotations\AttributeTags\SwaggerIgnore.cs" />

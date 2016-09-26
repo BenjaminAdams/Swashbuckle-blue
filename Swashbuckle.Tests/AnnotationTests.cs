@@ -932,6 +932,38 @@ namespace Swashbuckle.Tests
                 Assert.IsTrue(ex.Message.Contains("Parameter name: RequiredObject is null"));
             }
         }
+
+        //reg expression test
+        [TestMethod]
+        public void RegexTest()
+        {
+            var obj = new RegularExpressionAttrTest()
+            {
+                Country = "uS"
+            };
+
+            var res = SwagValidator.Validate(obj); //should throw exception
+            Assert.IsTrue(res);
+        }
+
+        [TestMethod]
+        public void RegexTestNotValid()
+        {
+            try
+            {
+                var obj = new RegularExpressionAttrTest()
+                {
+                    Country = "uX"
+                };
+
+                SwagValidator.Validate(obj); //should throw exception
+                Assert.Fail(); // should not reach here because empty string threw exception
+            }
+            catch (Exception ex)
+            {
+                Assert.IsTrue(ex.Message.Contains("Country is invalid"));
+            }
+        }
     }
 
         #endregion List Test cases
@@ -1041,45 +1073,52 @@ namespace Swashbuckle.Tests
         public int SomeInt { get; set; }
     }
 
+    public class RegularExpressionAttrTest
+    {
+        //we can put custom attributes here
+        [RegularExpression(@"^(AF|AX|AL|DZ|AS|AD|AO|AI|AQ|AG|AR|AM|AW|AU|AT|AZ|BS|BH|BD|BB|BY|BE|BZ|BJ|BM|BT|BO|BQ|BA|BW|BV|BR|IO|BN|BG|BF|BI|KH|CM|CA|CV|KY|CF|TD|CL|CN|CX|CC|CO|KM|CG|CD|CK|CR|CI|HR|CU|CW|CY|CZ|DK|DJ|DM|DO|EC|EG|SV|GQ|ER|EE|ET|FK|FO|FJ|FI|FR|GF|PF|TF|GA|GM|GE|DE|GH|GI|GR|GL|GD|GP|GU|GT|GG|GN|GW|GY|HT|HM|VA|HN|HK|HU|IS|IN|ID|IR|IQ|IE|IM|IL|IT|JM|JP|JE|JO|KZ|KE|KI|KP|KR|KW|KG|LA|LV|LB|LS|LR|LY|LI|LT|LU|MO|MK|MG|MW|MY|MV|ML|MT|MH|MQ|MR|MU|YT|MX|FM|MD|MC|MN|ME|MS|MA|MZ|MM|NA|NR|NP|NL|NC|NZ|NI|NE|NG|NU|NF|MP|NO|OM|PK|PW|PS|PA|PG|PY|PE|PH|PN|PL|PT|PR|QA|RE|RO|RU|RW|BL|SH|KN|LC|MF|PM|VC|WS|SM|ST|SA|SN|RS|SC|SL|SG|SX|SK|SI|SB|SO|ZA|GS|SS|ES|LK|SD|SR|SJ|SZ|SE|CH|SY|TW|TJ|TZ|TH|TL|TG|TK|TO|TT|TN|TR|TM|TC|TV|UG|UA|AE|GB|US|UM|UY|UZ|VU|VE|VN|VG|VI|WF|EH|YE|ZM|ZW)$")]
+        public string Country { get; set; }
+    }
+
     public class RegExCountyTestClass
     {
-        [RegEx(ValidationType.Country)]
+        [DefinedValidation(ValidationType.Country)]
         public string Text { get; set; }
     }
 
     public class RegExCurrencyTestClass
     {
-        [RegEx(ValidationType.Currency)]
+        [DefinedValidation(ValidationType.Currency)]
         public string Text { get; set; }
     }
 
     public class RegExEmailTestClass
     {
-        [RegEx(ValidationType.Email)]
+        [DefinedValidation(ValidationType.Email)]
         public string Text { get; set; }
     }
 
     public class RegExIPAddressTestClass
     {
-        [RegEx(ValidationType.IPAddress)]
+        [DefinedValidation(ValidationType.IPAddress)]
         public string Text { get; set; }
     }
 
     public class RegExLanguageTestClass
     {
-        [RegEx(ValidationType.Language)]
+        [DefinedValidation(ValidationType.Language)]
         public string Text { get; set; }
     }
 
     public class RegExRegionTestClass
     {
-        [RegEx(ValidationType.Region)]
+        [DefinedValidation(ValidationType.Region)]
         public string Text { get; set; }
     }
 
     public class RegExUrlTestClass
     {
-        [RegEx(ValidationType.Url)]
+        [DefinedValidation(ValidationType.Url)]
         public string Text { get; set; }
     }
 

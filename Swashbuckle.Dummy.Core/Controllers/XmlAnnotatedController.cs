@@ -161,7 +161,7 @@ namespace Swashbuckle.Dummy.Controllers
         [SwaggerExample("null")]
         public string SwaggerExampleNullTest { get; set; }
 
-        [RegExAttribute(ValidationType.Country)]
+        [DefinedValidationAttribute(ValidationType.Country)]
         [SwaggerExample("US")]
         public string Country { get; set; }
     }
@@ -227,6 +227,8 @@ namespace Swashbuckle.Dummy.Controllers
             /// </summary>
             [SwaggerExample("Hey its a working example guy")]
             [JsonProperty("allow-marketing-emails")]
+            // [StringLength(MaximumLength = 50, MinimumLength = 5)]
+            [Range(5, 500)]
             public string AllowMarketingEmails { get; set; }
         }
     }

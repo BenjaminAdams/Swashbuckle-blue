@@ -4,6 +4,7 @@ using System.Collections;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace Swashbuckle.Annotations
 {
@@ -62,7 +63,8 @@ namespace Swashbuckle.Annotations
                     CheckMaxLengthAttribute(prp, input, outputJsonPayload);
                     CheckMinLengthAttribute(prp, input, outputJsonPayload);
                     CheckStringLengthAttribute(prp, input, outputJsonPayload);
-                    CheckRegExAttribute(prp, input, outputJsonPayload);
+                    CheckDefinedExAttribute(prp, input, outputJsonPayload);
+                    CheckRegularExpressionAttribute(prp, input, outputJsonPayload);
 
                     if (prp.PropertyType.Assembly == input.GetType().Assembly)
                     {
@@ -184,15 +186,15 @@ namespace Swashbuckle.Annotations
         }
 
         /// <summary>
-        /// Checks the regular expersion attribute.
+        /// Checks the Defined attribute.
         /// </summary>
         /// <param name="property">The property.</param>
         /// <param name="input">The input.</param>
         /// <param name="outputJsonPayload">if set to <c>true</c> [output json payload].</param>
         /// <exception cref="System.ArgumentException"></exception>
-        private static void CheckRegExAttribute(PropertyInfo property, object input, bool outputJsonPayload)
+        private static void CheckDefinedExAttribute(PropertyInfo property, object input, bool outputJsonPayload)
         {
-            var attr = (RegExAttribute)(property.GetCustomAttribute(typeof(RegExAttribute)));
+            var attr = (DefinedValidationAttribute)(property.GetCustomAttribute(typeof(DefinedValidationAttribute)));
             if (attr == null)
                 return;
 
@@ -205,7 +207,35 @@ namespace Swashbuckle.Annotations
                 return;
             }
 
-            if (RegExAttribute.Validate(attr.KeyName, value.ToString()) == false)
+            if (DefinedValidationAttribute.Validate(attr.KeyName, value.ToString()) == false)
+            {
+                throw new ArgumentException(string.Format("{0} is invalid. Received value: {1}", property.Name, value).AppendJson(input, outputJsonPayload));
+            }
+        }
+
+        /// <summary>
+        /// Checks the Defined attribute.
+        /// </summary>
+        /// <param name="property">The property.</param>
+        /// <param name="input">The input.</param>
+        /// <param name="outputJsonPayload">if set to <c>true</c> [output json payload].</param>
+        /// <exception cref="System.ArgumentException"></exception>
+        private static void CheckRegularExpressionAttribute(PropertyInfo property, object input, bool outputJsonPayload)
+        {
+            var attr = (RegularExpressionAttribute)(property.GetCustomAttribute(typeof(RegularExpressionAttribute)));
+            if (attr == null)
+                return;
+
+            var value = property.GetValue(input);
+            if (value == null)
+                return;
+
+            if (string.IsNullOrWhiteSpace(value.ToString()))
+            {
+                return;
+            }
+
+            if (Regex.IsMatch(value.ToString(), attr.Pattern, RegexOptions.IgnoreCase) == false)
             {
                 throw new ArgumentException(string.Format("{0} is invalid. Received value: {1}", property.Name, value).AppendJson(input, outputJsonPayload));
             }
