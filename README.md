@@ -148,7 +148,61 @@ It will now display this route name as `Register_User` instead of `Register`
 
 ## Validation ##
 
-Swashbuckle.Blue uses a combination of custom and the built in Attribute tags to describe validation rules on your payloads
+Swashbuckle.Blue uses a combination of custom and the built in Attribute tags to describe validation rules on your payloads.
+
+#### Validation Helper ####
+
+##### SwagValidator.Validate() #####
+
+throws an ArgumentException if any of the fields do not pass your defined validation rules
+
+```csharp
+bool SwagValidator.Validate(object input, bool outputJsonPayload = true)
+```
+
+```csharp
+/// <summary>
+/// This endpoint is used to register 
+/// </summary>
+/// <param name="input"></param>
+/// <returns></returns>
+[HttpPost]
+[Route("Register")]
+[SwaggerIgnore]  //this will hide the Register endpoint from the Swagger page
+[ResponseType(typeof(RegistrationResponse))]
+public async Task<IHttpActionResult> Register(RegisterInput input)
+{
+    SwagValidator.Validate(input);
+    return Content(HttpStatusCode.OK, new RegistrationResponse());
+}
+```
+
+
+##### SwagValidator.TryValidate() #####
+
+Validates the attribute tag validations declared on the class.  Returns false if validation rules are not met and returns the error message in the errorMessage (out) parameter
+
+```csharp
+bool SwagValidator.TryValidate(object input, out string errorMessage, bool outputJsonPayload = true)
+```
+
+```csharp
+/// <summary>
+/// This endpoint is used to register 
+/// </summary>
+/// <param name="input"></param>
+/// <returns></returns>
+[HttpPost]
+[Route("Register")]
+[SwaggerIgnore]  //this will hide the Register endpoint from the Swagger page
+[ResponseType(typeof(RegistrationResponse))]
+public async Task<IHttpActionResult> Register(RegisterInput input)
+{
+    string errorMsg;
+    bool status= SwagValidator.TryValidate(input, errorMsg);
+    return Content(HttpStatusCode.OK, new RegistrationResponse());
+}
+```
 
 #### [Required] ####
 
@@ -235,15 +289,27 @@ public string Country { get; set; }
 ##### Other Defined Validation Types #####
 
 
-* [DefinedValidation(ValidationType.Country)]
-* [DefinedValidation(ValidationType.Currency)]
-* [DefinedValidation(ValidationType.Language)]
-* [DefinedValidation(ValidationType.Url)]
-* [DefinedValidation(ValidationType.Email)]
-* [DefinedValidation(ValidationType.IPAddress)]
+* `[DefinedValidation(ValidationType.Country)]`
+* `[DefinedValidation(ValidationType.Currency)]`
+* `[DefinedValidation(ValidationType.Language)]`
+* `[DefinedValidation(ValidationType.Url)]`
+* `[DefinedValidation(ValidationType.Email)]`
+* `[DefinedValidation(ValidationType.IPAddress)]`
 
+If none of these defined validations meet your requirements you can use...
 
+#### RegularExpression attribute ####
 
+Matches any regular expression to the property
+
+```csharp
+/// <summary>
+/// The customers country code
+/// </summary>
+[RegularExpression(@"^(US|JP)$")]  //Forces the field to only allow US or JP as a country code
+[SwaggerExample("US")]
+public string Country { get; set; }
+```
 
 ##### Custom Error Messages #####
 You can define a custom error message to display to the user when they fail to meet the requirements 
