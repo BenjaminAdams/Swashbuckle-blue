@@ -215,10 +215,34 @@ For numeric types only, define a min and max value
 public int Age { get; set; }
 ```
 
-If your type is a numeric type with a decimal value `floats`, `doubles` you should specify decimal values
+If your type is a numeric type with a decimal value `floats`, `doubles` you should specify decimal values for the min and max.
 ```csharp
 [Range(18.0,200.0)]
 ```
+
+#### DefinedAttributes ####
+Comes with a list of pre-made validation types
+
+```csharp
+/// <summary>
+/// The customers country code
+/// </summary>
+[DefinedValidation(ValidationType.Country)]  //Forces validation on a proper ISO 3166-1 country code
+[SwaggerExample("US")]
+public string Country { get; set; }
+```
+
+##### Other Defined Validation Types #####
+
+
+* [DefinedValidation(ValidationType.Country)]
+* [DefinedValidation(ValidationType.Currency)]
+* [DefinedValidation(ValidationType.Language)]
+* [DefinedValidation(ValidationType.Url)]
+* [DefinedValidation(ValidationType.Email)]
+* [DefinedValidation(ValidationType.IPAddress)]
+
+
 
 
 ##### Custom Error Messages #####
