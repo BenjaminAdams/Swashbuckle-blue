@@ -23,9 +23,8 @@ Once you have a Web API that can describe itself in Swagger, you've opened the t
 * Auto-generated [Swagger 2.0](https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md)
 * Seamless integration of swagger-ui
 * Reflection-based Schema generation for describing API types
-* Extensibility hooks for customizing the generated Swagger doc
 * Out-of-the-box support for leveraging Xml comments
-* Support for describing ApiKey, Basic Auth and OAuth2 schemes ... including UI support for the Implicit OAuth2 flow
+* Support for describing ApiKey, Basic Auth and OAuth2 schemes
 
 ## Getting Started ##
 
@@ -37,6 +36,16 @@ Once installed and enabled, you should be able to browse the following Swagger d
 
 ***\<your-root-url\>/swagger***
 
+### Generating the XML docs file ###
+Swashbuckle needs to get the commentes from inside your Visual Studio codebase. There is a setting in the properties of your project where it will generate an XML document at compile time.
+This image shows we are creating the xml file inside of our "API" project in the folder /XmlDocs
+
+![Api project settings](http://i.imgur.com/Ehu7Ymu.png)
+
+If you have your data contracts in more than one project you need to create an XML documentation file for those too.
+
+![DataContracts project settings](http://i.imgur.com/LcQbzUB.png)
+
 ### IIS Hosted ###
 
 If your service is hosted in IIS, you can start exposing Swagger docs and a corresponding swagger-ui by simply installing the following Nuget package:
@@ -45,7 +54,7 @@ If your service is hosted in IIS, you can start exposing Swagger docs and a corr
 
 This will add a reference to Swashbuckle.Core and also install a bootstrapper (App_Start/SwaggerConfig.cs) that enables the Swagger routes on app start-up using [WebActivatorEx](https://github.com/davidebbo/WebActivator).
 
-### Self-hosted ###
+### Self-hosted or OWIN ###
 
 If your service is self-hosted, just install the Core library:
 
@@ -56,32 +65,6 @@ And then manually enable the Swagger docs and optionally, the swagger-ui by invo
     httpConfiguration
         .EnableSwagger(c => c.SingleApiVersion("v1", "A title for your API"))
         .EnableSwaggerUi();
-
-### OWIN  ###
-
-If your service is hosted using OWIN middleware, just install the Core library:
-
-    Install-Package Swashbuckle.Blue.Core
-
-Then manually enable the Swagger docs and swagger-ui by invoking the extension methods (in namespace Swashbuckle.Application) on an instance of HttpConfiguration (e.g. in Startup.cs)
-
-    httpConfiguration
-        .EnableSwagger(c => c.SingleApiVersion("v1", "A title for your API"))
-        .EnableSwaggerUi();    
-
-## Troubleshooting ##
-
-Troubleshooting??? I thought this was all supposed to be "seamless"? OK you've called me out! Things shouldn't go wrong, but if they do, take a look at the [FAQ's](#troubleshooting-and-faqs) for inspiration.
-
-## Customizing the Generated Swagger Docs ##
-
-The following snippet demonstrates the minimum configuration required to get the Swagger docs and swagger-ui up and running:
-
-    httpConfiguration
-        .EnableSwagger(c => c.SingleApiVersion("v1", "A title for your API"))
-        .EnableSwaggerUi();
-
-These methods expose a range of configuration and extensibility options that you can pick and choose from, combining the convenience of sensible defaults with the flexibility to customize where you see fit. Read on to learn more.
 
 ### Custom Routes ###
 
@@ -377,23 +360,19 @@ By default, swagger-ui will validate specs against swagger.io's online validator
 
 Use this option to control how the Operation listing is displayed. It can be set to "None" (default), "List" (shows operations for each resource), or "Full" (fully expanded: shows operations and their details).
 
+## Troubleshooting ##
 
-### Injecting Custom Content ###
+Troubleshooting??? I thought this was all supposed to be "seamless"? OK you've called me out! Things shouldn't go wrong, but if they do, take a look at the [FAQ's](#troubleshooting-and-faqs) for inspiration.
 
-The __InjectStylesheet__, __InjectJavaScript__ and __CustomAsset__ options all share the same mechanism for providing custom content. In each case, the file must be included in your project as an "Embedded Resource". The steps to do this are described below:
+## Customizing the Generated Swagger Docs ##
 
-1. Add a new file to your WebApi project.
-2. In Solution Explorer, right click the file and open its properties window. Change the "Build Action" to "Embedded Resource".
+The following snippet demonstrates the minimum configuration required to get the Swagger docs and swagger-ui up and running:
 
-This will embed the file in your assembly and register it with a "Logical Name". This can then be passed to the relevant config. method. It's based on the Project's default namespace, file location and file extension. For example, given a default namespace of "YourWebApiProject" and a file located at "/SwaggerExtensions/index.html", then the resource will be assigned the name - "YourWebApiProject.SwaggerExtensions.index.html".
+    httpConfiguration
+        .EnableSwagger(c => c.SingleApiVersion("v1", "A title for your API"))
+        .EnableSwaggerUi();
 
-## Transitioning to Swashbuckle 5.0 ##
-
-This version of Swashbuckle makes the transition to Swagger 2.0. The 2.0 specification is significantly different to its predecessor - 1.2 and forces several breaking changes to Swashbuckle's config. interface. If you're using Swashbuckle without any customizations, i.e. App_Start/SwaggerConfig.cs has never been modified, then you can overwrite it with the new version. The defaults are the same and so the swagger-ui should behave as before.
-
-\* If you have consumers of the raw Swagger document, you should ensure they can accept Swagger 2.0 before making the upgrade.
-
-If you're using the existing config. interface to customize the final Swagger document and/or swagger-ui, you will need to port the code manually. The static __Customize__ methods on SwaggerSpecConfig and SwaggerUiConfig have been replaced with extension methods on HttpConfiguration - __EnableSwagger__ and __EnableSwaggerUi__. All options from version 4.0 are made available through these methods, albeit with slightly different naming and syntax. Refer to the tables below for a summary of changes:
+These methods expose a range of configuration and extensibility options that you can pick and choose from, combining the convenience of sensible defaults with the flexibility to customize where you see fit. Read on to learn more.
 
 
 | 4.0 | 5.0 Equivalant | Additional Notes |
