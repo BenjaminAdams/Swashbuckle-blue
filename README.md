@@ -83,16 +83,84 @@ We have created attribute tags to help describe your API payloads in greater det
 #### [SwaggerExample] ####
 
 Defines a value to use as the default in your payload.  It will default to something basic such as "string" or 0.
-The goal of [SwaggerExample] is to define your Payloads so well that all the user has to do is click "Try it out" when they load the page.  It could take the user minutes filling out proper values for your payloads if you do not define good example data for them to use.
+The goal of `[SwaggerExample]` is to define your Payloads so well that all the user has to do is click "Try it out" when they load the page.  It could take the user minutes filling out proper values for your payloads if you do not define good example data for them to use.
 
 ```csharp
 /// <summary>
 /// The customers first and last name
 /// </summary>
-[SwaggerExample("Benjamin Adams")]
+[SwaggerExample("Homer Simpson")]
 public string CustomerName { get; set; }
 ```
 
+This will put "Homer Simpson" instead of "string" in the CustomerName field.
+
+#### [SwaggerIgnore] ####
+
+Hides properties or API routes from being displayed on the page.
+
+```csharp
+/// <summary>
+/// The customers first and last name
+/// </summary>
+[SwaggerIgnore]
+[SwaggerExample("Homer Simpson")]
+public string CustomerName { get; set; }
+```
+
+To hide an API route on the Swagger page
+```csharp
+/// <summary>
+/// This endpoint is used to register 
+/// </summary>
+/// <param name="input"></param>
+/// <returns></returns>
+[HttpPost]
+[Route("Register")]
+[SwaggerIgnore]  //this will hide the Register endpoint from the Swagger page
+[ResponseType(typeof(RegistrationResponse))]
+public async Task<IHttpActionResult> Register(RegisterInput input)
+{
+    return Content(HttpStatusCode.OK, new RegistrationResponse());
+}
+```
+This is useful if you have an endpoint that the client doesn't necessarily need to know about.
+
+```csharp
+/// <summary>
+/// This endpoint is used to register 
+/// </summary>
+/// <param name="input"></param>
+/// <returns></returns>
+[HttpPost]
+[Route("Register")]
+[SwaggerIgnore]  //this will hide the Register endpoint from the Swagger page
+[ResponseType(typeof(RegistrationResponse))]
+public async Task<IHttpActionResult> Register(RegisterInput input)
+{
+    return Content(HttpStatusCode.OK, new RegistrationResponse());
+}
+```
+
+#### SwaggerRouteName ####
+If you want the route name to be displayed differently than how the function name is declared.
+
+```csharp
+/// <summary>
+/// This endpoint is used to register 
+/// </summary>
+/// <param name="input"></param>
+/// <returns></returns>
+[HttpPost]
+[Route("Register")]
+[SwaggerIgnore]  //this will hide the Register endpoint from the Swagger page
+[ResponseType(typeof(RegistrationResponse))]
+public async Task<IHttpActionResult> Register(RegisterInput input)
+{
+    return Content(HttpStatusCode.OK, new RegistrationResponse());
+}
+```
+It will now display this route name as `Register_User` instead of `Register`
 
 ### IIS Hosted ###
 
