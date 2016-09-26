@@ -23,6 +23,9 @@ Once you have a Web API that can describe itself in Swagger, you've opened the t
 
 * [Setting up the XML documentation files](#generating-the-xml-docs-file)
 * [Create a Swagger Intro](#creating-a-good-intro)
+* [Adding Data Annotation to your classes](#required)
+* [Using our built in validator to validate your Data Annotations](#validation)
+* [Adding SwaggerExample to all your input fields](#swaggerexample)
 
 
 **Swashbuckle Core Features:**
