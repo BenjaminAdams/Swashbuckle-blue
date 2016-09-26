@@ -23,9 +23,8 @@ Once you have a Web API that can describe itself in Swagger, you've opened the t
 * Auto-generated [Swagger 2.0](https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md)
 * Seamless integration of swagger-ui
 * Reflection-based Schema generation for describing API types
-* Extensibility hooks for customizing the generated Swagger doc
 * Out-of-the-box support for leveraging Xml comments
-* Support for describing ApiKey, Basic Auth and OAuth2 schemes ... including UI support for the Implicit OAuth2 flow
+* Support for describing ApiKey, Basic Auth and OAuth2 schemes
 
 ## Getting Started ##
 
@@ -37,6 +36,289 @@ Once installed and enabled, you should be able to browse the following Swagger d
 
 ***\<your-root-url\>/swagger***
 
+### Generating the XML docs file ###
+Swashbuckle needs to get the commentes from inside your Visual Studio codebase. There is a setting in the properties of your project where it will generate an XML document at compile time.
+This image shows we are creating the xml file inside of our `API` project in the folder `/XmlDocs`
+
+![Api project settings](http://i.imgur.com/Ehu7Ymu.png)
+
+If you have your data contracts in more than one project you need to create an XML documentation file for those too.
+
+![DataContracts project settings](http://i.imgur.com/LcQbzUB.png)
+
+Now that we have all of the XML documentation file created we need to tell Swashbuckle that they are located in the `/XmlDocs` folder.
+
+In the file `/ApiProject/App_Start/SwaggerConfig.cs`
+```csharp
+c.IncludeXmlComments(string.Format(@"{0}\XmlDocs\DataContracts.XML", AppDomain.CurrentDomain.BaseDirectory));
+c.IncludeXmlComments(string.Format(@"{0}\XmlDocs\ApiDocs.XML", AppDomain.CurrentDomain.BaseDirectory));
+```
+
+### Creating a Good intro ###
+At the top of the Swagger page you can give an intro to your API and tell a little bit about your project to the consumers.
+
+In the `/ApiProject/App_Start/SwaggerConfig.cs` file you can edit the intro.
+
+```csharp
+c.SingleApiVersion("v3", "The Test API - Documention and Examples")
+     .Description("<h1>Welcome to the test API</h1> <p>Thanks for reading our documentation!</p>");
+```
+
+It is recomended to store this introduction text in a HTML file outside of swagger.
+
+```csharp
+var intro = "";
+using (var reader = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("Api.Content.swaggerIntro.html")))
+{
+    intro = reader.ReadToEnd();
+}
+c.SingleApiVersion("v3", "SmartPayments API - Documention and Examples")
+    .Description(intro);
+```
+
+# Customizing your Payloads #
+
+We have created attribute tags to help describe your API payloads in greater detail
+
+#### [SwaggerExample] ####
+
+Defines a value to use as the default in your payload.  It will default to something basic such as "string" or 0.
+The goal of `[SwaggerExample]` is to define your Payloads so well that all the user has to do is click "Try it out" when they load the page.  It could take the user minutes filling out proper values for your payloads if you do not define good example data for them to use.
+
+```csharp
+/// <summary>
+/// The customers first and last name
+/// </summary>
+[SwaggerExample("Homer Simpson")]
+public string CustomerName { get; set; }
+```
+
+This will put "Homer Simpson" instead of "string" in the CustomerName field.
+
+#### [SwaggerIgnore] ####
+
+Hides properties or API routes from being displayed on the page.
+
+```csharp
+/// <summary>
+/// The customers first and last name
+/// </summary>
+[SwaggerIgnore]  //This will hide CustomerName from the user
+[SwaggerExample("Homer Simpson")]
+public string CustomerName { get; set; }
+```
+
+To hide an API route on the Swagger page
+```csharp
+/// <summary>
+/// This endpoint is used to register 
+/// </summary>
+/// <param name="input"></param>
+/// <returns></returns>
+[HttpPost]
+[Route("Register")]
+[SwaggerIgnore]  //this will hide the Register endpoint from the Swagger page
+[ResponseType(typeof(RegistrationResponse))]
+public async Task<IHttpActionResult> Register(RegisterInput input)
+{
+    return Content(HttpStatusCode.OK, new RegistrationResponse());
+}
+```
+This is useful if you have an endpoint or property that the client doesn't necessarily need to know about.
+
+#### SwaggerRouteName ####
+If you want the route name to be displayed differently than how the function name is declared.
+
+```csharp
+/// <summary>
+/// This endpoint is used to register 
+/// </summary>
+/// <param name="input"></param>
+/// <returns></returns>
+[HttpPost]
+[Route("Register")]
+[SwaggerIgnore]  //this will hide the Register endpoint from the Swagger page
+[ResponseType(typeof(RegistrationResponse))]
+public async Task<IHttpActionResult> Register(RegisterInput input)
+{
+    return Content(HttpStatusCode.OK, new RegistrationResponse());
+}
+```
+It will now display this route name as `Register_User` instead of `Register`
+
+## Validation ##
+
+Swashbuckle.Blue uses a combination of custom and the built in Attribute tags to describe validation rules on your payloads.
+
+#### Validation Helper ####
+
+##### SwagValidator.Validate() #####
+
+throws an ArgumentException if any of the fields do not pass your defined validation rules
+
+```csharp
+bool SwagValidator.Validate(object input, bool outputJsonPayload = true)
+```
+
+```csharp
+/// <summary>
+/// This endpoint is used to register 
+/// </summary>
+/// <param name="input"></param>
+/// <returns></returns>
+[HttpPost]
+[Route("Register")]
+[SwaggerIgnore]  //this will hide the Register endpoint from the Swagger page
+[ResponseType(typeof(RegistrationResponse))]
+public async Task<IHttpActionResult> Register(RegisterInput input)
+{
+    SwagValidator.Validate(input);
+    return Content(HttpStatusCode.OK, new RegistrationResponse());
+}
+```
+
+
+##### SwagValidator.TryValidate() #####
+
+Validates the attribute tag validations declared on the class.  Returns false if validation rules are not met and returns the error message in the errorMessage (out) parameter
+
+```csharp
+bool SwagValidator.TryValidate(object input, out string errorMessage, bool outputJsonPayload = true)
+```
+
+```csharp
+/// <summary>
+/// This endpoint is used to register 
+/// </summary>
+/// <param name="input"></param>
+/// <returns></returns>
+[HttpPost]
+[Route("Register")]
+[SwaggerIgnore]  //this will hide the Register endpoint from the Swagger page
+[ResponseType(typeof(RegistrationResponse))]
+public async Task<IHttpActionResult> Register(RegisterInput input)
+{
+    string errorMsg;
+    bool status= SwagValidator.TryValidate(input, errorMsg);
+    return Content(HttpStatusCode.OK, new RegistrationResponse());
+}
+```
+
+#### [Required] ####
+
+Labels the field as required in the UI and will throw an error when you call `SwagValidate.Validate()`.  This will also inform the user in Swagger that this field is Required.
+
+```csharp
+/// <summary>
+/// The customers first and last name
+/// </summary>
+[Required]  //This field is now required
+[SwaggerExample("Homer Simpson")]
+public string CustomerName { get; set; }
+```
+
+#### [MaxLength] ####
+
+The max length a string can contain.  This will also inform the user of the MaxLength.
+
+```csharp
+/// <summary>
+/// The customers first and last name
+/// </summary>
+[MaxLength(50)] //CustomerName will have a max length of 50 characters
+[SwaggerExample("Homer Simpson")]
+public string CustomerName { get; set; }
+```
+
+#### [MinLength] ####
+
+The min length a string can contain.  This will also inform the user of the MinLength. 
+
+```csharp
+/// <summary>
+/// The customers first and last name
+/// </summary>
+[MinLength(5)] //CustomerName will have a min length of 5 characters
+[SwaggerExample("Homer Simpson")]
+public string CustomerName { get; set; }
+```
+
+#### [StringLength] ####
+
+Define a min and max length in one attribute tag.  This will also inform the user of the length requirements. 
+
+```csharp
+/// <summary>
+/// The customers first and last name
+/// </summary>
+[StringLength(50, MinimumLength = 5)] //CustomerName will have a min length of 5 characters and a max length of 50 characters
+[SwaggerExample("Homer Simpson")]
+public string CustomerName { get; set; }
+```
+
+#### [Range] ####
+
+For numeric types only, define a min and max value
+
+```csharp
+/// <summary>
+/// The customers age
+/// </summary>
+[Range(18,200)] //Age will only allow values between 18 and 200
+[SwaggerExample("18")]
+public int Age { get; set; }
+```
+
+If your type is a numeric type with a decimal value `floats`, `doubles` you should specify decimal values for the min and max.
+```csharp
+[Range(18.0,200.0)]
+```
+
+#### DefinedAttributes ####
+Comes with a list of pre-made validation types
+
+```csharp
+/// <summary>
+/// The customers country code
+/// </summary>
+[DefinedValidation(ValidationType.Country)]  //Forces validation on a proper ISO 3166-1 country code
+[SwaggerExample("US")]
+public string Country { get; set; }
+```
+
+##### Other Defined Validation Types #####
+
+
+* `[DefinedValidation(ValidationType.Country)]`
+* `[DefinedValidation(ValidationType.Currency)]`
+* `[DefinedValidation(ValidationType.Language)]`
+* `[DefinedValidation(ValidationType.Url)]`
+* `[DefinedValidation(ValidationType.Email)]`
+* `[DefinedValidation(ValidationType.IPAddress)]`
+
+If none of these defined validations meet your requirements you can use...
+
+#### RegularExpression attribute ####
+
+Matches any regular expression to the property
+
+```csharp
+/// <summary>
+/// The customers country code
+/// </summary>
+[RegularExpression(@"^(US|JP)$")]  //Forces the field to only allow US or JP as a country code
+[SwaggerExample("US")]
+public string Country { get; set; }
+```
+
+##### Custom Error Messages #####
+You can define a custom error message to display to the user when they fail to meet the requirements 
+```csharp
+[Required(ErrorMessage = "You should have put a value in here!")]
+```
+
+# Installation #
+
 ### IIS Hosted ###
 
 If your service is hosted in IIS, you can start exposing Swagger docs and a corresponding swagger-ui by simply installing the following Nuget package:
@@ -45,7 +327,7 @@ If your service is hosted in IIS, you can start exposing Swagger docs and a corr
 
 This will add a reference to Swashbuckle.Core and also install a bootstrapper (App_Start/SwaggerConfig.cs) that enables the Swagger routes on app start-up using [WebActivatorEx](https://github.com/davidebbo/WebActivator).
 
-### Self-hosted ###
+### Self-hosted or OWIN ###
 
 If your service is self-hosted, just install the Core library:
 
@@ -56,32 +338,6 @@ And then manually enable the Swagger docs and optionally, the swagger-ui by invo
     httpConfiguration
         .EnableSwagger(c => c.SingleApiVersion("v1", "A title for your API"))
         .EnableSwaggerUi();
-
-### OWIN  ###
-
-If your service is hosted using OWIN middleware, just install the Core library:
-
-    Install-Package Swashbuckle.Blue.Core
-
-Then manually enable the Swagger docs and swagger-ui by invoking the extension methods (in namespace Swashbuckle.Application) on an instance of HttpConfiguration (e.g. in Startup.cs)
-
-    httpConfiguration
-        .EnableSwagger(c => c.SingleApiVersion("v1", "A title for your API"))
-        .EnableSwaggerUi();    
-
-## Troubleshooting ##
-
-Troubleshooting??? I thought this was all supposed to be "seamless"? OK you've called me out! Things shouldn't go wrong, but if they do, take a look at the [FAQ's](#troubleshooting-and-faqs) for inspiration.
-
-## Customizing the Generated Swagger Docs ##
-
-The following snippet demonstrates the minimum configuration required to get the Swagger docs and swagger-ui up and running:
-
-    httpConfiguration
-        .EnableSwagger(c => c.SingleApiVersion("v1", "A title for your API"))
-        .EnableSwaggerUi();
-
-These methods expose a range of configuration and extensibility options that you can pick and choose from, combining the convenience of sensible defaults with the flexibility to customize where you see fit. Read on to learn more.
 
 ### Custom Routes ###
 
@@ -377,23 +633,19 @@ By default, swagger-ui will validate specs against swagger.io's online validator
 
 Use this option to control how the Operation listing is displayed. It can be set to "None" (default), "List" (shows operations for each resource), or "Full" (fully expanded: shows operations and their details).
 
+## Troubleshooting ##
 
-### Injecting Custom Content ###
+Troubleshooting??? I thought this was all supposed to be "seamless"? OK you've called me out! Things shouldn't go wrong, but if they do, take a look at the [FAQ's](#troubleshooting-and-faqs) for inspiration.
 
-The __InjectStylesheet__, __InjectJavaScript__ and __CustomAsset__ options all share the same mechanism for providing custom content. In each case, the file must be included in your project as an "Embedded Resource". The steps to do this are described below:
+## Customizing the Generated Swagger Docs ##
 
-1. Add a new file to your WebApi project.
-2. In Solution Explorer, right click the file and open its properties window. Change the "Build Action" to "Embedded Resource".
+The following snippet demonstrates the minimum configuration required to get the Swagger docs and swagger-ui up and running:
 
-This will embed the file in your assembly and register it with a "Logical Name". This can then be passed to the relevant config. method. It's based on the Project's default namespace, file location and file extension. For example, given a default namespace of "YourWebApiProject" and a file located at "/SwaggerExtensions/index.html", then the resource will be assigned the name - "YourWebApiProject.SwaggerExtensions.index.html".
+    httpConfiguration
+        .EnableSwagger(c => c.SingleApiVersion("v1", "A title for your API"))
+        .EnableSwaggerUi();
 
-## Transitioning to Swashbuckle 5.0 ##
-
-This version of Swashbuckle makes the transition to Swagger 2.0. The 2.0 specification is significantly different to its predecessor - 1.2 and forces several breaking changes to Swashbuckle's config. interface. If you're using Swashbuckle without any customizations, i.e. App_Start/SwaggerConfig.cs has never been modified, then you can overwrite it with the new version. The defaults are the same and so the swagger-ui should behave as before.
-
-\* If you have consumers of the raw Swagger document, you should ensure they can accept Swagger 2.0 before making the upgrade.
-
-If you're using the existing config. interface to customize the final Swagger document and/or swagger-ui, you will need to port the code manually. The static __Customize__ methods on SwaggerSpecConfig and SwaggerUiConfig have been replaced with extension methods on HttpConfiguration - __EnableSwagger__ and __EnableSwaggerUi__. All options from version 4.0 are made available through these methods, albeit with slightly different naming and syntax. Refer to the tables below for a summary of changes:
+These methods expose a range of configuration and extensibility options that you can pick and choose from, combining the convenience of sensible defaults with the flexibility to customize where you see fit. Read on to learn more.
 
 
 | 4.0 | 5.0 Equivalant | Additional Notes |
