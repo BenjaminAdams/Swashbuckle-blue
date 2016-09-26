@@ -38,13 +38,31 @@ Once installed and enabled, you should be able to browse the following Swagger d
 
 ### Generating the XML docs file ###
 Swashbuckle needs to get the commentes from inside your Visual Studio codebase. There is a setting in the properties of your project where it will generate an XML document at compile time.
-This image shows we are creating the xml file inside of our "API" project in the folder /XmlDocs
+This image shows we are creating the xml file inside of our `API` project in the folder `/XmlDocs`
 
 ![Api project settings](http://i.imgur.com/Ehu7Ymu.png)
 
 If you have your data contracts in more than one project you need to create an XML documentation file for those too.
 
 ![DataContracts project settings](http://i.imgur.com/LcQbzUB.png)
+
+Now that we have all of the XML documentation file created we need to tell Swashbuckle that they are located in the `/XmlDocs` folder.
+
+In the file `/ApiProject/App_Start/SwaggerConfig.cs`
+```csharp
+c.IncludeXmlComments(string.Format(@"{0}\XmlDocs\DataContracts.XML", AppDomain.CurrentDomain.BaseDirectory));
+c.IncludeXmlComments(string.Format(@"{0}\XmlDocs\ApiDocs.XML", AppDomain.CurrentDomain.BaseDirectory));
+```
+
+### Creating a Good intro ###
+At the top of the Swagger page you can give an intro to your API and tell a little bit about your project to the consumers.
+
+You can either do it in the `/ApiProject/App_Start/SwaggerConfig.cs` as a string, or put it in a HTML page outside of the configuration.
+
+```csharp
+c.SingleApiVersion("v3", "The Test API - Documention and Examples")
+     .Description("<h1>Welcome to the test API</h1> <p>Thanks for reading our documentation!</p>");
+```
 
 ### IIS Hosted ###
 
