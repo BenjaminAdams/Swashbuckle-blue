@@ -103,7 +103,7 @@ Hides properties or API routes from being displayed on the page.
 /// <summary>
 /// The customers first and last name
 /// </summary>
-[SwaggerIgnore]
+[SwaggerIgnore]  //This will hide CustomerName from the user
 [SwaggerExample("Homer Simpson")]
 public string CustomerName { get; set; }
 ```
@@ -161,6 +161,44 @@ public async Task<IHttpActionResult> Register(RegisterInput input)
 }
 ```
 It will now display this route name as `Register_User` instead of `Register`
+
+## Validation ##
+
+Swashbuckle.Blue uses a combination of custom and the built in Attribute tags to describe validation rules on your payloads
+
+#### [Required] ####
+
+Labels the field as required in the UI and will throw an error when you call `SwagValidate.Validate()`.  This will also inform the user in Swagger that this field is Required.
+
+```csharp
+/// <summary>
+/// The customers first and last name
+/// </summary>
+[Required]  //This field is now required
+[SwaggerExample("Homer Simpson")]
+public string CustomerName { get; set; }
+```
+
+#### [MaxLength] ####
+
+The max length a string can contain.  This will also inform the user of the MaxLength. ![MaxLengthExample](http://i.imgur.com/QWenCqx.png)
+
+```csharp
+/// <summary>
+/// The customers first and last name
+/// </summary>
+[MaxLength(50)] //CustomerName will have a max length of 50 characters
+[SwaggerExample("Homer Simpson")]
+public string CustomerName { get; set; }
+```
+
+##### Custom Error Messages #####
+You can define a custom error message to display to the user when they fail to meet the requirements 
+```csharp
+[Required(ErrorMessage = "You should have put a value in here!")]
+```
+
+# Installation #
 
 ### IIS Hosted ###
 
