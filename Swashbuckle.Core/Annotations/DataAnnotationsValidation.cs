@@ -36,7 +36,7 @@ namespace Swashbuckle.Annotations
         }
 
         ///  <summary>
-        ///  Validates the attribute tag validations declared on the class.  Throws an ArgumentNullException if any validation rules are met
+        ///  Validates the attribute tag validations declared on the class.  Throws an ArgumentNullException if any validation rules are not met
         ///  </summary>
         ///  <param name="input">The object you wish to validate</param>
         ///  <param name="outputJsonPayload">If true will output the contents of input payload in the exception</param>
