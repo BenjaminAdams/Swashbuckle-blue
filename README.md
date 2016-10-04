@@ -102,8 +102,18 @@ The goal of `[SwaggerExample]` is to define your Payloads so well that all the u
 [SwaggerExample("Homer Simpson")]
 public string CustomerName { get; set; }
 ```
-
 This will put "Homer Simpson" instead of "string" in the CustomerName field.
+
+SwaggerExample also takes in a few strings that will generate values for you
+```csharp
+[SwaggerExample("RAND")]
+```
+Generates a random int 
+```csharp
+[SwaggerExample("GUID")]
+```
+Generates a random GUID
+
 
 #### [SwaggerIgnore] ####
 
