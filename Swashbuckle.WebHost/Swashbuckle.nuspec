@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>Swashbuckle.Blue</id>
-    <version>6.0.0.2</version>
+    <version>6.0.0.7</version>
     <title>Swashbuckle.Blue - Swagger for WebApi</title>
     <authors>Benjamin Adams</authors>
     <licenseUrl>http://opensource.org/licenses/BSD-3-Clause</licenseUrl>
@@ -10,20 +10,21 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Seamlessly adds a Swagger to WebApi projects!</description>
     <releaseNotes>
-Changed some things the current Swashbuckle/Swagger projects
-* Left sidebar navigation
-* Upgraded the .net version from 4.0 to 4.5.1
-* Added better presentation of your HTTP post payloads and the descriptions of each parameter.
-* Utilizing the XML comment from the top of the class model
-* Adding parsing for [MaxLength] and [MinLength], before it only read values from [StringLength] attribute
-* Customize the logo, header title, and page title
-* Night theme for code display
-* Added [SwaggerIgnore] attribute to hide properties/controller routes from appearing in documentation
-* Added [SwaggerExample] attribute.  You can add an example value that will be used as a placeholder in the input fields when the page loads.  Example: [SwaggerExample("myValue")], [SwaggerExample("GUID")] generates a new guid for you,  [SwaggerExample(RANDOM)] generates a random integer
-* Putting API keys in the header now works.  In SwaggerConfig.cs set c.ApiKey("apiKey").Name("apiKey").In("header") or "query" for the api key in a query param
-* Added code to validate DataAnnotation attribute tags.  Use `SwashValidator.Validate(inputObject);` or `SwashValidator.TryValidate(inputObject, out errorMsg);`
+      Changed some things the current Swashbuckle/Swagger projects
+      * Left sidebar navigation
+      * Upgraded the .net version from 4.0 to 4.5.1
+      * Added better presentation of your HTTP post payloads and the descriptions of each parameter.
+      * Utilizing the XML comment from the top of the class model
+      * Adding parsing for [MaxLength] and [MinLength], before it only read values from [StringLength] attribute
+      * Customize the logo, header title, and page title
+      * Night theme for code display
+      * Added [SwaggerIgnore] attribute to hide properties/controller routes from appearing in documentation
+      * Added [SwaggerExample] attribute.  You can add an example value that will be used as a placeholder in the input fields when the page loads.  Example: [SwaggerExample("myValue")], [SwaggerExample("GUID")] generates a new guid for you,  [SwaggerExample(RANDOM)] generates a random integer
+      * Putting API keys in the header now works.  In SwaggerConfig.cs set c.ApiKey("apiKey").Name("apiKey").In("header") or "query" for the api key in a query param
+      * Added code to validate DataAnnotation attribute tags.  Use `SwashValidator.Validate(inputObject);` or `SwashValidator.TryValidate(inputObject, out errorMsg);`
 
-For help getting started please read the documentation located at https://github.com/BenjaminAdams/Swashbuckle-blue
+      For help getting started please read the documentation located at
+      https://github.com/BenjaminAdams/Swashbuckle-blue
     </releaseNotes>
     <summary>Combines ApiExplorer and Swagger/swagger-ui to provide a rich discovery, documentation and playground experience to your API consumers</summary>
     <copyright>Copyright 2015</copyright>
@@ -31,7 +32,7 @@ For help getting started please read the documentation located at https://github
     <dependencies>
       <dependency id="Microsoft.AspNet.WebApi.WebHost" version="5.2.3" />
       <dependency id="WebActivatorEx" />
-      <dependency id="Swashbuckle.Blue.Core" version="6.0.0.2" />
+      <dependency id="Swashbuckle.Blue.Core" version="6.0.0.7" />
     </dependencies>
   </metadata>
   <files>

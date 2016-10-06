@@ -20,7 +20,7 @@ namespace Swashbuckle.Annotations
         /// <param name="errorMessage">The error message</param>
         /// <param name="outputJsonPayload">If you want the error message to contain the values in the object we are validating</param>
         /// <returns></returns>
-        public static bool TryValidate(object input, out string errorMessage, bool outputJsonPayload = true)
+        public static bool TryValidate(object input, out string errorMessage, bool outputJsonPayload = false)
         {
             errorMessage = null;
             try
