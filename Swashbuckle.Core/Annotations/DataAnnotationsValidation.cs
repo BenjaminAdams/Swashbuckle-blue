@@ -41,7 +41,7 @@ namespace Swashbuckle.Annotations
         ///  <param name="input">The object you wish to validate</param>
         ///  <param name="outputJsonPayload">If true will output the contents of input payload in the exception</param>
         ///  <exception cref="ArgumentNullException"></exception>
-        public static bool Validate(object input, bool outputJsonPayload = true)
+        public static bool Validate(object input, bool outputJsonPayload = false)
         {
             if (input == null) return false;
             if (IsPrimitiveType(input) == true) return true;
