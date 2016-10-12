@@ -32,7 +32,7 @@ namespace Swashbuckle.Tests
             }
             catch (Exception ex)
             {
-                Assert.AreEqual(ex.Message, "Value cannot be null.\r\nParameter name: StringType is null".AppendJson(m_TestObject));
+                Assert.AreEqual(ex.Message, "Value cannot be null. Parameter name: StringType");
                 return;
             }
 
@@ -59,7 +59,7 @@ namespace Swashbuckle.Tests
             }
             catch (Exception ex)
             {
-                Assert.AreEqual(ex.Message, "Value cannot be null.\r\nParameter name: StringType is null".AppendJson(m_TestObject));
+                Assert.AreEqual(ex.Message, "Value cannot be null. Parameter name: StringType");
                 return;
             }
 
@@ -86,7 +86,7 @@ namespace Swashbuckle.Tests
             }
             catch (Exception ex)
             {
-                Assert.AreEqual(ex.Message, "Value cannot be null.\r\nParameter name: StringType is null".AppendJson(m_TestObject));
+                Assert.AreEqual(ex.Message, "Value cannot be null. Parameter name: StringType");
                 return;
             }
 
@@ -112,7 +112,7 @@ namespace Swashbuckle.Tests
             }
             catch (Exception ex)
             {
-                Assert.AreEqual(ex.Message, "Value cannot be null.\r\nParameter name: IntegerType is null".AppendJson(m_TestObject));
+                Assert.AreEqual(ex.Message, "Value cannot be null. Parameter name: IntegerType");
                 return;
             }
 
@@ -139,7 +139,7 @@ namespace Swashbuckle.Tests
             }
             catch (Exception ex)
             {
-                Assert.AreEqual(ex.Message, "Value cannot be null.\r\nParameter name: IntegerType is null".AppendJson(m_TestObject));
+                Assert.AreEqual(ex.Message, "Value cannot be null. Parameter name: IntegerType");
                 return;
             }
 
@@ -164,7 +164,7 @@ namespace Swashbuckle.Tests
             }
             catch (Exception ex)
             {
-                Assert.AreEqual(ex.Message, "Value cannot be null.\r\nParameter name: DecimalType is null".AppendJson(m_TestObject));
+                Assert.AreEqual(ex.Message, "Value cannot be null. Parameter name: DecimalType");
                 return;
             }
 
@@ -191,7 +191,7 @@ namespace Swashbuckle.Tests
             }
             catch (Exception ex)
             {
-                Assert.AreEqual(ex.Message, "Value cannot be null.\r\nParameter name: DecimalType is null".AppendJson(m_TestObject));
+                Assert.AreEqual(ex.Message, "Value cannot be null. Parameter name: DecimalType");
                 return;
             }
 
@@ -217,7 +217,7 @@ namespace Swashbuckle.Tests
             }
             catch (Exception ex)
             {
-                Assert.AreEqual(ex.Message, "Value cannot be null.\r\nParameter name: GuidType is null".AppendJson(m_TestObject));
+                Assert.AreEqual(ex.Message, "Value cannot be null. Parameter name: GuidType");
                 return;
             }
 
@@ -243,7 +243,7 @@ namespace Swashbuckle.Tests
             }
             catch (Exception ex)
             {
-                Assert.AreEqual(ex.Message, "Value cannot be null.\r\nParameter name: NullableIntegerType is null".AppendJson(m_TestObject));
+                Assert.AreEqual(ex.Message, "Value cannot be null. Parameter name: NullableIntegerType");
                 return;
             }
 
@@ -269,7 +269,7 @@ namespace Swashbuckle.Tests
             }
             catch (Exception ex)
             {
-                Assert.AreEqual(ex.Message, "Value cannot be null.\r\nParameter name: NullableDecimalType is null".AppendJson(m_TestObject));
+                Assert.AreEqual(ex.Message, "Value cannot be null. Parameter name: NullableDecimalType");
                 return;
             }
 
@@ -296,7 +296,7 @@ namespace Swashbuckle.Tests
             }
             catch (Exception ex)
             {
-                Assert.AreEqual(ex.Message, "Value cannot be null.\r\nParameter name: NullableGuidType is null".AppendJson(m_TestObject));
+                Assert.AreEqual(ex.Message, "Value cannot be null. Parameter name: NullableGuidType");
                 return;
             }
 
@@ -336,7 +336,7 @@ namespace Swashbuckle.Tests
             }
             catch (Exception ex)
             {
-                Assert.AreEqual(ex.Message, "Value cannot be null.\r\nParameter name: BaseStringType is null".AppendJson(derivedObject));
+                Assert.AreEqual(ex.Message, "Value cannot be null. Parameter name: BaseStringType");
                 return;
             }
 
@@ -357,7 +357,7 @@ namespace Swashbuckle.Tests
             }
             catch (Exception ex)
             {
-                Assert.AreEqual(ex.Message, "Value cannot be null.\r\nParameter name: DerivedIntegerType is null".AppendJson(derivedObject));
+                Assert.AreEqual(ex.Message, "Value cannot be null. Parameter name: DerivedIntegerType");
                 return;
             }
 
@@ -376,7 +376,7 @@ namespace Swashbuckle.Tests
 
             var status = SwagValidator.TryValidate(derivedObject, out msg);
             Assert.IsFalse(status);
-            Assert.AreEqual(msg, "Value cannot be null.\r\nParameter name: DerivedIntegerType is null".AppendJson(derivedObject));
+            Assert.AreEqual(msg, "Value cannot be null. Parameter name: DerivedIntegerType");
         }
 
         [TestMethod]
@@ -410,7 +410,7 @@ namespace Swashbuckle.Tests
 
             var status = SwagValidator.TryValidate(derivedObject, out msg, false);
             Assert.IsFalse(status);
-            Assert.AreEqual(msg, "Value cannot be null.\r\nParameter name: DerivedIntegerType is null");
+            Assert.AreEqual(msg, "Value cannot be null. Parameter name: DerivedIntegerType");
         }
 
         [TestMethod]
@@ -689,7 +689,7 @@ namespace Swashbuckle.Tests
             }
             catch (Exception ex)
             {
-                Assert.IsTrue(ex.Message.Contains(" is null"));
+                Assert.AreEqual("Value cannot be null. Parameter name: ThisIsARequiredObj", ex.Message);
             }
         }
 
@@ -861,7 +861,7 @@ namespace Swashbuckle.Tests
             }
             catch (Exception ex)
             {
-                Assert.IsTrue(ex.Message.Contains("Parameter name: RequiredStringCollection is null"));
+                Assert.AreEqual("Value cannot be null. Parameter name: RequiredStringCollection", ex.Message);
             }
         }
 
@@ -929,7 +929,7 @@ namespace Swashbuckle.Tests
             }
             catch (Exception ex)
             {
-                Assert.IsTrue(ex.Message.Contains("Parameter name: RequiredObject is null"));
+                Assert.AreEqual("Value cannot be null. Parameter name: RequiredObject", ex.Message);
             }
         }
 
@@ -966,7 +966,7 @@ namespace Swashbuckle.Tests
         }
     }
 
-        #endregion List Test cases
+    #endregion List Test cases
 
     public class RequiredFieldTestObject
     {

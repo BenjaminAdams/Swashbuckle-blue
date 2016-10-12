@@ -13,6 +13,8 @@ namespace Swashbuckle.Annotations
     /// </summary>
     public static class SwagValidator
     {
+        private static string _nullParamMsg = "Value cannot be null. Parameter name: ";
+
         /// <summary>
         /// Validates the attribute tag validations declared on the class.  Returns false if validation rules are not met and returns the error message in the errorMessage (out) parameter
         /// </summary>
@@ -36,11 +38,11 @@ namespace Swashbuckle.Annotations
         }
 
         ///  <summary>
-        ///  Validates the attribute tag validations declared on the class.  Throws an ArgumentNullException if any validation rules are not met
+        ///  Validates the attribute tag validations declared on the class.  Throws an ValidationException if any validation rules are not met
         ///  </summary>
         ///  <param name="input">The object you wish to validate</param>
         ///  <param name="outputJsonPayload">If true will output the contents of input payload in the exception</param>
-        ///  <exception cref="ArgumentNullException"></exception>
+        ///  <exception cref="ValidationException"></exception>
         public static bool Validate(object input, bool outputJsonPayload = false)
         {
             if (input == null) return false;
@@ -76,7 +78,7 @@ namespace Swashbuckle.Annotations
             return true;
         }
 
-        private static void CheckListProperty(object input, PropertyInfo prp, bool outputJsonPayload = true)
+        private static void CheckListProperty(object input, PropertyInfo prp, bool outputJsonPayload = false)
         {
             var propValue = prp.GetValue(input, null);
             var listvalue = (IList)propValue;
@@ -91,24 +93,24 @@ namespace Swashbuckle.Annotations
             }
         }
 
-        private static void ObjReqChecker(object input, PropertyInfo prp, bool outputJsonPayload = true)
+        private static void ObjReqChecker(object input, PropertyInfo prp, bool outputJsonPayload = false)
         {
             if (prp.GetCustomAttribute(typeof(RequiredAttribute)) != null) // validate for required attribute
             {
                 var errormessage = ((ValidationAttribute)(prp.GetCustomAttribute(typeof(RequiredAttribute)))).ErrorMessage;
                 if (errormessage != null)
                 {
-                    throw new ArgumentException(errormessage.AppendJson(input, outputJsonPayload));
+                    throw new ValidationException(errormessage.AppendJson(input, outputJsonPayload));
                 }
                 else
                 {
-                    throw new ArgumentNullException(prp.Name + " is null".AppendJson(input, outputJsonPayload));
+                    throw new ValidationException(_nullParamMsg + prp.Name.AppendJson(input, outputJsonPayload));
                 }
             }
         }
 
         //if the root object is a list we need to check each element
-        private static bool CheckList(object input, bool outputJsonPayload = true)
+        private static bool CheckList(object input, bool outputJsonPayload = false)
         {
             var elems = input as IList;
             if (elems != null)
@@ -138,14 +140,14 @@ namespace Swashbuckle.Annotations
 
             if (valAsDbl > maxValue)
             {
-                if (attr.ErrorMessage != null) throw new ArgumentException(attr.ErrorMessage.AppendJson(input, outputJsonPayload));
-                throw new ArgumentException(string.Format("{0} is invalid. Received value: {1}, accepted values: {2} to {3}", property.Name, value, minValue, maxValue).AppendJson(input, outputJsonPayload));
+                if (attr.ErrorMessage != null) throw new ValidationException(attr.ErrorMessage.AppendJson(input, outputJsonPayload));
+                throw new ValidationException(string.Format("{0} is invalid. Received value: {1}, accepted values: {2} to {3}", property.Name, value, minValue, maxValue).AppendJson(input, outputJsonPayload));
             }
 
             if (valAsDbl < minValue)
             {
-                if (attr.ErrorMessage != null) throw new ArgumentException(attr.ErrorMessage.AppendJson(input, outputJsonPayload));
-                throw new ArgumentException(string.Format("{0} is invalid. Received value: {1}, accepted values: {2} to {3}", property.Name, value, minValue, maxValue).AppendJson(input, outputJsonPayload));
+                if (attr.ErrorMessage != null) throw new ValidationException(attr.ErrorMessage.AppendJson(input, outputJsonPayload));
+                throw new ValidationException(string.Format("{0} is invalid. Received value: {1}, accepted values: {2} to {3}", property.Name, value, minValue, maxValue).AppendJson(input, outputJsonPayload));
             }
         }
 
@@ -159,14 +161,14 @@ namespace Swashbuckle.Annotations
 
             if (value.ToString().Length > attr.MaximumLength)
             {
-                if (attr.ErrorMessage != null) throw new ArgumentException(attr.ErrorMessage.AppendJson(input, outputJsonPayload));
-                throw new ArgumentException(string.Format("{0} has length {1}.  Maxlength is {2}", property.Name, value.ToString().Length, attr.MaximumLength).AppendJson(input, outputJsonPayload));
+                if (attr.ErrorMessage != null) throw new ValidationException(attr.ErrorMessage.AppendJson(input, outputJsonPayload));
+                throw new ValidationException(string.Format("{0} has length {1}.  Maxlength is {2}", property.Name, value.ToString().Length, attr.MaximumLength).AppendJson(input, outputJsonPayload));
             }
 
             if (value.ToString().Length < attr.MinimumLength)
             {
-                if (attr.ErrorMessage != null) throw new ArgumentException(attr.ErrorMessage.AppendJson(input, outputJsonPayload));
-                throw new ArgumentException(string.Format("{0} has length {1}.  Minlength is {2}", property.Name, value.ToString().Length, attr.MinimumLength).AppendJson(input, outputJsonPayload));
+                if (attr.ErrorMessage != null) throw new ValidationException(attr.ErrorMessage.AppendJson(input, outputJsonPayload));
+                throw new ValidationException(string.Format("{0} has length {1}.  Minlength is {2}", property.Name, value.ToString().Length, attr.MinimumLength).AppendJson(input, outputJsonPayload));
             }
         }
 
@@ -180,8 +182,8 @@ namespace Swashbuckle.Annotations
 
             if (value.ToString().Length > attr.Length)
             {
-                if (attr.ErrorMessage != null) throw new ArgumentException(attr.ErrorMessage.AppendJson(input, outputJsonPayload));
-                throw new ArgumentException(string.Format("{0} has length {1}.  Maxlength is {2}", property.Name, value.ToString().Length, attr.Length).AppendJson(input, outputJsonPayload));
+                if (attr.ErrorMessage != null) throw new ValidationException(attr.ErrorMessage.AppendJson(input, outputJsonPayload));
+                throw new ValidationException(string.Format("{0} has length {1}.  Maxlength is {2}", property.Name, value.ToString().Length, attr.Length).AppendJson(input, outputJsonPayload));
             }
         }
 
@@ -191,7 +193,7 @@ namespace Swashbuckle.Annotations
         /// <param name="property">The property.</param>
         /// <param name="input">The input.</param>
         /// <param name="outputJsonPayload">if set to <c>true</c> [output json payload].</param>
-        /// <exception cref="System.ArgumentException"></exception>
+        /// <exception cref="ValidationException"></exception>
         private static void CheckDefinedExAttribute(PropertyInfo property, object input, bool outputJsonPayload)
         {
             var attr = (DefinedValidationAttribute)(property.GetCustomAttribute(typeof(DefinedValidationAttribute)));
@@ -209,7 +211,7 @@ namespace Swashbuckle.Annotations
 
             if (DefinedValidationAttribute.Validate(attr.KeyName, value.ToString()) == false)
             {
-                throw new ArgumentException(string.Format("{0} is invalid. Received value: {1}", property.Name, value).AppendJson(input, outputJsonPayload));
+                throw new ValidationException(string.Format("{0} is invalid. Received value: {1}", property.Name, value).AppendJson(input, outputJsonPayload));
             }
         }
 
@@ -219,7 +221,7 @@ namespace Swashbuckle.Annotations
         /// <param name="property">The property.</param>
         /// <param name="input">The input.</param>
         /// <param name="outputJsonPayload">if set to <c>true</c> [output json payload].</param>
-        /// <exception cref="System.ArgumentException"></exception>
+        /// <exception cref="ValidationException"></exception>
         private static void CheckRegularExpressionAttribute(PropertyInfo property, object input, bool outputJsonPayload)
         {
             var attr = (RegularExpressionAttribute)(property.GetCustomAttribute(typeof(RegularExpressionAttribute)));
@@ -237,7 +239,7 @@ namespace Swashbuckle.Annotations
 
             if (Regex.IsMatch(value.ToString(), attr.Pattern, RegexOptions.IgnoreCase) == false)
             {
-                throw new ArgumentException(string.Format("{0} is invalid. Received value: {1}", property.Name, value).AppendJson(input, outputJsonPayload));
+                throw new ValidationException(string.Format("{0} is invalid. Received value: {1}", property.Name, value).AppendJson(input, outputJsonPayload));
             }
         }
 
@@ -251,8 +253,8 @@ namespace Swashbuckle.Annotations
 
             if (value.ToString().Length < attr.Length)
             {
-                if (attr.ErrorMessage != null) throw new ArgumentException(attr.ErrorMessage.AppendJson(input, outputJsonPayload));
-                throw new ArgumentException(string.Format("{0} has length {1}.  Minlength is {2}", property.Name, value.ToString().Length, attr.Length).AppendJson(input, outputJsonPayload));
+                if (attr.ErrorMessage != null) throw new ValidationException(attr.ErrorMessage.AppendJson(input, outputJsonPayload));
+                throw new ValidationException(string.Format("{0} has length {1}.  Minlength is {2}", property.Name, value.ToString().Length, attr.Length).AppendJson(input, outputJsonPayload));
             }
         }
 
@@ -262,7 +264,7 @@ namespace Swashbuckle.Annotations
 
             if (typeof(IList).IsAssignableFrom(property.PropertyType) && value == null) //check if object is a list and is null
             {
-                throw new ArgumentNullException(property.Name + " is null ".AppendJson(input, outputJsonPayload));
+                throw new ValidationException(_nullParamMsg + property.Name.AppendJson(input, outputJsonPayload));
             }
 
             var attr = (RequiredAttribute)(property.GetCustomAttribute(typeof(RequiredAttribute)));
@@ -271,8 +273,8 @@ namespace Swashbuckle.Annotations
             //Validate whether Nullable fields are present and it contains proper values
             if ((Nullable.GetUnderlyingType(property.PropertyType) != null) && (value == null))
             {
-                if (attr.ErrorMessage != null) throw new ArgumentException(attr.ErrorMessage.AppendJson(input, outputJsonPayload));
-                throw new ArgumentNullException(property.Name + " is null".AppendJson(input, outputJsonPayload));
+                if (attr.ErrorMessage != null) throw new ValidationException(attr.ErrorMessage.AppendJson(input, outputJsonPayload));
+                throw new ValidationException(_nullParamMsg + property.Name.AppendJson(input, outputJsonPayload));
             }
 
             switch (property.PropertyType.Name.ToUpper())
@@ -281,8 +283,8 @@ namespace Swashbuckle.Annotations
                     //Validates null, empty string and white space -if a string is set with string.empty-value.Tostring() with fail
                     if (value == null || string.IsNullOrWhiteSpace(value.ToString()))
                     {
-                        if (attr.ErrorMessage != null) throw new ArgumentException(attr.ErrorMessage.AppendJson(input, outputJsonPayload));
-                        throw new ArgumentNullException(property.Name + " is null".AppendJson(input, outputJsonPayload));
+                        if (attr.ErrorMessage != null) throw new ValidationException(attr.ErrorMessage.AppendJson(input, outputJsonPayload));
+                        throw new ValidationException(_nullParamMsg + property.Name.AppendJson(input, outputJsonPayload));
                     }
                     break;
 
@@ -292,8 +294,8 @@ namespace Swashbuckle.Annotations
                     // if (!Guid.TryParse(value.ToString(), out result) || (result == Guid.Empty))
                     if ((Guid)value == Guid.Empty)
                     {
-                        if (attr.ErrorMessage != null) throw new ArgumentException(attr.ErrorMessage.AppendJson(input, outputJsonPayload));
-                        throw new ArgumentNullException(property.Name + " is null".AppendJson(input, outputJsonPayload));
+                        if (attr.ErrorMessage != null) throw new ValidationException(attr.ErrorMessage.AppendJson(input, outputJsonPayload));
+                        throw new ValidationException(_nullParamMsg + property.Name.AppendJson(input, outputJsonPayload));
                     }
                     break;
 
@@ -303,8 +305,8 @@ namespace Swashbuckle.Annotations
                     //Currently among value types -we support int and decimal - Converting to bigger type- int as it can hold decimal
                     if (Convert.ToDouble(value) == 0)
                     {
-                        if (attr.ErrorMessage != null) throw new ArgumentException(attr.ErrorMessage.AppendJson(input, outputJsonPayload));
-                        throw new ArgumentNullException(property.Name + " is null".AppendJson(input, outputJsonPayload));
+                        if (attr.ErrorMessage != null) throw new ValidationException(attr.ErrorMessage.AppendJson(input, outputJsonPayload));
+                        throw new ValidationException(_nullParamMsg + property.Name.AppendJson(input, outputJsonPayload));
                     }
                     break;
 
@@ -312,8 +314,8 @@ namespace Swashbuckle.Annotations
                     //handles objects and all others
                     if (value == null)
                     {
-                        if (attr.ErrorMessage != null) throw new ArgumentException(attr.ErrorMessage.AppendJson(input, outputJsonPayload));
-                        throw new ArgumentNullException(property.Name + " is null".AppendJson(input, outputJsonPayload));
+                        if (attr.ErrorMessage != null) throw new ValidationException(attr.ErrorMessage.AppendJson(input, outputJsonPayload));
+                        throw new ValidationException(_nullParamMsg + property.Name.AppendJson(input, outputJsonPayload));
                     }
                     break;
             }
@@ -325,9 +327,6 @@ namespace Swashbuckle.Annotations
             return myType.IsPrimitive || myType.Namespace == null || myType.Namespace.Equals("System");
         }
 
-        /// <summary>
-        ///
-        /// </summary>
         //public static PaymentException GetErrorInsideOfPaymentExceptions(object input, bool outputJsonPayload = true)
         //{
         //    try
