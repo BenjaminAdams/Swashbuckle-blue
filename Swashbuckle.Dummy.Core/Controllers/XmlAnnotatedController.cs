@@ -73,9 +73,11 @@ namespace Swashbuckle.Dummy.Controllers
         /// <param name="reward"></param>
         [HttpPut]
         [Route("{id}/add-reward")]
-        public void AddReward([SwaggerExample("GUID")] int id, Reward<string> reward)
+        public string AddReward([SwaggerExample("GUID")] int id, Reward<string> reward)
         {
-            throw new NotImplementedException();
+            SwagValidator.Validate(reward);
+
+            return "Yay";
         }
 
         /// <summary>
@@ -86,15 +88,15 @@ namespace Swashbuckle.Dummy.Controllers
         [Route("yay")]
         public void AddFuns(SoMuch soMuch)
         {
-            var results = new List<ValidationResult>();
-            var isValid = Validator.TryValidateObject(soMuch, new ValidationContext(soMuch, null, null), results, true);
-            Console.WriteLine("Validation resulted in " + isValid);
+            //var results = new List<ValidationResult>();
+            //var isValid = Validator.TryValidateObject(soMuch, new ValidationContext(soMuch, null, null), results, true);
+            //Console.WriteLine("Validation resulted in " + isValid);
 
-            isValid = Validator.TryValidateObject(soMuch.NestedObjTest, new ValidationContext(soMuch.NestedObjTest, null, null), results, true);
-            Console.WriteLine("Validation resulted in " + isValid);
+            //isValid = Validator.TryValidateObject(soMuch.NestedObjTest, new ValidationContext(soMuch.NestedObjTest, null, null), results, true);
+            //Console.WriteLine("Validation resulted in " + isValid);
 
-            Validator.ValidateObject(soMuch, new ValidationContext(soMuch, null, null));
-            Validator.ValidateObject(soMuch.NestedObjTest, new ValidationContext(soMuch.NestedObjTest, null, null));
+            //Validator.ValidateObject(soMuch, new ValidationContext(soMuch, null, null));
+            //Validator.ValidateObject(soMuch.NestedObjTest, new ValidationContext(soMuch.NestedObjTest, null, null));
 
             SwagValidator.Validate(soMuch);
 
@@ -130,6 +132,9 @@ namespace Swashbuckle.Dummy.Controllers
         public CatNames EumTest { get; set; }
 
         public List<CatNames> EumTestList { get; set; }
+
+        [Required]
+        public List<TestListStuff> ListWithSomeGuidsInside { get; set; }
     }
 
     public enum CatNames
@@ -198,6 +203,7 @@ namespace Swashbuckle.Dummy.Controllers
         ///     a random guid
         /// </summary>
         [SwaggerExample("GUID")]
+        [Required]
         public Guid StupdSexyFlanders { get; set; }
 
         /// <summary>
@@ -228,7 +234,7 @@ namespace Swashbuckle.Dummy.Controllers
             [SwaggerExample("Hey its a working example guy")]
             [JsonProperty("allow-marketing-emails")]
             // [StringLength(MaximumLength = 50, MinimumLength = 5)]
-            [Range(5, 500)]
+            // [Range(5, 500)]
             public string AllowMarketingEmails { get; set; }
         }
     }
@@ -263,5 +269,27 @@ namespace Swashbuckle.Dummy.Controllers
         /// </summary>
         [SwaggerExample("some kinda type")]
         public T RewardType { get; set; }
+
+        [SwaggerExample("GUID")]
+        public Guid GuidTest { get; set; }
+    }
+
+    public class TestListStuff
+    {
+        /// <summary>
+        /// The Amount to charge the customer.  Must be greater than zero
+        /// </summary>
+        [Required]
+        [DataType(DataType.Currency)]
+        [Range(0.01, Double.MaxValue)]
+        [SwaggerExample("0.01")]
+        public decimal Amount { get; set; }
+
+        /// <summary>
+        /// Identifies a location where the goods or services are coming from
+        /// </summary>
+        [Required]
+        [SwaggerExample("GUID")]
+        public Guid FulfillmentId { get; set; }
     }
 }

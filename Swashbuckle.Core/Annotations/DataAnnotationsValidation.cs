@@ -323,8 +323,15 @@ namespace Swashbuckle.Annotations
 
         private static bool IsPrimitiveType(object myObject)
         {
-            var myType = myObject.GetType();
-            return myType.IsPrimitive || myType.Namespace == null || myType.Namespace.Equals("System");
+            try
+            {
+                var myType = myObject.GetType();
+                return myType.IsPrimitive;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         //public static PaymentException GetErrorInsideOfPaymentExceptions(object input, bool outputJsonPayload = true)

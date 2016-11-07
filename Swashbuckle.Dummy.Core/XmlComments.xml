@@ -157,5 +157,15 @@
                 The reward type
             </summary>
         </member>
+        <member name="P:Swashbuckle.Dummy.Controllers.TestListStuff.Amount">
+            <summary>
+            The Amount to charge the customer.  Must be greater than zero
+            </summary>
+        </member>
+        <member name="P:Swashbuckle.Dummy.Controllers.TestListStuff.FulfillmentId">
+            <summary>
+            Identifies a location where the goods or services are coming from
+            </summary>
+        </member>
     </members>
 </doc>
