@@ -315,7 +315,7 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
     }
 
     if (schema.type === 'array' && schema.items && schema.items.$ref !== null) {
-        console.log('found an array=', schema)
+        // console.log('found an array=', schema)
         //  schema.$ref = schema.items.$ref
         // schema.type = 'object'
     }
