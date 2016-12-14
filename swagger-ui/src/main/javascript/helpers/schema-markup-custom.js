@@ -389,7 +389,7 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
         }
 
         if (!schema || !schema.properties) {
-            console.log('schema or schema properties are false', schema)
+            //console.log('schema or schema properties are false', schema)
             return ''
         }
 

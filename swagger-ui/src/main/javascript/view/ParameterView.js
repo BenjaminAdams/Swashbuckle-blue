@@ -188,12 +188,14 @@ SwaggerUi.Views.ParameterView = Backbone.View.extend({
                     var editor = ace.edit(editDiv[0]);
 
                     editor.$blockScrolling = Infinity
-                    editor.autoScrollEditorIntoView = true,
+                    editor.autoScrollEditorIntoView = false,
 
                     editor.renderer.setShowGutter(false);
                     editor.getSession().setValue(textarea.val());
                     editor.getSession().setMode("ace/mode/json");
                     editor.setTheme("ace/theme/twilight");
+
+                    editor.session.setOption("useWorker", false);
 
                     // copy back to textarea on form submit
                     textarea.closest('form').submit(function () {
