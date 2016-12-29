@@ -1189,9 +1189,10 @@ this["Handlebars"]["templates"]["operation"] = Handlebars.template({"1":function
   if (stack1 != null) { buffer += stack1; }
   return buffer + "                <h4 data-sw-translate=''>Parameters</h4>\n                <table class='fullwidth'>\n                    <thead>\n                        <tr>\n                            <th style=\"width: 100px; max-width: 100px\" data-sw-translate=\"\">Parameter</th>\n                            <th style=\"width: 310px; max-width: 310px\" data-sw-translate=\"\">Value</th>\n                            <th style=\"width: 200px; max-width: 200px\" data-sw-translate=\"\">Description</th>\n                            <th style=\"width: 100px; max-width: 100px\" data-sw-translate=\"\">Parameter Location</th>\n                            <th style=\"width: 220px; max-width: 230px\" data-sw-translate=\"\">Data Type</th>\n                        </tr>\n                    </thead>\n                    <tbody class=\"operation-params\"></tbody>\n                </table>\n";
 },"17":function(depth0,helpers,partials,data) {
-  var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, buffer = "                <h4>Input Parameter Description</h4>\n                ";
+  var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, uniqueId=escapeExpression(((helper = (helper = helpers.encodedParentId || (depth0 != null ? depth0.encodedParentId : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"encodedParentId","hash":{},"data":data}) : helper)))
+  + escapeExpression(((helper = (helper = helpers.nickname || (depth0 != null ? depth0.nickname : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"nickname","hash":{},"data":data}) : helper))), buffer = "                <h4 onclick=\"$('#inputDesc_" + uniqueId + "').fadeToggle(function(){$('#caretInputDesc_" + uniqueId + "').text($('#caretInputDesc_" + uniqueId + "').text() === '&#9650;' ? '&#9660;' : '&#9650;')});\" style=\"cursor: pointer;\" title=\"Click here to expand / collapse\">Input Parameter Description&nbsp;<span id=\"caretInputDesc_" + uniqueId + "\">&#9650;</span></h4>\n                ";
   stack1 = ((helper = (helper = helpers.inputSignatureHtml || (depth0 != null ? depth0.inputSignatureHtml : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"inputSignatureHtml","hash":{},"data":data}) : helper));
-  if (stack1 != null) { buffer += stack1; }
+  if (stack1 != null) { buffer += "<div id=\"inputDesc_" + uniqueId + "\" style=\"display: none;\">"+stack1+"</div>"; }
   return buffer + "\n                <div style='margin-bottom:15px;'></div>\n";
 },"19":function(depth0,helpers,partials,data) {
   return "";
@@ -1205,9 +1206,10 @@ this["Handlebars"]["templates"]["operation"] = Handlebars.template({"1":function
     + escapeExpression(((helper = (helper = helpers.successCode || (depth0 != null ? depth0.successCode : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"successCode","hash":{},"data":data}) : helper)))
     + ")</h4>\n                <p><span class=\"model-signature\" /></p>\n                <br />\n                <div class=\"response-content-type\" />\n";
 },"27":function(depth0,helpers,partials,data) {
-  var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, buffer = "                <h4>Response Parameter Description</h4>\n                ";
+  var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, uniqueId=escapeExpression(((helper = (helper = helpers.encodedParentId || (depth0 != null ? depth0.encodedParentId : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"encodedParentId","hash":{},"data":data}) : helper)))
+  + escapeExpression(((helper = (helper = helpers.nickname || (depth0 != null ? depth0.nickname : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"nickname","hash":{},"data":data}) : helper))), buffer = "                <h4 onclick=\"$('#responseDesc_" + uniqueId + "').fadeToggle(function(){$('#caretResponseDesc_" + uniqueId + "').text($('#caretResponseDesc_" + uniqueId + "').text() === '&#9650;' ? '&#9660;' : '&#9650;')});\" style=\"cursor: pointer\" title=\"Click here to expand / collapse\">Response Parameter Description&nbsp;<span id=\"caretResponseDesc_" + uniqueId + "\">&#9650;</span></h4>\n                ";
   stack1 = ((helper = (helper = helpers.responseSignatureHtml || (depth0 != null ? depth0.responseSignatureHtml : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"responseSignatureHtml","hash":{},"data":data}) : helper));
-  if (stack1 != null) { buffer += stack1; }
+  if (stack1 != null) { buffer += "<div id=\"responseDesc_" + uniqueId + "\" style=\"display: none;\">"+stack1+"</div>"; }
   return buffer + "\n                <div style='margin-bottom:15px;'></div>\n";
 },"29":function(depth0,helpers,partials,data) {
   return "                <div style='margin:0;padding:0;display:inline'></div>\n                <h4 data-sw-translate=''>Response Messages</h4>\n                <table class='fullwidth'>\n                    <thead>\n                        <tr>\n                            <th data-sw-translate=''>HTTP Status Code</th>\n                            <th data-sw-translate=''>Reason</th>\n                            <th data-sw-translate=''>Response Model</th>\n                            <th data-sw-translate=''>Headers</th>\n                        </tr>\n                    </thead>\n                    <tbody class=\"operation-status\"></tbody>\n                </table>\n";
@@ -30977,8 +30979,10 @@ window.SwaggerUi = Backbone.Router.extend({
         });
     },
     loadApiKey: function () {
+		$('#exploreChecker').hide();
         if (typeof Storage !== "undefined" && typeof localStorage.lastKeyUsed !== "undefined") {
-            $('#input_apiKey').val(localStorage.lastKeyUsed)
+            $('#input_apiKey').val(localStorage.lastKeyUsed);
+			$('#exploreChecker').show();
         }
     },
 
