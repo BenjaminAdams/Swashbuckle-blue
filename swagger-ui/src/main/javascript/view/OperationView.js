@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 
 SwaggerUi.Views.OperationView = Backbone.View.extend({
     invocationUrl: null,
@@ -9,7 +9,8 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
         'click .response_hider': 'hideResponse',
         'click .toggleOperation': 'toggleOperationContent',
         'mouseenter .api-ic': 'mouseEnter',
-        'dblclick .curl': 'selectText'
+        'dblclick .curl': 'selectText',
+        'click .toggleParamSection': 'clickToggleParamSection'
     },
 
     initialize: function (opts) {
@@ -24,9 +25,9 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
 
     selectText: function (event) {
         var doc = document,
-          text = event.target.firstChild,
-          range,
-          selection;
+            text = event.target.firstChild,
+            range,
+            selection;
         if (doc.body.createTextRange) {
             range = document.body.createTextRange();
             range.moveToElementText(text);
@@ -76,7 +77,44 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
     // Note: copied from CoffeeScript compiled file
     // TODO: redactor
     render: function () {
-        var a, auth, auths, code, contentTypeModel, isMethodSubmissionSupported, k, key, l, len, len1, len2, len3, len4, m, modelAuths, n, o, p, param, q, ref, ref1, ref2, ref3, ref4, ref5, responseContentTypeView, responseSignatureView, schema, schemaObj, scopeIndex, signatureModel, statusCode, successResponse, type, v, value;
+        var a,
+            auth,
+            auths,
+            code,
+            contentTypeModel,
+            isMethodSubmissionSupported,
+            k,
+            key,
+            l,
+            len,
+            len1,
+            len2,
+            len3,
+            len4,
+            m,
+            modelAuths,
+            n,
+            o,
+            p,
+            param,
+            q,
+            ref,
+            ref1,
+            ref2,
+            ref3,
+            ref4,
+            ref5,
+            responseContentTypeView,
+            responseSignatureView,
+            schema,
+            schemaObj,
+            scopeIndex,
+            signatureModel,
+            statusCode,
+            successResponse,
+            type,
+            v,
+            value;
         var self = this
         var responseSignatureHtml = ''
         var inputSignatureHtml = ''
@@ -161,10 +199,11 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
 
         //console.log('model====', this.model)
 
-        _.each(this.model.parameters, function (param) {
-            if (!param || !param.schema) return
-            inputSignatureHtml += window.getMockSignatureFromParamAsTable(param.schema, self.model.models, null)
-        })
+        _.each(this.model.parameters,
+            function (param) {
+                if (!param || !param.schema) return
+                inputSignatureHtml += window.getMockSignatureFromParamAsTable(param.schema, self.model.models, null)
+            })
 
         if (this.model.successResponse) {
             successResponse = this.model.successResponse;
@@ -308,48 +347,54 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
         }
         form = $('.sandbox', $(this.el));
         error_free = true;
-        form.find('input.required').each(function () {
-            $(this).removeClass('error');
-            if (jQuery.trim($(this).val()) === '') {
-                $(this).addClass('error');
-                $(this).wiggle({
-                    callback: (function (_this) {
-                        return function () {
-                            $(_this).focus();
-                        };
-                    })(this)
-                });
-                error_free = false;
-            }
-        });
-        form.find('textarea.required').each(function () {
-            $(this).removeClass('error');
-            if (jQuery.trim($(this).val()) === '') {
-                $(this).addClass('error');
-                $(this).wiggle({
-                    callback: (function (_this) {
-                        return function () {
-                            return $(_this).focus();
-                        };
-                    })(this)
-                });
-                error_free = false;
-            }
-        });
-        form.find('select.required').each(function () {
-            $(this).removeClass('error');
-            if (this.selectedIndex === -1) {
-                $(this).addClass('error');
-                $(this).wiggle({
-                    callback: (function (_this) {
-                        return function () {
-                            $(_this).focus();
-                        };
-                    })(this)
-                });
-                error_free = false;
-            }
-        });
+        form.find('input.required')
+            .each(function () {
+                $(this).removeClass('error');
+                if (jQuery.trim($(this).val()) === '') {
+                    $(this).addClass('error');
+                    $(this)
+                        .wiggle({
+                            callback: (function (_this) {
+                                return function () {
+                                    $(_this).focus();
+                                };
+                            })(this)
+                        });
+                    error_free = false;
+                }
+            });
+        form.find('textarea.required')
+            .each(function () {
+                $(this).removeClass('error');
+                if (jQuery.trim($(this).val()) === '') {
+                    $(this).addClass('error');
+                    $(this)
+                        .wiggle({
+                            callback: (function (_this) {
+                                return function () {
+                                    return $(_this).focus();
+                                };
+                            })(this)
+                        });
+                    error_free = false;
+                }
+            });
+        form.find('select.required')
+            .each(function () {
+                $(this).removeClass('error');
+                if (this.selectedIndex === -1) {
+                    $(this).addClass('error');
+                    $(this)
+                        .wiggle({
+                            callback: (function (_this) {
+                                return function () {
+                                    $(_this).focus();
+                                };
+                            })(this)
+                        });
+                    error_free = false;
+                }
+            });
         if (error_free) {
             map = this.getInputMap(form);
             isFileUpload = this.isFileUpload(form);
@@ -644,12 +689,13 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
 
             // Download
         } else if (headers['Content-Disposition'] && (/attachment/).test(headers['Content-Disposition']) ||
-          headers['content-disposition'] && (/attachment/).test(headers['content-disposition']) ||
-          headers['Content-Description'] && (/File Transfer/).test(headers['Content-Description']) ||
-          headers['content-description'] && (/File Transfer/).test(headers['content-description'])) {
+            headers['content-disposition'] && (/attachment/).test(headers['content-disposition']) ||
+            headers['Content-Description'] && (/File Transfer/).test(headers['Content-Description']) ||
+            headers['content-description'] && (/File Transfer/).test(headers['content-description'])) {
             if ('Blob' in window) {
                 var type = contentType || 'text/html';
-                var blob = new Blob([content], {
+                var blob = new Blob([content],
+                {
                     type: type
                 });
                 var a = document.createElement('a');
@@ -663,7 +709,8 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
 
                 pre = $('<div/>').append(a);
             } else {
-                pre = $('<pre class="json" />').append('Download headers detected but your browser does not support downloading binary via XHR (Blob).');
+                pre = $('<pre class="json" />')
+                    .append('Download headers detected but your browser does not support downloading binary via XHR (Blob).');
             }
 
             // Location header based redirect download
@@ -680,7 +727,10 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
         $('.request_url code', $(this.el)).text(url);
         $('.response_code', $(this.el)).html('<pre class="json"><code>' + response.status + '</code></pre>');
         $('.response_body', $(this.el)).html(response_body);
-        $('.response_headers', $(this.el)).html('<pre class="json"><code>' + _.escape(JSON.stringify(response.headers, null, '  ')).replace(/\n/g, '<br>') + '</code></pre>');
+        $('.response_headers', $(this.el))
+            .html('<pre class="json"><code>' +
+                _.escape(JSON.stringify(response.headers, null, '  ')).replace(/\n/g, '<br>') +
+                '</code></pre>');
         $('.response', $(this.el)).slideDown();
         $('.response_hider', $(this.el)).show();
         $('.response_throbber', $(this.el)).hide();
@@ -700,15 +750,18 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
 
         if (opts.showRequestHeaders) {
             var form = $('.sandbox', $(this.el)),
-              map = this.getInputMap(form),
-              requestHeaders = this.model.getHeaderParams(map);
+                map = this.getInputMap(form),
+                requestHeaders = this.model.getHeaderParams(map);
             delete requestHeaders['Content-Type'];
-            $('.request_headers', $(this.el)).html('<pre>' + _.escape(JSON.stringify(requestHeaders, null, '  ')).replace(/\n/g, '<br>') + '</pre>');
+            $('.request_headers', $(this.el))
+                .html('<pre>' + _.escape(JSON.stringify(requestHeaders, null, '  ')).replace(/\n/g, '<br>') + '</pre>');
         }
 
         var response_body_el = $('.response_body', $(this.el))[0];
         // only highlight the response if response is less than threshold, default state is highlight response
-        if (opts.highlightSizeThreshold && typeof response.data !== 'undefined' && response.data.length > opts.highlightSizeThreshold) {
+        if (opts.highlightSizeThreshold &&
+            typeof response.data !== 'undefined' &&
+            response.data.length > opts.highlightSizeThreshold) {
             return response_body_el;
         } else {
             return hljs.highlightBlock(response_body_el);
@@ -756,5 +809,17 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
             }
         }
         return null;
+    },
+    clickToggleParamSection: function (e) {
+        var target = $(e.currentTarget)
+        var toggleDiv = target.data('targetdiv')
+
+        console.log('we clicked the carot 9')
+
+        this.$el.find('.' + toggleDiv).fadeToggle();
+
+        var caret = target.find('.toggleParamCarot')
+        console.log('we found the carot =', caret.text())
+        caret.html(caret.text() === '▲' ? '▼' : '▲')
     }
 });

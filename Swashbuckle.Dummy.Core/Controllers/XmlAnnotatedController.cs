@@ -73,11 +73,11 @@ namespace Swashbuckle.Dummy.Controllers
         /// <param name="reward"></param>
         [HttpPut]
         [Route("{id}/add-reward")]
-        public string AddReward([SwaggerExample("GUID")] int id, Reward<string> reward)
+        public SoMuch AddReward([SwaggerExample("GUID")] int id, Reward<string> reward)
         {
             SwagValidator.Validate(reward);
 
-            return "Yay";
+            return new SoMuch();
         }
 
         /// <summary>

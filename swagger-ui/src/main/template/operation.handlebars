@@ -1,4 +1,4 @@
-<ul class='operations'>
+﻿<ul class='operations'>
     <li class='{{method}} operation' id='{{parentId}}_{{nickname}}'>
         <div class='heading'>
             <h3>
@@ -45,11 +45,6 @@
             <form accept-charset='UTF-8' class='sandbox'>
                 <div style='margin:0;padding:0;display:inline'></div>
                 {{#if parameters}}
-                {{#if inputSignatureHtml}}
-                <h4>Input Parameter Description</h4>
-                {{{inputSignatureHtml}}}
-                <div style='margin-bottom:15px;'></div>
-                {{/if}}
                 <h4 data-sw-translate=''>Parameters</h4>
                 <table class='fullwidth'>
                     <thead>
@@ -89,20 +84,47 @@
                     {{/if}}
                 </div>
                 {{#if type}}
-                <h4><span data-sw-translate=''>Response Class</span> (<span data-sw-translate=''>Status</span> {{successCode}})</h4>
-                <p><span class="model-signature" /></p>
-                <br />
-                <div class="response-content-type" />
+
+                {{#if parameters}}
+                {{#if inputSignatureHtml}}
+                <div style='margin-top:15px;'></div>
+                <h4 class="toggleParamSection" data-targetdiv="inputSignatureHtml" title="Click here to expand / collapse">
+                    Input Parameter Description
+                    <span class="toggleParamCarot">▲</span>
+                </h4>
+                <div class="inputSignatureHtml">{{{inputSignatureHtml}}}</div>
                 {{/if}}
+                {{/if}}
+
                 {{#if responseSignatureHtml}}
-                <h4>Response Parameter Description</h4>
-                {{{responseSignatureHtml}}}
-                <div style='margin-bottom:15px;'></div>
+                <h4 class="toggleParamSection" data-targetdiv="responseSignatureHtml" title="Click here to expand / collapse">
+                    Response Parameter Description
+                    <span class="toggleParamCarot">▲</span>
+                </h4>
+                <div class="responseSignatureHtml">{{{responseSignatureHtml}}}</div>
                 {{/if}}
+
+                <h4 class="toggleParamSection" data-targetdiv="respClassSignatureHtml" title="Click here to expand / collapse">
+                    <span data-sw-translate=''>Response Class</span> (<span data-sw-translate=''>Status</span> {{successCode}})
+                    <span class="toggleParamCarot">▲</span>
+                </h4>
+                <div class="respClassSignatureHtml">
+                    <p><span class="model-signature" /></p>
+                    <br />
+                    <div class="response-content-type" />
+                </div>
+
+                {{/if}}
+
                 {{#if responseMessages}}
                 <div style='margin:0;padding:0;display:inline'></div>
-                <h4 data-sw-translate=''>Response Messages</h4>
-                <table class='fullwidth'>
+
+                <h4 class="toggleParamSection" data-targetdiv="httpStatusTable" title="Click here to expand / collapse" data-sw-translate=''>
+                    Response Messages
+                    <span class="toggleParamCarot">▲</span>
+                </h4>
+
+                <table class='fullwidth httpStatusTable'>
                     <thead>
                         <tr>
                             <th data-sw-translate=''>HTTP Status Code</th>

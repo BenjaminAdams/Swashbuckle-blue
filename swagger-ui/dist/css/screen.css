@@ -1,3 +1,12 @@
+.swagger-section .respClassSignatureHtml,
+.swagger-section .responseSignatureHtml,
+.swagger-section .inputSignatureHtml,
+.swagger-section .httpStatusTable {
+  display: none;
+}
+.swagger-section .toggleParamSection {
+  cursor: pointer;
+}
 .swagger-section .swagger-ui-wrap {
   line-height: 1;
   max-width: 960px;

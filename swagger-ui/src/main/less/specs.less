@@ -1,4 +1,12 @@
 .swagger-section {
+    .respClassSignatureHtml, .responseSignatureHtml, .inputSignatureHtml, .httpStatusTable {
+        display: none;
+    }
+
+    .toggleParamSection {
+        cursor: pointer;
+    }
+
     .swagger-ui-wrap {
         line-height: 1;
         max-width: 960px;
@@ -95,9 +103,9 @@
                 text-decoration: none;
             }
 
-                a:hover {
-                    text-decoration: underline;
-                }
+            a:hover {
+                text-decoration: underline;
+            }
 
             span.divider {
                 color: #aaaaaa;
@@ -209,11 +217,11 @@
                 clear: both;
             }
 
-                li.string input.title,
-                li.url input.title,
-                li.numeric input.title {
-                    font-size: 1.3em;
-                }
+            li.string input.title,
+            li.url input.title,
+            li.numeric input.title {
+                font-size: 1.3em;
+            }
         }
 
         table.fullwidth {
@@ -230,10 +238,10 @@
                     color: #AAA;
                 }
 
-                    a:hover {
-                        text-decoration: underline;
-                        color: black;
-                    }
+                a:hover {
+                    text-decoration: underline;
+                    color: black;
+                }
 
                 .selected {
                     color: black;
@@ -608,10 +616,10 @@
                                 text-decoration: none;
                             }
 
-                                a:hover {
-                                    text-decoration: underline;
-                                    color: black;
-                                }
+                            a:hover {
+                                text-decoration: underline;
+                                color: black;
+                            }
                         }
 
                         li {
@@ -647,9 +655,9 @@
                             color: #999999;
                         }
 
-                            a:hover {
-                                color: black;
-                            }
+                        a:hover {
+                            color: black;
+                        }
                     }
                 }
 
@@ -690,9 +698,9 @@
                                                 text-decoration: none;
                                             }
 
-                                                a:hover {
-                                                    text-decoration: underline;
-                                                }
+                                            a:hover {
+                                                text-decoration: underline;
+                                            }
                                         }
 
                                         span.http_method {
@@ -821,303 +829,303 @@
                                 }
                             }
 
-                                li.operation.put {
-                                    div.heading {
-                                        background-color: #f9f2e9;
-                                        border: 1px solid #f0e0ca;
+                            li.operation.put {
+                                div.heading {
+                                    background-color: #f9f2e9;
+                                    border: 1px solid #f0e0ca;
 
-                                        h3 {
-                                            span.http_method {
-                                                a {
-                                                    background-color: #c5862b;
-                                                }
-                                            }
-                                        }
-
-                                        ul.options {
-                                            li {
-                                                border-right: 1px solid #dddddd;
-                                                border-right-color: #f0e0ca;
-                                                color: #c5862b;
-
-                                                a {
-                                                    color: #c5862b;
-                                                }
+                                    h3 {
+                                        span.http_method {
+                                            a {
+                                                background-color: #c5862b;
                                             }
                                         }
                                     }
 
-                                    div.content {
-                                        background-color: #faf5ee;
-                                        border: 1px solid #f0e0ca;
-
-                                        h4 {
+                                    ul.options {
+                                        li {
+                                            border-right: 1px solid #dddddd;
+                                            border-right-color: #f0e0ca;
                                             color: #c5862b;
-                                        }
 
-                                        div.sandbox_header {
                                             a {
-                                                color: #dcb67f;
+                                                color: #c5862b;
                                             }
                                         }
                                     }
                                 }
 
-                                li.operation.head {
-                                    div.heading {
-                                        background-color: #fcffcd;
-                                        border: 1px solid black;
-                                        border-color: #ffd20f;
+                                div.content {
+                                    background-color: #faf5ee;
+                                    border: 1px solid #f0e0ca;
 
-                                        h3 {
-                                            span.http_method {
-                                                a {
-                                                    text-transform: uppercase;
-                                                    background-color: #ffd20f;
-                                                }
-                                            }
+                                    h4 {
+                                        color: #c5862b;
+                                    }
+
+                                    div.sandbox_header {
+                                        a {
+                                            color: #dcb67f;
                                         }
+                                    }
+                                }
+                            }
 
-                                        ul.options {
-                                            li {
-                                                border-right: 1px solid #dddddd;
-                                                border-right-color: #ffd20f;
-                                                color: #ffd20f;
+                            li.operation.head {
+                                div.heading {
+                                    background-color: #fcffcd;
+                                    border: 1px solid black;
+                                    border-color: #ffd20f;
 
-                                                a {
-                                                    color: #ffd20f;
-                                                }
+                                    h3 {
+                                        span.http_method {
+                                            a {
+                                                text-transform: uppercase;
+                                                background-color: #ffd20f;
                                             }
                                         }
                                     }
 
-                                    div.content {
-                                        background-color: #fcffcd;
-                                        border: 1px solid black;
-                                        border-color: #ffd20f;
-
-                                        h4 {
+                                    ul.options {
+                                        li {
+                                            border-right: 1px solid #dddddd;
+                                            border-right-color: #ffd20f;
                                             color: #ffd20f;
-                                        }
 
-                                        div.sandbox_header {
                                             a {
-                                                color: #6fc992;
+                                                color: #ffd20f;
                                             }
                                         }
                                     }
                                 }
 
-                                li.operation.delete {
-                                    div.heading {
-                                        background-color: #f5e8e8;
-                                        border: 1px solid #e8c6c7;
+                                div.content {
+                                    background-color: #fcffcd;
+                                    border: 1px solid black;
+                                    border-color: #ffd20f;
 
-                                        h3 {
-                                            span.http_method {
-                                                a {
-                                                    text-transform: uppercase;
-                                                    background-color: #a41e22;
-                                                }
-                                            }
+                                    h4 {
+                                        color: #ffd20f;
+                                    }
+
+                                    div.sandbox_header {
+                                        a {
+                                            color: #6fc992;
                                         }
+                                    }
+                                }
+                            }
 
-                                        ul.options {
-                                            li {
-                                                border-right: 1px solid #dddddd;
-                                                border-right-color: #e8c6c7;
-                                                color: #a41e22;
+                            li.operation.delete {
+                                div.heading {
+                                    background-color: #f5e8e8;
+                                    border: 1px solid #e8c6c7;
 
-                                                a {
-                                                    color: #a41e22;
-                                                }
+                                    h3 {
+                                        span.http_method {
+                                            a {
+                                                text-transform: uppercase;
+                                                background-color: #a41e22;
                                             }
                                         }
                                     }
 
-                                    div.content {
-                                        background-color: #f7eded;
-                                        border: 1px solid #e8c6c7;
-
-                                        h4 {
+                                    ul.options {
+                                        li {
+                                            border-right: 1px solid #dddddd;
+                                            border-right-color: #e8c6c7;
                                             color: #a41e22;
-                                        }
 
-                                        div.sandbox_header {
                                             a {
-                                                color: #c8787a;
+                                                color: #a41e22;
                                             }
                                         }
                                     }
                                 }
 
-                                li.operation.post {
-                                    div.heading {
-                                        background-color: #e7f6ec;
-                                        border: 1px solid #c3e8d1;
+                                div.content {
+                                    background-color: #f7eded;
+                                    border: 1px solid #e8c6c7;
 
-                                        h3 {
-                                            span.http_method {
-                                                a {
-                                                    background-color: #10a54a;
-                                                }
-                                            }
+                                    h4 {
+                                        color: #a41e22;
+                                    }
+
+                                    div.sandbox_header {
+                                        a {
+                                            color: #c8787a;
                                         }
+                                    }
+                                }
+                            }
 
-                                        ul.options {
-                                            li {
-                                                border-right: 1px solid #dddddd;
-                                                border-right-color: #c3e8d1;
-                                                color: #10a54a;
+                            li.operation.post {
+                                div.heading {
+                                    background-color: #e7f6ec;
+                                    border: 1px solid #c3e8d1;
 
-                                                a {
-                                                    color: #10a54a;
-                                                }
+                                    h3 {
+                                        span.http_method {
+                                            a {
+                                                background-color: #10a54a;
                                             }
                                         }
                                     }
 
-                                    div.content {
-                                        background-color: #ebf7f0;
-                                        border: 1px solid #c3e8d1;
-
-                                        h4 {
+                                    ul.options {
+                                        li {
+                                            border-right: 1px solid #dddddd;
+                                            border-right-color: #c3e8d1;
                                             color: #10a54a;
-                                        }
 
-                                        div.sandbox_header {
                                             a {
-                                                color: #6fc992;
+                                                color: #10a54a;
                                             }
                                         }
                                     }
                                 }
 
-                                li.operation.patch {
-                                    div.heading {
-                                        background-color: #FCE9E3;
-                                        border: 1px solid #F5D5C3;
+                                div.content {
+                                    background-color: #ebf7f0;
+                                    border: 1px solid #c3e8d1;
 
-                                        h3 {
-                                            span.http_method {
-                                                a {
-                                                    background-color: #D38042;
-                                                }
-                                            }
+                                    h4 {
+                                        color: #10a54a;
+                                    }
+
+                                    div.sandbox_header {
+                                        a {
+                                            color: #6fc992;
                                         }
+                                    }
+                                }
+                            }
 
-                                        ul.options {
-                                            li {
-                                                border-right: 1px solid #dddddd;
-                                                border-right-color: #f0cecb;
-                                                color: #D38042;
+                            li.operation.patch {
+                                div.heading {
+                                    background-color: #FCE9E3;
+                                    border: 1px solid #F5D5C3;
 
-                                                a {
-                                                    color: #D38042;
-                                                }
+                                    h3 {
+                                        span.http_method {
+                                            a {
+                                                background-color: #D38042;
                                             }
                                         }
                                     }
 
-                                    div.content {
-                                        background-color: #faf0ef;
-                                        border: 1px solid #f0cecb;
-
-                                        h4 {
+                                    ul.options {
+                                        li {
+                                            border-right: 1px solid #dddddd;
+                                            border-right-color: #f0cecb;
                                             color: #D38042;
-                                        }
 
-                                        div.sandbox_header {
                                             a {
-                                                color: #dcb67f;
+                                                color: #D38042;
                                             }
                                         }
                                     }
                                 }
 
-                                li.operation.get {
-                                    div.heading {
-                                        background-color: #e7f0f7;
-                                        border: 1px solid #c3d9ec;
+                                div.content {
+                                    background-color: #faf0ef;
+                                    border: 1px solid #f0cecb;
 
-                                        h3 {
-                                            span.http_method {
-                                                a {
-                                                    background-color: #0f6ab4;
-                                                }
-                                            }
+                                    h4 {
+                                        color: #D38042;
+                                    }
+
+                                    div.sandbox_header {
+                                        a {
+                                            color: #dcb67f;
                                         }
+                                    }
+                                }
+                            }
 
-                                        ul.options {
-                                            li {
-                                                border-right: 1px solid #dddddd;
-                                                border-right-color: #c3d9ec;
-                                                color: #0f6ab4;
+                            li.operation.get {
+                                div.heading {
+                                    background-color: #e7f0f7;
+                                    border: 1px solid #c3d9ec;
 
-                                                a {
-                                                    color: #0f6ab4;
-                                                }
+                                    h3 {
+                                        span.http_method {
+                                            a {
+                                                background-color: #0f6ab4;
                                             }
                                         }
                                     }
 
-                                    div.content {
-                                        background-color: #ebf3f9;
-                                        border: 1px solid #c3d9ec;
-
-                                        h4 {
+                                    ul.options {
+                                        li {
+                                            border-right: 1px solid #dddddd;
+                                            border-right-color: #c3d9ec;
                                             color: #0f6ab4;
-                                        }
 
-                                        div.sandbox_header {
                                             a {
-                                                color: #6fa5d2;
-                                            }
-                                        }
-                                    }
-                                }
-
-                                li.operation.options {
-                                    div.heading {
-                                        background-color: #e7f0f7;
-                                        border: 1px solid #c3d9ec;
-
-                                        h3 {
-                                            span.http_method {
-                                                a {
-                                                    background-color: #0f6ab4;
-                                                }
-                                            }
-                                        }
-
-                                        ul.options {
-                                            li {
-                                                border-right: 1px solid #dddddd;
-                                                border-right-color: #c3d9ec;
                                                 color: #0f6ab4;
-
-                                                a {
-                                                    color: #0f6ab4;
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                    div.content {
-                                        background-color: #ebf3f9;
-                                        border: 1px solid #c3d9ec;
-
-                                        h4 {
-                                            color: #0f6ab4;
-                                        }
-
-                                        div.sandbox_header {
-                                            a {
-                                                color: #6fa5d2;
                                             }
                                         }
                                     }
                                 }
+
+                                div.content {
+                                    background-color: #ebf3f9;
+                                    border: 1px solid #c3d9ec;
+
+                                    h4 {
+                                        color: #0f6ab4;
+                                    }
+
+                                    div.sandbox_header {
+                                        a {
+                                            color: #6fa5d2;
+                                        }
+                                    }
+                                }
+                            }
+
+                            li.operation.options {
+                                div.heading {
+                                    background-color: #e7f0f7;
+                                    border: 1px solid #c3d9ec;
+
+                                    h3 {
+                                        span.http_method {
+                                            a {
+                                                background-color: #0f6ab4;
+                                            }
+                                        }
+                                    }
+
+                                    ul.options {
+                                        li {
+                                            border-right: 1px solid #dddddd;
+                                            border-right-color: #c3d9ec;
+                                            color: #0f6ab4;
+
+                                            a {
+                                                color: #0f6ab4;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                div.content {
+                                    background-color: #ebf3f9;
+                                    border: 1px solid #c3d9ec;
+
+                                    h4 {
+                                        color: #0f6ab4;
+                                    }
+
+                                    div.sandbox_header {
+                                        a {
+                                            color: #6fa5d2;
+                                        }
+                                    }
+                                }
+                            }
 
                             li.operation {
                                 &.get, &.post, &.head, &.put, &.patch, &.delete {
