@@ -127,8 +127,6 @@
                     if (typeof (Storage) !== "undefined") {
                         localStorage.lastKeyUsed = key;
                     }
-
-                    $('#exploreChecker').show();
                 }
             }
 
@@ -163,10 +161,7 @@
                     <input type="password" placeholder="api_key" id="input_apiKey" name="apiKey" />
                 </div>
                 <div class='input'>
-                    <a id="explore" href="#" style="display: inline-block" data-sw-translate>
-                        Explore
-                        <img id="exploreChecker" src="images/check-png" title="Api key has been entered" style="float: right; margin-left: 5px; width: 14px;" />
-                    </a>
+                    <a id="explore" href="#" style="display: inline-block" data-sw-translate>Explore</a>
                 </div>
             </form>
         </div>

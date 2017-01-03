@@ -814,12 +814,9 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
         var target = $(e.currentTarget)
         var toggleDiv = target.data('targetdiv')
 
-        console.log('we clicked the carot 9')
-
         this.$el.find('.' + toggleDiv).fadeToggle();
 
         var caret = target.find('.toggleParamCarot')
-        console.log('we found the carot =', caret.text())
         caret.html(caret.text() === '▲' ? '▼' : '▲')
     }
 });
