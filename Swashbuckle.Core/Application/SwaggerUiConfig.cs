@@ -49,6 +49,7 @@ namespace Swashbuckle.Application
             CustomAsset("lib/swagger-oauth-js", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.swagger-oauth.js");
             // CustomAsset("images/throbber.gif", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.images.throbber.gif");
             CustomAsset("images/favicon.ico", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.images.favicon.ico");
+            CustomAsset("images/check-png", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.images.check.png");
             CustomAsset("swagger-ui-js", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.swagger-ui.js");
             CustomAsset("lib/highlight-7-3-pack-js", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.lib.highlight.js");
         }

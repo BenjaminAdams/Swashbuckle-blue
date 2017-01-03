@@ -157,6 +157,7 @@
     <EmbeddedResource Include="SwaggerUi\CustomAssets\swagger-ui.min.js" />
     <EmbeddedResource Include="SwaggerUi\CustomAssets\images\throbber.gif" />
     <EmbeddedResource Include="SwaggerUi\CustomAssets\swagger-oauth.js" />
+    <EmbeddedResource Include="SwaggerUi\CustomAssets\images\check.png" />
     <Content Include="Swashbuckle.Core.nuspec">
       <SubType>Designer</SubType>
     </Content>
