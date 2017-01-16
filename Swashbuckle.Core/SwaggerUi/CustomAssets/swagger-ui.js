@@ -32721,7 +32721,7 @@ SwaggerUi.Views.SidebarView = Backbone.View.extend({
             $('#swagger-ui-container').css({ 'padding-left': '275px' });
             $('.collapseExpandIcon').text('<<');
             $('.collapseExpandIcon').attr('title', 'Collapse sidebar');
-            $('.collapseExpandIcon').css({ 'left': '246px' });
+            $('.collapseExpandIcon').css({ 'left': '250px' });
         }
     },
 

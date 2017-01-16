@@ -1064,13 +1064,6 @@ body,
   position: absolute;
   padding: 17px 0;
 }
-.swagger-section .swagger-ui-wrap .info_title,
-.swagger-section .swagger-ui-wrap .info_description {
-  display: none;
-}
-.swagger-section #header form#api_selector .input {
-  display: none;
-}
 .footer {
   margin-bottom: 20px;
 }
@@ -1084,7 +1077,7 @@ body,
   position: fixed;
   z-index: 1005;
   top: 90px;
-  left: 246px;
+  left: 250px;
   height: 9px;
   width: 17px;
   line-height: 7px;
