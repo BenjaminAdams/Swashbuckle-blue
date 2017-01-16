@@ -32708,13 +32708,20 @@ SwaggerUi.Views.SidebarView = Backbone.View.extend({
         this.isCallapsed = !this.isCallapsed;
 
         if (this.isCallapsed) {
+            if ($(window).width() <= 1024) {
+                $('#swagger-ui-container').css({ 'padding-left': '30px' });
+            } else {
+                $('#swagger-ui-container').css({ 'padding-left': '0px' });
+            }
+
             $('.collapseExpandIcon').text('>>');
             $('.collapseExpandIcon').attr('title', 'Expand sidebar');
             $('.collapseExpandIcon').css({ 'left': '0px' });
         } else {
+            $('#swagger-ui-container').css({ 'padding-left': '275px' });
             $('.collapseExpandIcon').text('<<');
             $('.collapseExpandIcon').attr('title', 'Collapse sidebar');
-            $('.collapseExpandIcon').css({ 'left': '250px' });
+            $('.collapseExpandIcon').css({ 'left': '246px' });
         }
     },
 
