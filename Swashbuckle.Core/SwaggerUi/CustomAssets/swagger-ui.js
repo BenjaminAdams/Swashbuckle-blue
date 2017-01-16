@@ -32677,7 +32677,8 @@ SwaggerUi.Views.ResponseContentTypeView = Backbone.View.extend({
 SwaggerUi.Views.SidebarView = Backbone.View.extend({
     el: '#sidebar',
     initialize: function (opts) {
-        _.bindAll(this, 'render', 'addModelToSidebar', 'shortMethod', 'addParentNameToSidebar');
+        _.bindAll(this, 'render', 'addModelToSidebar', 'shortMethod', 'addParentNameToSidebar', 'postCollapseExpandAction');
+        this.isCallapsed = false
         this.models = opts.models
         this.render()
     },
@@ -32693,10 +32694,30 @@ SwaggerUi.Views.SidebarView = Backbone.View.extend({
                 self.addModelToSidebar(model)
             })
         })
+
+        $('<div class="collapseExpandIcon" title="Collapse sidebar">&lt;&lt;</div>').appendTo('body');
+        $('.collapseExpandIcon').click(function () {
+            $('#sidebar').toggle()
+            self.postCollapseExpandAction()
+        });
     },
     addParentNameToSidebar: function (parent) {
         this.$el.append('<li class="sidebarParent">' + parent.name + '</li>')
     },
+    postCollapseExpandAction: function () {
+        this.isCallapsed = !this.isCallapsed;
+
+        if (this.isCallapsed) {
+            $('.collapseExpandIcon').text('>>');
+            $('.collapseExpandIcon').attr('title', 'Expand sidebar');
+            $('.collapseExpandIcon').css({ 'left': '0px' });
+        } else {
+            $('.collapseExpandIcon').text('<<');
+            $('.collapseExpandIcon').attr('title', 'Collapse sidebar');
+            $('.collapseExpandIcon').css({ 'left': '250px' });
+        }
+    },
+
     addModelToSidebar: function (model) {
         var self = this
 
