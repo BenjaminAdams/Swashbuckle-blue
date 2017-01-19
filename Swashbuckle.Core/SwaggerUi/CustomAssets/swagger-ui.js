@@ -781,8 +781,11 @@ function schemaToHTMLAsTable(name, schema, models, modelPropertyMacro) {
             // html += primitiveToHTML(cProperty);
 
             var propertyIsRequired = (_.indexOf(schema.required, name) >= 0);
+            var propertyIsRequiredCond = (_.indexOf(schema.requiredConditionally, name) >= 0);
             if (propertyIsRequired) {
                 html += '<td class="requiredParam">Y</td>'
+            } else if (propertyIsRequiredCond) {
+                html += '<td class="requiredParam" title="This field is required conditionally">C</td>'
             } else {
                 html += '<td>N</td>'
             }

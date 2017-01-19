@@ -82,6 +82,7 @@ namespace Swashbuckle.Swagger.FromUriParams
                         name = sourceQualifier + entry.Key.ToCamelCase(),
                         @in = "query",
                         required = required,
+                        requiredConditionally = sourceSchema.required != null && sourceSchema.requiredConditionally.Contains(entry.Key),
                         description = entry.Value.description,
                         example = entry.Value.example
                     };

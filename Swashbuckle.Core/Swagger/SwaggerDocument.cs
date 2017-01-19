@@ -158,6 +158,8 @@ namespace Swashbuckle.Swagger
 
         public bool? required;
 
+        public bool? requiredConditionally;
+
         public Schema schema;
 
         public Dictionary<string, object> vendorExtensions = new Dictionary<string, object>();
@@ -203,6 +205,8 @@ namespace Swashbuckle.Swagger
         public int? minProperties;
 
         public IList<string> required;
+
+        public IList<string> requiredConditionally;
 
         public IList<object> @enum;
 

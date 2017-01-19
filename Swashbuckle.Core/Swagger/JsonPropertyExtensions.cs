@@ -14,6 +14,11 @@ namespace Swashbuckle.Swagger
             return jsonProperty.HasAttribute<RequiredAttribute>();
         }
 
+        public static bool IsRequiredConditionally(this JsonProperty jsonProperty)
+        {
+            return jsonProperty.HasAttribute<RequiredConditionally>();
+        }
+
         public static bool IsObsolete(this JsonProperty jsonProperty)
         {
             return jsonProperty.HasAttribute<ObsoleteAttribute>();

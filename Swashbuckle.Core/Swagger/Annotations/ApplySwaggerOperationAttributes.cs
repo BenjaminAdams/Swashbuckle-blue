@@ -7,8 +7,7 @@ namespace Swashbuckle.Swagger.Annotations
     {
         public void Apply(Operation operation, SchemaRegistry schemaRegistry, ApiDescription apiDescription)
         {
-            var attribute = apiDescription.ActionDescriptor.GetCustomAttributes<SwaggerOperationAttribute>()
-                .FirstOrDefault();
+            var attribute = apiDescription.ActionDescriptor.GetCustomAttributes<SwaggerOperationAttribute>().FirstOrDefault();
             if (attribute == null) return;
 
             if (attribute.OperationId != null)

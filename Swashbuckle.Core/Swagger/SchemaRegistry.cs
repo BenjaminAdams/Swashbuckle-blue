@@ -255,20 +255,20 @@ namespace Swashbuckle.Swagger
         {
             var valueType = dictionaryContract.DictionaryValueType ?? typeof(object);
             return new Schema
-                {
-                    type = "object",
-                    additionalProperties = CreateInlineSchema(valueType)
-                };
+            {
+                type = "object",
+                additionalProperties = CreateInlineSchema(valueType)
+            };
         }
 
         private Schema CreateArraySchema(JsonArrayContract arrayContract)
         {
             var itemType = arrayContract.CollectionItemType ?? typeof(object);
             return new Schema
-                {
-                    type = "array",
-                    items = CreateInlineSchema(itemType).WithValidationProperties(arrayContract)
-                };
+            {
+                type = "array",
+                items = CreateInlineSchema(itemType).WithValidationProperties(arrayContract)
+            };
         }
 
         private Schema CreateObjectSchema(JsonObjectContract jsonContract)
@@ -286,9 +286,14 @@ namespace Swashbuckle.Swagger
                 .Select(propInfo => propInfo.PropertyName)
                 .ToList();
 
+            var requiredConditionally = jsonContract.Properties.Where(prop => prop.IsRequiredConditionally())
+                .Select(propInfo => propInfo.PropertyName)
+                .ToList();
+
             var schema = new Schema
             {
                 required = required.Any() ? required : null, // required can be null but not empty
+                requiredConditionally = requiredConditionally.Any() ? requiredConditionally : null, // required can be null but not empty
                 properties = properties,
                 type = "object"
             };

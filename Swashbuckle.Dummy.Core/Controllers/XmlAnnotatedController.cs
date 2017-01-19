@@ -18,6 +18,7 @@ namespace Swashbuckle.Dummy.Controllers
         /// <param name="account">Details for the account to be created</param>
         /// <response code="201"><paramref name="account" /> created</response>
         /// <response code="400">Username already in use</response>
+        [HttpPost]
         public int Create(Account account)
         {
             throw new NotImplementedException();
@@ -39,7 +40,7 @@ namespace Swashbuckle.Dummy.Controllers
         /// <param name="keywords">List of search keywords</param>
         /// <returns></returns>
         [HttpGet]
-        public IEnumerable<Account> Search(IEnumerable<string> keywords)
+        public IEnumerable<Account> Search([RequiredConditionally]IEnumerable<string> keywords)
         {
             throw new NotImplementedException();
         }
@@ -52,7 +53,7 @@ namespace Swashbuckle.Dummy.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("filter")]
-        public IEnumerable<Account> Filter([SwaggerExample("123")] string q, [SwaggerIgnore][FromUri] Page page)
+        public IEnumerable<Account> Filter([SwaggerExample("123")] string q, [RequiredConditionally][SwaggerIgnore][FromUri] Page page)
         {
             throw new NotImplementedException();
         }
@@ -62,7 +63,7 @@ namespace Swashbuckle.Dummy.Controllers
         /// </summary>
         [HttpPut]
         [ActionName("put-on-hold")]
-        public void PutOnHold([SwaggerExample("333333")] int id)
+        public void PutOnHold([SwaggerExample("333333")]    [RequiredConditionally] int id)
         {
             throw new NotImplementedException();
         }
@@ -73,7 +74,7 @@ namespace Swashbuckle.Dummy.Controllers
         /// <param name="reward"></param>
         [HttpPut]
         [Route("{id}/add-reward")]
-        public SoMuch AddReward([SwaggerExample("GUID")] int id, Reward<string> reward)
+        public SoMuch AddReward([SwaggerExample("GUID")] int id, [RequiredConditionally] Reward<string> reward)
         {
             SwagValidator.Validate(reward);
 
@@ -85,8 +86,8 @@ namespace Swashbuckle.Dummy.Controllers
         /// </summary>
         /// <param name="funs"></param>
         [HttpPost]
-        [Route("yay")]
-        public void AddFuns(SoMuch soMuch)
+        [Route("yayxx")]
+        public SoMuch AddFunsxx(SoMuch soMuch)
         {
             //var results = new List<ValidationResult>();
             //var isValid = Validator.TryValidateObject(soMuch, new ValidationContext(soMuch, null, null), results, true);
@@ -129,6 +130,7 @@ namespace Swashbuckle.Dummy.Controllers
 
         public SubAccount NestedObjTest { get; set; }
 
+        [RequiredConditionally]
         public CatNames EumTest { get; set; }
 
         public List<CatNames> EumTestList { get; set; }

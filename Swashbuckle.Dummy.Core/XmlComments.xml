@@ -45,7 +45,7 @@
             </summary>
             <param name="reward"></param>
         </member>
-        <member name="M:Swashbuckle.Dummy.Controllers.XmlAnnotatedController.AddFuns(Swashbuckle.Dummy.Controllers.SoMuch)">
+        <member name="M:Swashbuckle.Dummy.Controllers.XmlAnnotatedController.AddFunsxx(Swashbuckle.Dummy.Controllers.SoMuch)">
             <summary>
                So much funs! .So we can verify an array schema serializes properly
             </summary>
