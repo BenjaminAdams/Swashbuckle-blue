@@ -4,7 +4,9 @@ using Swashbuckle.Annotations.AttributeTags;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Net;
 using System.Web.Http;
+using Swashbuckle.Swagger.Annotations;
 
 namespace Swashbuckle.Dummy.Controllers
 {
@@ -87,6 +89,12 @@ namespace Swashbuckle.Dummy.Controllers
         /// <param name="funs"></param>
         [HttpPost]
         [Route("yayxx")]
+        [SwaggerResponse(HttpStatusCode.Accepted)]
+        [SwaggerResponse(HttpStatusCode.Ambiguous)]
+        [SwaggerResponse(HttpStatusCode.Conflict)]
+        [SwaggerResponse(HttpStatusCode.BadRequest)]
+        [SwaggerResponse(HttpStatusCode.Created)]
+        [SwaggerResponse(HttpStatusCode.HttpVersionNotSupported)]
         public SoMuch AddFunsxx(SoMuch soMuch)
         {
             //var results = new List<ValidationResult>();
