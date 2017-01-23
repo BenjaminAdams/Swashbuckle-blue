@@ -1,39 +1,87 @@
 'use strict';
 
-SwaggerUi.Views.StatusCodeView=Backbone.View.extend({
+SwaggerUi.Views.StatusCodeView = Backbone.View.extend({
+	events: {
+		'click .copyw3': 'copyw3'
+	},
 	initialize: function(opts) {
-		this.options=opts||{};
-		this.router=this.options.router;
+		this.options = opts || {};
+		this.router = this.options.router;
 	},
 
 	render: function() {
-		$(this.el).html(Handlebars.templates.status_code(this.model));
-
-		console.log('statusCodeModel=',this.model)
-
-		var httpCode=this.model.code
-		if(httpCode!=='default') {
-			$(this.el).attr('title',this.codes[httpCode])
+		if(this.model.code !== 'default') {
+			this.model.noCopy = false;
+			$(this.el).attr('title', this.codes[this.model.code]);
+		} else {
+			this.model.noCopy = true;
 		}
 
+		$(this.el).html(Handlebars.templates.status_code(this.model));
+
 		if(this.router.api.models.hasOwnProperty(this.model.responseModel)) {
-			var responseModel={
-				sampleJSON: JSON.stringify(this.router.api.models[this.model.responseModel].createJSONSample(),null,2),
+			var responseModel = {
+				sampleJSON: JSON.stringify(this.router.api.models[this.model.responseModel].createJSONSample(), null, 2),
 				isParam: false,
 				//signature: this.router.api.models[this.model.responseModel].getMockSignature(),
 				signature: window.getMockSignature(this.router.api.models[this.model.responseModel]),
 			};
 
-			var responseModelView=new SwaggerUi.Views.SignatureView({
+			var responseModelView = new SwaggerUi.Views.SignatureView({
 				model: responseModel,
 				tagName: 'div'
 			});
-			$('.model-signature',this.$el).append(responseModelView.render().el);
+			$('.model-signature', this.$el).append(responseModelView.render().el);
 		} else {
-			$('.model-signature',this.$el).html('');
+			$('.model-signature', this.$el).html('');
 		}
 		return this;
 	},
+	copyw3: function(e) {
+		var target = $(e.currentTarget);
+		var title = $(this.el).attr('title')
+		var statusOfCopy = this.copyTextToClipboard(title)
+		if(statusOfCopy) {
+			target.html('copied')
+			setTimeout(function() {
+				target.html('copy')
+			}, 1200)
+		}
+	},
+	copyTextToClipboard: function(text) {
+		try {
+			window.clipboardData.setData('Text', text);
+			return true
+		} catch(err) {
+			return this.copyTextToClipboardIESucks(text);
+		}
+	},
+	copyTextToClipboardIESucks: function(text) {
+		var textArea = document.createElement("textarea");
+		textArea.style.position = 'fixed';
+		textArea.style.top = 0;
+		textArea.style.left = 0;
+		textArea.style.width = '2em';
+		textArea.style.height = '2em';
+		textArea.style.padding = 0;
+		textArea.style.border = 'none';
+		textArea.style.outline = 'none';
+		textArea.style.boxShadow = 'none';
+		textArea.style.background = 'transparent';
+		textArea.value = text;
+		document.body.appendChild(textArea);
+		textArea.select();
+
+		try {
+			var statusOfCopy = document.execCommand('copy');
+			document.body.removeChild(textArea);
+			return statusOfCopy;
+		} catch(err) {
+			alert('Your browser does not support copy');
+			document.body.removeChild(textArea);
+		}
+	},
+
 	codes: {
 		100: 'The client SHOULD continue with its request. This interim response is used to inform the client that the initial part of the request has been received and has not yet been rejected by the server. The client SHOULD continue by sending the remainder of the request or, if the request has already been completed, ignore this response. The server MUST send a final response after the request has been completed',
 		101: 'The server understands and is willing to comply with the client\'s request, via the Upgrade message header field (section 14.42), for a change in the application protocol being used on this connection. The server will switch protocols to those defined by the response\'s Upgrade header field immediately after the empty line which terminates the 101 response.',
