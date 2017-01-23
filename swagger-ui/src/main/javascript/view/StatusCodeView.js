@@ -57,7 +57,7 @@ SwaggerUi.Views.StatusCodeView = Backbone.View.extend({
 		}
 	},
 	copyTextToClipboardIESucks: function(text) {
-		var textArea = document.createElement("textarea");
+		var textArea = document.createElement('textarea');
 		textArea.style.position = 'fixed';
 		textArea.style.top = 0;
 		textArea.style.left = 0;

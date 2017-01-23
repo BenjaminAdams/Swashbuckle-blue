@@ -1686,6 +1686,34 @@ this["Handlebars"]["templates"]["response_content_type"] = Handlebars.template({
   if (stack1 != null) { buffer += stack1; }
   return buffer + "</select>\n";
 },"useData":true});
+this["Handlebars"]["templates"]["sidebar"] = Handlebars.template({"1":function(depth0,helpers,partials,data,depths) {
+  var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, buffer = "\r\n<li class=\"sidebarParent\">"
+    + escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"name","hash":{},"data":data}) : helper)))
+    + "</li>\r\n\r\n";
+  stack1 = helpers.each.call(depth0, (depth0 != null ? depth0.operationsArray : depth0), {"name":"each","hash":{},"fn":this.program(2, data, depths),"inverse":this.noop,"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  return buffer;
+},"2":function(depth0,helpers,partials,data,depths) {
+  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, lambda=this.lambda;
+  return "<li class=\"sidebarChild\" title=\""
+    + escapeExpression(((helper = (helper = helpers.path || (depth0 != null ? depth0.path : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"path","hash":{},"data":data}) : helper)))
+    + "\" data-parentid=\""
+    + escapeExpression(lambda((depths[1] != null ? depths[1].name : depths[1]), depth0))
+    + "\" data-nickname=\""
+    + escapeExpression(((helper = (helper = helpers.nickname || (depth0 != null ? depth0.nickname : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"nickname","hash":{},"data":data}) : helper)))
+    + "\">\r\n    <div class=\"methodBtn btn-"
+    + escapeExpression(((helper = (helper = helpers.method || (depth0 != null ? depth0.method : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"method","hash":{},"data":data}) : helper)))
+    + "\">"
+    + escapeExpression(((helper = (helper = helpers.srtLbl || (depth0 != null ? depth0.srtLbl : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"srtLbl","hash":{},"data":data}) : helper)))
+    + "</div>\r\n    <div class=\"childTxt\">"
+    + escapeExpression(((helper = (helper = helpers.nickname || (depth0 != null ? depth0.nickname : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"nickname","hash":{},"data":data}) : helper)))
+    + "</div>\r\n</li>\r\n";
+},"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data,depths) {
+  var stack1;
+  stack1 = helpers.each.call(depth0, depth0, {"name":"each","hash":{},"fn":this.program(1, data, depths),"inverse":this.noop,"data":data});
+  if (stack1 != null) { return stack1; }
+  else { return ''; }
+  },"useData":true,"useDepths":true});
 this["Handlebars"]["templates"]["signature"] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
   var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, buffer = "<div>\n<ul class=\"signature-nav\">\n  <li><a class=\"description-link\" href=\"#\" data-sw-translate>Model</a></li>\n  <li><a class=\"snippet-link\" href=\"#\" data-sw-translate>Model Schema</a></li>\n</ul>\n<div>\n\n<div class=\"signature-container\">\n  <div class=\"description\">\n    ";
   stack1 = ((helper = (helper = helpers.signature || (depth0 != null ? depth0.signature : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"signature","hash":{},"data":data}) : helper));
@@ -32683,117 +32711,89 @@ SwaggerUi.Views.ResponseContentTypeView = Backbone.View.extend({
 'use strict';
 
 SwaggerUi.Views.SidebarView = Backbone.View.extend({
-    el: '#sidebar',
-    initialize: function (opts) {
-        _.bindAll(this, 'render', 'addModelToSidebar', 'shortMethod', 'addParentNameToSidebar', 'postCollapseExpandAction');
-        this.isCallapsed = false
-        this.models = opts.models
-        this.render()
-    },
+	el: '#sidebar',
+	events: {
+		'click .sidebarChild': 'clickRouteLink',
+	},
+	initialize: function(opts) {
+		_.bindAll(this, 'render', 'shortMethod', 'postCollapseExpandAction', 'addSidebarToggle', 'clickRouteLink');
+		this.isCallapsed = false
+		this.models = opts.models
+		this.render()
+	},
 
-    render: function () {
-        var self = this
-        this.$el.empty()
+	render: function() {
+		var self = this
+		this.$el.empty()
 
-        _.each(this.models, function (parent) {
-            self.addParentNameToSidebar(parent)
+		_.each(this.models, function(parent) {
+			_.each(parent.operationsArray, function(model) {
+				model.srtLbl = self.shortMethod(model.method)
+				//model.parentId = parent.id  //we are technically using the parent.name in the template because for some reason parent.id is undefined here
+			})
+		})
 
-            _.each(parent.operationsArray, function (model) {
-                self.addModelToSidebar(model)
-            })
-        })
+		this.addSidebarToggle()
 
-        $('<div class="collapseExpandIcon" title="Collapse sidebar">&lt;&lt;</div>').appendTo('body');
-        $('.collapseExpandIcon').click(function () {
-            $('#sidebar').toggle()
-            self.postCollapseExpandAction()
-        });
-    },
-    addParentNameToSidebar: function (parent) {
-        this.$el.append('<li class="sidebarParent">' + parent.name + '</li>')
-    },
-    postCollapseExpandAction: function () {
-        this.isCallapsed = !this.isCallapsed;
+		$(this.el).html(Handlebars.templates.sidebar(this.models));
+	},
+	clickRouteLink: function(e) {
+		var target = $(e.currentTarget)
+		var parentId = target.data('parentid')
+		var nickname = target.data('nickname')
 
-        if (this.isCallapsed) {
-            if ($(window).width() <= 1024) {
-                $('#swagger-ui-container').css({ 'padding-left': '30px' });
-            } else {
-                $('#swagger-ui-container').css({ 'padding-left': '0px' });
-            }
+		var $routeContent = $('.content-' + parentId + nickname);
 
-            $('.collapseExpandIcon').text('>>');
-            $('.collapseExpandIcon').attr('title', 'Expand sidebar');
-            $('.collapseExpandIcon').css({ 'left': '0px' });
-        } else {
-            $('#swagger-ui-container').css({ 'padding-left': '275px' });
-            $('.collapseExpandIcon').text('<<');
-            $('.collapseExpandIcon').attr('title', 'Collapse sidebar');
-            $('.collapseExpandIcon').css({ 'left': '250px' });
-        }
-    },
+		if(!$routeContent.parent().hasClass('active')) {
+			//shows the swagger api details when the user clicks the sidebar, opens the toggle
+			window.Docs.expandEndpointListForResource(parentId)
+		}
 
-    addModelToSidebar: function (model) {
-        var self = this
+		//send the user down to the api desc
+		$routeContent.slideDown('fast', function() {
+			$('html, body').animate({
+				scrollTop: $routeContent.offset().top - 105
+			}, 100);
+		});
+	},
+	addSidebarToggle: function() {
+		var self = this
+		$('<div class="collapseExpandIcon" title="Collapse sidebar">&lt;&lt;</div>').appendTo('body');
 
-        var srtLbl = this.shortMethod(model.method)
-        var methodBtn = '<div class="methodBtn btn-' + model.method + '">' + srtLbl + '</div>'
+		$('.collapseExpandIcon').click(function() {
+			$('#sidebar').toggle()
+			self.postCollapseExpandAction()
+		});
+	},
+	postCollapseExpandAction: function() {
+		this.isCallapsed = !this.isCallapsed;
 
-        // var shortNick = this.getShortNickname(model.nickname)  //moved this to SwaggerGenerator.cs
+		if(this.isCallapsed) {
+			if($(window).width() <= 1024) {
+				$('#swagger-ui-container').css({ 'padding-left': '30px' });
+			} else {
+				$('#swagger-ui-container').css({ 'padding-left': '0px' });
+			}
 
-        var $routeLink = $('<li class="sidebarChild" title="' + model.path + '"   >' + methodBtn + '<div class="childTxt">' + model.nickname + '</div></li>')
-
-        this.$el.append($routeLink)
-
-        $routeLink.click(function (e) {
-            var $routeContent = $('.content-' + model.parentId + model.nickname)
-            // self.toggleOperationContent(e, model)
-            //make sure parent has active class
-            if (!$routeContent.parent().hasClass('active')) {
-                // $('.toggleEndpointList[data-id="' + model.parentId + '"]').click()
-
-                window.Docs.expandEndpointListForResource(model.parentId)
-            }
-
-            $routeContent.slideDown('fast', function () {
-                $('html, body').animate({
-                    scrollTop: $routeContent.offset().top - 105
-                }, 100);
-            });
-        })
-    },
-
-    toggleOperationContent: function (event, model) {
-        var elem = $('#' + Docs.escapeResourceName(model.parentId + '_' + model.nickname + '_content'));
-        if (elem.is(':visible')) {
-            event.preventDefault();
-            $.bbq.pushState('#/', 2);
-            Docs.collapseOperation(elem);
-        } else {
-            Docs.expandOperation(elem);
-        }
-    },
-
-    getShortNickname: function (nickname) {
-        var parts = nickname.split("_");
-        if (parts.length === 0) {
-            return nickname
-        } else {
-            var shortNick = _.filter(parts, function (item, i) {
-                return i !== 0
-            })
-            return shortNick.join('_')
-        }
-    },
-    shortMethod: function (meth) {
-        if (meth === 'options') {
-            return 'opt'
-        } else if (meth === 'delete') {
-            return 'del'
-        } else {
-            return meth
-        }
-    },
+			$('.collapseExpandIcon').text('>>');
+			$('.collapseExpandIcon').attr('title', 'Expand sidebar');
+			$('.collapseExpandIcon').css({ 'left': '0px' });
+		} else {
+			$('#swagger-ui-container').css({ 'padding-left': '275px' });
+			$('.collapseExpandIcon').text('<<');
+			$('.collapseExpandIcon').attr('title', 'Collapse sidebar');
+			$('.collapseExpandIcon').css({ 'left': '250px' });
+		}
+	},
+	shortMethod: function(meth) {
+		if(meth === 'options') {
+			return 'opt'
+		} else if(meth === 'delete') {
+			return 'del'
+		} else {
+			return meth
+		}
+	},
 });
 'use strict';
 
@@ -32921,7 +32921,6 @@ SwaggerUi.Views.StatusCodeView = Backbone.View.extend({
 		}
 	},
 	copyTextToClipboard: function(text) {
-		//	var self = this
 		try {
 			window.clipboardData.setData('Text', text);
 			return true
@@ -32930,7 +32929,7 @@ SwaggerUi.Views.StatusCodeView = Backbone.View.extend({
 		}
 	},
 	copyTextToClipboardIESucks: function(text) {
-		var textArea = document.createElement("textarea");
+		var textArea = document.createElement('textarea');
 		textArea.style.position = 'fixed';
 		textArea.style.top = 0;
 		textArea.style.left = 0;

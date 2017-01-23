@@ -1,115 +1,87 @@
 ﻿'use strict';
 
 SwaggerUi.Views.SidebarView = Backbone.View.extend({
-    el: '#sidebar',
-    initialize: function (opts) {
-        _.bindAll(this, 'render', 'addModelToSidebar', 'shortMethod', 'addParentNameToSidebar', 'postCollapseExpandAction');
-        this.isCallapsed = false
-        this.models = opts.models
-        this.render()
-    },
+	el: '#sidebar',
+	events: {
+		'click .sidebarChild': 'clickRouteLink',
+	},
+	initialize: function(opts) {
+		_.bindAll(this, 'render', 'shortMethod', 'postCollapseExpandAction', 'addSidebarToggle', 'clickRouteLink');
+		this.isCallapsed = false
+		this.models = opts.models
+		this.render()
+	},
 
-    render: function () {
-        var self = this
-        this.$el.empty()
+	render: function() {
+		var self = this
+		this.$el.empty()
 
-        _.each(this.models, function (parent) {
-            self.addParentNameToSidebar(parent)
+		_.each(this.models, function(parent) {
+			_.each(parent.operationsArray, function(model) {
+				model.srtLbl = self.shortMethod(model.method)
+				//model.parentId = parent.id  //we are technically using the parent.name in the template because for some reason parent.id is undefined here
+			})
+		})
 
-            _.each(parent.operationsArray, function (model) {
-                self.addModelToSidebar(model)
-            })
-        })
+		this.addSidebarToggle()
 
-        $('<div class="collapseExpandIcon" title="Collapse sidebar">&lt;&lt;</div>').appendTo('body');
-        $('.collapseExpandIcon').click(function () {
-            $('#sidebar').toggle()
-            self.postCollapseExpandAction()
-        });
-    },
-    addParentNameToSidebar: function (parent) {
-        this.$el.append('<li class="sidebarParent">' + parent.name + '</li>')
-    },
-    postCollapseExpandAction: function () {
-        this.isCallapsed = !this.isCallapsed;
+		$(this.el).html(Handlebars.templates.sidebar(this.models));
+	},
+	clickRouteLink: function(e) {
+		var target = $(e.currentTarget)
+		var parentId = target.data('parentid')
+		var nickname = target.data('nickname')
 
-        if (this.isCallapsed) {
-            if ($(window).width() <= 1024) {
-                $('#swagger-ui-container').css({ 'padding-left': '30px' });
-            } else {
-                $('#swagger-ui-container').css({ 'padding-left': '0px' });
-            }
+		var $routeContent = $('.content-' + parentId + nickname);
 
-            $('.collapseExpandIcon').text('>>');
-            $('.collapseExpandIcon').attr('title', 'Expand sidebar');
-            $('.collapseExpandIcon').css({ 'left': '0px' });
-        } else {
-            $('#swagger-ui-container').css({ 'padding-left': '275px' });
-            $('.collapseExpandIcon').text('<<');
-            $('.collapseExpandIcon').attr('title', 'Collapse sidebar');
-            $('.collapseExpandIcon').css({ 'left': '250px' });
-        }
-    },
+		if(!$routeContent.parent().hasClass('active')) {
+			//shows the swagger api details when the user clicks the sidebar, opens the toggle
+			window.Docs.expandEndpointListForResource(parentId)
+		}
 
-    addModelToSidebar: function (model) {
-        var self = this
+		//send the user down to the api desc
+		$routeContent.slideDown('fast', function() {
+			$('html, body').animate({
+				scrollTop: $routeContent.offset().top - 105
+			}, 100);
+		});
+	},
+	addSidebarToggle: function() {
+		var self = this
+		$('<div class="collapseExpandIcon" title="Collapse sidebar">&lt;&lt;</div>').appendTo('body');
 
-        var srtLbl = this.shortMethod(model.method)
-        var methodBtn = '<div class="methodBtn btn-' + model.method + '">' + srtLbl + '</div>'
+		$('.collapseExpandIcon').click(function() {
+			$('#sidebar').toggle()
+			self.postCollapseExpandAction()
+		});
+	},
+	postCollapseExpandAction: function() {
+		this.isCallapsed = !this.isCallapsed;
 
-        // var shortNick = this.getShortNickname(model.nickname)  //moved this to SwaggerGenerator.cs
+		if(this.isCallapsed) {
+			if($(window).width() <= 1024) {
+				$('#swagger-ui-container').css({ 'padding-left': '30px' });
+			} else {
+				$('#swagger-ui-container').css({ 'padding-left': '0px' });
+			}
 
-        var $routeLink = $('<li class="sidebarChild" title="' + model.path + '"   >' + methodBtn + '<div class="childTxt">' + model.nickname + '</div></li>')
-
-        this.$el.append($routeLink)
-
-        $routeLink.click(function (e) {
-            var $routeContent = $('.content-' + model.parentId + model.nickname)
-            // self.toggleOperationContent(e, model)
-            //make sure parent has active class
-            if (!$routeContent.parent().hasClass('active')) {
-                // $('.toggleEndpointList[data-id="' + model.parentId + '"]').click()
-
-                window.Docs.expandEndpointListForResource(model.parentId)
-            }
-
-            $routeContent.slideDown('fast', function () {
-                $('html, body').animate({
-                    scrollTop: $routeContent.offset().top - 105
-                }, 100);
-            });
-        })
-    },
-
-    toggleOperationContent: function (event, model) {
-        var elem = $('#' + Docs.escapeResourceName(model.parentId + '_' + model.nickname + '_content'));
-        if (elem.is(':visible')) {
-            event.preventDefault();
-            $.bbq.pushState('#/', 2);
-            Docs.collapseOperation(elem);
-        } else {
-            Docs.expandOperation(elem);
-        }
-    },
-
-    getShortNickname: function (nickname) {
-        var parts = nickname.split("_");
-        if (parts.length === 0) {
-            return nickname
-        } else {
-            var shortNick = _.filter(parts, function (item, i) {
-                return i !== 0
-            })
-            return shortNick.join('_')
-        }
-    },
-    shortMethod: function (meth) {
-        if (meth === 'options') {
-            return 'opt'
-        } else if (meth === 'delete') {
-            return 'del'
-        } else {
-            return meth
-        }
-    },
+			$('.collapseExpandIcon').text('>>');
+			$('.collapseExpandIcon').attr('title', 'Expand sidebar');
+			$('.collapseExpandIcon').css({ 'left': '0px' });
+		} else {
+			$('#swagger-ui-container').css({ 'padding-left': '275px' });
+			$('.collapseExpandIcon').text('<<');
+			$('.collapseExpandIcon').attr('title', 'Collapse sidebar');
+			$('.collapseExpandIcon').css({ 'left': '250px' });
+		}
+	},
+	shortMethod: function(meth) {
+		if(meth === 'options') {
+			return 'opt'
+		} else if(meth === 'delete') {
+			return 'del'
+		} else {
+			return meth
+		}
+	},
 });
