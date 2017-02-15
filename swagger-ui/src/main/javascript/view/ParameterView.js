@@ -150,7 +150,9 @@ SwaggerUi.Views.ParameterView = Backbone.View.extend({
 
 		setTimeout(function() {
 			try {
-				self.editor = CodeMirror.fromTextArea($('.body-textarea', $(self.el)).get(0), {
+				var txtArea = $('.body-textarea', $(self.el))
+
+				self.editor = CodeMirror.fromTextArea(txtArea.get(0), {
 					theme: 'rubyblue',
 					mode: { name: 'javascript', json: true },
 					//lineNumbers: true,
@@ -158,6 +160,11 @@ SwaggerUi.Views.ParameterView = Backbone.View.extend({
 					//autofocus: true,
 					//	continueComments: "Enter",
 				});
+
+				self.editor.on("change", function(cm, change) {
+					console.log('txt was changed', cm, change)
+					txtArea.val(cm.getValue())
+				})
 
 				setInterval(function() {
 					//we have to do this because when you load the editor and textarea is inside of a hidden div it will not load correctly
