@@ -5,6 +5,7 @@
 {{#if sampleJSON}}
 <td colspan="2" title="{{name}}">
     <textarea class='body-textarea {{#if required}}required{{/if}} fullWidth' name='{{name}}' id='{{valueId}}'>{{example}}</textarea>
+    <button class="copyBodyTxt" title="Copy all the text in the textbox">&#x1f4cb;</button>
     <br />
     <div class="parameter-content-type" />
 </td>
@@ -16,6 +17,7 @@
 {{else}}
 <td title="{{name}}">
     <textarea class='body-textarea {{#if required}}required{{/if}}' name='{{name}}' id='{{valueId}}'>{{example}}</textarea>
+    <button class="copyBodyTxt" title="Copy all the text in the textbox">&#x1f4cb;</button>
     <br />
     <div class="parameter-content-type" />
 </td>

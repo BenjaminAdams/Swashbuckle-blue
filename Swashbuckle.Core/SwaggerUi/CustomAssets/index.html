@@ -20,15 +20,19 @@
     <script src='lib/backbone-min-js' type='text/javascript'></script>
     <script src='swagger-ui-js' type='text/javascript'></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.8.0/highlight.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js" charset="utf-8"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/theme-twilight.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/mode-json.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.23.0/codemirror.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.23.0/codemirror.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.23.0/theme/rubyblue.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.23.0/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.23.0/addon/edit/matchbrackets.min.js"></script>
+
     <script src='lib/marked-js' type='text/javascript'></script>
     <script src='lib/swagger-oauth-js' type='text/javascript'></script>
     <script type="text/javascript">
-        $(function () {
+        $(function() {
             var url = window.location.search.match(/url=([^&]+)/);
-            if (url && url.length > 1) {
+            if(url && url.length > 1) {
                 url = decodeURIComponent(url[1]);
             } else {
                 url = "http://petstore.swagger.io/v2/swagger.json";
@@ -62,11 +66,11 @@
             };
 
             // Pre load translate...
-            if (window.SwaggerTranslator) {
+            if(window.SwaggerTranslator) {
                 window.SwaggerTranslator.translate();
             }
 
-            if (window.swashbuckleConfig.customSwagDocLocation) {
+            if(window.swashbuckleConfig.customSwagDocLocation) {
                 url = window.swashbuckleConfig.customSwagDocLocation
             } else {
                 url = swashbuckleConfig.rootUrl + "/" + swashbuckleConfig.discoveryPaths[0]
@@ -76,8 +80,8 @@
                 url: url,
                 dom_id: "swagger-ui-container",
                 booleanValues: swashbuckleConfig.booleanValues,
-                onComplete: function (swaggerApi, swaggerUi) {
-                    if (typeof initOAuth == "function" && swashbuckleConfig.oAuth2Enabled) {
+                onComplete: function(swaggerApi, swaggerUi) {
+                    if(typeof initOAuth == "function" && swashbuckleConfig.oAuth2Enabled) {
                         initOAuth({
                             clientId: swashbuckleConfig.oAuth2ClientId,
                             clientSecret: swashbuckleConfig.oAuth2ClientSecret,
@@ -87,12 +91,12 @@
                         });
                     }
 
-                    if (window.SwaggerTranslator) {
+                    if(window.SwaggerTranslator) {
                         window.SwaggerTranslator.translate();
                     }
 
-                    setTimeout(function () {
-                        $('pre code').each(function (i, block) {
+                    setTimeout(function() {
+                        $('pre code').each(function(i, block) {
                             hljs.highlightBlock(block);
                         });
                     }, 1000)
@@ -100,11 +104,11 @@
                     addApiKeyAuthorization();
 
                     window.swaggerApi = swaggerApi;
-                    _.each(swashbuckleConfig.customScripts, function (script) {
+                    _.each(swashbuckleConfig.customScripts, function(script) {
                         $.getScript(script);
                     });
                 },
-                onFailure: function (data, x, y) {
+                onFailure: function(data, x, y) {
                     log('Unable to Load SwaggerUI', data);
 
                     $('#swagger-ui-container').html(data);
@@ -115,16 +119,16 @@
                 showRequestHeaders: false
             });
 
-            if (window.swashbuckleConfig.validatorUrl !== '')
+            if(window.swashbuckleConfig.validatorUrl !== '')
                 window.swaggerUi.options.validatorUrl = window.swashbuckleConfig.validatorUrl;
 
             function addApiKeyAuthorization() {
                 var key = encodeURIComponent($('#input_apiKey')[0].value);
-                if (key && key.trim() != "") {
+                if(key && key.trim() != "") {
                     var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization(window.swashbuckleConfig.apiKeyName, key, window.swashbuckleConfig.apiKeyLocation);
                     window.swaggerUi.api.clientAuthorizations.add(window.swashbuckleConfig.apiKeyName, apiKeyAuth);
 
-                    if (typeof (Storage) !== "undefined") {
+                    if(typeof (Storage) !== "undefined") {
                         localStorage.lastKeyUsed = key;
                     }
                 }
@@ -141,7 +145,7 @@
             window.swaggerUi.load();
 
             function log() {
-                if ('console' in window) {
+                if('console' in window) {
                     console.log.apply(console, arguments);
                 }
             }

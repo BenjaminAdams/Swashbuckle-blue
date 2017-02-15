@@ -14,6 +14,7 @@ namespace Swashbuckle.Annotations
     public static class SwagValidator
     {
         private static string _nullParamMsg = "Value cannot be null. Parameter name: ";
+        private static string _nullOrZeroParamMsg = "Value cannot be null or zero. Parameter name: ";
 
         /// <summary>
         /// Validates the attribute tag validations declared on the class.  Returns false if validation rules are not met and returns the error message in the errorMessage (out) parameter
@@ -306,7 +307,7 @@ namespace Swashbuckle.Annotations
                     if (Convert.ToDouble(value) == 0)
                     {
                         if (attr.ErrorMessage != null) throw new ValidationException(attr.ErrorMessage.AppendJson(input, outputJsonPayload));
-                        throw new ValidationException(_nullParamMsg + property.Name.AppendJson(input, outputJsonPayload));
+                        throw new ValidationException(_nullOrZeroParamMsg + property.Name.AppendJson(input, outputJsonPayload));
                     }
                     break;
 

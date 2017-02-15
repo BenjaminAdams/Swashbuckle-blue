@@ -47,6 +47,12 @@
   box-sizing: border-box;
   width: 60%;
 }
+.swagger-section .swagger-ui-wrap .copyBodyTxt {
+  float: right;
+  color: #cc8484;
+  margin-top: 13px;
+  cursor: pointer;
+}
 .swagger-section .swagger-ui-wrap table {
   border-collapse: collapse;
   border-spacing: 0;
@@ -131,6 +137,13 @@
 .swagger-section .swagger-ui-wrap pre {
   font-family: "Anonymous Pro", "Menlo", "Consolas", "Bitstream Vera Sans Mono", "Courier New", monospace;
 }
+.swagger-section .swagger-ui-wrap .content {
+  /*pre {
+                font-size: 12px;
+                margin-top: 5px;
+                padding: 5px;
+            }*/
+}
 .swagger-section .swagger-ui-wrap .content > .content-type > div > label {
   clear: both;
   display: block;
@@ -138,11 +151,6 @@
   font-size: 1.1em;
   margin: 0;
   padding: 15px 0 5px;
-}
-.swagger-section .swagger-ui-wrap .content pre {
-  font-size: 12px;
-  margin-top: 5px;
-  padding: 5px;
 }
 .swagger-section .swagger-ui-wrap .icon-btn {
   cursor: pointer;
