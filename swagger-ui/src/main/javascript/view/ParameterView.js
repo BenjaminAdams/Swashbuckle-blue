@@ -157,12 +157,10 @@ SwaggerUi.Views.ParameterView = Backbone.View.extend({
 					mode: { name: 'javascript', json: true },
 					//lineNumbers: true,
 					matchBrackets: true,
-					//autofocus: true,
-					//	continueComments: "Enter",
 				});
 
 				self.editor.on("change", function(cm, change) {
-					console.log('txt was changed', cm, change)
+					//updates the original txtbox's value because when we click the submit button it reads the payload from there
 					txtArea.val(cm.getValue())
 				})
 
