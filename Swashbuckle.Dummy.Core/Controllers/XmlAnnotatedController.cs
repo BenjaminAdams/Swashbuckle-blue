@@ -260,6 +260,9 @@ namespace Swashbuckle.Dummy.Controllers
         [SwaggerExample("RAND")]
         [Range(0, 3)]
         public override int AccountID { get; set; }
+
+        [Required]
+        public string ThisIsRequired { get; set; }
     }
 
     /// <summary>

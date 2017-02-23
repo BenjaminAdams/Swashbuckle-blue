@@ -4,6 +4,7 @@ using Swashbuckle.Annotations.AttributeTags;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Swashbuckle.Dummy.Controllers;
 using Assert = NUnit.Framework.Assert;
 
 namespace Swashbuckle.Tests
@@ -112,7 +113,7 @@ namespace Swashbuckle.Tests
             }
             catch (Exception ex)
             {
-                Assert.AreEqual(ex.Message, "Value cannot be null. Parameter name: IntegerType");
+                Assert.AreEqual(ex.Message, "Value cannot be null or zero. Parameter name: IntegerType");
                 return;
             }
 
@@ -139,7 +140,7 @@ namespace Swashbuckle.Tests
             }
             catch (Exception ex)
             {
-                Assert.AreEqual(ex.Message, "Value cannot be null. Parameter name: IntegerType");
+                Assert.AreEqual(ex.Message, "Value cannot be null or zero. Parameter name: IntegerType");
                 return;
             }
 
@@ -164,7 +165,7 @@ namespace Swashbuckle.Tests
             }
             catch (Exception ex)
             {
-                Assert.AreEqual(ex.Message, "Value cannot be null. Parameter name: DecimalType");
+                Assert.AreEqual(ex.Message, "Value cannot be null or zero. Parameter name: DecimalType");
                 return;
             }
 
@@ -191,7 +192,7 @@ namespace Swashbuckle.Tests
             }
             catch (Exception ex)
             {
-                Assert.AreEqual(ex.Message, "Value cannot be null. Parameter name: DecimalType");
+                Assert.AreEqual(ex.Message, "Value cannot be null or zero. Parameter name: DecimalType");
                 return;
             }
 
@@ -357,7 +358,7 @@ namespace Swashbuckle.Tests
             }
             catch (Exception ex)
             {
-                Assert.AreEqual(ex.Message, "Value cannot be null. Parameter name: DerivedIntegerType");
+                Assert.AreEqual(ex.Message, "Value cannot be null or zero. Parameter name: DerivedIntegerType");
                 return;
             }
 
@@ -376,7 +377,7 @@ namespace Swashbuckle.Tests
 
             var status = SwagValidator.TryValidate(derivedObject, out msg);
             Assert.IsFalse(status);
-            Assert.AreEqual(msg, "Value cannot be null. Parameter name: DerivedIntegerType");
+            Assert.AreEqual(msg, "Value cannot be null or zero. Parameter name: DerivedIntegerType");
         }
 
         [TestMethod]
@@ -410,7 +411,7 @@ namespace Swashbuckle.Tests
 
             var status = SwagValidator.TryValidate(derivedObject, out msg, false);
             Assert.IsFalse(status);
-            Assert.AreEqual(msg, "Value cannot be null. Parameter name: DerivedIntegerType");
+            Assert.AreEqual(msg, "Value cannot be null or zero. Parameter name: DerivedIntegerType");
         }
 
         [TestMethod]
@@ -671,6 +672,83 @@ namespace Swashbuckle.Tests
             };
 
             Assert.IsTrue(SwagValidator.Validate(obj1));
+        }
+
+        [TestMethod]
+        public void ParentNotRequiredButHasChildParamWithRequired()
+        {
+            var obj1 = new SoMuch()
+            {
+                Funs = new List<CoolThings>()
+                {
+                  new CoolThings()
+                  {
+                      Country = "US",
+                      Id = 123,
+                      Name = "asd",
+                      SwaggerExampleNullTest = "1"
+                  }
+                },
+                NestedObjTest = new SubAccount()
+                {
+                    ThisIsRequired = null  //since the parent object is not required, we should not enforce the required tag on the "ThisIsRequired"
+                },
+                ListWithSomeGuidsInside = new List<TestListStuff>()
+                {
+                    new TestListStuff()
+                    {
+                        Amount = 5,
+                        FulfillmentId = Guid.NewGuid()
+                    }
+                }
+            };
+
+            Assert.IsTrue(SwagValidator.Validate(obj1));
+        }
+
+        [TestMethod]
+        public void ParentRequired_ListsShouldAllBeRequired()
+        {
+            var obj1 = new SoMuch()
+            {
+                Funs = new List<CoolThings>()
+                {
+                  new CoolThings()
+                  {
+                      Country = "US",
+                      Id = 123,
+                      Name = "asd",
+                      SwaggerExampleNullTest = "1"
+                  }
+                },
+                NestedObjTest = new SubAccount()
+                {
+                    ThisIsRequired = null  //since the parent object is not required, we should not enforce the required tag on the "ThisIsRequired"
+                },
+                ListWithSomeGuidsInside = new List<TestListStuff>()
+                {
+                    new TestListStuff()
+                    {
+                        Amount = 5,
+                        FulfillmentId = Guid.NewGuid()
+                    },
+                    new TestListStuff()
+                    {
+                        Amount = 33,
+                        //FulfillmentId = null //it should fail here because all parent objs are also [Required]
+                    }
+                }
+            };
+
+            try
+            {
+                Assert.IsTrue(SwagValidator.Validate(obj1));
+                Assert.Fail(); // should not reach here
+            }
+            catch (Exception ex)
+            {
+                Assert.AreEqual("Value cannot be null. Parameter name: FulfillmentId", ex.Message);
+            }
         }
 
         [TestMethod]
