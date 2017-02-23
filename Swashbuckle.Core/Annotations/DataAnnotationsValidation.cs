@@ -44,11 +44,11 @@ namespace Swashbuckle.Annotations
         ///  <param name="input">The object you wish to validate</param>
         ///  <param name="outputJsonPayload">If true will output the contents of input payload in the exception</param>
         ///  <exception cref="ValidationException"></exception>
-        public static bool Validate(object input, bool outputJsonPayload = false, bool parentHasRequired = true)
+        public static bool Validate(object input, bool outputJsonPayload = false)
         {
             if (input == null) return false;
             if (IsPrimitiveType(input) == true) return true;
-            if (CheckList(input, outputJsonPayload, parentHasRequired)) return true;
+            if (CheckList(input)) return true;
 
             foreach (PropertyInfo prp in input.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(p => p.CanRead))
             {
@@ -56,13 +56,13 @@ namespace Swashbuckle.Annotations
 
                 if (typeof(IList).IsAssignableFrom(prp.PropertyType)) // Property is collection
                 {
-                    CheckListProperty(input, prp, outputJsonPayload, DoesPropertyHaveRequiredAttr(prp));
+                    CheckListProperty(input, prp, outputJsonPayload);
                 }
                 else
                 {
                     // Property is object
                     CheckRangeAttribute(prp, input, outputJsonPayload);  //check range first
-                    CheckRequiredAttribute(prp, input, outputJsonPayload, parentHasRequired);
+                    CheckRequiredAttribute(prp, input, outputJsonPayload);
                     CheckMaxLengthAttribute(prp, input, outputJsonPayload);
                     CheckMinLengthAttribute(prp, input, outputJsonPayload);
                     CheckStringLengthAttribute(prp, input, outputJsonPayload);
@@ -72,22 +72,21 @@ namespace Swashbuckle.Annotations
                     if (prp.PropertyType.Assembly == input.GetType().Assembly)
                     {
                         //check nested classes
-
-                        Validate(prp.GetValue(input, null), outputJsonPayload, DoesPropertyHaveRequiredAttr(prp));
+                        Validate(prp.GetValue(input, null), outputJsonPayload);
                     }
                 }
             }
             return true;
         }
 
-        private static void CheckListProperty(object input, PropertyInfo prp, bool outputJsonPayload = false, bool parentHasRequired = false)
+        private static void CheckListProperty(object input, PropertyInfo prp, bool outputJsonPayload = false)
         {
             var propValue = prp.GetValue(input, null);
             var listvalue = (IList)propValue;
 
             if (listvalue != null && listvalue.Count > 0) // Has values then iterate
             {
-                CheckList(listvalue, outputJsonPayload, parentHasRequired);
+                CheckList(listvalue, outputJsonPayload);
             }
             else  // validate for required attribute
             {
@@ -112,7 +111,7 @@ namespace Swashbuckle.Annotations
         }
 
         //if the root object is a list we need to check each element
-        private static bool CheckList(object input, bool outputJsonPayload = false, bool parentHasRequired = false)
+        private static bool CheckList(object input, bool outputJsonPayload = false)
         {
             var elems = input as IList;
             if (elems != null)
@@ -120,7 +119,7 @@ namespace Swashbuckle.Annotations
                 //check nested arrays
                 foreach (var item in elems)
                 {
-                    Validate(item, outputJsonPayload, parentHasRequired);
+                    Validate(item, outputJsonPayload);
                 }
                 return true;
             }
@@ -260,16 +259,8 @@ namespace Swashbuckle.Annotations
             }
         }
 
-        private static bool DoesPropertyHaveRequiredAttr(PropertyInfo property)
+        private static void CheckRequiredAttribute(PropertyInfo property, object input, bool outputJsonPayload)
         {
-            var attr = (RequiredAttribute)(property.GetCustomAttribute(typeof(RequiredAttribute)));
-            return attr != null;
-        }
-
-        private static void CheckRequiredAttribute(PropertyInfo property, object input, bool outputJsonPayload, bool parentHasRequired = false)
-        {
-            if (parentHasRequired == false) return; //if parent has required, we do not check the child elements for [Required]
-
             var value = property.GetValue(input);
 
             if (typeof(IList).IsAssignableFrom(property.PropertyType) && value == null) //check if object is a list and is null
