@@ -47,7 +47,8 @@
   box-sizing: border-box;
   width: 60%;
 }
-.swagger-section .swagger-ui-wrap .copyBodyTxt {
+.swagger-section .swagger-ui-wrap .copyBodyTxt,
+.swagger-section .swagger-ui-wrap .copyResponseBodyTxt {
   float: right;
   color: #cc8484;
   margin-top: 13px;
