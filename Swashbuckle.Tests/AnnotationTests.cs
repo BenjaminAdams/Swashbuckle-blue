@@ -660,6 +660,31 @@ namespace Swashbuckle.Tests
             }
         }
 
+        [TestMethod]
+        public void TestRegExFilePath()
+        {
+            try
+            {
+                //Valid value
+                var obj = new RegExFilePathTestClass()
+                {
+                    Text = @"D://ShareFolder/File.txt"
+                };
+                Assert.IsTrue(SwagValidator.Validate(obj));
+
+                obj.Text = "//server1//Folder//File.txt";
+                Assert.IsTrue(SwagValidator.Validate(obj));
+
+                //Invalid Value
+                obj.Text = "1098.3456.33.44";
+                SwagValidator.Validate(obj);
+                Assert.Fail();
+            } catch (Exception ex)
+            {
+                Assert.IsTrue(ex.Message.Contains("is invalid. Received value"));
+            }
+        }
+
         #endregion RegEx Validation
 
         [TestMethod]
@@ -1102,6 +1127,12 @@ namespace Swashbuckle.Tests
     public class RegExIPAddressTestClass
     {
         [DefinedValidation(ValidationType.IPAddress)]
+        public string Text { get; set; }
+    }
+
+    public class RegExFilePathTestClass
+    {
+        [DefinedValidation(ValidationType.FilePath)]
         public string Text { get; set; }
     }
 
