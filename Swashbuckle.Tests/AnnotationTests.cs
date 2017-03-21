@@ -668,12 +668,19 @@ namespace Swashbuckle.Tests
                 //Valid value
                 var obj = new RegExFilePathTestClass()
                 {
-                    Text = @"D://ShareFolder/File.txt"
+                    Text = @"D:\server\tshare\folder\myfile.txt"
                 };
                 Assert.IsTrue(SwagValidator.Validate(obj));
 
-                obj.Text = "//server1//Folder//File.txt";
+                obj.Text = @"\\server1\Folder\File.txt";
                 Assert.IsTrue(SwagValidator.Validate(obj));
+
+                obj.Text = "\\\\server1\\Folder\\File.txt";
+                Assert.IsTrue(SwagValidator.Validate(obj));
+
+                obj.Text = "D:\\server\\tshare\\folder\\myfile.txt";
+                Assert.IsTrue(SwagValidator.Validate(obj));
+
 
                 //Invalid Value
                 obj.Text = "1098.3456.33.44";
