@@ -103,7 +103,7 @@
         </member>
         <member name="P:Swashbuckle.Dummy.Controllers.Account.AccountID">
             <summary>
-                The ID for Accounts is 5 digits long.
+               Really long SwaggerExample test
             </summary>
         </member>
         <member name="P:Swashbuckle.Dummy.Controllers.Account.StupdSexyFlanders">
@@ -113,7 +113,7 @@
         </member>
         <member name="P:Swashbuckle.Dummy.Controllers.Account.Username">
             <summary>
-                Uniquely identifies the account
+               Really long SwaggerExample test
             </summary>
         </member>
         <member name="P:Swashbuckle.Dummy.Controllers.Account.Password">

@@ -204,7 +204,7 @@ namespace Swashbuckle.Dummy.Controllers
     public class Account
     {
         /// <summary>
-        ///     The ID for Accounts is 5 digits long.
+        ///    Really long SwaggerExample test
         /// </summary>
         [SwaggerExample("abc12333333")]
         public virtual int AccountID { get; set; }
@@ -217,9 +217,9 @@ namespace Swashbuckle.Dummy.Controllers
         public Guid StupdSexyFlanders { get; set; }
 
         /// <summary>
-        ///     Uniquely identifies the account
+        ///    Really long SwaggerExample test
         /// </summary>
-        [SwaggerExample("Benjamin Adams")]
+        [SwaggerExample("abc12333333xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")]
         public string Username { get; set; }
 
         /// <summary>

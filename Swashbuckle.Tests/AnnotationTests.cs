@@ -681,12 +681,12 @@ namespace Swashbuckle.Tests
                 obj.Text = "D:\\server\\tshare\\folder\\myfile.txt";
                 Assert.IsTrue(SwagValidator.Validate(obj));
 
-
                 //Invalid Value
                 obj.Text = "1098.3456.33.44";
                 SwagValidator.Validate(obj);
                 Assert.Fail();
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 Assert.IsTrue(ex.Message.Contains("is invalid. Received value"));
             }
@@ -834,8 +834,6 @@ namespace Swashbuckle.Tests
             }
         }
 
-        #region List Test cases
-
         /// <summary>
         /// Test Optioanl string list with value test.
         /// Test case 1 : Optional string list : With List<string> - Expected reult : True
@@ -980,6 +978,56 @@ namespace Swashbuckle.Tests
         }
 
         [TestMethod]
+        public void SenseitiveDataTest()
+        {
+            var obj = new RequiredFieldDerived()
+            {
+                BaseIntegerType = 5,
+                BaseStringType = "asdasd",
+                DerivedIntegerType = 33,
+                DerivedStringType = "xxxx",
+                SensitiveInt = 1111,
+                SensitiveString = "yyyy"
+            };
+
+            var res = obj.ObjToJson();
+            Assert.IsFalse(res.Contains("yyyy"));
+            Assert.IsFalse(res.Contains("1111"));
+        }
+
+        [TestMethod]
+        public void SenseitiveData_NestedObj()
+        {
+            var obj = new NestedObjWithSensitive()
+            {
+                OHay = "test",
+                SomethingElse = "bbbbb",
+                ThisIsSensitive = "88888",
+                ASensitiveList = new List<string>()
+                {
+                    "99999",
+                    "221212"
+                },
+                ThisHasSomeSensitiveFields = new RequiredFieldDerived()
+                {
+                    BaseIntegerType = 5,
+                    BaseStringType = "asdasd",
+                    DerivedIntegerType = 33,
+                    DerivedStringType = "xxxx",
+                    SensitiveInt = 1111,
+                    SensitiveString = "yyyy"
+                }
+            };
+
+            var res = obj.ObjToJson();
+            Assert.IsFalse(res.Contains("yyyy"));
+            Assert.IsFalse(res.Contains("1111"));
+            Assert.IsFalse(res.Contains("88888"));
+            Assert.IsFalse(res.Contains("99999"));
+            Assert.IsFalse(res.Contains("221212"));
+        }
+
+        [TestMethod]
         public void RegexTestNotValid()
         {
             try
@@ -998,8 +1046,6 @@ namespace Swashbuckle.Tests
             }
         }
     }
-
-    #endregion List Test cases
 
     public class RequiredFieldTestObject
     {
@@ -1174,5 +1220,19 @@ namespace Swashbuckle.Tests
         public string SomethingElse { get; set; }
 
         public slot ThisIsNotARequiredObj { get; set; }
+    }
+
+    public class NestedObjWithSensitive
+    {
+        public string SomethingElse { get; set; }
+
+        [SensitiveData]
+        public string ThisIsSensitive { get; set; }
+
+        public string OHay { get; set; }
+        public RequiredFieldDerived ThisHasSomeSensitiveFields { get; set; }
+
+        [SensitiveData]
+        public List<string> ASensitiveList { get; set; }
     }
 }

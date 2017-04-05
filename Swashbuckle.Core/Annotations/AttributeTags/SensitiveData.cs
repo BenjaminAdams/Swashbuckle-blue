@@ -26,6 +26,7 @@ namespace Swashbuckle.Annotations.AttributeTags
             foreach (PropertyInfo prp in input.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(x => x.CanRead && x.CanWrite))
             {
                 var propValue = prp.GetValue(input, null);
+                MaskObject(prp, input);
 
                 var elems = propValue as IList;
                 if (elems != null)
@@ -40,15 +41,11 @@ namespace Swashbuckle.Annotations.AttributeTags
                         }
                     }
                 }
-                else
-                {
-                    MaskObject(prp, input);
 
-                    if (prp.PropertyType.Assembly == input.GetType().Assembly)
-                    {
-                        //check nested classes
-                        MaskSensitiveData(prp.PropertyType, prp.GetValue(input, null));
-                    }
+                if (prp.PropertyType.Assembly == input.GetType().Assembly)
+                {
+                    //check nested classes
+                    MaskSensitiveData(prp.PropertyType, prp.GetValue(input, null));
                 }
             }
 
