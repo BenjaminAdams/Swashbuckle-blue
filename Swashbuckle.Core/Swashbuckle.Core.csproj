@@ -132,38 +132,26 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="SwaggerUi\CustomAssets\css\highlight.css" />
-    <EmbeddedResource Include="SwaggerUi\CustomAssets\css\print.css" />
-    <EmbeddedResource Include="SwaggerUi\CustomAssets\css\reset.css" />
-    <EmbeddedResource Include="SwaggerUi\CustomAssets\css\screen.css" />
-    <EmbeddedResource Include="SwaggerUi\CustomAssets\css\style.css" />
-    <EmbeddedResource Include="SwaggerUi\CustomAssets\css\typography.css" />
-    <EmbeddedResource Include="SwaggerUi\CustomAssets\images\favicon.ico" />
-    <EmbeddedResource Include="SwaggerUi\CustomAssets\images\logo_small.png" />
-    <EmbeddedResource Include="SwaggerUi\CustomAssets\lib\backbone-min.js" />
-    <EmbeddedResource Include="SwaggerUi\CustomAssets\lib\handlebars-2.0.0.js" />
-    <EmbeddedResource Include="SwaggerUi\CustomAssets\lib\highlight.js" />
-    <EmbeddedResource Include="SwaggerUi\CustomAssets\lib\jquery-1.8.0.min.js" />
-    <EmbeddedResource Include="SwaggerUi\CustomAssets\lib\jquery.ba-bbq.min.js" />
-    <EmbeddedResource Include="SwaggerUi\CustomAssets\lib\jquery.slideto.min.js" />
-    <EmbeddedResource Include="SwaggerUi\CustomAssets\lib\jquery.wiggle.min.js" />
-    <EmbeddedResource Include="SwaggerUi\CustomAssets\lib\marked.js" />
-    <EmbeddedResource Include="SwaggerUi\CustomAssets\lib\swagger-oauth.js" />
-    <EmbeddedResource Include="SwaggerUi\CustomAssets\lib\underscore-min.js" />
-    <EmbeddedResource Include="SwaggerUi\CustomAssets\o2c.html" />
+    <EmbeddedResource Include="SwaggerUi\CustomAssets\favicon-16x16.png" />
+    <EmbeddedResource Include="SwaggerUi\CustomAssets\favicon-32x32.png" />
+    <EmbeddedResource Include="SwaggerUi\CustomAssets\oauth2-redirect.html" />
+    <EmbeddedResource Include="SwaggerUi\CustomAssets\swagger-ui-bundle.js" />
+    <EmbeddedResource Include="SwaggerUi\CustomAssets\swagger-ui-standalone-preset.js" />
+    <EmbeddedResource Include="SwaggerUi\CustomAssets\swagger-ui.css" />
     <EmbeddedResource Include="SwaggerUi\CustomAssets\swagger-ui.js" />
-    <EmbeddedResource Include="SwaggerUi\CustomAssets\swagger-ui.min.js" />
-    <EmbeddedResource Include="SwaggerUi\CustomAssets\images\throbber.gif" />
-    <EmbeddedResource Include="SwaggerUi\CustomAssets\swagger-oauth.js" />
     <Content Include="Swashbuckle.Core.nuspec">
       <SubType>Designer</SubType>
     </Content>
     <EmbeddedResource Include="SwaggerUi\CustomAssets\index.html" />
     <None Include="app.config" />
     <None Include="packages.config" />
+    <EmbeddedResource Include="SwaggerUi\CustomAssets\swagger-ui-bundle.js.map" />
+    <EmbeddedResource Include="SwaggerUi\CustomAssets\swagger-ui-standalone-preset.js.map" />
+    <EmbeddedResource Include="SwaggerUi\CustomAssets\swagger-ui.css.map" />
+    <EmbeddedResource Include="SwaggerUi\CustomAssets\swagger-ui.js.map" />
     <None Include="Swashbuckle.Core.snk" />
   </ItemGroup>
   <!-- Automatically embed swagger-ui files. Construct name so resource can be retrieved by swagger-ui relative path -->

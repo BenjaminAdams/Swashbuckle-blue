@@ -2,6 +2,7 @@
 using Swashbuckle.Dummy.App_Start;
 using Swashbuckle.Dummy.SwaggerExtensions;
 using System;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -44,6 +45,26 @@ namespace Swashbuckle.Dummy
                         .License(lc => lc
                             .Name("Some License")
                             .Url("http://tempuri.org/license"));
+
+                    //c.MultipleApiVersions(
+                    //    (apiDesc, version) =>
+                    //    {
+                    //        System.Console.WriteLine("path=" + apiDesc.RelativePath);
+                    //        var path = apiDesc.RelativePath.Split('/');
+                    //        var pathVersion = path[0];
+
+                    //        var testtt = CultureInfo.InvariantCulture.CompareInfo.IndexOf(pathVersion, version, CompareOptions.IgnoreCase);
+
+                    //        return CultureInfo.InvariantCulture.CompareInfo.IndexOf(pathVersion, version, CompareOptions.IgnoreCase) >= 0;
+                    //    },
+                    //    vc =>
+                    //    {
+                    //        vc.Version("v3", "Swashbuckle Dummy API V3");
+
+                    //        // ReSharper disable once ConvertToLambdaExpression
+                    //        vc.Version("v1", "Swashbuckle Dummy API V1");
+                    //    }
+                    //);
 
                     // If your API has multiple versions, use "MultipleApiVersions" instead of "SingleApiVersion".
                     // In this case, you must provide a lambda that tells Swashbuckle which actions should be
@@ -185,15 +206,17 @@ namespace Swashbuckle.Dummy
                 })
                 .EnableSwaggerUi(c =>
                 {
-                    var customSwagUrl = LoadCustomSwagUrl();
-                    if (customSwagUrl != null)
-                    {
-                        //c.CustomSwagDocLocation(customSwagUrl);
-                    }
+                    //var customSwagUrl = LoadCustomSwagUrl();
+                    //  if (customSwagUrl != null)
+                    // {
+                    c.CustomSwagDocLocation("http://localhost/Payments.Productization.Api/swagger/docs/v3");
+                    // }
 
                     c.CustomLogo("http://i.imgur.com/2QS9HX9.png");
 
                     c.DisableValidator();
+
+                    // c.EnableDiscoveryUrlSelector();
 
                     // Use the "InjectStylesheet" option to enrich the UI with one or more additional CSS stylesheets.
                     // The file must be included in your project as an "Embedded Resource", and then the resource's
@@ -260,18 +283,18 @@ namespace Swashbuckle.Dummy
         }
 
         //Use this in combination with .gitignore to have a custom swagger URL that won't get checked in
-        private static string LoadCustomSwagUrl()
-        {
-            //place a url in a text file to load custom url for testing purposes
-            try
-            {
-                var reader = new StreamReader("C:\\CustomSwagUrl.txt");
-                return reader.ReadToEnd();
-            }
-            catch
-            {
-                return null;
-            }
-        }
+        //private static string LoadCustomSwagUrl()
+        //{
+        //    //place a url in a text file to load custom url for testing purposes
+        //    try
+        //    {
+        //        var reader = new StreamReader("C:\\CustomSwagUrl.txt");
+        //        return reader.ReadToEnd();
+        //    }
+        //    catch
+        //    {
+        //        return null;
+        //    }
+        //}
     }
 }

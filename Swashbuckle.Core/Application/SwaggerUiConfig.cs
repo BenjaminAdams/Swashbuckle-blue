@@ -43,14 +43,20 @@ namespace Swashbuckle.Application
             // Use some custom versions to support config and extensionless paths
             var thisAssembly = GetType().Assembly;
             CustomAsset("index", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.index.html");
-            CustomAsset("css/screen-css", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.css.screen.css");
-            CustomAsset("css/highlight-css", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.css.highlight.css");
-            CustomAsset("css/typography-css", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.typography.css");
-            CustomAsset("lib/swagger-oauth-js", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.swagger-oauth.js");
-            // CustomAsset("images/throbber.gif", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.images.throbber.gif");
-            CustomAsset("images/favicon.ico", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.images.favicon.ico");
+            CustomAsset("favicon.ico", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.favicon-16x16.png");
             CustomAsset("swagger-ui-js", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.swagger-ui.js");
-            CustomAsset("lib/highlight-7-3-pack-js", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.lib.highlight.js");
+            CustomAsset("swagger-ui-bundle-js", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.swagger-ui-bundle.js");
+            CustomAsset("swagger-ui-bundle.js", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.swagger-ui-bundle.js");
+            CustomAsset("swagger-ui-bundle.js.map", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.swagger-ui-bundle.js.map");
+            CustomAsset("swagger-ui-bundle-js.map", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.swagger-ui-bundle.js.map");
+            CustomAsset("swagger-ui-bundle-js-map", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.swagger-ui-bundle.js.map");
+            CustomAsset("swagger-ui-standalone-preset-js", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.swagger-ui-standalone-preset.js");
+            CustomAsset("swagger-ui-standalone-preset-js", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.swagger-ui-standalone-preset.js");
+            CustomAsset("oauth2-redirect.html", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.oauth2-redirect.html");
+            CustomAsset("oauth2-redirect-html", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.oauth2-redirect.html");
+
+            CustomAsset("swagger-ui.css", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.swagger-ui.css");
+            CustomAsset("swagger-ui-css", thisAssembly, "Swashbuckle.SwaggerUi.CustomAssets.swagger-ui.css");
         }
 
         public void CustomLogo(string url)
@@ -160,11 +166,11 @@ namespace Swashbuckle.Application
             var thisAssembly = GetType().Assembly;
             foreach (var resourceName in thisAssembly.GetManifestResourceNames())
             {
-                if (resourceName.Contains("Swashbuckle.SwaggerUi.CustomAssets")) continue; // original assets only
+                // if (resourceName.Contains("Swashbuckle.SwaggerUi.CustomAssets")) continue; // original assets only
 
                 var path = resourceName
-                    .Replace("\\", "/")
-                    .Replace(".", "-"); // extensionless to avoid RUMMFAR
+                    .Replace("\\", "/");
+                // .Replace(".", "-"); // extensionless to avoid RUMMFAR
 
                 _pathToAssetMap[path] = new EmbeddedAssetDescriptor(thisAssembly, resourceName, path == "index");
             }

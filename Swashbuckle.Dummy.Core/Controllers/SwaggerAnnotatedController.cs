@@ -8,6 +8,7 @@ using System.Web.Http;
 namespace Swashbuckle.Dummy.Controllers
 {
     [SwaggerResponse(400, "Bad request")]
+    [RoutePrefix("v3/SwaggerAnnotated")]
     public class SwaggerAnnotatedController : ApiController
     {
         [SwaggerResponseRemoveDefaults]

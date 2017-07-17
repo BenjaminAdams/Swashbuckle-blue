@@ -10,7 +10,7 @@ using Swashbuckle.Swagger.Annotations;
 
 namespace Swashbuckle.Dummy.Controllers
 {
-    [RoutePrefix("xmlannotated")]
+    [RoutePrefix("v1/xmlannotated")]
     public class XmlAnnotatedController : ApiController
     {
         /// <summary>
