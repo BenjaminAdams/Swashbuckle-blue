@@ -2,6 +2,7 @@ var path = require('path')
 var fs = require('fs')
 const nodeModules = fs.readdirSync("node_modules").filter(function(x) { return x !== ".bin" })
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 var rules = [
   { test: /\.(worker\.js)(\?.*)?$/,

@@ -5,6 +5,7 @@ var ExtractTextPlugin = require("extract-text-webpack-plugin")
 var deepExtend = require("deep-extend")
 const {gitDescribeSync} = require("git-describe")
 const os = require("os")
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 var pkg = require("./package.json")
 
@@ -40,6 +41,8 @@ var commonRules = [
 ]
 
 module.exports = function(rules, options) {
+
+	options= options || {}
 
   // Special options, that have logic in this file
   // ...with defaults
@@ -91,6 +94,27 @@ module.exports = function(rules, options) {
         BUILD_TIME: new Date().toUTCString()
       })
     }))
+	
+	
+	plugins.push(new CopyWebpackPlugin([            
+            // {output}/to/file.txt         
+            { from: path.join(__dirname, "dist/swagger-ui-bundle.js") ,to: path.join(__dirname,"../Swashbuckle.Core/SwaggerUi/CustomAssets/swagger-ui-bundle.js") },            
+            { from: path.join(__dirname, "dist/swagger-ui-bundle.js.map") ,to: path.join(__dirname,"../Swashbuckle.Core/SwaggerUi/CustomAssets/swagger-ui-bundle.js.map") },            
+            { from: path.join(__dirname, "dist/swagger-ui.css") ,to: path.join(__dirname,"../Swashbuckle.Core/SwaggerUi/CustomAssets/swagger-ui.css") },            
+            { from: path.join(__dirname, "dist/swagger-ui.css.map") ,to: path.join(__dirname,"../Swashbuckle.Core/SwaggerUi/CustomAssets/swagger-ui.css.map") },            
+            { from: path.join(__dirname, "dist/swagger-ui.js") ,to: path.join(__dirname,"../Swashbuckle.Core/SwaggerUi/CustomAssets/swagger-ui.js") },            
+            { from: path.join(__dirname, "dist/swagger-ui.js.map") ,to: path.join(__dirname,"../Swashbuckle.Core/SwaggerUi/CustomAssets/swagger-ui.js.map") },            
+        ], {
+            ignore: [
+                // Doesn't copy any files with a txt extension    
+                '*index.html',               
+            ],
+
+            // By default, we only copy modified files during
+            // a watch or webpack-dev-server build. Setting this
+            // to `true` copies all files.
+            copyUnmodified: false
+        }))
 
   delete options._special
 
