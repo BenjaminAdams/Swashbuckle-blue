@@ -6,6 +6,7 @@
     <title>Swagger UI</title>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Source+Code+Pro:300,600|Titillium+Web:400,600,700" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="./swagger-ui-css">
+    %(StylesheetIncludes)
     <link rel="icon" type="image/png" href="./favicon-32x32.png" sizes="32x32" />
     <link rel="icon" type="image/png" href="./favicon-16x16.png" sizes="16x16" />
     <style>
@@ -55,17 +56,20 @@
         </defs>
     </svg>
     <div id="swagger-ui"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js" integrity="sha256-8E6QUcFg1KTnpEU8TFGhpTGHw5fJqB9vCms3OhAYLqw=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
     <script src="./swagger-ui-bundle-js"> </script>
     <script src="./swagger-ui-standalone-preset-js"> </script>
     <script>
         window.onload = function () {
 
-            var docsUrl = window.location.search.match(/url=([^&]+)/);
-            if (docsUrl && docsUrl.length > 1) {
-                docsUrl = decodeURIComponent(url[1]);
-            } else {
-                docsUrl = "http://petstore.swagger.io/v2/swagger.json";
-            }
+            var docsUrl;
+            //var docsUrl = window.location.search.match(/url=([^&]+)/);
+            //if (docsUrl && docsUrl.length > 1) {
+            //    docsUrl = decodeURIComponent(url[1]);
+            //} else {
+            //    docsUrl = "http://petstore.swagger.io/v2/swagger.json";
+            //}
 
             // Get Swashbuckle config into JavaScript
             function arrayFrom(configString) {
@@ -97,6 +101,10 @@
             } else {
                 docsUrl = swashbuckleConfig.rootUrl + "/" + swashbuckleConfig.discoveryPaths[0]
             }
+
+            _.each(swashbuckleConfig.customScripts, function (script) {
+                $.getScript(script);
+            });
 
             // Build a system
             const ui = SwaggerUIBundle({

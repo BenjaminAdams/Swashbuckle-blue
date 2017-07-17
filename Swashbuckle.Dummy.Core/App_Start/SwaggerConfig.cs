@@ -16,8 +16,7 @@ namespace Swashbuckle.Dummy
     {
         public static void Register(HttpConfiguration httpConfig)
         {
-            httpConfig
-                .EnableSwagger(c =>
+            httpConfig.EnableSwagger(c =>
                 {
                     // By default, the service root url is inferred from the request used to access the docs.
                     // However, there may be situations (e.g. proxy and load-balanced environments) where this does not
@@ -214,7 +213,7 @@ namespace Swashbuckle.Dummy
 
                     c.CustomLogo("http://i.imgur.com/2QS9HX9.png");
 
-                    c.DisableValidator();
+                    //c.DisableValidator();
 
                     // c.EnableDiscoveryUrlSelector();
 
@@ -223,12 +222,15 @@ namespace Swashbuckle.Dummy
                     // "Logical Name" is passed to the method as shown below.
                     //
                     //c.InjectStylesheet(containingAssembly, "Swashbuckle.Dummy.SwaggerExtensions.testStyles1.css");
+                    //c.InjectStylesheet(MethodBase.GetCurrentMethod().DeclaringType.Assembly, "Swashbuckle.Dummy.SwaggerExtensions.testStyles1.css");
+                    // c.InjectStylesheet(MethodBase.GetCurrentMethod().DeclaringType.Assembly, "Swashbuckle.Dummy.SwaggerExtensions.testStyles2.css");
 
                     // Use the "InjectJavaScript" option to invoke one or more custom JavaScripts after the swagger-ui
                     // has loaded. The file must be included in your project as an "Embedded Resource", and then the resource's
                     // "Logical Name" is passed to the method as shown above.
                     //
-                    //c.InjectJavaScript(thisAssembly, "Swashbuckle.Dummy.SwaggerExtensions.testScript1.js");
+                    //c.InjectJavaScript(MethodBase.GetCurrentMethod().DeclaringType.Assembly, "Swashbuckle.Dummy.SwaggerExtensions.testScript1.js");
+                    //c.InjectJavaScript(MethodBase.GetCurrentMethod().DeclaringType.Assembly, "Swashbuckle.Dummy.SwaggerExtensions.testScript2.js");
 
                     // The swagger-ui renders boolean data types as a dropdown. By default, it provides "true" and "false"
                     // strings as the possible choices. You can use this option to change these to something else,
@@ -281,20 +283,5 @@ namespace Swashbuckle.Dummy
 
             return (versionConstraint == null) ? false : versionConstraint.Pattern.Split('|').Contains(targetApiVersion);
         }
-
-        //Use this in combination with .gitignore to have a custom swagger URL that won't get checked in
-        //private static string LoadCustomSwagUrl()
-        //{
-        //    //place a url in a text file to load custom url for testing purposes
-        //    try
-        //    {
-        //        var reader = new StreamReader("C:\\CustomSwagUrl.txt");
-        //        return reader.ReadToEnd();
-        //    }
-        //    catch
-        //    {
-        //        return null;
-        //    }
-        //}
     }
 }
