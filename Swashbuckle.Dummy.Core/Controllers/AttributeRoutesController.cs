@@ -8,6 +8,13 @@ namespace Swashbuckle.Dummy.Controllers
 {
     public class AttributeRoutesController : ApiController
     {
+        [Route("v3/subscriptions/IgnoreThis")]
+        // [SwaggerIgnore]
+        public void IgnoreThis([SwaggerIgnore]  string ignoreThis)
+        {
+            throw new NotImplementedException();
+        }
+
         [Route("v3/subscriptions/{id}/cancel")]
         public void CancelSubscription([SwaggerExample("777"), Range(0, 9861)] int id, [MaxLength(55)] string strWithMaxLen,
                             [MinLength(24)] string strWithMinLen)

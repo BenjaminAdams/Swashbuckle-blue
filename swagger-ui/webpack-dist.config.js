@@ -64,7 +64,7 @@ var rules = [
 module.exports = require('./make-webpack-config.js')(rules, {
   _special: {
     separateStylesheets: true,
-    minimize: true,
+    minimize: false,
     sourcemaps: true,
   },
 

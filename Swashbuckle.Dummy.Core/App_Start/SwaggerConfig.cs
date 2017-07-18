@@ -208,7 +208,7 @@ namespace Swashbuckle.Dummy
                     //var customSwagUrl = LoadCustomSwagUrl();
                     //  if (customSwagUrl != null)
                     // {
-                    c.CustomSwagDocLocation("http://localhost/Payments.Productization.Api/swagger/docs/v3");
+                    // c.CustomSwagDocLocation("http://localhost/Payments.Productization.Api/swagger/docs/v3");
                     // }
 
                     c.CustomLogo("http://i.imgur.com/2QS9HX9.png");

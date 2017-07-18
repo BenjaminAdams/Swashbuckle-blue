@@ -63,11 +63,18 @@ module.exports = function(rules, options) {
     }))
   }
 
+  
+  specialOptions.minimize= false;
+  
+  console.log('*************specialOptions.minimize=',specialOptions.minimize)  
+  
   if( specialOptions.minimize ) {
 
     plugins.push(
       new webpack.optimize.UglifyJsPlugin({
-        sourceMap: true,
+        sourceMap: false,
+		compress: false,
+		beautify: true
       }),
       new webpack.LoaderOptionsPlugin({
         options: {
@@ -77,7 +84,6 @@ module.exports = function(rules, options) {
     )
 
     plugins.push( new webpack.NoEmitOnErrorsPlugin())
-
   }
 
   plugins.push(
@@ -96,8 +102,7 @@ module.exports = function(rules, options) {
     }))
 	
 	
-	plugins.push(new CopyWebpackPlugin([            
-            // {output}/to/file.txt         
+	plugins.push(new CopyWebpackPlugin([                
             { from: path.join(__dirname, "dist/swagger-ui-bundle.js") ,to: path.join(__dirname,"../Swashbuckle.Core/SwaggerUi/CustomAssets/swagger-ui-bundle.js") },            
             { from: path.join(__dirname, "dist/swagger-ui-bundle.js.map") ,to: path.join(__dirname,"../Swashbuckle.Core/SwaggerUi/CustomAssets/swagger-ui-bundle.js.map") },            
             { from: path.join(__dirname, "dist/swagger-ui.css") ,to: path.join(__dirname,"../Swashbuckle.Core/SwaggerUi/CustomAssets/swagger-ui.css") },            
@@ -105,11 +110,6 @@ module.exports = function(rules, options) {
             { from: path.join(__dirname, "dist/swagger-ui.js") ,to: path.join(__dirname,"../Swashbuckle.Core/SwaggerUi/CustomAssets/swagger-ui.js") },            
             { from: path.join(__dirname, "dist/swagger-ui.js.map") ,to: path.join(__dirname,"../Swashbuckle.Core/SwaggerUi/CustomAssets/swagger-ui.js.map") },            
         ], {
-            ignore: [
-                // Doesn't copy any files with a txt extension    
-                '*index.html',               
-            ],
-
             // By default, we only copy modified files during
             // a watch or webpack-dev-server build. Setting this
             // to `true` copies all files.

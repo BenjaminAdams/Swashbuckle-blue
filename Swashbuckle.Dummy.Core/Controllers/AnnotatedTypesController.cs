@@ -8,9 +8,12 @@ using System.Web.Http;
 
 namespace Swashbuckle.Dummy.Controllers
 {
+    [RoutePrefix("v1/thisShouldBeIgnored")]
     public class AnnotatedTypesController : ApiController
     {
-        public int Create(Payment payment)
+        [HttpPost]
+        [Route("IgnoreThisPlz")]
+        public int IgnoreOneParam(Payment payment)
         {
             if (!ModelState.IsValid)
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState));
@@ -23,6 +26,9 @@ namespace Swashbuckle.Dummy.Controllers
     {
         [Required]
         public decimal Amount { get; set; }
+
+        // [SwaggerIgnore]
+        public string SwaggerIgnoredParam { get; set; }
 
         [Required, RegularExpression("^[3-6]?\\d{12,15}$")]
         public string CardNumber { get; set; }
