@@ -26,6 +26,8 @@ import LiveResponse from "core/components/live-response"
 import OnlineValidatorBadge from "core/components/online-validator-badge"
 import Operations from "core/components/operations"
 import Operation from "core/components/operation"
+import OperationWrapper from "core/components/operationWrapper"
+import Sidebar from "core/components/sidebar"
 import HighlightCode from "core/components/highlight-code"
 import Responses from "core/components/responses"
 import Response from "core/components/response"
@@ -61,7 +63,6 @@ import * as LayoutUtils from "core/components/layout-utils"
 import * as JsonSchemaComponents from "core/json-schema-components"
 
 export default function() {
-
   let coreComponents = {
     components: {
       App,
@@ -79,6 +80,8 @@ export default function() {
       onlineValidatorBadge: OnlineValidatorBadge,
       operations: Operations,
       operation: Operation,
+      operationWrapper: OperationWrapper,
+      sidebar: Sidebar,
       highlightCode: HighlightCode,
       responses: Responses,
       response: Response,

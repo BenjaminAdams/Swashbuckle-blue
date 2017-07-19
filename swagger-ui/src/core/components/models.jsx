@@ -16,8 +16,6 @@ export default class Models extends Component {
         let { docExpansion } = getConfigs()
         let showModels = layoutSelectors.isShown("models", docExpansion === "full" || docExpansion === "list")
 
-        console.log('showModels=', showModels)
-
         const ModelWrapper = getComponent("ModelWrapper")
         const Collapse = getComponent("Collapse")
 

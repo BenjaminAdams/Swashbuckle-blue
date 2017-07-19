@@ -20,6 +20,7 @@ namespace Swashbuckle.Application
 
             _templateParams = new Dictionary<string, string>
             {
+                { "%(vRootUrl)", "" },
                 { "%(StylesheetIncludes)", "" },
                 { "%(DiscoveryPaths)", String.Join("|", discoveryPaths) },
                 { "%(CustomSwagDocLocation)", "" },
