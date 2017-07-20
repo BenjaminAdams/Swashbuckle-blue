@@ -52,9 +52,6 @@ export default class Operations extends React.Component {
       var allTheRoutes = taggedOps.map((tagObj, tag) => {
           let operations = tagObj.get("operations")
           let tagDescription = tagObj.getIn(["tagDetails", "description"], null)
-
-          //const operationId = op.getIn(["operation", "operationId"]) || op.getIn(["operation", "__originalOperationId"]) || opId(op.get("operation"), path, method) || op.get("id")
-
           let isShownKey = ["operations-tag", tag]
           let showTag = layoutSelectors.isShown(isShownKey, docExpansion === "full" || docExpansion === "list")
 
@@ -68,6 +65,7 @@ export default class Operations extends React.Component {
               const allowTryItOut = specSelectors.allowTryItOutFor(op.get("path"), op.get("method"))
               const response = specSelectors.responseFor(op.get("path"), op.get("method"))
               const request = specSelectors.requestFor(op.get("path"), op.get("method"))
+           
 
               return <Route 
                       exact path={ "/" + op.get('routeId') } 
@@ -75,14 +73,13 @@ export default class Operations extends React.Component {
                       render={ x => 
                         <Operation
                           {...op.toObject()}
-                          isShownKey={isShownKey}
                           jumpToKey={jumpToKey}
                           showSummary={showSummary}
                           key={isShownKey}
                           response={ response }
                           request={ request }
                           allowTryItOut={allowTryItOut}
-                          displayOperationId={displayOperationId}
+                          displayOperationId={true}
                           displayRequestDuration={displayRequestDuration}
                           specActions={ specActions }
                           specSelectors={ specSelectors }
@@ -95,10 +92,10 @@ export default class Operations extends React.Component {
                           getConfigs={ getConfigs }
                         />
             }
-            />})
+            />}).toArray()
 
             return routes;
-          })
+          }).toArray()
         //  { taggedOps.size < 1 ? <h3> No operations defined in spec! </h3> : null }
 
         return (

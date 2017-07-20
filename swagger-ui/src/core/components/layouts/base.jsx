@@ -61,14 +61,11 @@ export default class BaseLayout extends React.Component {
       //var baseUrl = baseUrlSplit[0] + '/swagger/ui/index'
       var baseUrl = window.swashbuckleConfig.baseUrl
 
-
-
-
     return (
+       <span>
+      <Sidebar taggedOps={taggedOps} />
       <div className='swagger-ui'>
-
-                <Sidebar taggedOps={taggedOps} />
-
+                
                 <div className="collapseExpandIcon" title="Collapse sidebar">&lt;&lt;</div>
                 <div id="swagger-ui-container">
                     <Errors />
@@ -121,6 +118,7 @@ export default class BaseLayout extends React.Component {
                     </Row>
                 </div>
             </div>
+            </span>
 
     )
   }

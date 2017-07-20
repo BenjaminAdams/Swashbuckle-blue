@@ -11,8 +11,6 @@ export default class Operation extends PureComponent {
     method: PropTypes.string.isRequired,
     operation: PropTypes.object.isRequired,
     showSummary: PropTypes.bool,
-
-    isShownKey: CustomPropTypes.arrayOrString.isRequired,
     jumpToKey: CustomPropTypes.arrayOrString.isRequired,
 
     allowTryItOut: PropTypes.bool,
@@ -72,18 +70,6 @@ export default class Operation extends PureComponent {
     }
   }
 
-  toggleShown =() => {
-    let { layoutActions, isShownKey } = this.props
-    layoutActions.show(isShownKey, !this.isShown())
-  }
-
-  isShown =() => {
-    let { layoutSelectors, isShownKey, getConfigs } = this.props
-    let { docExpansion } = getConfigs()
-
-    return layoutSelectors.isShown(isShownKey, docExpansion === "full" ) // Here is where we set the default
-  }
-
   onTryoutClick =() => {
     this.setState({tryItOutEnabled: !this.state.tryItOutEnabled})
   }
@@ -100,7 +86,6 @@ export default class Operation extends PureComponent {
 
   render() {
     let {
-      isShownKey,
       jumpToKey,
       path,
       method,
@@ -130,6 +115,7 @@ export default class Operation extends PureComponent {
     let schemes = operation.get("schemes")
     let parameters = getList(operation, ["parameters"])
     let operationId = operation.get("__originalOperationId")
+
     let operationScheme = specSelectors.operationScheme(path, method)
 
     const Responses = getComponent("responses")
@@ -153,20 +139,15 @@ export default class Operation extends PureComponent {
     }
 
     let { tryItOutEnabled } = this.state
-    let shown = this.isShown()
+    let shown = true
     let onChangeKey = [ path, method ] // Used to add values to _this_ operation ( indexed by path and method )
 
     return (
-        <div className={deprecated ? "opblock opblock-deprecated" : shown ? `opblock opblock-${method} is-open` : `opblock opblock-${method}`} id={isShownKey.join("-")} >
-          <div className={`opblock-summary opblock-summary-${method}`} onClick={this.toggleShown} >
+        <div className={deprecated ? "opblock opblock-deprecated" : shown ? `opblock opblock-${method} is-open` : `opblock opblock-${method}`} id={operationId} >
+          <div className={`opblock-summary opblock-summary-${method}`} >
               <span className="opblock-summary-method">{method.toUpperCase()}</span>
               <span className={ deprecated ? "opblock-summary-path__deprecated" : "opblock-summary-path" } >
-                <a
-                  className="nostyle"
-                  onClick={(e) => e.preventDefault()}
-                  href={ isDeepLinkingEnabled ? `#/${isShownKey[1]}/${isShownKey[2]}` : ""} >
-                  <span>{path}</span>
-                </a>
+                    <span>{path}</span>
                 <JumpToPath path={jumpToKey} />
               </span>
 

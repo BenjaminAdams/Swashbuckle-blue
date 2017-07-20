@@ -13,7 +13,7 @@ class ListChildren extends React.Component {
     var ops = operations.map(function (op) {
       return <li key={op.routeId} className="sidebarChild" title={op.operation.operationId}>
         <Link to={"/" + op.routeId}>
-          <div className="methodBtn btn-get">{op.method}</div>
+          <div className={"methodBtn " + "btn-"+op.method}>{op.method}</div>
           <div className="childTxt">{op.operation.operationId}</div>
         </Link>
       </li>
@@ -49,7 +49,7 @@ export default class BaseLayout extends React.Component {
 
     return <HashRouter basename={baseUrl}>
       <ul id="sidebar">
-        <li>
+        <li className="sidebarParent">
           <ul>
             <Link to="/">Home</Link>
           </ul>

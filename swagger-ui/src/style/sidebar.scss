@@ -1,19 +1,24 @@
 ﻿#sidebar {
-  font-family: Museo Sans For Dell !important;
-  position: fixed;
-  left: 250px;
-  width: 250px;
-  height: 80%;
-  margin-left: -250px;
-  padding-top: 50px;
-  padding-bottom: 20%;
-  border: none;
-  border-radius: 0;
-  overflow-y: auto;
-  background-color: #0085c3;
-  color: white;
+    font-family: Museo Sans For Dell !important;
+    position: fixed;
+    left: 250px;
+    width: 250px;
+    top: 36px;
+    height: 100%;
+    margin-left: -250px;
+    padding-top: 18px;
+    padding-bottom: 22%;
+    border: none;
+    border-radius: 0;
+    overflow-y: auto;
+    background-color: #0085c3;
+    color: white;
 
-  li.sidebarChild {
+  ol, ul, li {
+    list-style: none;
+  }
+
+  .sidebarChild {
     font-size: 12px;
     margin-top: 3px;
     margin-left: 10px;
@@ -112,64 +117,40 @@
     }
   }
 
-  #sidebarContainer {
-    position: fixed;
-    padding-top: 71px;
-    background-color: #0085c3;
-    height: 94%;
-  }
-
-  .swagger-section {
-    position: relative;
-    left: 0px;
-    height: inherit;
-    margin-left: 0px;
-    padding-top: 0px;
-    padding-bottom: 10px;
-    width: 350px;
-  }
-
-  .swagger-section #sidebar::-webkit-scrollbar {
+   #sidebar::-webkit-scrollbar {
     width: 15px;
     cursor: all-scroll;
   }
 
-  .swagger-section #sidebar::-webkit-scrollbar-track {
+   #sidebar::-webkit-scrollbar-track {
     background-color: #99e6ff;
     -webkit-border-radius: 0;
   }
 
-  .swagger-section #sidebar::-webkit-scrollbar-thumb {
+  #sidebar::-webkit-scrollbar-thumb {
     background-color: #0099cc;
     -webkit-border-radius: 0;
   }
 
-  .swagger-section li {
+  li {
     padding: 10px 0px 10px 10px;
   }
 
-  .swagger-section li .childTxt {
+  .childTxt {
     width: 245px;
     font-family: Museo Sans For Dell;
     font-weight: bold;
   }
 
-  .swagger-section li .methodBtn {
+  .methodBtn {
     width: 50px;
   }
 
-  .swagger-section li .sidebarParent {
+  .sidebarParent {
     font-family: Museo Sans For Dell;
   }
 
-  .swagger-section #header {
-    position: absolute;
-    padding: 17px 0;
-  }
 
-  .footer {
-    margin-bottom: 20px;
-  }
 }
 
 .collapseExpandIcon {
