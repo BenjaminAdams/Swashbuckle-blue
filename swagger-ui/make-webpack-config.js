@@ -51,7 +51,7 @@ module.exports = function(rules, options) {
     separateStylesheets: true,
     minimize: false,
     longTermCaching: false,
-    sourcemaps: false,
+    sourcemaps: true,
   }, options._special)
 
   var plugins = []
@@ -64,7 +64,7 @@ module.exports = function(rules, options) {
   }
 
   
-  specialOptions.minimize= false;
+  //specialOptions.minimize= false;
   
   console.log('*************specialOptions.minimize=',specialOptions.minimize)  
   
@@ -72,7 +72,7 @@ module.exports = function(rules, options) {
 
     plugins.push(
       new webpack.optimize.UglifyJsPlugin({
-        sourceMap: false,
+        sourceMap: true,
 		compress: false,
 		beautify: true
       }),

@@ -195,7 +195,6 @@ export const operationsWithTags = createSelector(
       var operationId = op.getIn(["operation","operationId"])
       op= op.set('parentId', parentId)
       op= op.set('routeId', parentId + "_" + operationId)
-      debugger;
       if(tags.count() < 1)
         return taggedMap.update(DEFAULT_TAG, List(), ar => ar.push(op))
       return tags.reduce( (res, tag) => res.update(tag, List(), (ar) => ar.push(op)), taggedMap )

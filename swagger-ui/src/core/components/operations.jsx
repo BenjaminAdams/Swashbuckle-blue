@@ -1,7 +1,7 @@
 import React from "react"
 import PropTypes from "prop-types"
 import { helpers } from "swagger-client"
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import { HashRouter, Route, Link } from 'react-router-dom'
 
 const { opId } = helpers
 
@@ -61,11 +61,11 @@ export default class Operations extends React.Component {
       taggedOps = taggedOps.slice(0, maxDisplayedTags)
     }
 
-    return (
-        <div>
+    //var baseUrlSplit = window.location.pathname.split('/swagger/ui/index')
+    //var baseUrl = baseUrlSplit[0] + '/swagger/ui/index'
+    var baseUrl =window.swashbuckleConfig.baseUrl
 
-          {
-            taggedOps.map( (tagObj, tag) => {
+      var allTheRoutes= taggedOps.map( (tagObj, tag) => {
               let operations = tagObj.get("operations")
               let tagDescription = tagObj.getIn(["tagDetails", "description"], null)
 
@@ -74,11 +74,21 @@ export default class Operations extends React.Component {
              // let isShownKey = ["operations-tag", tag]
              // let showTag = layoutSelectors.isShown(isShownKey, docExpansion === "full" || docExpansion === "list")
 
-                  operations.map(op => <Route exact path={"#" + tag + "_" + op.get('id')}  key={tag + "_" + op.get('id')}  render={x => console.log('inside render=', x) }  />)
-            }).toArray()
-          }
+            //var routes = operations.map(op => <Route exact path={op.get('routeId')}  key={op.get('routeId')}  render={x => console.log('inside render=', x) }  />)
+            var routes = operations.map(op => <Route exact path={"/"+op.get('routeId')}  key={op.get('routeId')}  render={x => <div>asdasdasd</div> }  />)
 
-          { taggedOps.size < 1 ? <h3> No operations defined in spec! </h3> : null }
+            return routes
+
+            })
+            //  { taggedOps.size < 1 ? <h3> No operations defined in spec! </h3> : null }
+
+    return (
+        <div>
+          <HashRouter basename={baseUrl}>
+          <div>
+          {allTheRoutes}        
+          </div>
+          </HashRouter>  
         </div>
     )
   }
