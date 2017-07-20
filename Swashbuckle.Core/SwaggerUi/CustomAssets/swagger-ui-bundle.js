@@ -44516,7 +44516,7 @@ var CONFIGS = [
 
 
 // eslint-disable-next-line no-undef
-var _buildInfo = {"PACKAGE_VERSION":"3.0.19","GIT_COMMIT":"ga8a5ee8","GIT_DIRTY":true,"HOSTNAME":"WN7X64-5GH7N22","BUILD_TIME":"Wed, 19 Jul 2017 16:50:58 GMT"},GIT_DIRTY = _buildInfo.GIT_DIRTY,GIT_COMMIT = _buildInfo.GIT_COMMIT,PACKAGE_VERSION = _buildInfo.PACKAGE_VERSION,HOSTNAME = _buildInfo.HOSTNAME,BUILD_TIME = _buildInfo.BUILD_TIME;
+var _buildInfo = {"PACKAGE_VERSION":"3.0.19","GIT_COMMIT":"g6eb8366","GIT_DIRTY":true,"HOSTNAME":"WN7X64-5GH7N22","BUILD_TIME":"Wed, 19 Jul 2017 21:57:52 GMT"},GIT_DIRTY = _buildInfo.GIT_DIRTY,GIT_COMMIT = _buildInfo.GIT_COMMIT,PACKAGE_VERSION = _buildInfo.PACKAGE_VERSION,HOSTNAME = _buildInfo.HOSTNAME,BUILD_TIME = _buildInfo.BUILD_TIME;
 
 module.exports = function SwaggerUI(opts) {
 
@@ -48441,12 +48441,6 @@ BaseLayout = function (_React$Component) {(0, _inherits3.default)(BaseLayout, _R
                 return _react2.default.createElement("h4", null, "No spec provided.");
             }
 
-            //  function RenderParents(taggedOps) {
-            //   return  (taggedOps.map( (tagObj, tag)  =>
-            //     ( <li className="sidebarParent">{tag}</li> )
-            //   ))
-            //  }
-
             return (
                 _react2.default.createElement("div", { className: "swagger-ui" },
 
@@ -49483,35 +49477,12 @@ Operations = function (_React$Component) {(0, _inherits3.default)(Operations, _R
             var operations = tagObj.get("operations");
             var tagDescription = tagObj.getIn(["tagDetails", "description"], null);
 
+            //const operationId = op.getIn(["operation", "operationId"]) || op.getIn(["operation", "__originalOperationId"]) || opId(op.get("operation"), path, method) || op.get("id")
+
             // let isShownKey = ["operations-tag", tag]
             // let showTag = layoutSelectors.isShown(isShownKey, docExpansion === "full" || docExpansion === "list")
 
-            // <div className={showTag ? "opblock-tag-section is-open" : "opblock-tag-section"} key={"operation-" + tag}>
-
-            //<h4
-            //  onClick={() => layoutActions.show(isShownKey, !showTag)}
-            //  className={!tagDescription ? "opblock-tag no-desc" : "opblock-tag" }
-            //  id={isShownKey.join("-")}>
-            //  <a
-            //    className="nostyle"
-            //    onClick={(e) => e.preventDefault()}
-            //    href={ isDeepLinkingEnabled ? `#/${tag}` : ""}>
-            //    <span>{tag}</span>
-            //  </a>
-            //  { !tagDescription ? null :
-            //      <small>
-            //        { tagDescription }
-            //      </small>
-            //  }
-
-            //  <button className="expand-operation" title="Expand operation" onClick={() => layoutActions.show(isShownKey, !showTag)}>
-            //    <svg className="arrow" width="20" height="20">
-            //      <use xlinkHref={showTag ? "#large-arrow-down" : "#large-arrow"} />
-            //    </svg>
-            //  </button>
-            //</h4>
-
-            operations.map(function (op) {return _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: "/" + op.get('id'), key: op.get('id'), render: function render(x) {return console.log('inside render=', x);} });});
+            operations.map(function (op) {return _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: "#" + tag + "_" + op.get('id'), key: tag + "_" + op.get('id'), render: function render(x) {return console.log('inside render=', x);} });});
           }).toArray(),
 
 
@@ -50531,14 +50502,17 @@ ListChildren = function (_React$Component) {(0, _inherits3.default)(ListChildren
 
 
 
-    {var
-      operations = this.props.operations;
+
+    {var _props =
+      this.props,operations = _props.operations,parentName = _props.parentName;
 
       var ops = operations.map(function (op) {
-        return _react2.default.createElement("li", { className: "sidebarChild", title: "/Documentation/ListErrorCodes", "data-parentid": "_Documentation", "data-nickname": "ListErrorCodes" },
-          _react2.default.createElement(_reactRouterDom.Link, { to: "/" + op.get('id') },
-            _react2.default.createElement("div", { className: "methodBtn btn-get" }, op.get('method')),
-            _react2.default.createElement("div", { className: "childTxt" }, "ListErrorCodes")));
+        var routeId = parentName + "_" + op.operation.operationId;
+
+        return _react2.default.createElement("li", { key: routeId, className: "sidebarChild", title: op.operation.operationId },
+          _react2.default.createElement(_reactRouterDom.Link, { to: "#" + routeId },
+            _react2.default.createElement("div", { className: "methodBtn btn-get" }, op.method),
+            _react2.default.createElement("div", { className: "childTxt" }, op.operation.operationId)));
 
 
       });
@@ -50546,7 +50520,7 @@ ListChildren = function (_React$Component) {(0, _inherits3.default)(ListChildren
       return (
         _react2.default.createElement("ul", null, ops));
 
-    } }]);return ListChildren;}(_react2.default.Component);ListChildren.propTypes = { operations: _propTypes2.default.object.isRequired };var
+    } }]);return ListChildren;}(_react2.default.Component);ListChildren.propTypes = { operations: _propTypes2.default.array.isRequired, parentName: _propTypes2.default.string.isRequired };var
 
 
 BaseLayout = function (_React$Component2) {(0, _inherits3.default)(BaseLayout, _React$Component2);function BaseLayout() {(0, _classCallCheck3.default)(this, BaseLayout);return (0, _possibleConstructorReturn3.default)(this, (BaseLayout.__proto__ || (0, _getPrototypeOf2.default)(BaseLayout)).apply(this, arguments));}(0, _createClass3.default)(BaseLayout, [{ key: "render", value: function render()
@@ -50560,9 +50534,10 @@ BaseLayout = function (_React$Component2) {(0, _inherits3.default)(BaseLayout, _
       var baseUrlSplit = window.location.pathname.split('/swagger/ui/index');
       var baseUrl = baseUrlSplit[0];
 
-      var parentNodes = taggedOps.map(function (tagObj, tag) {
-        var operations = tagObj.get("operations");
-        return _react2.default.createElement("li", { className: "sidebarParent" }, tag, _react2.default.createElement(ListChildren, { operations: operations }));
+      var parentNodes = taggedOps.entrySeq().map(function (tagObj, tag) {
+        // let operations = tagObj.get("operations").toJS()
+        var operations = tagObj[1].get("operations").toJS();
+        return _react2.default.createElement("li", { className: "sidebarParent" }, tagObj[0], _react2.default.createElement(ListChildren, { operations: operations, parentName: tagObj[0] }));
       });
 
       return _react2.default.createElement(_reactRouterDom.BrowserRouter, { basename: baseUrl + '/swagger/ui/index' },

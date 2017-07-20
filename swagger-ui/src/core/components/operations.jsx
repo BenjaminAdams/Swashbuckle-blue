@@ -69,35 +69,12 @@ export default class Operations extends React.Component {
               let operations = tagObj.get("operations")
               let tagDescription = tagObj.getIn(["tagDetails", "description"], null)
 
+             //const operationId = op.getIn(["operation", "operationId"]) || op.getIn(["operation", "__originalOperationId"]) || opId(op.get("operation"), path, method) || op.get("id")
+
              // let isShownKey = ["operations-tag", tag]
              // let showTag = layoutSelectors.isShown(isShownKey, docExpansion === "full" || docExpansion === "list")
 
-               // <div className={showTag ? "opblock-tag-section is-open" : "opblock-tag-section"} key={"operation-" + tag}>
-
-                  //<h4
-                  //  onClick={() => layoutActions.show(isShownKey, !showTag)}
-                  //  className={!tagDescription ? "opblock-tag no-desc" : "opblock-tag" }
-                  //  id={isShownKey.join("-")}>
-                  //  <a
-                  //    className="nostyle"
-                  //    onClick={(e) => e.preventDefault()}
-                  //    href={ isDeepLinkingEnabled ? `#/${tag}` : ""}>
-                  //    <span>{tag}</span>
-                  //  </a>
-                  //  { !tagDescription ? null :
-                  //      <small>
-                  //        { tagDescription }
-                  //      </small>
-                  //  }
-
-                  //  <button className="expand-operation" title="Expand operation" onClick={() => layoutActions.show(isShownKey, !showTag)}>
-                  //    <svg className="arrow" width="20" height="20">
-                  //      <use xlinkHref={showTag ? "#large-arrow-down" : "#large-arrow"} />
-                  //    </svg>
-                  //  </button>
-                  //</h4>
-
-                  operations.map(op => <Route exact path={"/" + op.get('id')}  key={op.get('id')}  render={x => console.log('inside render=', x) }  />)
+                  operations.map(op => <Route exact path={"#" + tag + "_" + op.get('id')}  key={tag + "_" + op.get('id')}  render={x => console.log('inside render=', x) }  />)
             }).toArray()
           }
 

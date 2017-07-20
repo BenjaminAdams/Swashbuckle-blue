@@ -1,0 +1,17 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+    {
+            "name": "Launch Chrome",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://localhost:3200",
+            "webRoot": "${workspaceRoot}/src",
+            "userDataDir": "${workspaceRoot}/.chrome",
+            "smartStep": true
+            // "sourceMapPathOverrides": {
+            //     "webpack:///src/*": "${webRoot}/*"
+            // }
+    }
+    ]
+}

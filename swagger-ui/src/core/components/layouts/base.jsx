@@ -57,12 +57,6 @@ export default class BaseLayout extends React.Component {
             return <h4>No spec provided.</h4>
         }
 
-      //  function RenderParents(taggedOps) {
-      //   return  (taggedOps.map( (tagObj, tag)  =>
-      //     ( <li className="sidebarParent">{tag}</li> )
-      //   ))
-      //  }
-
         return (
             <div className='swagger-ui'>
 
