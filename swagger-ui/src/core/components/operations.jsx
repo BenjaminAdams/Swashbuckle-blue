@@ -72,7 +72,8 @@ export default class Operations extends React.Component {
               return <Route 
                       exact path={ "/" + op.get('routeId') } 
                       key={ op.get('routeId') } 
-                      render={ x => <Operation
+                      render={ x => 
+                        <Operation
                           {...op.toObject()}
                           isShownKey={isShownKey}
                           jumpToKey={jumpToKey}
