@@ -1,6 +1,6 @@
 import React from "react"
 import PropTypes from "prop-types"
-import { HashRouter, Route, Link,Switch } from 'react-router-dom'
+import { HashRouter, Route, Link, Switch } from 'react-router-dom'
 
 export default class BaseLayout extends React.Component {
   static propTypes = {
@@ -13,9 +13,25 @@ export default class BaseLayout extends React.Component {
     getComponent: PropTypes.func.isRequired
   }
 
+  constructor(props) {
+    super(props);
+    this.state = { showSidebar: true, leftPadding: '250px' };
+  }
+
   onFilterChange = (e) => {
     let { target: { value } } = e
     this.props.layoutActions.updateFilter(value)
+  }
+
+  toggleSidebar = () => {
+    this.state.showSidebar= !this.state.showSidebar//we have to set this before we call setState because its not changing it in local scope
+    this.setState({ showSidebar: this.state.showSidebar });
+    console.log(this.state.showSidebar)
+    if (this.state.showSidebar === true) {
+           this.setState({ leftPadding: '250px' });
+    } else { 
+        this.setState({ leftPadding: '0px' });  
+    }
   }
 
   render() {
@@ -57,17 +73,15 @@ export default class BaseLayout extends React.Component {
       return <h4>No spec provided.</h4>
     }
 
-      //var baseUrlSplit = window.location.pathname.split('/swagger/ui/index')
-      //var baseUrl = baseUrlSplit[0] + '/swagger/ui/index'
-      var baseUrl = window.swashbuckleConfig.baseUrl
+    //var baseUrlSplit = window.location.pathname.split('/swagger/ui/index')
+    //var baseUrl = baseUrlSplit[0] + '/swagger/ui/index'
+    var baseUrl = window.swashbuckleConfig.baseUrl
 
     return (
-       <span>
-      <Sidebar taggedOps={taggedOps} />
+      <span>
+      <Sidebar taggedOps={taggedOps} toggleSidebarFunc={this.toggleSidebar} showSidebar={this.state.showSidebar} />
       <div className='swagger-ui'>
-                
-               
-                <div id="swagger-ui-container">
+                <div id="swagger-ui-container" style={{ paddingLeft: this.state.leftPadding }}>
                     <Errors />
                       <HashRouter basename={ baseUrl } hashType="noslash">
                        <Switch>

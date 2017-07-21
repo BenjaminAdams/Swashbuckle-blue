@@ -27,28 +27,20 @@ class ListChildren extends React.Component {
 
 export default class BaseLayout extends React.Component {
   static propTypes = {
-    taggedOps: PropTypes.object.isRequired
+    taggedOps: PropTypes.object.isRequired,
+    showSidebar:  PropTypes.bool.isRequired,
+    toggleSidebarFunc: PropTypes.func.isRequired
   }
 
 constructor(props) {
     super(props);
-     this.state = {showSidebar: true};
-     this.toggleSidebar = this.toggleSidebar.bind(this);
+     this.state = {showSidebar: props.showSidebar};
   }
   
- toggleSidebar = () => {   
-    this.setState({ showSidebar: !this.state.showSidebar });
 
-	if($(window).width() <= 1024) {
-				$('#swagger-ui-container').css({ 'padding-left': '30px' });
-			} else {
-				$('#swagger-ui-container').css({ 'padding-left': '0px' });
-			}
-
-}
 
   render() {
-    let { taggedOps } = this.props
+    let { taggedOps, showSidebar,toggleSidebarFunc } = this.props
 
     // var baseUrlSplit = window.location.pathname.split('/swagger/ui/index') var
     // baseUrl = baseUrlSplit[0] + '/swagger/ui/index'
@@ -66,13 +58,13 @@ constructor(props) {
     return <HashRouter basename={baseUrl} hashType="noslash">
     <div>
       <div className="collapseExpandIcon" 
-            title={this.state.showSidebar ? 'Collapse sidebar' : 'Show sidebar' } 
-            onClick={this.toggleSidebar}
-            style={this.state.showSidebar ? { left: '250px' } : { left: '0px' }}>
-                {this.state.showSidebar ? '<<' : '>>' } 
+            title={this.props.showSidebar ? 'Collapse sidebar' : 'Show sidebar' } 
+            onClick={toggleSidebarFunc}
+            style={this.props.showSidebar ? { left: '250px' } : { left: '0px' }}>
+                {this.props.showSidebar ? '<<' : '>>' } 
             
       </div>
-      <ul id="sidebar" style={this.state.showSidebar ? {} : { display: 'none' }}>
+      <ul id="sidebar" style={this.props.showSidebar ? {} : { display: 'none' }}>
         <li className="sidebarParent">
           <ul>
             <Link to="/">Intro</Link>
