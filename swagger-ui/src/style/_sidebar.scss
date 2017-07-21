@@ -8,6 +8,7 @@
     margin-left: -250px;
     padding-top: 18px;
     padding-bottom: 22%;
+    padding-left: 0px;
     border: none;
     border-radius: 0;
     overflow-y: auto;
@@ -18,10 +19,28 @@
     list-style: none;
   }
 
+  ul {
+    padding-left:4px;
+  }
+
+    a {
+      color: white;
+      text-decoration: none;
+    }
+
+
+  .sidebarParent {
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+  .sidebarParent:not(:first-child) {
+    margin-top:10px;
+  }
+
   .sidebarChild {
+    padding-top:2px;
     font-size: 12px;
-    margin-top: 3px;
-    margin-left: 10px;
     cursor: pointer;
     user-select: none;
     -moz-user-select: none; /* Firefox */
@@ -29,34 +48,28 @@
     -khtml-user-select: none; /* KHTML browsers (e.g. Konqueror) */
     -webkit-user-select: none; /* Chrome, Safari, and Opera */
     -webkit-touch-callout: none; /* Disable Android and iOS callouts*/
-  }
-
-  li.sidebarParent {
-    font-weight: bold;
-    font-size: 18px;
-    margin-top: 30px;
-    padding-bottom: 0px;
-    margin-bottom: -3px;
-  }
-
-  li {
-    padding: 5px 0px 5px 2px;
-    clear: both;
-    white-space: nowrap;
 
     a {
-      color: white;
-      text-decoration: none;
+      width:250px; 
     }
+  }
+
+  .sidebarChild:not(:first-child) {
+    padding-top:5px;
+  }
+
+
+  li {
+    padding: 5px 0px 0px 5px;
+    white-space: nowrap;
 
     .methodBtn {
       padding: 4px 4px;
       margin-right: 4px;
       color: #0085c3;
       font-size: 11px;
-      display: block;
-      width: 28px;
-      float: left;
+      display: inline-block;
+      min-width: 40px;
       vertical-align: top;
       font-weight: bold;
       background-color: white;
@@ -72,12 +85,11 @@
     }
 
     .childTxt {
-      width: 145px;
-      display: block;
+      width: 170px;
+      display: inline-block;
       vertical-align: top;
       white-space: normal;
       margin-top: 3px;
-      float: left;
       overflow-wrap: break-word;
       word-wrap: break-word;
       -ms-word-break: break-all;
@@ -119,26 +131,15 @@
   }
 
 
-  li {
-    padding: 10px 0px 10px 10px;
-  }
-
   .childTxt {
     width: 245px;
     font-family: Museo Sans For Dell;
     font-weight: bold;
   }
 
-  .methodBtn {
-    width: 50px;
-  }
-
   .sidebarParent {
     font-family: Museo Sans For Dell;
   }
-
-
-
 }
 
 .collapseExpandIcon {

@@ -37,8 +37,6 @@ constructor(props) {
      this.state = {showSidebar: props.showSidebar};
   }
   
-
-
   render() {
     let { taggedOps, showSidebar,toggleSidebarFunc } = this.props
 

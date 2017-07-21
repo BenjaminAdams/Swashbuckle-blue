@@ -36,9 +36,7 @@ export default class BaseLayout extends React.Component {
 
   render() {
     let { specSelectors, specActions, getComponent, layoutSelectors } = this.props
-
     let taggedOps = specSelectors.taggedOperations()
-
     let info = specSelectors.info()
     let url = specSelectors.url()
     let basePath = specSelectors.basePath()
@@ -46,7 +44,6 @@ export default class BaseLayout extends React.Component {
     let securityDefinitions = specSelectors.securityDefinitions()
     let externalDocs = specSelectors.externalDocs()
     let schemes = specSelectors.schemes()
-
     let Info = getComponent("info")
     let Operations = getComponent("operations", true)
     let Operation = getComponent("operation", true)
@@ -56,17 +53,13 @@ export default class BaseLayout extends React.Component {
     let Row = getComponent("Row")
     let Col = getComponent("Col")
     let Errors = getComponent("errors", true)
-
     let isLoading = specSelectors.loadingStatus() === "loading"
     let isFailed = specSelectors.loadingStatus() === "failed"
     let filter = layoutSelectors.currentFilter()
-
     let inputStyle = {}
     if (isFailed) inputStyle.color = "red"
     if (isLoading) inputStyle.color = "#aaa"
-
     const Schemes = getComponent("schemes")
-
     const isSpecEmpty = !specSelectors.specStr()
 
     if (isSpecEmpty) {

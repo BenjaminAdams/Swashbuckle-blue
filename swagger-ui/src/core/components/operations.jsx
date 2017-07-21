@@ -98,12 +98,12 @@ export default class Operations extends React.Component {
         
         return (
           <div>
-        <HashRouter basename={ baseUrl } hashType="noslash">
-          <div>
-            { allTheRoutes }
+            <HashRouter basename={ baseUrl } hashType="noslash">
+              <div>
+                { allTheRoutes }
+              </div>
+            </HashRouter>
           </div>
-        </HashRouter>
-      </div>
         )
       }
     }

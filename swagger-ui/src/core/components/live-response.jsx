@@ -55,7 +55,6 @@ export default class LiveResponse extends React.Component {
 
     return (
       <div>
-        { request && <Curl request={ request }/> }
         <h4>Server response</h4>
         <table className="responses-table">
           <thead>
@@ -70,7 +69,7 @@ export default class LiveResponse extends React.Component {
                 { status }
                 {
                   notDocumented ? <div className="response-undocumented">
-                                    <i> Undocumented </i>
+                                    <i style={{color: 'red'}}>Error</i>
                                   </div>
                                 : null
                 }
@@ -100,6 +99,7 @@ export default class LiveResponse extends React.Component {
             </tr>
           </tbody>
         </table>
+      { request && <Curl request={ request }/> }
       </div>
     )
   }
