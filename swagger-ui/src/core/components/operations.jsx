@@ -21,6 +21,7 @@ export default class Operations extends React.Component {
       let { specSelectors, specActions, getComponent, layoutSelectors, layoutActions, authActions, authSelectors, getConfigs, fn } = this.props
 
       let taggedOps = specSelectors.taggedOperations()
+      if(taggedOps.size < 1) return <h3> No operations defined in spec! </h3>
 
       const Operation = getComponent("operation")
       const OperationWrapper = getComponent("operationWrapper")
@@ -55,7 +56,6 @@ export default class Operations extends React.Component {
           let isShownKey = ["operations-tag", tag]
           let showTag = layoutSelectors.isShown(isShownKey, docExpansion === "full" || docExpansion === "list")
 
-          //var routes = operations.map(op => <Route exact path={op.get('routeId')}  key={op.get('routeId')}  render={x => console.log('inside render=', x) }  />)
           var routes = operations.map(op => {
               const path = op.get("path", "")
               const method = op.get("method", "")
@@ -66,7 +66,6 @@ export default class Operations extends React.Component {
               const response = specSelectors.responseFor(op.get("path"), op.get("method"))
               const request = specSelectors.requestFor(op.get("path"), op.get("method"))
            
-
               return <Route 
                       exact path={ "/" + op.get('routeId') } 
                       key={ op.get('routeId') } 
@@ -96,11 +95,10 @@ export default class Operations extends React.Component {
 
             return routes;
           }).toArray()
-        //  { taggedOps.size < 1 ? <h3> No operations defined in spec! </h3> : null }
-
+        
         return (
           <div>
-        <HashRouter basename={ baseUrl }>
+        <HashRouter basename={ baseUrl } hashType="noslash">
           <div>
             { allTheRoutes }
           </div>

@@ -66,10 +66,10 @@ export default class BaseLayout extends React.Component {
       <Sidebar taggedOps={taggedOps} />
       <div className='swagger-ui'>
                 
-                <div className="collapseExpandIcon" title="Collapse sidebar">&lt;&lt;</div>
+               
                 <div id="swagger-ui-container">
                     <Errors />
-                      <HashRouter basename={ baseUrl }>
+                      <HashRouter basename={ baseUrl } hashType="noslash">
                        <Switch>
                           <Route path={"/"} exact key={"home"} render={x => 
                                 <Row className="information-container">
