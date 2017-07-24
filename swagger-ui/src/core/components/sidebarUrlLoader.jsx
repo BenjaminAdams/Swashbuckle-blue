@@ -34,6 +34,7 @@ export default class Topbar extends React.Component {
     this.loadSpec(url)
     this.setSelectedUrl(url)
     localStorage.setItem('selectedDiscUrl',url);     
+    window.swashbuckleConfig.selectedDiscUrl = url
     e.preventDefault()
   }
 
@@ -106,7 +107,14 @@ export default class Topbar extends React.Component {
     let control = []
     let formOnSubmit = null
 
+    if(window.swashbuckleConfig.discoveryUrlObj.length< 2 ) return '';
+
     var selectedDiscUrl= localStorage.getItem('selectedDiscUrl');
+    if(selectedDiscUrl) {
+      window.swashbuckleConfig.selectedDiscUrl = selectedDiscUrl
+    }else {
+      selectedDiscUrl= ''
+    }
 
     if(urls) {
       let rows = []
@@ -123,11 +131,7 @@ export default class Topbar extends React.Component {
         </label>
       )
     }
-    else {
-      formOnSubmit = this.downloadUrl
-      control.push(<input key={this.state.url} className="download-url-input" type="text" onChange={ this.onUrlChange } value={this.state.url} disabled={isLoading} style={inputStyle} />)
-      control.push(<Button key="madeUpValue" className="download-url-button" onClick={ this.downloadUrl }>Explore</Button>)
-    }
+
 
     return (
           <div className="todo">

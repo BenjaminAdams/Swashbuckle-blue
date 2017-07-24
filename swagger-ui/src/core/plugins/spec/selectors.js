@@ -10,6 +10,9 @@ const state = state => {
   return state || Map()
 }
 
+
+
+
 export const lastError = createSelector(
   state,
   spec => spec.get("lastError")
@@ -188,13 +191,22 @@ export const tagDetails = (state, tag) => {
 export const operationsWithTags = createSelector(
   operationsWithRootInherited,
   tags,
-  (operations, tags) => {
+  version,
+  (operations, tags, version) => {
     return operations.reduce( (taggedMap, op) => {
       let tags = Set(op.getIn(["operation","tags"]))
       var parentId = tags.first()
       var operationId = op.getIn(["operation","operationId"])
+
+     // var version='v3'
+
+      if(!version && version !==0){
+        version=1;
+      }
+
       op= op.set('parentId', parentId)
       op= op.set('routeId', parentId + "_" + operationId)
+      op= op.set('urlHash', '/' + version + '/' + parentId + "_" + operationId)
       if(tags.count() < 1)
         return taggedMap.update(DEFAULT_TAG, List(), ar => ar.push(op))
       return tags.reduce( (res, tag) => res.update(tag, List(), (ar) => ar.push(op)), taggedMap )
@@ -332,6 +344,7 @@ export const validateBeforeExecute = ( state, pathMethod ) => {
 
   return isValid
 }
+
 
 function returnSelfOrNewMap(obj) {
   // returns obj if obj is an Immutable map, else returns a new Map

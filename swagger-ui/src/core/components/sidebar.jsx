@@ -4,15 +4,16 @@ import { HashRouter, Link } from 'react-router-dom'
 
 class ListChildren extends React.Component {
   static propTypes = {
-    operations: PropTypes.array.isRequired
+    operations: PropTypes.array.isRequired,
+    version: PropTypes.string.isRequired
   }
 
   render() {
-    const { operations } = this.props
+    const { operations, version } = this.props
 
     var ops = operations.map(function(op) {
       return <li key={op.routeId} className="sidebarChild" title={op.operation.operationId}>
-        <Link to={"/" + op.routeId}>
+        <Link to={op.urlHash}>
           <div className={"methodBtn " + "btn-"+op.method}>{op.method}</div>
           <div className="childTxt">{op.operation.operationId}</div>
         </Link>
@@ -25,14 +26,15 @@ class ListChildren extends React.Component {
   }
 }
 
-export default class BaseLayout extends React.Component {
+export default class Sidebar extends React.Component {
   static propTypes = {
     taggedOps: PropTypes.object.isRequired,
     showSidebar:  PropTypes.bool.isRequired,  //showSidebar is an input to propigate/share the click event of the close/hide button from the Operations.jsx file
     toggleSidebarFunc: PropTypes.func.isRequired,
     specActions: PropTypes.object.isRequired,
     getComponent: PropTypes.func.isRequired,
-    getConfigs: PropTypes.func.isRequired
+    getConfigs: PropTypes.func.isRequired,
+    specSelectors: PropTypes.object.isRequired,
   }
 
 constructor(props) {
@@ -41,7 +43,7 @@ constructor(props) {
   }
   
   render() {
-    let { taggedOps, showSidebar,toggleSidebarFunc, getComponent } = this.props
+    let { taggedOps, showSidebar,toggleSidebarFunc, specActions, getComponent,specSelectors } = this.props
 
     const SidebarUrlLoader = getComponent("sidebarUrlLoader", true) 
 
@@ -49,13 +51,16 @@ constructor(props) {
     // baseUrl = baseUrlSplit[0] + '/swagger/ui/index'
     var baseUrl = window.swashbuckleConfig.baseUrl
 
+    //var version= specSelectors.getVersion() //couldnt figure this out
+    var version=specSelectors.info().get('version') || '1'
+
     var parentNodes = taggedOps
       .entrySeq()
       .map(function(tagObj, tag) {
         let operations = tagObj[1]
           .get("operations")
           .toJS()
-        return <li key={tagObj[0]} className="sidebarParent">{tagObj[0]}<ListChildren operations={operations}/></li>
+        return <li key={tagObj[0]} className="sidebarParent">{tagObj[0]}<ListChildren operations={operations} version={version} /></li>
       });
 
     return <HashRouter basename={baseUrl} hashType="noslash">

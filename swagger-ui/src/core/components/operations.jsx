@@ -21,11 +21,14 @@ export default class Operations extends React.Component {
       let { specSelectors, specActions, getComponent, layoutSelectors, layoutActions, authActions, authSelectors, getConfigs, fn } = this.props
 
       let taggedOps = specSelectors.taggedOperations()
-      if(taggedOps.size < 1) return <h3> No operations defined in spec! </h3>
+      if (taggedOps.size < 1) return <h3> No operations defined in spec! </h3>
 
       const Operation = getComponent("operation")
       const OperationWrapper = getComponent("operationWrapper")
       const Collapse = getComponent("Collapse")
+
+      //var version= specSelectors.getVersion() //couldnt figure this out
+      var version = specSelectors.info().get('version') || '1'
 
       let showSummary = layoutSelectors.showSummary()
       let { docExpansion, displayOperationId, displayRequestDuration, maxDisplayedTags, deepLinking } = getConfigs()
@@ -65,9 +68,9 @@ export default class Operations extends React.Component {
               const allowTryItOut = specSelectors.allowTryItOutFor(op.get("path"), op.get("method"))
               const response = specSelectors.responseFor(op.get("path"), op.get("method"))
               const request = specSelectors.requestFor(op.get("path"), op.get("method"))
-           
+
               return <Route 
-                      exact path={ "/" + op.get('routeId') } 
+                      exact path={ op.get('urlHash') } 
                       key={ op.get('routeId') } 
                       render={ x => 
                         <Operation
@@ -95,7 +98,7 @@ export default class Operations extends React.Component {
 
             return routes;
           }).toArray()
-        
+
         return (
           <div>
             <HashRouter basename={ baseUrl } hashType="noslash">

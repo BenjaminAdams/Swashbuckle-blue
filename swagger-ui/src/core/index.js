@@ -5,6 +5,7 @@ import win from "core/window"
 import ApisPreset from "core/presets/apis"
 import * as AllPlugins from "core/plugins/all"
 import { parseSeach, filterConfigs } from "core/utils"
+import { HashRouter, Route, Link } from 'react-router-dom'
 
 const CONFIGS = [
   "url",
@@ -75,17 +76,30 @@ module.exports = function SwaggerUI(opts) {
     ],
 
     // Inline Plugin
-    fn: { },
-    components: { },
-    state: { },
+    fn: {},
+    components: {},
+    state: {},
 
     // Override some core configs... at your own risk
-    store: { },
+    store: {},
   }
 
   let queryConfig = parseSeach()
 
   const constructorConfig = deepExtend({}, defaults, opts, queryConfig)
+
+  if (window.swashbuckleConfig.discoveryUrlObj != null && window.swashbuckleConfig.discoveryUrlObj.length > 1) {
+    //get the version from the url if it exists
+    var versionFromUrl = getVersionFromUrl()
+    //find the url for that version from the window.swashbuckleConfig.discoveryUrlObj obj
+    var newDocsUrl= window.swashbuckleConfig.discoveryUrlObj.find(x=>x.version===versionFromUrl)
+    //replace url variable with that url
+    if(newDocsUrl) {
+      constructorConfig.url = window.swashbuckleConfig.rootUrl +'/'+ newDocsUrl.url
+    }else {
+      console.log('we decided to not change the url')
+    }
+  }
 
   const storeConfigs = deepExtend({}, constructorConfig.store, {
     system: {
@@ -104,7 +118,7 @@ module.exports = function SwaggerUI(opts) {
     }
   })
 
-  let inlinePlugin = ()=> {
+  let inlinePlugin = () => {
     return {
       fn: constructorConfig.fn,
       components: constructorConfig.components,
@@ -120,7 +134,7 @@ module.exports = function SwaggerUI(opts) {
   system.initOAuth = system.authActions.configureAuth
 
   const downloadSpec = (fetchedConfig) => {
-    if(typeof constructorConfig !== "object") {
+    if (typeof constructorConfig !== "object") {
       return system
     }
 
@@ -139,7 +153,7 @@ module.exports = function SwaggerUI(opts) {
       }
     }
 
-    if(mergedConfig.dom_id) {
+    if (mergedConfig.dom_id) {
       system.render(mergedConfig.dom_id, "App")
     } else {
       console.error("Skipped rendering: no `dom_id` was specified")
@@ -155,6 +169,18 @@ module.exports = function SwaggerUI(opts) {
   }
 
   return system
+}
+
+function getVersionFromUrl() {
+  try {
+    if (!window.location.hash) return null;
+    var url = window.location.hash.replace('#', '')
+    if (!url) return null;
+    return url.split('/')[0]
+  } catch (e) {
+    return null
+  }
+
 }
 
 // Add presets
