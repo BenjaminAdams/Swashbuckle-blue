@@ -7,6 +7,7 @@ namespace Swashbuckle.Application
     {
         private string _version;
         private string _title;
+        private string _url;
         private string _description;
         private string _termsOfService;
         private readonly ContactBuilder _contactBuilder = new ContactBuilder();
@@ -54,5 +55,12 @@ namespace Swashbuckle.Application
                 license = _licenseBuilder.Build()
             };
         }
+    }
+
+    public class DiscoveryUrlsObj
+    {
+        public string version { get; set; }
+        public string title { get; set; }
+        public string url { get; set; }
     }
 }

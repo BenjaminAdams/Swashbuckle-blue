@@ -34,36 +34,36 @@ namespace Swashbuckle.Dummy
                     // hold additional metadata for an API. Version and title are required but you may also provide the
                     // additional fields.
                     //
-                    c.SingleApiVersion("v1", "Swashbuckle Dummy")
-                        .Description("A sample API for testing and prototyping Swashbuckle features")
-                        .TermsOfService("Some terms")
-                        .Contact(cc => cc
-                            .Name("Some contact")
-                            .Url("http://tempuri.org/contact")
-                            .Email("some.contact@tempuri.org"))
-                        .License(lc => lc
-                            .Name("Some License")
-                            .Url("http://tempuri.org/license"));
+                    //c.SingleApiVersion("v1", "Swashbuckle Dummy")
+                    //    .Description("A sample API for testing and prototyping Swashbuckle features")
+                    //    .TermsOfService("Some terms")
+                    //    .Contact(cc => cc
+                    //        .Name("Some contact")
+                    //        .Url("http://tempuri.org/contact")
+                    //        .Email("some.contact@tempuri.org"))
+                    //    .License(lc => lc
+                    //        .Name("Some License")
+                    //        .Url("http://tempuri.org/license"));
 
-                    //c.MultipleApiVersions(
-                    //    (apiDesc, version) =>
-                    //    {
-                    //        System.Console.WriteLine("path=" + apiDesc.RelativePath);
-                    //        var path = apiDesc.RelativePath.Split('/');
-                    //        var pathVersion = path[0];
+                    c.MultipleApiVersions(
+                        (apiDesc, version) =>
+                        {
+                            //System.Console.WriteLine("path=" + apiDesc.RelativePath);
+                            var path = apiDesc.RelativePath.Split('/');
+                            var pathVersion = path[0];
 
-                    //        var testtt = CultureInfo.InvariantCulture.CompareInfo.IndexOf(pathVersion, version, CompareOptions.IgnoreCase);
+                            // var testtt = CultureInfo.InvariantCulture.CompareInfo.IndexOf(pathVersion, version, CompareOptions.IgnoreCase);
 
-                    //        return CultureInfo.InvariantCulture.CompareInfo.IndexOf(pathVersion, version, CompareOptions.IgnoreCase) >= 0;
-                    //    },
-                    //    vc =>
-                    //    {
-                    //        vc.Version("v3", "Swashbuckle Dummy API V3");
+                            return CultureInfo.InvariantCulture.CompareInfo.IndexOf(pathVersion, version, CompareOptions.IgnoreCase) >= 0;
+                        },
+                        vc =>
+                        {
+                            vc.Version("v3", "Swashbuckle Dummy API V3");
 
-                    //        // ReSharper disable once ConvertToLambdaExpression
-                    //        vc.Version("v1", "Swashbuckle Dummy API V1");
-                    //    }
-                    //);
+                            // ReSharper disable once ConvertToLambdaExpression
+                            vc.Version("v1", "Swashbuckle Dummy API V1");
+                        }
+                    );
 
                     // If your API has multiple versions, use "MultipleApiVersions" instead of "SingleApiVersion".
                     // In this case, you must provide a lambda that tells Swashbuckle which actions should be
@@ -215,7 +215,12 @@ namespace Swashbuckle.Dummy
 
                     //c.DisableValidator();
 
-                    // c.EnableDiscoveryUrlSelector();
+                    // If your API has multiple versions and you've applied the MultipleApiVersions setting
+                    // as described above, you can also enable a select box in the swagger-ui, that displays
+                    // a discovery URL for each version. This provides a convenient way for users to browse documentation
+                    // for different API versions.
+                    //
+                    c.EnableDiscoveryUrlSelector();
 
                     // Use the "InjectStylesheet" option to enrich the UI with one or more additional CSS stylesheets.
                     // The file must be included in your project as an "Embedded Resource", and then the resource's
@@ -257,13 +262,6 @@ namespace Swashbuckle.Dummy
                     // the method as shown below.
                     //
                     //c.CustomAsset("index.html", containingAssembly, "YourWebApiProject.SwaggerExtensions.index.html");
-
-                    // If your API has multiple versions and you've applied the "MultipleApiVersions" setting
-                    // as described above, you can also enable a select box in the swagger-ui, that displays
-                    // a discovery URL for each version. This provides a convenient way for users to browse documentation
-                    // for different API versions.
-                    //
-                    //c.EnableDiscoveryUrlSelector();
 
                     // If your API supports the OAuth2 Implicit flow, and you've described it correctly, according to
                     // the Swagger 2.0 specification, you can enable UI support as shown below.

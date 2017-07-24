@@ -73,8 +73,8 @@ module.exports = function(rules, options) {
     plugins.push(
       new webpack.optimize.UglifyJsPlugin({
         sourceMap: true,
-		compress: false,
-		beautify: true
+		compress: true,
+		beautify: false
       }),
       new webpack.LoaderOptionsPlugin({
         options: {
@@ -101,7 +101,7 @@ module.exports = function(rules, options) {
       })
     }))
 	
-	
+	console.log('copying the files over to the Core project')
 	plugins.push(new CopyWebpackPlugin([                
             { from: path.join(__dirname, "dist/swagger-ui-bundle.js") ,to: path.join(__dirname,"../Swashbuckle.Core/SwaggerUi/CustomAssets/swagger-ui-bundle.js") },            
             { from: path.join(__dirname, "dist/swagger-ui-bundle.js.map") ,to: path.join(__dirname,"../Swashbuckle.Core/SwaggerUi/CustomAssets/swagger-ui-bundle.js.map") },            
@@ -113,7 +113,7 @@ module.exports = function(rules, options) {
             // By default, we only copy modified files during
             // a watch or webpack-dev-server build. Setting this
             // to `true` copies all files.
-            copyUnmodified: false
+            copyUnmodified: true
         }))
 
   delete options._special

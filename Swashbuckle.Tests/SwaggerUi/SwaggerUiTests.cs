@@ -61,13 +61,11 @@ namespace Swashbuckle.Tests.SwaggerUi
         {
             SetUpHandler(c =>
                 {
-                    c.DocExpansion(DocExpansion.Full);
                     c.BooleanValues(new[] { "1", "0" });
                 });
 
             var content = GetContentAsString("http://tempuri.org/swagger/ui/index");
 
-            StringAssert.Contains("docExpansion: 'full'", content);
             StringAssert.Contains("booleanValues: arrayFrom('1|0')", content);
         }
 
@@ -91,7 +89,7 @@ namespace Swashbuckle.Tests.SwaggerUi
 
             var content = GetContentAsString("http://tempuri.org/swagger/ui/index");
 
-            StringAssert.Contains("Swashbuckle-SwaggerUi-CustomAssets-discoveryUrlSelector-js", content);
+            StringAssert.Contains("enableDiscoveryUrlSelector: 'true'", content);
         }
 
         [Test]

@@ -23,19 +23,20 @@ namespace Swashbuckle.Application
                 { "%(vRootUrl)", "" },
                 { "%(StylesheetIncludes)", "" },
                 { "%(DiscoveryPaths)", String.Join("|", discoveryPaths) },
+                { "%(DiscoveryUrlObj)", "{}" },
                 { "%(CustomSwagDocLocation)", "" },
                 { "%(BooleanValues)", "true|false" },
                 { "%(ValidatorUrl)", "" },
                 { "%(CustomScripts)", "" },
                 { "%(CustomLogo)", "images/logo_small-png" },
-                { "%(DocExpansion)", "none" },
                 { "%(OAuth2Enabled)", "false" },
                 { "%(OAuth2ClientId)", "" },
                 { "%(OAuth2ClientSecret)", "" },
                 { "%(OAuth2Realm)", "" },
                 { "%(OAuth2AppName)", "" },
                 { "%(ApiKeyLocation)", "header" },
-                { "%(ApiKeyName)", "none" }
+                { "%(ApiKeyName)", "none" },
+                { "%(EnableDiscoveryUrlSelector)", "false" },
             };
             _rootUrlResolver = rootUrlResolver;
 
@@ -123,11 +124,6 @@ namespace Swashbuckle.Application
             CustomAsset(path, resourceAssembly, resourceName);
         }
 
-        public void DocExpansion(DocExpansion docExpansion)
-        {
-            _templateParams["%(DocExpansion)"] = docExpansion.ToString().ToLower();
-        }
-
         public void CustomAsset(string path, Assembly resourceAssembly, string resourceName)
         {
             _pathToAssetMap[path] = new EmbeddedAssetDescriptor(resourceAssembly, resourceName, path == "index");
@@ -135,7 +131,22 @@ namespace Swashbuckle.Application
 
         public void EnableDiscoveryUrlSelector()
         {
-            InjectJavaScript(GetType().Assembly, "Swashbuckle.SwaggerUi.CustomAssets.discoveryUrlSelector.js");
+            // InjectJavaScript(GetType().Assembly, "Swashbuckle.SwaggerUi.CustomAssets.discoveryUrlSelector.js"); //old version injected a new view to handle this, we will handle it by a template param now
+            _templateParams["%(EnableDiscoveryUrlSelector)"] = "true";
+        }
+
+        public void SetDiscUrlsObj(List<DiscoveryUrlsObj> discObj)
+        {
+            var str = "[";
+
+            foreach (var disc in discObj)
+            {
+                str += string.Format("{{version:'{0}', title: '{1}', url:'{2}'}},  ", disc.version, disc.title, disc.url);
+            }
+
+            str += "]";
+
+            _templateParams["%(DiscoveryUrlObj)"] = str;
         }
 
         public void EnableOAuth2Support(string clientId, string realm, string appName)
@@ -176,12 +187,5 @@ namespace Swashbuckle.Application
                 _pathToAssetMap[path] = new EmbeddedAssetDescriptor(thisAssembly, resourceName, path == "index");
             }
         }
-    }
-
-    public enum DocExpansion
-    {
-        None,
-        List,
-        Full
     }
 }

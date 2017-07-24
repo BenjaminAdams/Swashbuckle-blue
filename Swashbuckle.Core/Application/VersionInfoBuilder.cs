@@ -25,5 +25,15 @@ namespace Swashbuckle.Application
         {
             return _versionInfos.ToDictionary(entry => entry.Key, entry => entry.Value.Build());
         }
+
+        public List<DiscoveryUrlsObj> GetAllVersions(string routeTemplate)
+        {
+            return _versionInfos.Select(x => new DiscoveryUrlsObj()
+            {
+                title = x.Value.Build()?.title ?? x.Key,
+                version = x.Key,
+                url = routeTemplate.Replace("{apiVersion}", x.Key)
+            }).ToList();
+        }
     }
 }

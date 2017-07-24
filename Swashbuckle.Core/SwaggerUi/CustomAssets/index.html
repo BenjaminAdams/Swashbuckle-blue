@@ -81,8 +81,9 @@
 
             window.swashbuckleConfig = {
                 rootUrl: '%(RootUrl)',
-                baseUrl:'/',
+                baseUrl: '/',
                 discoveryPaths: arrayFrom('%(DiscoveryPaths)'),
+                discoveryUrlObj: %(DiscoveryUrlObj),
                 customSwagDocLocation: stringOrNullFrom('%(CustomSwagDocLocation)'),
                 booleanValues: arrayFrom('%(BooleanValues)'),
                 validatorUrl: stringOrNullFrom('%(ValidatorUrl)'),
@@ -94,7 +95,9 @@
                 oAuth2Realm: '%(OAuth2Realm)',
                 oAuth2AppName: '%(OAuth2AppName)',
                 apiKeyLocation: '%(ApiKeyLocation)',
-                apiKeyName: '%(ApiKeyName)'
+                apiKeyName: '%(ApiKeyName)',
+                enableDiscoveryUrlSelector: '%(EnableDiscoveryUrlSelector)'
+
             };
 
             if (window.swashbuckleConfig.customSwagDocLocation) {

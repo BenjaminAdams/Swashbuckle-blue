@@ -37,7 +37,7 @@ namespace Swashbuckle.Application
             return new SwaggerEnabledConfiguration(
                 httpConfig,
                 config.GetRootUrl,
-                config.GetApiVersions().Select(version => routeTemplate.Replace("{apiVersion}", version)), config);
+                config.GetApiVersions().Select(version => routeTemplate.Replace("{apiVersion}", version)), config, routeTemplate);
         }
 
         public static JsonSerializerSettings SerializerSettingsOrDefault(this HttpConfiguration httpConfig)
@@ -60,14 +60,17 @@ namespace Swashbuckle.Application
         private readonly Func<HttpRequestMessage, string> _rootUrlResolver;
         private readonly IEnumerable<string> _discoveryPaths;
         private readonly SwaggerDocsConfig _swaggerDocsConfig;
+        private readonly List<DiscoveryUrlsObj> _discoveryPathsObj;  //we want the version name and the title
 
         public SwaggerEnabledConfiguration(HttpConfiguration httpConfig, Func<HttpRequestMessage, string> rootUrlResolver,
-            IEnumerable<string> discoveryPaths, SwaggerDocsConfig swaggerDocsConfig)
+            IEnumerable<string> discoveryPaths, SwaggerDocsConfig swaggerDocsConfig, string routeTemplate)
         {
             _swaggerDocsConfig = swaggerDocsConfig;
             _httpConfig = httpConfig;
             _rootUrlResolver = rootUrlResolver;
             _discoveryPaths = discoveryPaths;
+
+            _discoveryPathsObj = swaggerDocsConfig.GetDiscoveryPaths(routeTemplate);
         }
 
         public void EnableSwaggerUi(Action<SwaggerUiConfig> configure = null)
@@ -85,6 +88,8 @@ namespace Swashbuckle.Application
             {
                 config.SetApiKeyDetails(apiKey);
             }
+
+            config.SetDiscUrlsObj(_discoveryPathsObj);
 
             _httpConfig.Routes.MapHttpRoute(
                 name: "swagger_ui",

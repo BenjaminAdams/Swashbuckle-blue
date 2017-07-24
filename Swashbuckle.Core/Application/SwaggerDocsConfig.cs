@@ -66,9 +66,7 @@ namespace Swashbuckle.Application
             return _versionInfoBuilder.Version(version, title);
         }
 
-        public void MultipleApiVersions(
-            Func<ApiDescription, string, bool> versionSupportResolver,
-            Action<VersionInfoBuilder> configure)
+        public void MultipleApiVersions(Func<ApiDescription, string, bool> versionSupportResolver, Action<VersionInfoBuilder> configure)
         {
             _versionSupportResolver = versionSupportResolver;
             _versionInfoBuilder = new VersionInfoBuilder();
@@ -272,6 +270,11 @@ namespace Swashbuckle.Application
         internal IEnumerable<string> GetApiVersions()
         {
             return _versionInfoBuilder.Build().Select(entry => entry.Key);
+        }
+
+        internal List<DiscoveryUrlsObj> GetDiscoveryPaths(string routeTemplate)
+        {
+            return _versionInfoBuilder.GetAllVersions(routeTemplate);
         }
 
         public static string DefaultRootUrlResolver(HttpRequestMessage request)

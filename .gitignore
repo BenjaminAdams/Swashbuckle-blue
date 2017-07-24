@@ -21,3 +21,4 @@ CustomSwagUrl.txt
 swagger-ui/yarn-error.log
 swagger-ui/.chrome/Crashpad/metadata
 .chrome
+largeApi.json

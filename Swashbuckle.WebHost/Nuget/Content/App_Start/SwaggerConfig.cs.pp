@@ -200,12 +200,6 @@ namespace $rootnamespace$
                         //c.SetValidatorUrl("http://localhost/validator");
                         c.DisableValidator();
 
-                        // Use this option to control how the Operation listing is displayed.
-                        // It can be set to "None" (default), "List" (shows operations for each resource),
-                        // or "Full" (fully expanded: shows operations and their details).
-                        //
-                        c.DocExpansion(DocExpansion.List);
-
                         // Use the CustomAsset option to provide your own version of assets used in the swagger-ui.
                         // It's typically used to instruct Swashbuckle to return your version instead of the default
                         // when a request is made for "index.html". As with all custom content, the file must be included

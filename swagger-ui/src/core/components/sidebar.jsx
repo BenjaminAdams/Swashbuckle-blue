@@ -28,8 +28,11 @@ class ListChildren extends React.Component {
 export default class BaseLayout extends React.Component {
   static propTypes = {
     taggedOps: PropTypes.object.isRequired,
-    showSidebar:  PropTypes.bool.isRequired,
-    toggleSidebarFunc: PropTypes.func.isRequired
+    showSidebar:  PropTypes.bool.isRequired,  //showSidebar is an input to propigate/share the click event of the close/hide button from the Operations.jsx file
+    toggleSidebarFunc: PropTypes.func.isRequired,
+    specActions: PropTypes.object.isRequired,
+    getComponent: PropTypes.func.isRequired,
+    getConfigs: PropTypes.func.isRequired
   }
 
 constructor(props) {
@@ -38,7 +41,9 @@ constructor(props) {
   }
   
   render() {
-    let { taggedOps, showSidebar,toggleSidebarFunc } = this.props
+    let { taggedOps, showSidebar,toggleSidebarFunc, getComponent } = this.props
+
+    const SidebarUrlLoader = getComponent("sidebarUrlLoader", true) 
 
     // var baseUrlSplit = window.location.pathname.split('/swagger/ui/index') var
     // baseUrl = baseUrlSplit[0] + '/swagger/ui/index'
@@ -68,6 +73,9 @@ constructor(props) {
             <Link to="/">Intro</Link>
           </ul>
         </li>
+
+        <li className="sidebarParent">{ SidebarUrlLoader ? <SidebarUrlLoader /> : null }</li>
+
         {parentNodes}
       </ul>
       </div>
