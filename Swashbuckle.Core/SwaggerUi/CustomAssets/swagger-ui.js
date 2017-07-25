@@ -5452,7 +5452,22 @@ function (state, _ref9) {var _ref9$payload = _ref9.payload,scheme = _ref9$payloa
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.validateBeforeExecute = exports.canExecuteScheme = exports.operationScheme = exports.hasHost = exports.allowTryItOutFor = exports.requestFor = exports.responseFor = exports.requests = exports.responses = exports.taggedOperations = exports.operationsWithTags = exports.tagDetails = exports.tags = exports.operationsWithRootInherited = exports.schemes = exports.host = exports.basePath = exports.definitions = exports.findDefinition = exports.securityDefinitions = exports.security = exports.produces = exports.consumes = exports.operations = exports.paths = exports.semver = exports.version = exports.externalDocs = exports.info = exports.spec = exports.specResolved = exports.specJson = exports.specSource = exports.specStr = exports.url = exports.lastError = undefined;var _toConsumableArray2 = __webpack_require__(84);var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);exports.
+Object.defineProperty(exports, "__esModule", { value: true });exports.validateBeforeExecute = exports.canExecuteScheme = exports.operationScheme = exports.hasHost = exports.allowTryItOutFor = exports.requestFor = exports.responseFor = exports.requests = exports.responses = exports.getUrlFromVersion = exports.getVersion = exports.taggedOperations = exports.operationsWithTags = exports.tagDetails = exports.tags = exports.operationsWithRootInherited = exports.schemes = exports.host = exports.basePath = exports.definitions = exports.findDefinition = exports.securityDefinitions = exports.security = exports.produces = exports.consumes = exports.operations = exports.paths = exports.semver = exports.version = exports.externalDocs = exports.info = exports.spec = exports.specResolved = exports.specJson = exports.specSource = exports.specStr = exports.url = exports.lastError = undefined;var _toConsumableArray2 = __webpack_require__(84);var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);exports.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -5771,9 +5786,9 @@ contentTypeValues = contentTypeValues;exports.
 
 operationConsumes = operationConsumes;var _reselect = __webpack_require__(59);var _utils = __webpack_require__(7);var _immutable = __webpack_require__(8);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var DEFAULT_TAG = "default";var OPERATION_METHODS = ["get", "put", "post", "delete", "options", "head", "patch"];var state = function state(_state) {return _state || (0, _immutable.Map)();};var lastError = exports.lastError = (0, _reselect.createSelector)(state, function (spec) {return spec.get("lastError");});var url = exports.url = (0, _reselect.createSelector)(state, function (spec) {return spec.get("url");});var specStr = exports.specStr = (0, _reselect.createSelector)(state, function (spec) {return spec.get("spec") || "";});var specSource = exports.specSource = (0, _reselect.createSelector)(state, function (spec) {return spec.get("specSource") || "not-editor";});var specJson = exports.specJson = (0, _reselect.createSelector)(state, function (spec) {return spec.get("json", (0, _immutable.Map)());});var specResolved = exports.specResolved = (0, _reselect.createSelector)(state, function (spec) {return spec.get("resolved", (0, _immutable.Map)());}); // Default Spec ( as an object )
 var spec = exports.spec = function spec(state) {var res = specResolved(state);return res;};var info = exports.info = (0, _reselect.createSelector)(spec, function (spec) {return returnSelfOrNewMap(spec && spec.get("info"));});var externalDocs = exports.externalDocs = (0, _reselect.createSelector)(spec, function (spec) {return returnSelfOrNewMap(spec && spec.get("externalDocs"));});var version = exports.version = (0, _reselect.createSelector)(info, function (info) {return info && info.get("version");});var semver = exports.semver = (0, _reselect.createSelector)(version, function (version) {return (/v?([0-9]*)\.([0-9]*)\.([0-9]*)/i.exec(version).slice(1));});var paths = exports.paths = (0, _reselect.createSelector)(spec, function (spec) {return spec.get("paths");});var operations = exports.operations = (0, _reselect.createSelector)(paths, function (paths) {if (!paths || paths.size < 1) return (0, _immutable.List)();var list = (0, _immutable.List)();if (!paths || !paths.forEach) {return (0, _immutable.List)();}paths.forEach(function (path, pathName) {if (!path || !path.forEach) {return {};}path.forEach(function (operation, method) {if (OPERATION_METHODS.indexOf(method) === -1) {return;}list = list.push((0, _immutable.fromJS)({ path: pathName, method: method, operation: operation, id: method + "-" + pathName }));});});return list;});var consumes = exports.consumes = (0, _reselect.createSelector)(spec, function (spec) {return (0, _immutable.Set)(spec.get("consumes"));});var produces = exports.produces = (0, _reselect.createSelector)(spec, function (spec) {return (0, _immutable.Set)(spec.get("produces"));});var security = exports.security = (0, _reselect.createSelector)(spec, function (spec) {return spec.get("security", (0, _immutable.List)());});var securityDefinitions = exports.securityDefinitions = (0, _reselect.createSelector)(spec, function (spec) {return spec.get("securityDefinitions");});var findDefinition = exports.findDefinition = function findDefinition(state, name) {return specResolved(state).getIn(["definitions", name], null);};var definitions = exports.definitions = (0, _reselect.createSelector)(spec, function (spec) {return spec.get("definitions") || (0, _immutable.Map)();});var basePath = exports.basePath = (0, _reselect.createSelector)(spec, function (spec) {return spec.get("basePath");});var host = exports.host = (0, _reselect.createSelector)(spec, function (spec) {return spec.get("host");});var schemes = exports.schemes = (0, _reselect.createSelector)(spec, function (spec) {return spec.get("schemes", (0, _immutable.Map)());});var operationsWithRootInherited = exports.operationsWithRootInherited = (0, _reselect.createSelector)(operations, consumes, produces, function (operations, consumes, produces) {return operations.map(function (ops) {return ops.update("operation", function (op) {if (op) {if (!_immutable.Map.isMap(op)) {return;}return op.withMutations(function (op) {if (!op.get("consumes")) {op.update("consumes", function (a) {return (0, _immutable.Set)(a).merge(consumes);});}if (!op.get("produces")) {op.update("produces", function (a) {return (0, _immutable.Set)(a).merge(produces);});}return op;});} else {// return something with Immutable methods
-        return (0, _immutable.Map)();}});});});var tags = exports.tags = (0, _reselect.createSelector)(spec, function (json) {return json.get("tags", (0, _immutable.List)());});var tagDetails = exports.tagDetails = function tagDetails(state, tag) {var currentTags = tags(state) || (0, _immutable.List)();return currentTags.filter(_immutable.Map.isMap).find(function (t) {return t.get("name") === tag;}, (0, _immutable.Map)());};var operationsWithTags = exports.operationsWithTags = (0, _reselect.createSelector)(operationsWithRootInherited, tags, version, function (operations, tags, version) {return operations.reduce(function (taggedMap, op) {var tags = (0, _immutable.Set)(op.getIn(["operation", "tags"]));var parentId = tags.first();var operationId = op.getIn(["operation", "operationId"]); // var version='v3'
-    if (!version && version !== 0) {version = 1;}op = op.set('parentId', parentId);op = op.set('routeId', parentId + "_" + operationId);op = op.set('urlHash', '/' + version + '/' + parentId + "_" + operationId);if (tags.count() < 1) return taggedMap.update(DEFAULT_TAG, (0, _immutable.List)(), function (ar) {return ar.push(op);});return tags.reduce(function (res, tag) {return res.update(tag, (0, _immutable.List)(), function (ar) {return ar.push(op);});}, taggedMap);}, tags.reduce(function (taggedMap, tag) {return taggedMap.set(tag.get("name"), (0, _immutable.List)());}, (0, _immutable.OrderedMap)()));});var taggedOperations = exports.taggedOperations = function taggedOperations(state) {return function (_ref) {var getConfigs = _ref.getConfigs;var _getConfigs = getConfigs(),tagsSorter = _getConfigs.tagsSorter,operationsSorter = _getConfigs.operationsSorter;return operationsWithTags(state).sortBy(function (val, key) {return key;}, // get the name of the tag to be passed to the sorter
-    function (tagA, tagB) {var sortFn = typeof tagsSorter === "function" ? tagsSorter : _utils.sorters.tagsSorter[tagsSorter];return !sortFn ? null : sortFn(tagA, tagB);}).map(function (ops, tag) {var sortFn = typeof operationsSorter === "function" ? operationsSorter : _utils.sorters.operationsSorter[operationsSorter];var operations = !sortFn ? ops : ops.sort(sortFn);return (0, _immutable.Map)({ tagDetails: tagDetails(state, tag), operations: operations });});};};var responses = exports.responses = (0, _reselect.createSelector)(state, function (state) {return state.get("responses", (0, _immutable.Map)());});var requests = exports.requests = (0, _reselect.createSelector)(state, function (state) {return state.get("requests", (0, _immutable.Map)());});var responseFor = exports.responseFor = function responseFor(state, path, method) {return responses(state).getIn([path, method], null);};var requestFor = exports.requestFor = function requestFor(state, path, method) {return requests(state).getIn([path, method], null);};var allowTryItOutFor = exports.allowTryItOutFor = function allowTryItOutFor() {// This is just a hook for now.
+        return (0, _immutable.Map)();}});});});var tags = exports.tags = (0, _reselect.createSelector)(spec, function (json) {return json.get("tags", (0, _immutable.List)());});var tagDetails = exports.tagDetails = function tagDetails(state, tag) {var currentTags = tags(state) || (0, _immutable.List)();return currentTags.filter(_immutable.Map.isMap).find(function (t) {return t.get("name") === tag;}, (0, _immutable.Map)());};var operationsWithTags = exports.operationsWithTags = (0, _reselect.createSelector)(operationsWithRootInherited, tags, version, function (operations, tags, version) {return operations.reduce(function (taggedMap, op) {var tags = (0, _immutable.Set)(op.getIn(["operation", "tags"]));var parentId = tags.first();var operationId = op.getIn(["operation", "operationId"]);var routeId = parentId + '_' + operationId + '_' + op.get('method');if (!version && version !== 0) {version = 1;}op = op.set('parentId', parentId);op = op.set('routeId', routeId); //op= op.set('urlHash', '/' + version + '/' + parentId + "_" + operationId)
+    op = op.set('urlHash', '/' + version + '/' + routeId);if (tags.count() < 1) return taggedMap.update(DEFAULT_TAG, (0, _immutable.List)(), function (ar) {return ar.push(op);});return tags.reduce(function (res, tag) {return res.update(tag, (0, _immutable.List)(), function (ar) {return ar.push(op);});}, taggedMap);}, tags.reduce(function (taggedMap, tag) {return taggedMap.set(tag.get("name"), (0, _immutable.List)());}, (0, _immutable.OrderedMap)()));});var taggedOperations = exports.taggedOperations = function taggedOperations(state) {return function (_ref) {var getConfigs = _ref.getConfigs;var _getConfigs = getConfigs(),tagsSorter = _getConfigs.tagsSorter,operationsSorter = _getConfigs.operationsSorter;return operationsWithTags(state).sortBy(function (val, key) {return key;}, // get the name of the tag to be passed to the sorter
+    function (tagA, tagB) {var sortFn = typeof tagsSorter === "function" ? tagsSorter : _utils.sorters.tagsSorter[tagsSorter];return !sortFn ? null : sortFn(tagA, tagB);}).map(function (ops, tag) {var sortFn = typeof operationsSorter === "function" ? operationsSorter : _utils.sorters.operationsSorter[operationsSorter];var operations = !sortFn ? ops : ops.sort(sortFn);return (0, _immutable.Map)({ tagDetails: tagDetails(state, tag), operations: operations });});};};var getVersion = exports.getVersion = (0, _reselect.createSelector)(version, function (version) {return version || '1';});var getUrlFromVersion = exports.getUrlFromVersion = (0, _reselect.createSelector)(version, function (version) {var selectedDocs = window.swashbuckleConfig.discoveryUrlObj.find(function (x) {return x.version === version;});if (!selectedDocs) return null;return window.swashbuckleConfig.rootUrl + '/' + selectedDocs.url;});var responses = exports.responses = (0, _reselect.createSelector)(state, function (state) {return state.get("responses", (0, _immutable.Map)());});var requests = exports.requests = (0, _reselect.createSelector)(state, function (state) {return state.get("requests", (0, _immutable.Map)());});var responseFor = exports.responseFor = function responseFor(state, path, method) {return responses(state).getIn([path, method], null);};var requestFor = exports.requestFor = function requestFor(state, path, method) {return requests(state).getIn([path, method], null);};var allowTryItOutFor = exports.allowTryItOutFor = function allowTryItOutFor() {// This is just a hook for now.
   return true;}; // Get the parameter value by parameter name
 function getParameter(state, pathMethod, name) {var params = spec(state).getIn(["paths"].concat((0, _toConsumableArray3.default)(pathMethod), ["parameters"]), (0, _immutable.fromJS)([]));return params.filter(function (p) {return _immutable.Map.isMap(p) && p.get("name") === name;}).first();}var hasHost = exports.hasHost = (0, _reselect.createSelector)(spec, function (spec) {var host = spec.get("host");return typeof host === "string" && host.length > 0 && host[0] !== "/";}); // Get the parameter values, that the user filled out
 function parameterValues(state, pathMethod, isXml) {var params = spec(state).getIn(["paths"].concat((0, _toConsumableArray3.default)(pathMethod), ["parameters"]), (0, _immutable.fromJS)([]));return params.reduce(function (hash, p) {var value = isXml && p.get("in") === "body" ? p.get("value_xml") : p.get("value");return hash.set(p.get("name"), value);}, (0, _immutable.fromJS)({}));} // True if any parameter includes `in: ?`
@@ -7774,7 +7789,7 @@ var CONFIGS = [
 
 
 // eslint-disable-next-line no-undef
-var _buildInfo = {"PACKAGE_VERSION":"3.0.19","GIT_COMMIT":"g6ce7008","GIT_DIRTY":true,"HOSTNAME":"WN7X64-5GH7N22","BUILD_TIME":"Tue, 25 Jul 2017 13:22:14 GMT"},GIT_DIRTY = _buildInfo.GIT_DIRTY,GIT_COMMIT = _buildInfo.GIT_COMMIT,PACKAGE_VERSION = _buildInfo.PACKAGE_VERSION,HOSTNAME = _buildInfo.HOSTNAME,BUILD_TIME = _buildInfo.BUILD_TIME;
+var _buildInfo = {"PACKAGE_VERSION":"3.0.19","GIT_COMMIT":"g20cfd39","GIT_DIRTY":true,"HOSTNAME":"WN7X64-5GH7N22","BUILD_TIME":"Tue, 25 Jul 2017 14:12:53 GMT"},GIT_DIRTY = _buildInfo.GIT_DIRTY,GIT_COMMIT = _buildInfo.GIT_COMMIT,PACKAGE_VERSION = _buildInfo.PACKAGE_VERSION,HOSTNAME = _buildInfo.HOSTNAME,BUILD_TIME = _buildInfo.BUILD_TIME;
 
 module.exports = function SwaggerUI(opts) {
 
@@ -7828,17 +7843,7 @@ module.exports = function SwaggerUI(opts) {
   var constructorConfig = (0, _deepExtend2.default)({}, defaults, opts, queryConfig);
 
   if (window.swashbuckleConfig.discoveryUrlObj != null && window.swashbuckleConfig.discoveryUrlObj.length > 1) {
-    //get the version from the url if it exists
-    var versionFromUrl = getVersionFromUrl();
-    //find the url for that version from the window.swashbuckleConfig.discoveryUrlObj obj
-    var newDocsUrl = window.swashbuckleConfig.discoveryUrlObj.find(function (x) {return x.version === versionFromUrl;});
-    //replace url variable with that url
-    if (newDocsUrl) {
-      constructorConfig.url = window.swashbuckleConfig.rootUrl + '/' + newDocsUrl.url;
-      newDocsUrl.selectedAtPageLoad = true;
-    } else {
-      console.log('we decided to not change the url');
-    }
+    constructorConfig.url = checkIfAVersionWasPreviouslySelected(constructorConfig.url);
   }
 
   var storeConfigs = (0, _deepExtend2.default)({}, constructorConfig.store, {
@@ -7911,6 +7916,25 @@ module.exports = function SwaggerUI(opts) {
   return system;
 };
 
+function checkIfAVersionWasPreviouslySelected(defaultUrl) {
+  //get the version from the url if it exists
+  var versionFromUrl = getVersionFromUrl();
+  if (versionFromUrl == null) {
+    //if the user has no version selected in the URL then we should try and load their prefered version from localStorage
+    return getDocUrlFromLocalstorage(defaultUrl);
+  }
+
+  //find the url for that version from the window.swashbuckleConfig.discoveryUrlObj obj
+  var newDocsUrl = window.swashbuckleConfig.discoveryUrlObj.find(function (x) {return x.version === versionFromUrl;});
+  //replace url variable with that url
+  if (newDocsUrl) {
+    newDocsUrl.selectedAtPageLoad = true;
+    return window.swashbuckleConfig.rootUrl + '/' + newDocsUrl.url;
+  }
+
+  return defaultUrl;
+}
+
 function getVersionFromUrl() {
   try {
     if (!window.location.hash) return null;
@@ -7920,7 +7944,12 @@ function getVersionFromUrl() {
   } catch (e) {
     return null;
   }
+}
 
+function getDocUrlFromLocalstorage(defaultUrl) {
+  var selectedDiscUrl = localStorage.getItem('selectedDiscUrl');
+  if (selectedDiscUrl) return selectedDiscUrl;
+  return defaultUrl;
 }
 
 // Add presets
@@ -10435,9 +10464,7 @@ Operations = function (_React$Component) {(0, _inherits3.default)(Operations, _R
       var OperationWrapper = getComponent("operationWrapper");
       var Collapse = getComponent("Collapse");
 
-      //var version= specSelectors.getVersion() //couldnt figure this out
-      var version = specSelectors.info().get('version') || '1';
-
+      var version = specSelectors.getVersion();
       var showSummary = layoutSelectors.showSummary();var _getConfigs =
       getConfigs(),docExpansion = _getConfigs.docExpansion,displayOperationId = _getConfigs.displayOperationId,displayRequestDuration = _getConfigs.displayRequestDuration,maxDisplayedTags = _getConfigs.maxDisplayedTags,deepLinking = _getConfigs.deepLinking;
 
@@ -10510,8 +10537,9 @@ Operations = function (_React$Component) {(0, _inherits3.default)(Operations, _R
       return (
         _react2.default.createElement("div", null,
           _react2.default.createElement(_reactRouterDom.HashRouter, { basename: baseUrl, hashType: "noslash" },
-            _react2.default.createElement("div", null,
-              allTheRoutes))));
+            _react2.default.createElement(_reactRouterDom.Switch, null,
+              allTheRoutes,
+              _react2.default.createElement(_reactRouterDom.Route, { render: function render(x) {return _react2.default.createElement("h2", null, "404 API Method Not Found");} })))));
 
 
 
@@ -11576,11 +11604,7 @@ Sidebar = function (_React$Component2) {(0, _inherits3.default)(Sidebar, _React$
       // var baseUrlSplit = window.location.pathname.split('/swagger/ui/index') var
       // baseUrl = baseUrlSplit[0] + '/swagger/ui/index'
       var baseUrl = window.swashbuckleConfig.baseUrl;
-
-      //var version= specSelectors.getVersion() //couldnt figure this out
-      var version = specSelectors.info().get('version') || '1';
-
-      console.log(window.swashbuckleConfig.discoveryUrlObj);
+      var version = specSelectors.getVersion();
 
       var parentNodes = taggedOps.
       entrySeq().
@@ -11601,13 +11625,12 @@ Sidebar = function (_React$Component2) {(0, _inherits3.default)(Sidebar, _React$
 
 
           _react2.default.createElement("ul", { id: "sidebar", style: this.props.showSidebar ? {} : { display: 'none' } },
+            _react2.default.createElement("li", { className: "sidebarParent" }, SidebarUrlLoader ? _react2.default.createElement(SidebarUrlLoader, null) : null),
             _react2.default.createElement("li", { className: "sidebarParent" },
               _react2.default.createElement("ul", null,
                 _react2.default.createElement(_reactRouterDom.Link, { to: "/" }, "Intro"))),
 
 
-
-            _react2.default.createElement("li", { className: "sidebarParent" }, SidebarUrlLoader ? _react2.default.createElement(SidebarUrlLoader, null) : null),
 
             parentNodes)));
 
@@ -11656,8 +11679,7 @@ Topbar = function (_React$Component) {(0, _inherits3.default)(Topbar, _React$Com
       var url = e.target.value || e.target.href;
       _this.loadSpec(url);
       _this.setSelectedUrl(url);
-      localStorage.setItem('selectedDiscUrl', url);
-      window.swashbuckleConfig.selectedDiscUrl = url;
+      localStorage.setItem('selectedDiscUrl', url); //we will use this on page load at the root url when no route is selected
       e.preventDefault();
     };_this.
 
@@ -11731,13 +11753,7 @@ Topbar = function (_React$Component) {(0, _inherits3.default)(Topbar, _React$Com
       var formOnSubmit = null;
 
       if (window.swashbuckleConfig.discoveryUrlObj.length < 2) return '';
-
-      var selectedDiscUrl = localStorage.getItem('selectedDiscUrl');
-      if (selectedDiscUrl) {
-        window.swashbuckleConfig.selectedDiscUrl = selectedDiscUrl;
-      } else {
-        selectedDiscUrl = '';
-      }
+      var selectedDiscUrl = specSelectors.getUrlFromVersion();
 
       if (urls) {
         var rows = [];
@@ -11748,13 +11764,12 @@ Topbar = function (_React$Component) {(0, _inherits3.default)(Topbar, _React$Com
 
         control.push(
         _react2.default.createElement("label", { key: this.state.selectedIndex, className: "select-label", htmlFor: "select" },
-          _react2.default.createElement("select", { id: "select", disabled: isLoading, onChange: this.onUrlSelect, value: selectedDiscUrl },
+          _react2.default.createElement("select", { id: "select", disabled: isLoading, onChange: this.onUrlSelect, value: selectedDiscUrl || '' },
             rows)));
 
 
 
       }
-
 
       return (
         _react2.default.createElement("div", { className: "todo" },

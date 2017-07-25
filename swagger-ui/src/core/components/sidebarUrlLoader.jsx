@@ -33,8 +33,7 @@ export default class Topbar extends React.Component {
     let url = e.target.value || e.target.href
     this.loadSpec(url)
     this.setSelectedUrl(url)
-    localStorage.setItem('selectedDiscUrl',url);     
-    //window.swashbuckleConfig.selectedDiscUrl = url
+    localStorage.setItem('selectedDiscUrl',url);  //we will use this on page load at the root url when no route is selected
     e.preventDefault()
   }
 
@@ -108,14 +107,6 @@ export default class Topbar extends React.Component {
     let formOnSubmit = null
 
     if(window.swashbuckleConfig.discoveryUrlObj.length< 2 ) return '';
-
-    // var selectedDiscUrl= localStorage.getItem('selectedDiscUrl');
-    // if(selectedDiscUrl) {
-    //   window.swashbuckleConfig.selectedDiscUrl = selectedDiscUrl
-    // }else {
-    //   selectedDiscUrl= ''
-    // }
-
    var selectedDiscUrl= specSelectors.getUrlFromVersion()
 
     if(urls) {
@@ -127,13 +118,12 @@ export default class Topbar extends React.Component {
 
       control.push(
         <label key={this.state.selectedIndex} className="select-label" htmlFor="select">
-          <select id="select" disabled={isLoading} onChange={ this.onUrlSelect } value={selectedDiscUrl} >
+          <select id="select" disabled={isLoading} onChange={ this.onUrlSelect } value={selectedDiscUrl || ''} >
             {rows}
           </select>
         </label>
       )
     }
-
 
     return (
           <div className="todo">

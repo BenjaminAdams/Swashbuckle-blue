@@ -194,16 +194,17 @@ export const operationsWithTags = createSelector(
       let tags = Set(op.getIn(["operation","tags"]))
       var parentId = tags.first()
       var operationId = op.getIn(["operation","operationId"])
-
-     // var version='v3'
+      var routeId = parentId + '_' + operationId + '_' + op.get('method')
 
       if(!version && version !==0){
         version=1;
       }
 
       op= op.set('parentId', parentId)
-      op= op.set('routeId', parentId + "_" + operationId)
-      op= op.set('urlHash', '/' + version + '/' + parentId + "_" + operationId)
+      op= op.set('routeId', routeId)
+      //op= op.set('urlHash', '/' + version + '/' + parentId + "_" + operationId)
+      op= op.set('urlHash', '/' + version + '/' + routeId)
+
       if(tags.count() < 1)
         return taggedMap.update(DEFAULT_TAG, List(), ar => ar.push(op))
       return tags.reduce( (res, tag) => res.update(tag, List(), (ar) => ar.push(op)), taggedMap )

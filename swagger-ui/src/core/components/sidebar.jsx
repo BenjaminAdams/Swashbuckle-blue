@@ -71,13 +71,12 @@ constructor(props) {
             
       </div>
       <ul id="sidebar" style={this.props.showSidebar ? {} : { display: 'none' }}>
+        <li className="sidebarParent">{ SidebarUrlLoader ? <SidebarUrlLoader /> : null }</li>
         <li className="sidebarParent">
           <ul>
             <Link to="/">Intro</Link>
           </ul>
         </li>
-
-        <li className="sidebarParent">{ SidebarUrlLoader ? <SidebarUrlLoader /> : null }</li>
 
         {parentNodes}
       </ul>
