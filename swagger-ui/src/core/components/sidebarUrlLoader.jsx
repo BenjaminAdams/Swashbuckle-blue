@@ -109,7 +109,7 @@ export default class Topbar extends React.Component {
     let control = []
     let formOnSubmit = null
 
-    if(window.swashbuckleConfig.discoveryUrlObj.length< 2 ) return '';
+    if(window.swashbuckleConfig.discoveryUrlObj.length< 2 ) return <span></span>;
    var selectedDiscUrl= specSelectors.getUrlFromVersion()
 
     if(urls) {
@@ -129,7 +129,7 @@ export default class Topbar extends React.Component {
     }
 
     return (
-          <div className="todo">
+          <div>
             <form className="download-url-wrapper" onSubmit={formOnSubmit}>
               {control}
             </form>
