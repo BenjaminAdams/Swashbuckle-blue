@@ -1,5 +1,4 @@
 import deepExtend from "deep-extend"
-
 import System from "core/system"
 import win from "core/window"
 import ApisPreset from "core/presets/apis"

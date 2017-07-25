@@ -42,8 +42,6 @@ var commonRules = [
 
 module.exports = function(rules, options) {
 
-	options= options || {}
-
   // Special options, that have logic in this file
   // ...with defaults
   var specialOptions = deepExtend({}, {
@@ -51,7 +49,7 @@ module.exports = function(rules, options) {
     separateStylesheets: true,
     minimize: false,
     longTermCaching: false,
-    sourcemaps: true,
+    sourcemaps: false,
   }, options._special)
 
   var plugins = []
@@ -63,18 +61,11 @@ module.exports = function(rules, options) {
     }))
   }
 
-  
-  //specialOptions.minimize= false;
-  
-  console.log('*************specialOptions.minimize=',specialOptions.minimize)  
-  
   if( specialOptions.minimize ) {
 
     plugins.push(
       new webpack.optimize.UglifyJsPlugin({
         sourceMap: true,
-		compress: true,
-		beautify: false
       }),
       new webpack.LoaderOptionsPlugin({
         options: {
@@ -84,6 +75,7 @@ module.exports = function(rules, options) {
     )
 
     plugins.push( new webpack.NoEmitOnErrorsPlugin())
+
   }
 
   plugins.push(
@@ -108,12 +100,14 @@ module.exports = function(rules, options) {
             { from: path.join(__dirname, "dist/swagger-ui.css") ,to: path.join(__dirname,"../Swashbuckle.Core/SwaggerUi/CustomAssets/swagger-ui.css") },            
             { from: path.join(__dirname, "dist/swagger-ui.css.map") ,to: path.join(__dirname,"../Swashbuckle.Core/SwaggerUi/CustomAssets/swagger-ui.css.map") },            
             { from: path.join(__dirname, "dist/swagger-ui.js") ,to: path.join(__dirname,"../Swashbuckle.Core/SwaggerUi/CustomAssets/swagger-ui.js") },            
-            { from: path.join(__dirname, "dist/swagger-ui.js.map") ,to: path.join(__dirname,"../Swashbuckle.Core/SwaggerUi/CustomAssets/swagger-ui.js.map") },            
+            { from: path.join(__dirname, "dist/swagger-ui.js.map") ,to: path.join(__dirname,"../Swashbuckle.Core/SwaggerUi/CustomAssets/swagger-ui.js.map") },       
+			{ from: path.join(__dirname, "dist/swagger-ui-standalone-preset.js") ,to: path.join(__dirname,"../Swashbuckle.Core/SwaggerUi/CustomAssets/swagger-ui-standalone-preset.js") },            
+            { from: path.join(__dirname, "dist/swagger-ui-standalone-preset.js.map") ,to: path.join(__dirname,"../Swashbuckle.Core/SwaggerUi/CustomAssets/swagger-ui-standalone-preset.js.map") },            
         ], {
             // By default, we only copy modified files during
             // a watch or webpack-dev-server build. Setting this
             // to `true` copies all files.
-            copyUnmodified: true
+            copyUnmodified: false
         }))
 
   delete options._special

@@ -56,7 +56,6 @@
         </defs>
     </svg>
     <div id="swagger-ui"></div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js" integrity="sha256-8E6QUcFg1KTnpEU8TFGhpTGHw5fJqB9vCms3OhAYLqw=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
     <script src="./swagger-ui-bundle-js"></script>
     <script src="./swagger-ui-standalone-preset-js"></script>
@@ -107,9 +106,9 @@
                 docsUrl = swashbuckleConfig.rootUrl + "/" + swashbuckleConfig.discoveryPaths[0]
             }
 
-            _.each(swashbuckleConfig.customScripts, function (script) {
+            swashbuckleConfig.customScripts.forEach(function (script) {
                 $.getScript(script);
-            });
+            })
 
             // Build a system
             const ui = SwaggerUIBundle({
