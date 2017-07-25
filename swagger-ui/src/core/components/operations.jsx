@@ -27,9 +27,7 @@ export default class Operations extends React.Component {
       const OperationWrapper = getComponent("operationWrapper")
       const Collapse = getComponent("Collapse")
 
-      //var version= specSelectors.getVersion() //couldnt figure this out
-      var version = specSelectors.info().get('version') || '1'
-
+      var version= specSelectors.getVersion() 
       let showSummary = layoutSelectors.showSummary()
       let { docExpansion, displayOperationId, displayRequestDuration, maxDisplayedTags, deepLinking } = getConfigs()
 

@@ -89,16 +89,7 @@ module.exports = function SwaggerUI(opts) {
   const constructorConfig = deepExtend({}, defaults, opts, queryConfig)
 
   if (window.swashbuckleConfig.discoveryUrlObj != null && window.swashbuckleConfig.discoveryUrlObj.length > 1) {
-    //get the version from the url if it exists
-    var versionFromUrl = getVersionFromUrl()
-    //find the url for that version from the window.swashbuckleConfig.discoveryUrlObj obj
-    var newDocsUrl= window.swashbuckleConfig.discoveryUrlObj.find(x=>x.version===versionFromUrl)
-    //replace url variable with that url
-    if(newDocsUrl) {
-      constructorConfig.url = window.swashbuckleConfig.rootUrl +'/'+ newDocsUrl.url
-    }else {
-      console.log('we decided to not change the url')
-    }
+    constructorConfig.url = checkIfAVersionWasPreviouslySelected(constructorConfig.url)
   }
 
   const storeConfigs = deepExtend({}, constructorConfig.store, {
@@ -171,6 +162,25 @@ module.exports = function SwaggerUI(opts) {
   return system
 }
 
+function checkIfAVersionWasPreviouslySelected(defaultUrl) {
+  //get the version from the url if it exists
+  var versionFromUrl = getVersionFromUrl()
+  if (versionFromUrl == null) {
+    //if the user has no version selected in the URL then we should try and load their prefered version from localStorage
+    return getDocUrlFromLocalstorage(defaultUrl)
+  }
+
+  //find the url for that version from the window.swashbuckleConfig.discoveryUrlObj obj
+  var newDocsUrl = window.swashbuckleConfig.discoveryUrlObj.find(x => x.version === versionFromUrl)
+  //replace url variable with that url
+  if (newDocsUrl) {
+    newDocsUrl.selectedAtPageLoad = true
+    return window.swashbuckleConfig.rootUrl + '/' + newDocsUrl.url
+  }
+
+  return defaultUrl
+}
+
 function getVersionFromUrl() {
   try {
     if (!window.location.hash) return null;
@@ -180,7 +190,12 @@ function getVersionFromUrl() {
   } catch (e) {
     return null
   }
+}
 
+function getDocUrlFromLocalstorage(defaultUrl) {
+  var selectedDiscUrl = localStorage.getItem('selectedDiscUrl')
+  if (selectedDiscUrl) return selectedDiscUrl
+  return defaultUrl
 }
 
 // Add presets

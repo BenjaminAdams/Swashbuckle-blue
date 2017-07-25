@@ -34,7 +34,7 @@ export default class Topbar extends React.Component {
     this.loadSpec(url)
     this.setSelectedUrl(url)
     localStorage.setItem('selectedDiscUrl',url);     
-    window.swashbuckleConfig.selectedDiscUrl = url
+    //window.swashbuckleConfig.selectedDiscUrl = url
     e.preventDefault()
   }
 
@@ -109,12 +109,14 @@ export default class Topbar extends React.Component {
 
     if(window.swashbuckleConfig.discoveryUrlObj.length< 2 ) return '';
 
-    var selectedDiscUrl= localStorage.getItem('selectedDiscUrl');
-    if(selectedDiscUrl) {
-      window.swashbuckleConfig.selectedDiscUrl = selectedDiscUrl
-    }else {
-      selectedDiscUrl= ''
-    }
+    // var selectedDiscUrl= localStorage.getItem('selectedDiscUrl');
+    // if(selectedDiscUrl) {
+    //   window.swashbuckleConfig.selectedDiscUrl = selectedDiscUrl
+    // }else {
+    //   selectedDiscUrl= ''
+    // }
+
+   var selectedDiscUrl= specSelectors.getUrlFromVersion()
 
     if(urls) {
       let rows = []

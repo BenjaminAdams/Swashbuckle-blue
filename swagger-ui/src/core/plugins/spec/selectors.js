@@ -10,9 +10,6 @@ const state = state => {
   return state || Map()
 }
 
-
-
-
 export const lastError = createSelector(
   state,
   spec => spec.get("lastError")
@@ -233,6 +230,23 @@ export const taggedOperations = (state) => ({ getConfigs }) => {
       return Map({ tagDetails: tagDetails(state, tag), operations: operations })
     })
 }
+
+export const getVersion = createSelector(
+  version,
+  (version) => {
+    return version || '1'
+  }
+)
+
+export const getUrlFromVersion = createSelector(
+  version,
+  (version) => {
+    var selectedDocs= window.swashbuckleConfig.discoveryUrlObj.find(x=>x.version===version)
+    if(!selectedDocs) return null
+    return window.swashbuckleConfig.rootUrl +'/'+ selectedDocs.url
+  }
+)
+
 
 export const responses = createSelector(
   state,

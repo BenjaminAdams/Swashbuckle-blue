@@ -50,9 +50,7 @@ constructor(props) {
     // var baseUrlSplit = window.location.pathname.split('/swagger/ui/index') var
     // baseUrl = baseUrlSplit[0] + '/swagger/ui/index'
     var baseUrl = window.swashbuckleConfig.baseUrl
-
-    //var version= specSelectors.getVersion() //couldnt figure this out
-    var version=specSelectors.info().get('version') || '1'
+    var version=specSelectors.getVersion()
 
     var parentNodes = taggedOps
       .entrySeq()
