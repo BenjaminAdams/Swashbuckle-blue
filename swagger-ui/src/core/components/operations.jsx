@@ -1,7 +1,7 @@
 import React from "react"
 import PropTypes from "prop-types"
 import { helpers } from "swagger-client"
-import { HashRouter, Route, Link } from 'react-router-dom'
+import { HashRouter, Route, Link, Switch } from 'react-router-dom'
 
 const { opId } = helpers
 
@@ -100,9 +100,10 @@ export default class Operations extends React.Component {
         return (
           <div>
             <HashRouter basename={ baseUrl } hashType="noslash">
-              <div>
+              <Switch>
                 { allTheRoutes }
-              </div>
+                <Route render={x=><h2>404 API Method Not Found</h2>}/>
+              </Switch>
             </HashRouter>
           </div>
         )
