@@ -102,7 +102,7 @@ export default class Operations extends React.Component {
             <HashRouter basename={ baseUrl } hashType="noslash">
               <Switch>
                 { allTheRoutes }
-                <Route render={x=><h2>404 API Method Not Found</h2>}/>
+                <Route path="/:version/*" render={x=><h2>404 API Method Not Found</h2>}/>
               </Switch>
             </HashRouter>
           </div>

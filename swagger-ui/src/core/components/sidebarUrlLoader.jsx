@@ -1,8 +1,6 @@
 import React from "react"
 import PropTypes from "prop-types"
-
-//import "./topbar.less"
-
+import { browserHistory  } from 'react-router-dom'
 
 export default class Topbar extends React.Component {
 
@@ -35,6 +33,11 @@ export default class Topbar extends React.Component {
     this.setSelectedUrl(url)
     localStorage.setItem('selectedDiscUrl',url);  //we will use this on page load at the root url when no route is selected
     e.preventDefault()
+    try {   
+      //sending the user back to the baseUrl, this will prevent a 404 method not found from showing up when we load a different version
+       history.pushState('', document.title, window.location.pathname);
+      }
+    catch(e) {}
   }
 
   downloadUrl = (e) => {

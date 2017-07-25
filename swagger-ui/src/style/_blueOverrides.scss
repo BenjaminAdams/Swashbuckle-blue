@@ -1,5 +1,10 @@
 ﻿#swagger-ui-container {
   padding-left: 275px;
-  margin-top: 50px;
   word-wrap: break-word;
+}
+
+.mainLoading {
+  position:fixed;
+  top:40%;
+  right:50%;
 }

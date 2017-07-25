@@ -53,6 +53,7 @@ export default class BaseLayout extends React.Component {
     let Row = getComponent("Row")
     let Col = getComponent("Col")
     let Errors = getComponent("errors", true)
+    const Header = getComponent("header", true)
     let isLoading = specSelectors.loadingStatus() === "loading"
     let isFailed = specSelectors.loadingStatus() === "failed"
     let filter = layoutSelectors.currentFilter()
@@ -73,8 +74,9 @@ export default class BaseLayout extends React.Component {
     return (
       <span>
       <Sidebar taggedOps={taggedOps} toggleSidebarFunc={this.toggleSidebar} showSidebar={this.state.showSidebar} />
-      <div className='swagger-ui'>
+      <div className='swagger-ui'>               
                 <div id="swagger-ui-container" style={{ paddingLeft: this.state.leftPadding }}>
+                 { Header ? <Header /> : null }
                     <Errors />
                       <HashRouter basename={ baseUrl } hashType="noslash">
                        <Switch>

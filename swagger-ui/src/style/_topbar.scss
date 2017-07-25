@@ -2,7 +2,7 @@
 {
     padding: 8px 30px;
 
-    background-color: #89bf04;
+    background-color: #0085c3;
     .topbar-wrapper
     {
         display: flex;
@@ -12,13 +12,10 @@
     {
         font-size: 1.5em;
         font-weight: bold;
-
         display: flex;
         align-items: center;
         flex: 1;
-
         max-width: 300px;
-
         text-decoration: none;
 
         @include text_headline(#fff);

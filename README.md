@@ -423,7 +423,7 @@ If your API has multiple versions, use __MultipleApiVersions__ instead of __Sing
             });
         .EnableSwaggerUi(c =>
             {
-                c.EnableDiscoveryUrlSelector();
+                //c.EnableDiscoveryUrlSelector(); //this options has been removed
             });
 
 \* You can also enable a select box in the swagger-ui (as shown above) that displays a discovery URL for each version. This provides a convenient way for users to browse documentation for different API versions.

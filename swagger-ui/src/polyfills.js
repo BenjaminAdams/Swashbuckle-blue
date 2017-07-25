@@ -34,3 +34,13 @@ require("core-js/fn/promise");
     init();
   }
 }());
+
+//history.pushState polyfill
+(function () {
+  if (!history && !history.pushState) {
+      window.history = {
+        pushState: function(){
+            console.log('History.pushState not available')
+        }
+      }
+}}());

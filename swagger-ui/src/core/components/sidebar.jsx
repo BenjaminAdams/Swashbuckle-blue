@@ -8,12 +8,17 @@ class ListChildren extends React.Component {
     version: PropTypes.string.isRequired
   }
 
+  gotoTop = () => {
+     window.scrollTo(0, 0);
+  }
+
   render() {
     const { operations, version } = this.props
+    var self=this
 
     var ops = operations.map(function(op) {
       return <li key={op.routeId} className="sidebarChild" title={op.operation.operationId}>
-        <Link to={op.urlHash}>
+        <Link to={op.urlHash} onClick={self.gotoTop}>
           <div className={"methodBtn " + "btn-"+op.method}>{op.method}</div>
           <div className="childTxt">{op.operation.operationId}</div>
         </Link>
@@ -47,8 +52,6 @@ constructor(props) {
 
     const SidebarUrlLoader = getComponent("sidebarUrlLoader", true) 
 
-    // var baseUrlSplit = window.location.pathname.split('/swagger/ui/index') var
-    // baseUrl = baseUrlSplit[0] + '/swagger/ui/index'
     var baseUrl = window.swashbuckleConfig.baseUrl
     var version=specSelectors.getVersion()
 

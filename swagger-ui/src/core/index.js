@@ -89,6 +89,10 @@ module.exports = function SwaggerUI(opts) {
   const constructorConfig = deepExtend({}, defaults, opts, queryConfig)
 
   if (window.swashbuckleConfig.discoveryUrlObj != null && window.swashbuckleConfig.discoveryUrlObj.length > 1) {
+    //if the user has indicated they wanted to view a specific version
+    //this can come from 2 places
+    //1.  The url hash
+    //2.  Localstorage - this is set by the left sidebar nav select box
     constructorConfig.url = checkIfAVersionWasPreviouslySelected(constructorConfig.url)
   }
 

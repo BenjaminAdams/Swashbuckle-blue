@@ -29,6 +29,7 @@ import Operation from "core/components/operation"
 import OperationWrapper from "core/components/operationWrapper"
 import Sidebar from "core/components/sidebar"
 import SidebarUrlLoader from "core/components/sidebarUrlLoader.jsx"
+import Header from "core/components/header.jsx"
 import HighlightCode from "core/components/highlight-code"
 import Responses from "core/components/responses"
 import Response from "core/components/response"
@@ -84,6 +85,7 @@ export default function() {
       operationWrapper: OperationWrapper,
       sidebar: Sidebar,
       sidebarUrlLoader: SidebarUrlLoader,
+      header: Header,
       highlightCode: HighlightCode,
       responses: Responses,
       response: Response,
