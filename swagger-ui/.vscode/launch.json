@@ -6,7 +6,7 @@
             "type": "chrome",
             "request": "launch",
             "url": "http://localhost:3200",
-            "webRoot": "${workspaceRoot}/src",
+            "webRoot": "${workspaceRoot}",
             "userDataDir": "${workspaceRoot}/.chrome",
             "smartStep": true
             // "sourceMapPathOverrides": {
