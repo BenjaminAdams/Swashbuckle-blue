@@ -31,7 +31,7 @@ export default class Topbar extends React.Component {
     let url = e.target.value || e.target.href
     this.loadSpec(url)
     this.setSelectedUrl(url)
-    localStorage.setItem('selectedDiscUrl',url);  //we will use this on page load at the root url when no route is selected
+    localStorage.setItem('selectedDiscUrl',url)  //we will use this on page load at the root url when no route is selected
     e.preventDefault()
     try {   
       //sending the user back to the baseUrl, this will prevent a 404 method not found from showing up when we load a different version

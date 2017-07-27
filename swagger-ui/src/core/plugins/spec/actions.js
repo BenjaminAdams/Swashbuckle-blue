@@ -196,7 +196,6 @@ export const executeRequest = (req) => ({fn, specActions, specSelectors}) => {
   // if url is relative, parseUrl makes it absolute by inferring from `window.location`
   req.contextUrl = parseUrl(specSelectors.url()).toString()
 
-
   if(op && op.operationId) {
     req.operationId = op.operationId
   } else if(op && pathName && method) {
@@ -208,20 +207,38 @@ export const executeRequest = (req) => ({fn, specActions, specSelectors}) => {
 
   specActions.setRequest(req.pathName, req.method, parsedRequest)
 
+
+
+  if(req.securities && req.securities.definitions && req.securities.definitions.apiKey){
+    if(!parsedRequest.headers) {
+      parsedRequest.headers = {}
+    }
+    //parsedRequest.headers[req.securities.definitions.apiKey.name] = 'xxx'
+      parsedRequest.headers['FakeHeader'] = 'xxx'
+  }
+
+  console.log('req=', req)
+  console.log('fn=', fn)
+  console.log('parsedRequest=', parsedRequest)
+
   // track duration of request
   const startTime = Date.now()
 
   return fn.execute(req)
-  .then( res => {
+  .then(res => {
     res.duration = Date.now() - startTime
     specActions.setResponse(req.pathName, req.method, res)
-  } )
-  .catch( err => specActions.setResponse(req.pathName, req.method, { error: true, err: serializeError(err) } ) )
+  })
+  .catch( err => {
+    specActions.setResponse(req.pathName, req.method, { error: true, err: serializeError(err) } )
+  
+  })
 }
 
 
 // I'm using extras as a way to inject properties into the final, `execute` method - It's not great. Anyone have a better idea? @ponelat
 export const execute = ( { path, method, ...extras }={} ) => (system) => {
+
   let { fn:{fetch}, specSelectors, specActions } = system
   let spec = specSelectors.spec().toJS()
   let scheme = specSelectors.operationScheme(path, method)

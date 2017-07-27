@@ -15,6 +15,9 @@ export default {
   },
 
   [AUTHORIZE]: (state, { payload } ) =>{
+
+    localStorage.setItem('securitiesPayload',JSON.stringify(payload))
+
     let securities = fromJS(payload)
     let map = state.get("authorized") || Map()
 

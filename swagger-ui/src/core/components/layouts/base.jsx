@@ -42,6 +42,7 @@ export default class BaseLayout extends React.Component {
     let basePath = specSelectors.basePath()
     let host = specSelectors.host()
     let securityDefinitions = specSelectors.securityDefinitions()
+    console.log('securityDefinitions',securityDefinitions)
     let externalDocs = specSelectors.externalDocs()
     let schemes = specSelectors.schemes()
     let Info = getComponent("info")

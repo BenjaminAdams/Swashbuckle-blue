@@ -3,7 +3,16 @@ import PropTypes from "prop-types"
 
 export default class AuthorizeBtn extends React.Component {
   static propTypes = {
-    className: PropTypes.string
+    className: PropTypes.string,
+    authActions: PropTypes.object.isRequired
+  }
+
+  componentWillMount() {
+    let {  authActions } = this.props
+    var secPayload= localStorage.getItem('securitiesPayload')
+    if(secPayload) {
+      authActions.authorize(JSON.parse(secPayload))
+    }
   }
 
   onClick =() => {
@@ -14,11 +23,13 @@ export default class AuthorizeBtn extends React.Component {
   }
 
   render() {
-    let { authSelectors, getComponent } = this.props
+    let { authSelectors, getComponent, authActions } = this.props
     //must be moved out of button component
     const AuthorizationPopup = getComponent("authorizationPopup", true)
+
     let showPopup = !!authSelectors.shownDefinitions()
     let isAuthorized = !!authSelectors.authorized().size
+
 
     return (
       <div className="auth-wrapper">
