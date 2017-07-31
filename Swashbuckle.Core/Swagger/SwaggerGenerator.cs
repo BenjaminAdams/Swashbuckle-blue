@@ -67,7 +67,8 @@ namespace Swashbuckle.Swagger
                 schemes = (_options.Schemes != null) ? _options.Schemes.ToList() : new[] { rootUri.Scheme }.ToList(),
                 paths = paths,
                 definitions = schemaRegistry.Definitions,
-                securityDefinitions = _options.SecurityDefinitions
+                securityDefinitions = _options.SecurityDefinitions,
+                security = _options.Security
             };
 
             foreach (var filter in _options.DocumentFilters)

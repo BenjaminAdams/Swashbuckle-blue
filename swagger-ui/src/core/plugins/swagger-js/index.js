@@ -1,6 +1,7 @@
 import Swagger from "swagger-client"
 
 module.exports = function({ configs }) {
+
   return {
     fn: {
       fetch: Swagger.makeHttp(configs.preFetch, configs.postFetch),

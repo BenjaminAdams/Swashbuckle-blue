@@ -19,6 +19,7 @@ namespace Swashbuckle.Application
         private Func<ApiDescription, string, bool> _versionSupportResolver;
         private IEnumerable<string> _schemes;
         private IDictionary<string, SecuritySchemeBuilder> _securitySchemeBuilders;
+        private List<string> _securityBuilders;
         private bool _ignoreObsoleteActions;
         private Func<ApiDescription, string> _groupingKeySelector;
         private IComparer<string> _groupingKeyComparer;
@@ -40,6 +41,7 @@ namespace Swashbuckle.Application
         {
             _versionInfoBuilder = new VersionInfoBuilder();
             _securitySchemeBuilders = new Dictionary<string, SecuritySchemeBuilder>();
+            _securityBuilders = new List<string>();
             _ignoreObsoleteActions = false;
             _customSchemaMappings = new Dictionary<Type, Func<Schema>>();
             _schemaFilters = new List<Func<ISchemaFilter>>();
@@ -82,6 +84,7 @@ namespace Swashbuckle.Application
         {
             var schemeBuilder = new BasicAuthSchemeBuilder();
             _securitySchemeBuilders[name] = schemeBuilder;
+            _securityBuilders.Add(name);
             return schemeBuilder;
         }
 
@@ -89,6 +92,7 @@ namespace Swashbuckle.Application
         {
             var schemeBuilder = new ApiKeySchemeBuilder();
             _securitySchemeBuilders[name] = schemeBuilder;
+            _securityBuilders.Add(name);
             return schemeBuilder;
         }
 
@@ -113,6 +117,7 @@ namespace Swashbuckle.Application
         {
             var schemeBuilder = new OAuth2SchemeBuilder();
             _securitySchemeBuilders[name] = schemeBuilder;
+            _securityBuilders.Add(name);
             return schemeBuilder;
         }
 
@@ -232,10 +237,18 @@ namespace Swashbuckle.Application
                 ? _securitySchemeBuilders.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.Build())
                 : null;
 
+            var security = new List<IDictionary<string, IEnumerable<string>>>();
+            foreach (var sec in _securityBuilders)
+            {
+                var tmpSec = new Dictionary<string, IEnumerable<string>> { { sec, new List<string>() { } } };
+                security.Add(tmpSec);
+            }
+
             var options = new SwaggerGeneratorOptions(
                 versionSupportResolver: _versionSupportResolver,
                 schemes: _schemes,
                 securityDefinitions: securityDefintitions,
+                security: security,
                 ignoreObsoleteActions: _ignoreObsoleteActions,
                 groupingKeySelector: _groupingKeySelector,
                 groupingKeyComparer: _groupingKeyComparer,

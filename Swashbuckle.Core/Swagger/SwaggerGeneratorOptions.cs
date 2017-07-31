@@ -11,6 +11,7 @@ namespace Swashbuckle.Swagger
             Func<ApiDescription, string, bool> versionSupportResolver = null,
             IEnumerable<string> schemes = null,
             IDictionary<string, SecurityScheme> securityDefinitions = null,
+            IList<IDictionary<string, IEnumerable<string>>> security = null, //a list of security names
             bool ignoreObsoleteActions = false,
             Func<ApiDescription, string> groupingKeySelector = null,
             IComparer<string> groupingKeyComparer = null,
@@ -18,7 +19,7 @@ namespace Swashbuckle.Swagger
             IEnumerable<ISchemaFilter> schemaFilters = null,
             IEnumerable<IModelFilter> modelFilters = null,
             bool ignoreObsoleteProperties = false,
-            Func<Type, string> schemaIdSelector = null, 
+            Func<Type, string> schemaIdSelector = null,
             bool describeAllEnumsAsStrings = false,
             bool describeStringEnumsInCamelCase = false,
             IEnumerable<IOperationFilter> operationFilters = null,
@@ -29,6 +30,7 @@ namespace Swashbuckle.Swagger
             VersionSupportResolver = versionSupportResolver;
             Schemes = schemes;
             SecurityDefinitions = securityDefinitions;
+            Security = security;
             IgnoreObsoleteActions = ignoreObsoleteActions;
             GroupingKeySelector = groupingKeySelector ?? DefaultGroupingKeySelector;
             GroupingKeyComparer = groupingKeyComparer ?? Comparer<string>.Default;
@@ -49,6 +51,7 @@ namespace Swashbuckle.Swagger
         public IEnumerable<string> Schemes { get; private set; }
 
         public IDictionary<string, SecurityScheme> SecurityDefinitions { get; private set; }
+        public IList<IDictionary<string, IEnumerable<string>>> Security { get; private set; }
 
         public bool IgnoreObsoleteActions { get; private set; }
 

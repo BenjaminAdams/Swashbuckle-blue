@@ -41,7 +41,7 @@ export default class LiveResponse extends React.Component {
     const headers = response.get("headers").toJS()
     const notDocumented = response.get("notDocumented")
     const isError = response.get("error")
-    const body = response.get("text")
+    var body = response.get("text")
     const duration = response.get("duration")
     const headersKeys = Object.keys(headers)
     const contentType = headers["content-type"]
@@ -52,6 +52,11 @@ export default class LiveResponse extends React.Component {
       return <span className="headerline" key={key}> {key}: {headers[key]} </span>
     })
     const hasHeaders = returnObject.length !== 0
+
+    if(!body) {
+      body = response.get('name')  + ' ' + response.get('message')
+    }
+
 
     return (
       <div>
@@ -75,12 +80,7 @@ export default class LiveResponse extends React.Component {
                 }
               </td>
               <td className="col response-col_description">
-                {
-                  isError ? <span>
-                              {`${response.get("name")}: ${response.get("message")}`}
-                            </span>
-                          : null
-                }
+
                 {
                   body ? <ResponseBody content={ body }
                                        contentType={ contentType }
