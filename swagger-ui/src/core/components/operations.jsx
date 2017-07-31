@@ -28,7 +28,6 @@ export default class Operations extends React.Component {
       const Collapse = getComponent("Collapse")
 
       var version= specSelectors.getVersion() 
-      let showSummary = layoutSelectors.showSummary()
       let { docExpansion, displayOperationId, displayRequestDuration, maxDisplayedTags, deepLinking } = getConfigs()
 
       const isDeepLinkingEnabled = deepLinking && deepLinking !== "false"
@@ -74,7 +73,6 @@ export default class Operations extends React.Component {
                         <Operation
                           {...op.toObject()}
                           jumpToKey={jumpToKey}
-                          showSummary={showSummary}
                           key={isShownKey}
                           response={ response }
                           request={ request }

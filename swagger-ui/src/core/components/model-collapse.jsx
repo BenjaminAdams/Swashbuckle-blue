@@ -12,7 +12,7 @@ export default class ModelCollapse extends Component {
   static defaultProps = {
     collapsedContent: "{...}",
     collapsed: true,
-    title: null
+    title: ''
   }
 
   constructor(props, context) {

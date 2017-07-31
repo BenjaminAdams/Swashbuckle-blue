@@ -120,11 +120,11 @@ export default class BaseLayout extends React.Component {
                             <Operations />
                         </Col>
                     </Row>
-                    <Row>
-                        <Col mobile={12} desktop={12} >
-                            <Models />
-                        </Col>
-                    </Row>
+                    { /* <Row>
+                         <Col mobile={12} desktop={12} >
+                             <Models />
+                         </Col>
+                    </Row> */}
                 </div>
             </div>
             </span>

@@ -88,10 +88,10 @@ namespace Swashbuckle.Dummy
                     //c.BasicAuth("basic")
                     //    .Description("Basic HTTP Authentication");
                     //
-                    //c.ApiKey("apiKey")
-                    //    .Description("API Key Authentication")
-                    //    .Name("yourApiKeyHeaderName")
-                    //    .In("header");
+                    c.ApiKey("apiKey")
+                        .Description("API Key Authentication")
+                        .Name("yourApiKeyHeaderName")
+                        .In("header");
 
                     //c.OAuth2("oauth2")
                     //    .Description("OAuth2 Implicit Grant")

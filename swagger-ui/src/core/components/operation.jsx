@@ -10,7 +10,6 @@ export default class Operation extends PureComponent {
     path: PropTypes.string.isRequired,
     method: PropTypes.string.isRequired,
     operation: PropTypes.object.isRequired,
-    showSummary: PropTypes.bool,
     jumpToKey: CustomPropTypes.arrayOrString.isRequired,
 
     allowTryItOut: PropTypes.bool,
@@ -33,7 +32,6 @@ export default class Operation extends PureComponent {
   }
 
   static defaultProps = {
-    showSummary: true,
     response: null,
     allowTryItOut: true,
     displayOperationId: false,
@@ -90,7 +88,6 @@ export default class Operation extends PureComponent {
       path,
       method,
       operation,
-      showSummary,
       response,
       request,
       allowTryItOut,
@@ -155,11 +152,7 @@ export default class Operation extends PureComponent {
                 <JumpToPath path={jumpToKey} />
               </span>
 
-            { !showSummary ? null :
-                <div className="opblock-summary-description">
-                  { summary }
-                </div>
-            }
+
 
             { displayOperationId && operationId ? <span className="opblock-summary-operation-id">{operationId}</span> : null }
 
@@ -170,7 +163,6 @@ export default class Operation extends PureComponent {
                   authSelectors={ authSelectors }/>
             }
           </div>
-
          
             <div className="opblock-body">
               { deprecated && <h4 className="opblock-title_normal"> Warning: Deprecated</h4>}
@@ -200,7 +192,7 @@ export default class Operation extends PureComponent {
                 onCancelClick = { this.onCancelClick }
                 tryItOutEnabled = { tryItOutEnabled }
                 allowTryItOut={allowTryItOut}
-
+                summary={summary}
                 fn={fn}
                 getComponent={ getComponent }
                 specActions={ specActions }

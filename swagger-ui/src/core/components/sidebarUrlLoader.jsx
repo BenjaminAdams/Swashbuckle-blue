@@ -5,7 +5,11 @@ import { browserHistory  } from 'react-router-dom'
 export default class Topbar extends React.Component {
 
   static propTypes = {
-    layoutActions: PropTypes.object.isRequired
+    layoutActions: PropTypes.object.isRequired,
+    specSelectors: PropTypes.object.isRequired,
+    specActions: PropTypes.object.isRequired,
+    getComponent: PropTypes.func.isRequired,
+    getConfigs: PropTypes.func.isRequired
   }
 
   constructor(props, context) {
@@ -138,9 +142,3 @@ export default class Topbar extends React.Component {
   }
 }
 
-Topbar.propTypes = {
-  specSelectors: PropTypes.object.isRequired,
-  specActions: PropTypes.object.isRequired,
-  getComponent: PropTypes.func.isRequired,
-  getConfigs: PropTypes.func.isRequired
-}

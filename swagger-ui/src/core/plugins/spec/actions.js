@@ -211,12 +211,19 @@ export const executeRequest = (req) => ({fn, specActions, specSelectors}) => {
   // track duration of request
   const startTime = Date.now()
 
+var thisIsTheReq=req
+console.log(thisIsTheReq)
+
   return fn.execute(req)
   .then( res => {
     res.duration = Date.now() - startTime
     specActions.setResponse(req.pathName, req.method, res)
   } )
-  .catch( err => specActions.setResponse(req.pathName, req.method, { error: true, err: serializeError(err) } ) )
+  .catch( err => { 
+    
+    console.log('err=', err)
+    
+    specActions.setResponse(req.pathName, req.method, { error: true, err: serializeError(err) } )  }  )
 }
 
 

@@ -19,7 +19,8 @@ export default class Parameters extends Component {
     onTryoutClick: PropTypes.func,
     onCancelClick: PropTypes.func,
     onChangeKey: PropTypes.array,
-    pathMethod: PropTypes.array.isRequired
+    pathMethod: PropTypes.array.isRequired,
+    summary: PropTypes.string
   }
 
 
@@ -29,6 +30,7 @@ export default class Parameters extends Component {
     tryItOutEnabled: false,
     allowTryItOut: true,
     onChangeKey: [],
+    summary: ''
   }
 
   onChange = ( param, value, isXml ) => {
@@ -57,7 +59,7 @@ export default class Parameters extends Component {
       parameters,
       allowTryItOut,
       tryItOutEnabled,
-
+      summary,
       fn,
       getComponent,
       specSelectors,
@@ -72,7 +74,9 @@ export default class Parameters extends Component {
     return (
       <div className="opblock-section">
         <div className="opblock-section-header">
-          <h4 className="opblock-title">Parameters</h4>
+        
+            <div dangerouslySetInnerHTML={{__html:summary}}></div>
+        
             { allowTryItOut ? (
               <TryItOutButton enabled={ tryItOutEnabled } onCancelClick={ onCancelClick } onTryoutClick={ onTryoutClick } />
             ) : null }
@@ -80,12 +84,7 @@ export default class Parameters extends Component {
         { !parameters.count() ? <div className="opblock-description-wrapper"><p>No parameters</p></div> :
           <div className="table-container">
             <table className="parameters">
-              <thead>
-                <tr>
-                  <th className="col col_header parameters-col_name">Name</th>
-                  <th className="col col_header parameters-col_description">Description</th>
-                </tr>
-              </thead>
+
               <tbody>
                 {
                   eachMap(parameters, (parameter) => (
