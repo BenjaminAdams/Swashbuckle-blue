@@ -21,6 +21,8 @@ export default class Execute extends Component {
     if ( specSelectors.validateBeforeExecute([path, method]) ) {
       if(this.props.onExecute) {
         this.props.onExecute()
+
+        //todo add hitory tracker here
       }
       specActions.execute( { operation, path, method } )
     }

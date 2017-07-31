@@ -26,6 +26,10 @@ export default class StandaloneLayout extends React.Component {
 
     const loadingStatus = specSelectors.loadingStatus()
 
+    if(loadingStatus === "failed") {
+       localStorage.clear('selectedDiscUrl') //user will be stuck in a failed loading state if we dont clear this
+    }
+
     return (
       <Container className='swagger-ui'>
         { loadingStatus === "loading" &&
@@ -35,12 +39,12 @@ export default class StandaloneLayout extends React.Component {
         }
         { loadingStatus === "failed" &&
           <div className="info">
-            <h4 className="title">Failed to load spec.</h4>
+            <h4 className="mainLoading">Failed to load spec.</h4>
           </div>
         }
         { loadingStatus === "failedConfig" &&
           <div className="info" style={{ maxWidth: "880px", marginLeft: "auto", marginRight: "auto", textAlign: "center" }}>
-            <h4 className="title">Failed to load config.</h4>
+            <h4 className="mainLoading">Failed to load config.</h4>
           </div>
         }
         { !loadingStatus || loadingStatus === "success" && <BaseLayout /> }
