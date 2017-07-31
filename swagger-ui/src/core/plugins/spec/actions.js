@@ -208,35 +208,11 @@ export const executeRequest = (req) => ({fn, specActions, specSelectors}) => {
   let parsedRequest = Object.assign({}, req)
   parsedRequest = fn.buildRequest(parsedRequest)
 
-  if(req.securities && req.securities.definitions && req.securities.definitions.apiKey){
-    if(!req.headers) {
-      req.headers = {}
-    }
-
-    console.log('adding some headers...')
-    //parsedRequest.headers[req.securities.definitions.apiKey.name] = 'xxx'
-      req.headers['FakeHeader'] = 'xxxyyy'
-      parsedRequest.headers['FakeHeader222'] = 'xxxyyy222'
-  }
-
-
 
   specActions.setRequest(req.pathName, req.method, parsedRequest)
 
-  console.log('req=', req)
-  console.log('fn=', fn)
-  console.log('parsedRequest=', parsedRequest)
-
-
-
-
-
-
   // track duration of request
   const startTime = Date.now()
-
-var thisIsTheReq=req
-console.log(thisIsTheReq)
 
   return fn.execute(req)
   .then(res => {
@@ -245,11 +221,7 @@ console.log(thisIsTheReq)
 
   })
   .catch( err => { 
-    
-    console.log('err=', err)
-    
     specActions.setResponse(req.pathName, req.method, { error: true, err: serializeError(err) } )  }  )
-
 }
 
 

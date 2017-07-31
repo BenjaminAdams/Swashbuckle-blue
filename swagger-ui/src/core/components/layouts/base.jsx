@@ -26,7 +26,7 @@ export default class BaseLayout extends React.Component {
   toggleSidebar = () => {
     this.state.showSidebar= !this.state.showSidebar//we have to set this before we call setState because its not changing it in local scope
     this.setState({ showSidebar: this.state.showSidebar });
-    console.log(this.state.showSidebar)
+
     if (this.state.showSidebar === true) {
            this.setState({ leftPadding: '250px' });
     } else { 
@@ -42,7 +42,6 @@ export default class BaseLayout extends React.Component {
     let basePath = specSelectors.basePath()
     let host = specSelectors.host()
     let securityDefinitions = specSelectors.securityDefinitions()
-    console.log('securityDefinitions',securityDefinitions)
     let externalDocs = specSelectors.externalDocs()
     let schemes = specSelectors.schemes()
     let Info = getComponent("info")

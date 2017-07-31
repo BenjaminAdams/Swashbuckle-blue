@@ -49,7 +49,7 @@ export default class ParamBody extends PureComponent {
     let { specSelectors, pathMethod, param, isExecute, consumesValue="" } = props
     let parameter = specSelectors ? specSelectors.getParameter(pathMethod, param.get("name")) : {}
     if(!parameter){
-      console.log('param was null', props)
+      //console.log('param was null', props)
       return;
     }
     let isXml = /xml/i.test(consumesValue)

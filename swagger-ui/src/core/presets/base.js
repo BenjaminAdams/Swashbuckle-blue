@@ -26,7 +26,6 @@ import LiveResponse from "core/components/live-response"
 import OnlineValidatorBadge from "core/components/online-validator-badge"
 import Operations from "core/components/operations"
 import Operation from "core/components/operation"
-import OperationWrapper from "core/components/operationWrapper"
 import Sidebar from "core/components/sidebar"
 import SidebarUrlLoader from "core/components/sidebarUrlLoader.jsx"
 import Header from "core/components/header.jsx"
@@ -82,7 +81,6 @@ export default function() {
       onlineValidatorBadge: OnlineValidatorBadge,
       operations: Operations,
       operation: Operation,
-      operationWrapper: OperationWrapper,
       sidebar: Sidebar,
       sidebarUrlLoader: SidebarUrlLoader,
       header: Header,
