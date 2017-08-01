@@ -34,7 +34,6 @@ export default class ParamBody extends PureComponent {
       isEditBox: false,
       value: ""
     }
-
   }
 
   componentDidMount() {
@@ -55,6 +54,7 @@ export default class ParamBody extends PureComponent {
     let isXml = /xml/i.test(consumesValue)
     let isJson = /json/i.test(consumesValue)
     let paramValue = isXml ? parameter.get("value_xml") : parameter.get("value")
+
 
     if ( paramValue !== undefined ) {
       let val = !paramValue && isJson ? "{}" : paramValue
@@ -83,6 +83,8 @@ export default class ParamBody extends PureComponent {
 
   _onChange = (val, isXml) => { (this.props.onChange || NOOP)(this.props.param, val, isXml) }
 
+
+  //this is fired when the user changes the contents of the textbox
   handleOnChange = e => {
     const {consumesValue} = this.props
     const isJson = /json/i.test(consumesValue)
@@ -133,10 +135,13 @@ export default class ParamBody extends PureComponent {
                          </Button>
                          </div>
           }
-          <label htmlFor="">
+
+        { /*  <label htmlFor="">
             <span>Parameter content type</span>
             <ContentType value={ consumesValue } contentTypes={ consumes } onChange={onChangeConsumes} className="body-param-content-type" />
           </label>
+        */}
+
         </div>
 
       </div>

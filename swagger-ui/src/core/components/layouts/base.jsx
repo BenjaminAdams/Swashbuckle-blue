@@ -1,6 +1,6 @@
 import React from "react"
 import PropTypes from "prop-types"
-import { HashRouter, Route, Link, Switch } from 'react-router-dom'
+import { HashRouter, Route, Link } from 'react-router-dom'
 
 export default class BaseLayout extends React.Component {
   static propTypes = {
@@ -65,8 +65,6 @@ export default class BaseLayout extends React.Component {
       return <h4>No spec provided.</h4>
     }
 
-    //var baseUrlSplit = window.location.pathname.split('/swagger/ui/index')
-    //var baseUrl = baseUrlSplit[0] + '/swagger/ui/index'
     var baseUrl = window.swashbuckleConfig.baseUrl
 
     return (
@@ -89,16 +87,6 @@ export default class BaseLayout extends React.Component {
                                 } />                                                                              
                          </span>
                          </HashRouter>
-
-
-                  { /*   <div className="scheme-container">
-                                        <Col className="schemes wrapper" mobile={12}>
-                                            {schemes && schemes.size ? (
-                                                <Schemes schemes={schemes} specActions={specActions} />
-                                            ) : null}                                        
-                                        </Col>
-                                    </div>
-                   */ }
 
                     {
                         filter === null || filter === false ? null :

@@ -20,7 +20,8 @@ export default class Parameters extends Component {
     onCancelClick: PropTypes.func,
     onChangeKey: PropTypes.array,
     pathMethod: PropTypes.array.isRequired,
-    summary: PropTypes.string
+    summary: PropTypes.string,
+    onChangeConsumesWrapper: PropTypes.func.isRequired
   }
 
 
@@ -42,14 +43,7 @@ export default class Parameters extends Component {
     changeParam( onChangeKey, param.get("name"), value, isXml)
   }
 
-  onChangeConsumesWrapper = ( val ) => {
-    let {
-      specActions: { changeConsumesValue },
-      onChangeKey
-    } = this.props
 
-    changeConsumesValue(onChangeKey, val)
-  }
 
   render(){
 
@@ -63,7 +57,8 @@ export default class Parameters extends Component {
       fn,
       getComponent,
       specSelectors,
-      pathMethod
+      pathMethod,
+      onChangeConsumesWrapper
     } = this.props
 
     const ParameterRow = getComponent("parameterRow")
@@ -93,7 +88,7 @@ export default class Parameters extends Component {
                       param={ parameter }
                       key={ parameter.get( "name" ) }
                       onChange={ this.onChange }
-                      onChangeConsumes={this.onChangeConsumesWrapper}
+                      onChangeConsumes={onChangeConsumesWrapper}
                       specSelectors={ specSelectors }
                       pathMethod={ pathMethod }
                       isExecute={ isExecute }/>

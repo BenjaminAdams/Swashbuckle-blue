@@ -11,15 +11,11 @@ export default class Operation extends PureComponent {
     method: PropTypes.string.isRequired,
     operation: PropTypes.object.isRequired,
     jumpToKey: CustomPropTypes.arrayOrString.isRequired,
-
     allowTryItOut: PropTypes.bool,
-
     displayOperationId: PropTypes.bool,
     displayRequestDuration: PropTypes.bool,
-
     response: PropTypes.object,
     request: PropTypes.object,
-
     getComponent: PropTypes.func.isRequired,
     authActions: PropTypes.object,
     authSelectors: PropTypes.object,
@@ -66,6 +62,16 @@ export default class Operation extends PureComponent {
       consumesValue = consumes && consumes.size ? consumes.first() : defaultContentType
       specActions.changeConsumesValue([path, method], consumesValue)
     }
+  }
+
+    onChangeConsumesWrapper = ( val ) => {
+    let {
+      specActions: { changeConsumesValue },
+      path, method
+    } = this.props
+
+    var onChangeKey=[ path, method ]
+    changeConsumesValue(onChangeKey, val)
   }
 
   onTryoutClick =() => {
@@ -181,6 +187,7 @@ export default class Operation extends PureComponent {
               <Parameters
                 parameters={parameters}
                 onChangeKey={onChangeKey}
+                onChangeConsumesWrapper={this.onChangeConsumesWrapper}
                 onTryoutClick = { this.onTryoutClick }
                 onCancelClick = { this.onCancelClick }
                 tryItOutEnabled = { tryItOutEnabled }
@@ -231,6 +238,7 @@ export default class Operation extends PureComponent {
                     producesValue={ operation.get("produces_value") }
                     pathMethod={ [path, method] }
                     displayRequestDuration={ displayRequestDuration }
+                    onChangeConsumesWrapper={this.onChangeConsumesWrapper}
                     fn={fn} />
               }
             </div>
