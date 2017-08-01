@@ -96,8 +96,9 @@ namespace Swashbuckle.Dummy
                     //c.OAuth2("oauth2")
                     //    .Description("OAuth2 Implicit Grant")
                     //    .Flow("implicit")
-                    //    .AuthorizationUrl("http://petstore.swagger.io/api/oauth/dialog")
-                    //    //.TokenUrl("https://tempuri.org/token")
+                    //    //.AuthorizationUrl("http://petstore.swagger.io/api/oauth/dialog")
+                    //    .AuthorizationUrl("http://localhost/Swashbuckle.Dummy.WebHost/swagger/ui/oauth2-redirect-html")
+                    //    .TokenUrl("https://tempuri.org/token")
                     //    .Scopes(scopes =>
                     //    {
                     //        scopes.Add("read", "Read access to protected resources");

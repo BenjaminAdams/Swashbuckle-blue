@@ -5,7 +5,8 @@
 </html>
 <script>
     'use strict';
-    function run () {
+    function run() {
+        debugger;
         var oauth2 = window.opener.swaggerUIRedirectOauth2;
         var sentState = oauth2.state;
         var redirectUrl = oauth2.redirectUrl;
@@ -14,11 +15,11 @@
         qp = (window.location.hash || location.search).substring(1);
 
         arr = qp.split("&")
-        arr.forEach(function (v,i,_arr) { _arr[i] = '"' + v.replace('=', '":"') + '"';})
+        arr.forEach(function (v, i, _arr) { _arr[i] = '"' + v.replace('=', '":"') + '"'; })
         qp = qp ? JSON.parse('{' + arr.join() + '}',
-                function (key, value) {
-                    return key === "" ? value : decodeURIComponent(value)
-                }
+            function (key, value) {
+                return key === "" ? value : decodeURIComponent(value)
+            }
         ) : {}
 
         isValid = qp.state === sentState
@@ -36,7 +37,7 @@
             if (qp.code) {
                 delete oauth2.state;
                 oauth2.auth.code = qp.code;
-                oauth2.callback({auth: oauth2.auth, redirectUrl: redirectUrl});
+                oauth2.callback({ auth: oauth2.auth, redirectUrl: redirectUrl });
             } else {
                 oauth2.errCb({
                     authId: oauth2.auth.name,
@@ -46,7 +47,7 @@
                 });
             }
         } else {
-            oauth2.callback({auth: oauth2.auth, token: qp, isValid: isValid, redirectUrl: redirectUrl});
+            oauth2.callback({ auth: oauth2.auth, token: qp, isValid: isValid, redirectUrl: redirectUrl });
         }
         window.close();
     }

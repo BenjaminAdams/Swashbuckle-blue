@@ -39,12 +39,17 @@ export default class Auths extends React.Component {
   logoutClick =(e) => {
     e.preventDefault()
 
-    let { authActions, definitions } = this.props
+    let { authActions, definitions, closeFunction } = this.props
     let auths = definitions.map( (val, key) => {
       return key
     }).toArray()
 
+    localStorage.setItem('securitiesPayload','{}')
     authActions.logout(auths)
+    
+    if(closeFunction) {
+      closeFunction()
+    }
   }
 
   render() {

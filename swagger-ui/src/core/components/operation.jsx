@@ -149,8 +149,6 @@ export default class Operation extends PureComponent {
                 <JumpToPath path={jumpToKey} />
               </span>
 
-
-
             { displayOperationId && operationId ? <span className="opblock-summary-operation-id">{operationId}</span> : null }
 
             {

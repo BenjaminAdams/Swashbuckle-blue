@@ -41,7 +41,6 @@ export default class BaseLayout extends React.Component {
     let url = specSelectors.url()
     let basePath = specSelectors.basePath()
     let host = specSelectors.host()
-    let securityDefinitions = specSelectors.securityDefinitions()
     let externalDocs = specSelectors.externalDocs()
     let schemes = specSelectors.schemes()
     let Info = getComponent("info")
@@ -49,7 +48,6 @@ export default class BaseLayout extends React.Component {
     let Operation = getComponent("operation", true)
     let Sidebar = getComponent("sidebar", true)
     let Models = getComponent("Models", true)
-    let AuthorizeBtn = getComponent("authorizeBtn", true)
     let Row = getComponent("Row")
     let Col = getComponent("Col")
     let Errors = getComponent("errors", true)
@@ -94,11 +92,7 @@ export default class BaseLayout extends React.Component {
                                         <Col className="schemes wrapper" mobile={12}>
                                             {schemes && schemes.size ? (
                                                 <Schemes schemes={schemes} specActions={specActions} />
-                                            ) : null}
-
-                                            {securityDefinitions ? (
-                                                <AuthorizeBtn />
-                                            ) : null}
+                                            ) : null}                                        
                                         </Col>
                                     </div>
                             }/>

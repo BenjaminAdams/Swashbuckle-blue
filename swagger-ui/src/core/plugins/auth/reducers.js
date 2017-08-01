@@ -15,6 +15,7 @@ export default {
   },
 
   [AUTHORIZE]: (state, { payload } ) =>{
+    if(!payload) return
 
     localStorage.setItem('securitiesPayload',JSON.stringify(payload))
 
