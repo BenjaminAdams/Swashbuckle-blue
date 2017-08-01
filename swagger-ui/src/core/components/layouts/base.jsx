@@ -74,10 +74,10 @@ export default class BaseLayout extends React.Component {
       <Sidebar taggedOps={taggedOps} toggleSidebarFunc={this.toggleSidebar} showSidebar={this.state.showSidebar} />
       <div className='swagger-ui'>               
                 <div id="swagger-ui-container" style={{ paddingLeft: this.state.leftPadding }}>
-                 { Header ? <Header /> : null }
-                    <Errors />
+                <Header />
+                <Errors />
                       <HashRouter basename={ baseUrl } hashType="noslash">
-                       <Switch>
+                       <span>
                           <Route path={"/"} exact key={"home"} render={x => 
                                 <Row className="information-container">
                                             <Col mobile={12}>
@@ -86,19 +86,19 @@ export default class BaseLayout extends React.Component {
                                                 ) : null}
                                             </Col>
                                         </Row>
-                                } />
-                           <Route render={x=> 
-                                    <div className="scheme-container">
+                                } />                                                                              
+                         </span>
+                         </HashRouter>
+
+
+                  { /*   <div className="scheme-container">
                                         <Col className="schemes wrapper" mobile={12}>
                                             {schemes && schemes.size ? (
                                                 <Schemes schemes={schemes} specActions={specActions} />
                                             ) : null}                                        
                                         </Col>
                                     </div>
-                            }/>
-                         </Switch>
-                         </HashRouter>
-              
+                   */ }
 
                     {
                         filter === null || filter === false ? null :

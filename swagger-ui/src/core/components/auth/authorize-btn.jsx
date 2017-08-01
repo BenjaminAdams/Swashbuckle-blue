@@ -32,7 +32,7 @@ export default class AuthorizeBtn extends React.Component {
 
 
     return (
-      <div className="auth-wrapper">
+      <span>
         <button className={isAuthorized ? "btn authorize locked" : "btn authorize unlocked"} onClick={ this.onClick }>
           <span>Authorize</span>
           <svg width="20" height="20">
@@ -40,7 +40,7 @@ export default class AuthorizeBtn extends React.Component {
           </svg>
         </button>
       { showPopup && <AuthorizationPopup /> }
-      </div>
+      </span>
     )
   }
 

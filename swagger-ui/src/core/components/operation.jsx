@@ -108,13 +108,10 @@ export default class Operation extends PureComponent {
     let externalDocs = operation.get("externalDocs")
     let responses = operation.get("responses")
     let security = operation.get("security") || specSelectors.security()
-    let produces = operation.get("produces")
-    let schemes = operation.get("schemes")
+    let produces = operation.get("produces")   
     let parameters = getList(operation, ["parameters"])
     let operationId = operation.get("__originalOperationId")
-
     let operationScheme = specSelectors.operationScheme(path, method)
-
     const Responses = getComponent("responses")
     const Parameters = getComponent( "parameters" )
     const Execute = getComponent( "execute" )
@@ -123,7 +120,7 @@ export default class Operation extends PureComponent {
     const JumpToPath = getComponent("JumpToPath", true)
     const Collapse = getComponent( "Collapse" )
     const Markdown = getComponent( "Markdown" )
-    const Schemes = getComponent( "schemes" )
+
 
     const { deepLinking } = getConfigs()
 
@@ -139,6 +136,7 @@ export default class Operation extends PureComponent {
     let { tryItOutEnabled } = this.state
     let shown = true
     let onChangeKey = [ path, method ] // Used to add values to _this_ operation ( indexed by path and method )
+
 
     return (
         <div className={deprecated ? "opblock opblock-deprecated" : shown ? `opblock opblock-${method} is-open` : `opblock opblock-${method}`} id={operationId} >
@@ -195,14 +193,7 @@ export default class Operation extends PureComponent {
                 pathMethod={ [path, method] }
               />
 
-              {!tryItOutEnabled || !allowTryItOut ? null : schemes && schemes.size ? <div className="opblock-schemes">
-                    <Schemes schemes={ schemes }
-                             path={ path }
-                             method={ method }
-                             specActions={ specActions }
-                             operationScheme={ operationScheme } />
-                  </div> : null
-              }
+                  
 
             <div className={(!tryItOutEnabled || !response || !allowTryItOut) ? "execute-wrapper" : "btn-group"}>
               { !tryItOutEnabled || !allowTryItOut ? null :
