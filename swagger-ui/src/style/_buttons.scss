@@ -36,23 +36,20 @@
     &.authorize
     {
         line-height: 1;
-
         display: inline;
-
-        color: $_color-post;
-        border-color: $_color-post;
+        color:white;
+        border-color: white;
 
 
         span
         {
             float: left;
-
             padding: 4px 20px 0 0;
         }
 
         svg
         {
-            fill: $_color-post;
+            fill: white;
         }
     }
 

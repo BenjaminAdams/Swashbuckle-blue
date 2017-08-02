@@ -127,11 +127,8 @@ export default class Operation extends PureComponent {
     const Collapse = getComponent( "Collapse" )
     const Markdown = getComponent( "Markdown" )
 
-
     const { deepLinking } = getConfigs()
-
     const isDeepLinkingEnabled = deepLinking && deepLinking !== "false"
-
 
     // Merge in Live Response
     if(response && response.size > 0) {
@@ -140,9 +137,9 @@ export default class Operation extends PureComponent {
     }
 
     let { tryItOutEnabled } = this.state
+    tryItOutEnabled= true  //always enable TryItOut
     let shown = true
     let onChangeKey = [ path, method ] // Used to add values to _this_ operation ( indexed by path and method )
-
 
     return (
         <div className={deprecated ? "opblock opblock-deprecated" : shown ? `opblock opblock-${method} is-open` : `opblock opblock-${method}`} id={operationId} >

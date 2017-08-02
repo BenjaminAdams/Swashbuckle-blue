@@ -33,15 +33,11 @@ export default class Responses extends React.Component {
   render() {
     let { responses, request, tryItOutResponse, getComponent, specSelectors, fn, producesValue, displayRequestDuration,pathMethod,onChangeConsumesWrapper } = this.props
     let defaultCode = defaultStatusCode( responses )
-
     const ContentType = getComponent( "contentType" )
     const LiveResponse = getComponent( "liveResponse" )
     const Response = getComponent( "response" )
     let consumesValue = specSelectors.contentTypeValues(pathMethod).get("requestContentType")
     let consumes = specSelectors.operationConsumes(pathMethod)
-
-console.log(consumes,consumesValue )
-
     let produces = this.props.produces && this.props.produces.size ? this.props.produces : Responses.defaultProps.produces
 
     return (

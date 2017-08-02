@@ -22,7 +22,7 @@ export default class ObjectModel extends Component {
     let description = schema.get("description")
     let properties = schema.get("properties")
     let additionalProperties = schema.get("additionalProperties")
-    let title = schema.get("title") || name
+    let titleStr = schema.get("title") || name || 'failed to get title'
     let required = schema.get("required")
 
     const JumpToPath = getComponent("JumpToPath", true)
@@ -38,9 +38,9 @@ export default class ObjectModel extends Component {
         }
     </span>)
     
-    const titleEl = title && <span className="model-title">
+    const titleEl = titleStr && <span className="model-title">
       { isRef && schema.get("$$ref") && <span className="model-hint">{ schema.get("$$ref") }</span> }
-      <span className="model-title__text">{ title }</span>
+      <span className="model-title__text">{ titleStr }</span>
     </span>
 
     return <span className="model">

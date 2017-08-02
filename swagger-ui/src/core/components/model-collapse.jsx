@@ -6,7 +6,8 @@ export default class ModelCollapse extends Component {
     collapsedContent: PropTypes.any,
     collapsed: PropTypes.bool,
     children: PropTypes.any,
-    title: PropTypes.element
+   // title: PropTypes.element
+    title: PropTypes.any
   }
 
   static defaultProps = {
@@ -18,7 +19,7 @@ export default class ModelCollapse extends Component {
   constructor(props, context) {
     super(props, context)
 
-    let { collapsed, collapsedContent } = this.props
+    let { collapsed, collapsedContent, title } = this.props
 
     this.state = {
       collapsed: collapsed !== undefined ? collapsed : ModelCollapse.defaultProps.collapsed,
