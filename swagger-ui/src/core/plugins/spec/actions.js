@@ -20,9 +20,6 @@ export const UPDATE_OPERATION_VALUE = "spec_update_operation_value"
 export const UPDATE_RESOLVED = "spec_update_resolved"
 export const SET_SCHEME = "set_scheme"
 
-
-
-
 export function updateSpec(spec) {
   if(spec instanceof Error) {
     return {type: UPDATE_SPEC, error: true, payload: spec}

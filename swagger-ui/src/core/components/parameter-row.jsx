@@ -87,6 +87,13 @@ export default class ParameterRow extends Component {
     let parameter = specSelectors.getParameter(pathMethod, param.get("name"))
     let value = parameter ? parameter.get("value") : ""
 
+
+    let schemaDesc= param.get("description")  //gets the comment from the param list in the class declaration
+    if(bodyParam && schema != null) {
+      //adds a comment from the top of the class
+      schemaDesc = ' <p>' + schema.get("description") + '</p>' + schemaDesc
+    }
+
     return (
       <tr>
         <td className="col parameters-col_name">
@@ -99,7 +106,7 @@ export default class ParameterRow extends Component {
         </td>
 
         <td className="col parameters-col_description">
-          <Markdown source={ param.get("description") }/>
+          <Markdown source={ schemaDesc }/>
           {(isFormData && !isFormDataSupported) && <div>Error: your browser does not support FormData</div>}
 
           { bodyParam || !isExecute ? null

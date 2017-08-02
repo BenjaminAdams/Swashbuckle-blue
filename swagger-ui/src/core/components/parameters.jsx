@@ -72,7 +72,7 @@ export default class Parameters extends Component {
         
             <div dangerouslySetInnerHTML={{__html:summary}}></div>
         
-            {
+            { 
               /*
                allowTryItOut ? (
               <TryItOutButton enabled={ tryItOutEnabled } onCancelClick={ onCancelClick } onTryoutClick={ onTryoutClick } />
