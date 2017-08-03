@@ -10,19 +10,19 @@ export default class ArrayModel extends Component {
     specSelectors: PropTypes.object.isRequired,
     name: PropTypes.string,
     required: PropTypes.bool,
+    requiredConditionally: PropTypes.bool,
     expandDepth: PropTypes.number,
     depth: PropTypes.number
   }
 
   render(){
-    let { getComponent, required, schema, depth, expandDepth } = this.props
+    let { getComponent, required, schema, depth, expandDepth, requiredConditionally } = this.props
     let items = schema.get("items")
     let title = schema.get("title") || name || ''
     let properties = schema.filter( ( v, key) => ["type", "items", "$$ref"].indexOf(key) === -1 )
 
     const ModelCollapse = getComponent("ModelCollapse")
     const Model = getComponent("Model")
-
 
     const titleEl =  
       <span className="model-title">
@@ -31,9 +31,7 @@ export default class ArrayModel extends Component {
 
     return <span className="model">
       <ModelCollapse title={titleEl} collapsed={ depth > expandDepth } collapsedContent="[...]">
-        [
-          <span><Model { ...this.props } schema={ items } required={ false }/></span>
-        ]
+        Array[<span><Model { ...this.props } schema={ items } required={ false } requiredConditionally={requiredConditionally}/></span>]
         {
           properties.size ? <span>
               { properties.entrySeq().map( ( [ key, v ] ) => <span key={`${key}-${v}`} style={propStyle}>
@@ -41,8 +39,7 @@ export default class ArrayModel extends Component {
               }<br /></span>
             : null
         }
-      </ModelCollapse>
-      { required && <span style={{ color: "red" }}>*</span>}
+      </ModelCollapse>  
     </span>
   }
 }

@@ -3,7 +3,7 @@ import ImPropTypes from "react-immutable-proptypes"
 
 const EnumModel = ({ value, getComponent }) => {
   let ModelCollapse = getComponent("ModelCollapse")
-  let collapsedContent = <span>Array [ { value.count() } ]</span>
+  let collapsedContent = <span>[ { value.count() } ]</span>
   return <span className="prop-enum">
     Enum:<br />
     <ModelCollapse collapsedContent={ collapsedContent }>

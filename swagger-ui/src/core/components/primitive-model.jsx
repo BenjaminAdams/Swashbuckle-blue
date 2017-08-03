@@ -7,7 +7,8 @@ export default class Primitive extends Component {
   static propTypes = {
     schema: PropTypes.object.isRequired,
     getComponent: PropTypes.func.isRequired,
-    required: PropTypes.bool
+    required: PropTypes.bool,
+    requiredConditionally: PropTypes.bool,
   }
 
   render(){
@@ -28,18 +29,22 @@ export default class Primitive extends Component {
     const Markdown = getComponent("Markdown")
     const EnumModel = getComponent("EnumModel")
 
+    if(type==='string' && enumArray) {
+      type= 'enum/string'
+    }
+
     return <span className="prop">
-      <span className="prop-type" style={ style }>{ type }</span> { required && <span style={{ color: "red" }}>*</span>}
+      {
+        !description ? null :<Markdown source={ description } />
+      }
+      <span className="prop-type" style={ style }>{ type }</span>{ /* required && <span style={{ color: "red" }}>required *</span> */}
       { format && <span className="prop-format">(${format})</span>}
       {
         properties.size ? properties.entrySeq().map( ( [ key, v ] ) => <span key={`${key}-${v}`} style={ propStyle }>
           <br />{ key }: { String(v) }</span>)
           : null
       }
-      {
-        !description ? null :
-          <Markdown source={ description } />
-      }
+
       {
         xml && xml.size ? (<span><br /><span style={ propStyle }>xml:</span>
           {

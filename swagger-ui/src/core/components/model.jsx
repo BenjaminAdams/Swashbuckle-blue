@@ -9,6 +9,7 @@ export default class Model extends Component {
         name: PropTypes.string,
         isRef: PropTypes.bool,
         required: PropTypes.bool,
+        requiredConditionally: PropTypes.bool,
         expandDepth: PropTypes.number,
         depth: PropTypes.number
     }
@@ -26,7 +27,7 @@ export default class Model extends Component {
     }
 
     render() {
-        let { schema, getComponent, required, name, isRef } = this.props
+        let { schema, getComponent, required, requiredConditionally, name, isRef } = this.props
         let ObjectModel = getComponent("ObjectModel")
         let ArrayModel = getComponent("ArrayModel")
         let PrimitiveModel = getComponent("PrimitiveModel")
@@ -53,13 +54,13 @@ export default class Model extends Component {
                     name={name || modelName}
                     isRef={isRef !== undefined ? isRef : !!$$ref} />
             case "array":
-                return <ArrayModel className="array" { ...this.props } schema={modelSchema} required={required} />
+                return <ArrayModel className="array" { ...this.props } schema={modelSchema} required={required} requiredConditionally={requiredConditionally} />
             case "string":
             case "number":
             case "integer":
             case "boolean":
             default:
-                return <PrimitiveModel getComponent={getComponent} schema={modelSchema} required={required} />
+                return <PrimitiveModel getComponent={getComponent} schema={modelSchema} required={required} requiredConditionally={requiredConditionally} />
         }
     }
 }

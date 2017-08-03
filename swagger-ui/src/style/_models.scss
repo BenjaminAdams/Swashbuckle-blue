@@ -1,9 +1,9 @@
 .model
 {
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 300;
 
-    @include text_code();
+    @include text_code(#000);
     &-toggle
     {
         font-size: 10px;
@@ -37,6 +37,19 @@
             background: url(data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M10%206L8.59%207.41%2013.17%2012l-4.58%204.59L10%2018l6-6z%22/%3E%0A%3C/svg%3E%0A) center center no-repeat;
             background-size: 100%;
         }
+    }
+
+    .model-desc {
+        margin-bottom:15px;
+        p {
+            color:gray;
+            font-size:18px;
+        }
+        
+    }
+
+    .brace-close, .brace-open {
+        font-size:20px;
     }
 
     &-jump-to-path
@@ -81,7 +94,7 @@
     }
 
     p {
-        margin: 0 0 1em 0;
+        margin: 0;
     }
 }
 
@@ -197,9 +210,9 @@ section.models
 
 .model-title
 {
-    font-size: 16px;
+    font-size: 24px;
 
-    @include text_headline(#555);
+    @include text_headline(#0085c3);
 }
 
 

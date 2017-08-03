@@ -24,7 +24,8 @@ export default class Operation extends PureComponent {
     layoutActions: PropTypes.object.isRequired,
     layoutSelectors: PropTypes.object.isRequired,
     fn: PropTypes.object.isRequired,
-    getConfigs: PropTypes.func.isRequired
+    getConfigs: PropTypes.func.isRequired,
+    tag: PropTypes.string
   }
 
   static defaultProps = {
@@ -105,7 +106,8 @@ export default class Operation extends PureComponent {
       specSelectors,
       authActions,
       authSelectors,
-      getConfigs
+      getConfigs,
+      tag
     } = this.props
 
     let summary = operation.get("summary")
@@ -150,14 +152,14 @@ export default class Operation extends PureComponent {
                 <JumpToPath path={jumpToKey} />
               </span>
 
-            { displayOperationId && operationId ? <span className="opblock-summary-operation-id">{operationId}</span> : null }
+            { /*  displayOperationId && operationId ? <span className="opblock-summary-operation-id">{operationId}</span> : null */ }
 
-            {
+            { /* we dont need this here
               (!security || !security.count()) ? null :
                 <AuthorizeOperationBtn authActions={ authActions }
                   security={ security }
                   authSelectors={ authSelectors }/>
-            }
+           */ }
           </div>
          
             <div className="opblock-body">
@@ -191,10 +193,12 @@ export default class Operation extends PureComponent {
                 allowTryItOut={allowTryItOut}
                 summary={summary}
                 fn={fn}
+                tag={tag}
                 getComponent={ getComponent }
                 specActions={ specActions }
                 specSelectors={ specSelectors }
                 pathMethod={ [path, method] }
+                operationId={operationId}
               />
 
                   

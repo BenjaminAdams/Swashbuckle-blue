@@ -83,29 +83,32 @@ export default class ParameterRow extends Component {
     let isFormData = inType === "formData"
     let isFormDataSupported = "FormData" in win
     let required = param.get("required")
+    let requiredConditionally = param.get("requiredConditionally")
     let itemType = param.getIn(["items", "type"])
     let parameter = specSelectors.getParameter(pathMethod, param.get("name"))
     let value = parameter ? parameter.get("value") : ""
 
 
     let schemaDesc= param.get("description")  //gets the comment from the param list in the class declaration
-    if(bodyParam && schema != null) {
+
+    if(bodyParam && schema != null && schema.get("description")) {
       //adds a comment from the top of the class
       schemaDesc = ' <p>' + schema.get("description") + '</p>' + schemaDesc
     }
 
     return (
-      <tr>
-        <td className="col parameters-col_name">
-          <div className={required ? "parameter__name required" : "parameter__name"}>
+      <div>
+        <span className="col parameters-col_name">
+          <div className="parameter__name">
             { param.get("name") }
-            { !required ? null : <span style={{color: "red"}}>&nbsp;*</span> }
+            { !required ? null : <div className="required">required *</div> }
+            { !requiredConditionally ? null : <div className="required" title="This field is only sometimes required">conditionally required *</div> }
           </div>
           <div className="parameter__type">{ param.get("type") } { itemType && `[${itemType}]` }</div>
           <div className="parameter__in">({ param.get("in") })</div>
-        </td>
+        </span>
 
-        <td className="col parameters-col_description">
+        <span className="col parameters-col_description">
           <Markdown source={ schemaDesc }/>
           {(isFormData && !isFormDataSupported) && <div>Error: your browser does not support FormData</div>}
 
@@ -129,9 +132,9 @@ export default class ParameterRow extends Component {
               : null
           }
 
-        </td>
+        </span>
 
-      </tr>
+      </div>
     )
 
   }

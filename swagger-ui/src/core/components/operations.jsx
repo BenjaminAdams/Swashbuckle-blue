@@ -76,6 +76,7 @@ export default class Operations extends React.Component {
                           key={isShownKey}
                           response={ response }
                           request={ request }
+                          tag={tag}
                           allowTryItOut={allowTryItOut}
                           displayOperationId={true}
                           displayRequestDuration={displayRequestDuration}

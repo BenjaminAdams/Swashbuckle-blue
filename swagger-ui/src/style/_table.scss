@@ -2,7 +2,6 @@ table
 {
     width: 100%;
     padding: 0 10px;
-
     border-collapse: collapse;
 
     &.model
@@ -47,7 +46,7 @@ table
             td
             {
                 padding: 10px 0 0 0;
-
+                border-bottom: 20px solid transparent;
                 vertical-align: top;
 
                 &:first-of-type
@@ -81,15 +80,23 @@ table
     }
 }
 
+.parameters-col_name {
+    display: inline-block;
+    width: 10%;
+    vertical-align: top;
+    padding-top: 20px;
+}
+
 .parameters-col_description
 {
+    display: inline-block;
+    width: 90%;
+
     p
     {
-        font-size: 14px;
-
+        font-size: 14px;     
         margin: 0;
-
-        @include text_body();
+        @include text_body(#000);
     }
 
     input[type=text]
@@ -105,26 +112,15 @@ table
     font-weight: normal;
 
     @include text_headline();
+}
 
-    &.required
+    .required
     {
         font-weight: bold;
-
-        &:after
-        {
-            font-size: 10px;
-
-            position: relative;
-            top: -6px;
-
-            padding: 5px;
-
-            content: 'required';
-
-            color: rgba(#f00, .6);
-        }
+        font-size: 12px;
+        color: rgba(#f00, .6);
     }
-}
+
 
 .parameter__in
 {
@@ -137,5 +133,5 @@ table
 
 .table-container
 {
-    padding: 20px;
+    padding: 0 20px 20px 20px;
 }

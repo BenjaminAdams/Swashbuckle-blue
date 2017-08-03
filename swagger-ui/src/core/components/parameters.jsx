@@ -21,7 +21,9 @@ export default class Parameters extends Component {
     onChangeKey: PropTypes.array,
     pathMethod: PropTypes.array.isRequired,
     summary: PropTypes.string,
-    onChangeConsumesWrapper: PropTypes.func.isRequired
+    onChangeConsumesWrapper: PropTypes.func.isRequired,
+    operationId: PropTypes.string,
+    tag: PropTypes.string
   }
 
 
@@ -31,7 +33,8 @@ export default class Parameters extends Component {
     tryItOutEnabled: false,
     allowTryItOut: true,
     onChangeKey: [],
-    summary: ''
+    summary: '',
+    operationId: ''
   }
 
   onChange = ( param, value, isXml ) => {
@@ -58,7 +61,9 @@ export default class Parameters extends Component {
       getComponent,
       specSelectors,
       pathMethod,
-      onChangeConsumesWrapper
+      onChangeConsumesWrapper,
+      operationId,
+      tag
     } = this.props
 
     const ParameterRow = getComponent("parameterRow")
@@ -66,12 +71,12 @@ export default class Parameters extends Component {
 
     const isExecute = tryItOutEnabled && allowTryItOut
 
+    summary= '<h3>' + tag + ' '  + operationId + '</h3>' + summary
+
     return (
       <div className="opblock-section">
-        <div className="opblock-section-header">
-        
-            <div dangerouslySetInnerHTML={{__html:summary}}></div>
-        
+        <div className="opblock-section-header" dangerouslySetInnerHTML={{__html:summary}}>        
+                
             { 
               /*
                allowTryItOut ? (
@@ -79,14 +84,10 @@ export default class Parameters extends Component {
             ) : null 
             */
               }
-
-
         </div>
         { !parameters.count() ? <div className="opblock-description-wrapper"><p>No parameters</p></div> :
           <div className="table-container">
-            <table className="parameters">
-
-              <tbody>
+            <div className="parameters">            
                 {
                   eachMap(parameters, (parameter) => (
                     <ParameterRow fn={ fn }
@@ -99,9 +100,8 @@ export default class Parameters extends Component {
                       pathMethod={ pathMethod }
                       isExecute={ isExecute }/>
                   )).toArray()
-                }
-              </tbody>
-            </table>
+                }           
+            </div>
           </div>
         }
       </div>

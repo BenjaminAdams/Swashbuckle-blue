@@ -32,11 +32,11 @@ export default class ModelExample extends React.Component {
 
     return <div>
       <ul className="tab">
-        <li className={ "tabitem" + ( isExecute || this.state.activeTab === "example" ? " active" : "") }>
+        <li className={ "tabitem" + ( this.state.activeTab === "example" ? " active" : "") }>
           <a className="tablinks" data-name="example" onClick={ this.activeTab }>Example Value</a>
         </li>
-        <li className={ "tabitem" + ( !isExecute && this.state.activeTab === "model" ? " active" : "") }>
-          <a className={ "tablinks" + ( isExecute ? " inactive" : "" )} data-name="model" onClick={ this.activeTab }>Model</a>
+        <li className={ "tabitem" + ( this.state.activeTab === "model" ? " active" : "") }>
+          <a className={ "tablinks" + ( isExecute ? " inactive" : "" )} data-name="model" onClick={ this.activeTab }>Documentation</a>
         </li>
       </ul>
       
@@ -48,9 +48,7 @@ export default class ModelExample extends React.Component {
            this.state.activeTab === "model" && <ModelWrapper schema={ schema }
                                                      getComponent={ getComponent }
                                                      specSelectors={ specSelectors }
-                                                     expandDepth={ 1 } />
-
-
+                                                     expandDepth={ 5 } />
         }
       </div>
     </div>
