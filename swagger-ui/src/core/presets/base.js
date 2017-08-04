@@ -41,6 +41,7 @@ import Errors from "core/components/errors"
 import ContentType from "core/components/content-type"
 import Overview from "core/components/overview"
 import Info from "core/components/info"
+import History from "core/components/history"
 import Footer from "core/components/footer"
 import ParamBody from "core/components/param-body"
 import Curl from "core/components/curl"
@@ -83,6 +84,7 @@ export default function() {
       operation: Operation,
       sidebar: Sidebar,
       sidebarUrlLoader: SidebarUrlLoader,
+      history: History,
       header: Header,
       highlightCode: HighlightCode,
       responses: Responses,

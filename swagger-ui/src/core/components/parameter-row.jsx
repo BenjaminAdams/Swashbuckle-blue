@@ -63,13 +63,9 @@ export default class ParameterRow extends Component {
     const JsonSchemaForm = getComponent("JsonSchemaForm")
     const ParamBody = getComponent("ParamBody")
     let inType = param.get("in")
-
-
     const ModelExample = getComponent("modelExample")
     const Markdown = getComponent("Markdown")
-
     let schema = param.get("schema")
-
     let isFormData = inType === "formData"
     let isFormDataSupported = "FormData" in win
     let required = param.get("required")
@@ -83,10 +79,7 @@ export default class ParameterRow extends Component {
       value = valueFromHistory
     }
 
-    console.log('valueFromHistory=',valueFromHistory)
-
     let schemaDesc= param.get("description")  //gets the comment from the param list in the class declaration
-
 
     let bodyParam = inType !== "body" ? null
       : <ParamBody getComponent={getComponent}

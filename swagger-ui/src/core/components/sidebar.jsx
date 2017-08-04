@@ -77,7 +77,8 @@ constructor(props) {
         <li className="sidebarParent">{ SidebarUrlLoader ? <SidebarUrlLoader /> : null }</li>
         <li className="sidebarParent">
           <ul>
-            <Link to="/">Intro</Link>
+            <li><Link to="/">Intro</Link></li>
+            <li><Link to="/history">History</Link></li>
           </ul>
         </li>
 

@@ -1,6 +1,7 @@
 import React from "react"
 import PropTypes from "prop-types"
 import { HashRouter, Route, Link } from 'react-router-dom'
+import {History} from "core/components/history"
 
 export default class BaseLayout extends React.Component {
   static propTypes = {
@@ -84,7 +85,8 @@ export default class BaseLayout extends React.Component {
                                                 ) : null}
                                             </Col>
                                         </Row>
-                                } />                                                                              
+                                } />      
+                          <Route path={"/history"} exact key={"history"} component={History} />                 
                          </span>
                          </HashRouter>
 

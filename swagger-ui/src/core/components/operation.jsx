@@ -152,7 +152,10 @@ export default class Operation extends PureComponent {
     //   })
     // }
 var xhrHistory= fromJS(getXhrHistory())
-parameters = xhrHistory.first().get('parameters')
+if(xhrHistory != null &&  xhrHistory.count()) {
+  parameters = xhrHistory.first().get('parameters')
+}
+
     
 
 console.log('request=', request? request.toJS() : request)
