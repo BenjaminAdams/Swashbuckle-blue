@@ -1,9 +1,9 @@
 import React, { PureComponent } from "react"
+import { List, OrderedMap } from 'immutable'
 import PropTypes from "prop-types"
 import { getList } from "core/utils"
 import * as CustomPropTypes from "core/proptypes"
-
-//import "less/opblock"
+import {getXhrHistory} from 'core/ls-actions'
 
 export default class Operation extends PureComponent {
   static propTypes = {
@@ -143,6 +143,18 @@ export default class Operation extends PureComponent {
     let shown = true
     let onChangeKey = [ path, method ] // Used to add values to _this_ operation ( indexed by path and method )
 
+    var xhrHistory= List(getXhrHistory())
+    if(xhrHistory && xhrHistory.first()){
+      parameters = List(xhrHistory.first().parameters)
+      parameters= parameters.map(x => {
+        x.schema = OrderedMap(x.schema)
+        return OrderedMap(x) 
+      })
+    }
+
+console.log('request=', request? request.toJS() : request)
+console.log('response=', response? response.toJS() : response)
+
     return (
         <div className={deprecated ? "opblock opblock-deprecated" : shown ? `opblock opblock-${method} is-open` : `opblock opblock-${method}`} id={operationId} >
           <div className={`opblock-summary opblock-summary-${method}`} >
@@ -183,6 +195,7 @@ export default class Operation extends PureComponent {
                   </div>
                 </div> : null
               }
+
               <Parameters
                 parameters={parameters}
                 onChangeKey={onChangeKey}
@@ -200,9 +213,7 @@ export default class Operation extends PureComponent {
                 pathMethod={ [path, method] }
                 operationId={operationId}
               />
-
                   
-
             <div className={(!tryItOutEnabled || !response || !allowTryItOut) ? "execute-wrapper" : "btn-group"}>
               { !tryItOutEnabled || !allowTryItOut ? null :
 
@@ -242,10 +253,8 @@ export default class Operation extends PureComponent {
                     onChangeConsumesWrapper={this.onChangeConsumesWrapper}
                     fn={fn} />
               }
-            </div>
-        
+            </div>       
         </div>
     )
   }
-
 }

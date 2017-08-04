@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import PropTypes from "prop-types"
 import win from "core/window"
+import IM from 'immutable'
 
 export default class ParameterRow extends Component {
   static propTypes = {
@@ -62,18 +63,7 @@ export default class ParameterRow extends Component {
     const JsonSchemaForm = getComponent("JsonSchemaForm")
     const ParamBody = getComponent("ParamBody")
     let inType = param.get("in")
-    let bodyParam = inType !== "body" ? null
-      : <ParamBody getComponent={getComponent}
-                   fn={fn}
-                   param={param}
-                   consumes={ specSelectors.operationConsumes(pathMethod) }
-                   consumesValue={ specSelectors.contentTypeValues(pathMethod).get("requestContentType") }
-                   onChange={onChange}
-                   onChangeConsumes={onChangeConsumes}
-                   isExecute={ isExecute }
-                   specSelectors={ specSelectors }
-                   pathMethod={ pathMethod }
-      />
+
 
     const ModelExample = getComponent("modelExample")
     const Markdown = getComponent("Markdown")
@@ -86,12 +76,33 @@ export default class ParameterRow extends Component {
     let requiredConditionally = param.get("requiredConditionally")
     let itemType = param.getIn(["items", "type"])
     let parameter = specSelectors.getParameter(pathMethod, param.get("name"))
-    let value = parameter ? parameter.get("value") : ""
 
+    var valueFromHistory= param.get('value')
+    let value = parameter ? parameter.get("value") : ""
+    if(valueFromHistory) {
+      value = valueFromHistory
+    }
+
+    console.log('valueFromHistory=',valueFromHistory)
 
     let schemaDesc= param.get("description")  //gets the comment from the param list in the class declaration
 
-    if(bodyParam && schema != null && schema.get("description")) {
+
+    let bodyParam = inType !== "body" ? null
+      : <ParamBody getComponent={getComponent}
+                   fn={fn}
+                   param={param}
+                   consumes={ specSelectors.operationConsumes(pathMethod) }
+                   consumesValue={ specSelectors.contentTypeValues(pathMethod).get("requestContentType") }
+                   onChange={onChange}
+                   onChangeConsumes={onChangeConsumes}
+                   isExecute={ isExecute }
+                   specSelectors={ specSelectors }
+                   pathMethod={ pathMethod }
+                   value={value}
+      />
+
+    if(bodyParam && schema && typeof(schema.get) ==='function' && schema.get("description")) {
       //adds a comment from the top of the class
       schemaDesc = ' <p>' + schema.get("description") + '</p>' + schemaDesc
     }

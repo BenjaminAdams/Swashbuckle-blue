@@ -1,6 +1,7 @@
 import YAML from "js-yaml"
 import parseUrl from "url-parse"
 import serializeError from "serialize-error"
+import {addHistory} from 'core/ls-actions'
 
 // Actions conform to FSA (flux-standard-actions)
 // {type: string,payload: Any|Error, meta: obj, error: bool}
@@ -190,7 +191,6 @@ export const logRequest = (req) => {
 // (For debugging) and ease of testing
 export const executeRequest = (req) => ({fn, specActions, specSelectors}) => {
   let { pathName, method, operation } = req
-
   let op = operation.toJS()
 
   // if url is relative, parseUrl makes it absolute by inferring from `window.location`
@@ -205,20 +205,46 @@ export const executeRequest = (req) => ({fn, specActions, specSelectors}) => {
   let parsedRequest = Object.assign({}, req)
   parsedRequest = fn.buildRequest(parsedRequest)
 
-
   specActions.setRequest(req.pathName, req.method, parsedRequest)
 
   // track duration of request
   const startTime = Date.now()
+  console.log('op=',op)
+  console.log('parsedRequest',parsedRequest)
+  console.log('req',req)
+
+  var saveToHistory = {
+    request: parsedRequest,
+    parameters: op.parameters
+  }
 
   return fn.execute(req)
   .then(res => {
     res.duration = Date.now() - startTime
-    specActions.setResponse(req.pathName, req.method, res)
+    saveToHistory.response = res
+    console.log('res=',res)
+    addHistory(saveToHistory)
 
+    specActions.setResponse(req.pathName, req.method, res)
   })
   .catch( err => { 
+    console.log('res=',err)   
+    //saveToHistory.response = { error: true, err: serializeError(err) }
+   // saveToHistory.response = serializeError(err)
+    var serializedError = serializeError(err)
+    if(serializedError.response) {
+          saveToHistory.response = serializedError.response
+    }else {
+          saveToHistory.response = serializedError
+    }
+
+    saveToHistory.response.error=true
+    saveToHistory.duration = Date.now() - startTime
+    addHistory(saveToHistory)
     specActions.setResponse(req.pathName, req.method, { error: true, err: serializeError(err) } )  }  )
+
+
+
 }
 
 

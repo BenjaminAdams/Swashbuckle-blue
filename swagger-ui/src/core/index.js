@@ -5,6 +5,7 @@ import ApisPreset from "core/presets/apis"
 import * as AllPlugins from "core/plugins/all"
 import { parseSeach, filterConfigs } from "core/utils"
 import { HashRouter, Route, Link } from 'react-router-dom'
+import {initHistory} from 'core/ls-actions'
 
 const CONFIGS = [
   "url",
@@ -84,7 +85,7 @@ module.exports = function SwaggerUI(opts) {
   }
 
   let queryConfig = parseSeach()
-
+  initHistory()
   const constructorConfig = deepExtend({}, defaults, opts, queryConfig)
 
   if (window.swashbuckleConfig.discoveryUrlObj != null && window.swashbuckleConfig.discoveryUrlObj.length > 1) {
@@ -200,6 +201,7 @@ function getDocUrlFromLocalstorage(defaultUrl) {
   if (selectedDiscUrl) return selectedDiscUrl
   return defaultUrl
 }
+
 
 // Add presets
 module.exports.presets = {
