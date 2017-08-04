@@ -30,15 +30,15 @@ export default class ArrayModel extends Component {
       </span>
 
     return <span className="model">
-      <ModelCollapse title={titleEl} collapsed={ depth > expandDepth } collapsedContent="[...]">
-        Array[<span><Model { ...this.props } schema={ items } required={ false } requiredConditionally={requiredConditionally}/></span>]
         {
           properties.size ? <span>
               { properties.entrySeq().map( ( [ key, v ] ) => <span key={`${key}-${v}`} style={propStyle}>
-                <br />{ `${key}:`}{ String(v) }</span>)
+                <br />{ `${key}: `}{ String(v) }</span>)
               }<br /></span>
             : null
         }
+      <ModelCollapse title={titleEl} collapsed={ depth > expandDepth } collapsedContent="[...]">
+        Array[<span><Model { ...this.props } schema={ items } required={ false } requiredConditionally={requiredConditionally}/></span>]
       </ModelCollapse>  
     </span>
   }

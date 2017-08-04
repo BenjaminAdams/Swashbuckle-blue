@@ -64,7 +64,7 @@ export default class ObjectModel extends Component {
           }
           {
             !description ? null : <div className="model-desc"><Markdown source={ description } /></div>
-          }
+          } 
           <span className="inner-object">
             {
               <table className="model"><tbody>

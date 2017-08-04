@@ -18,13 +18,20 @@ export default class Header extends React.Component {
     let securityDefinitions = specSelectors.securityDefinitions()
     const Schemes = getComponent("schemes")
 
+    let title='swagger'
+    let info=specSelectors.info()
+    if(info && info.get('title')) {
+      title=info.get('title')
+      document.title =title
+    }
+
     return (
       <div className="topbar">
         <div className="wrapper">
           <div className="topbar-wrapper">
-            <Link href="#" title="Swagger UX"> 
-              {customLogo ? <img src={ customLogo } alt="Swagger UX"/> : '' } 
-              <span>swagger</span>             
+            <Link href="#" title={title}> 
+              {customLogo ? <img src={ customLogo } alt={title}/> : '' } 
+              <span>{title}</span>             
             </Link>
             
             <div className="auth-wrapper">
