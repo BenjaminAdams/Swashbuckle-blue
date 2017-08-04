@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react"
-import { List, OrderedMap } from 'immutable'
+import { List, OrderedMap, fromJS } from 'immutable'
 import PropTypes from "prop-types"
 import { getList } from "core/utils"
 import * as CustomPropTypes from "core/proptypes"
@@ -143,14 +143,17 @@ export default class Operation extends PureComponent {
     let shown = true
     let onChangeKey = [ path, method ] // Used to add values to _this_ operation ( indexed by path and method )
 
-    var xhrHistory= List(getXhrHistory())
-    if(xhrHistory && xhrHistory.first()){
-      parameters = List(xhrHistory.first().parameters)
-      parameters= parameters.map(x => {
-        x.schema = OrderedMap(x.schema)
-        return OrderedMap(x) 
-      })
-    }
+    // var xhrHistory= List(getXhrHistory())
+    // if(xhrHistory && xhrHistory.first()){
+    //   parameters = List(xhrHistory.first().parameters)
+    //   parameters= parameters.map(x => {
+    //     x.schema = OrderedMap(x.schema)
+    //     return OrderedMap(x) 
+    //   })
+    // }
+var xhrHistory= fromJS(getXhrHistory())
+parameters = xhrHistory.first().get('parameters')
+    
 
 console.log('request=', request? request.toJS() : request)
 console.log('response=', response? response.toJS() : response)
