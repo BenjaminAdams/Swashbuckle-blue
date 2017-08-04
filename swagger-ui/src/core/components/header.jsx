@@ -22,12 +22,11 @@ export default class Header extends React.Component {
     let info=specSelectors.info()
     if(info && info.get('title')) {
       title=info.get('title')
-      document.title =title
+      document.title =title 
     }
 
     return (
       <div className="topbar">
-        <div className="wrapper">
           <div className="topbar-wrapper">
             <Link href="#" title={title}> 
               {customLogo ? <img src={ customLogo } alt={title}/> : '' } 
@@ -40,7 +39,6 @@ export default class Header extends React.Component {
             </div>
 
           </div>
-        </div>
       </div>
     )
   }
