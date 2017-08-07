@@ -13,10 +13,10 @@ export class History extends React.Component {
   render() {
     //let { host, basePath } = this.props
     var hst=fromJS(getXhrHistory())
-    var hstDivs= hst.map(x => { 
-      console.log(x)
+    var hstDivs= hst.map((x, index) => { 
+      console.log(x.toJS())
       var req= x.get('request')
-      return <li>{req.get('url')}</li> 
+      return <li key={index}>{req.get('url')}</li> 
 
      }).toArray()
 

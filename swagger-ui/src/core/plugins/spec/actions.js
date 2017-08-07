@@ -188,8 +188,8 @@ export const logRequest = (req) => {
 
 // Actually fire the request via fn.execute
 // (For debugging) and ease of testing
-export const executeRequest = (req) => ({ fn, specActions, specSelectors }) => {
-  let { pathName, method, operation, urlHash, routeId } = req
+export const executeRequest = (req) => ({ fn, specActions, specSelectors,urlHash,routeId }) => {
+  let { pathName, method, operation } = req
   let op = operation.toJS()
 
   // if url is relative, parseUrl makes it absolute by inferring from `window.location`
@@ -212,11 +212,11 @@ export const executeRequest = (req) => ({ fn, specActions, specSelectors }) => {
   var saveToHistory = {
     request: parsedRequest,
     parameters: getSlimParams(op.parameters),
-    urlHash: urlHash,
-    routeId: routeId
+    urlHash: op.urlHash,
+    routeId: op.routeId
   }
 
-  console.log('saveToHistory.parameters=', saveToHistory.parameters)
+  console.log('saveToHistory=', saveToHistory)
 
   return fn.execute(req)
     .then(res => {
@@ -245,9 +245,9 @@ export const executeRequest = (req) => ({ fn, specActions, specSelectors }) => {
     })
 }
 
-export const execute = ({ path, method, ...extras } = {}) => (system) => {
-  console.log('extras=', extras)
-  let { fn: { fetch }, specSelectors, specActions } = system
+export const execute = ({ path, method,urlHash,routeId,  ...extras } = {}) => (system) => {
+  
+  let { fn: { fetch }, specSelectors, specActions,urlHash,routeId } = system
   let spec = specSelectors.spec().toJS()
   let scheme = specSelectors.operationScheme(path, method)
   let { requestContentType, responseContentType } = specSelectors.contentTypeValues([path, method]).toJS()
@@ -284,6 +284,6 @@ function getSlimParams(largeParameters) {
 
   return parameters.map(x => {
     x.schema = null
-    return x
+    return {name: x.name, value:x.value}
   });
 }

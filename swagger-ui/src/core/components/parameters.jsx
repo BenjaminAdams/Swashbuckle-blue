@@ -92,7 +92,7 @@ export default class Parameters extends Component {
     const TryItOutButton = getComponent("TryItOutButton")
     const isExecute = tryItOutEnabled && allowTryItOut
     summary = '<h3>' + tag + ' ' + operationId + '</h3>' + summary
-    //parameters= this.loadValuesFromHistory(parameters)
+    parameters= this.loadValuesFromHistory(parameters)
     console.log('parameters after',parameters)
 
     return (

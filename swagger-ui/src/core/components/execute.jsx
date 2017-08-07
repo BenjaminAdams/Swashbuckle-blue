@@ -25,7 +25,10 @@ export default class Execute extends Component {
       if(this.props.onExecute) {
         this.props.onExecute()
       }
-      specActions.execute( { operation, path, method,urlHash,routeId } )
+
+      operation= operation.set('urlHash', urlHash)
+      operation= operation.set('routeId', routeId)
+      specActions.execute( { operation, path, method } )
     }
   }
 
