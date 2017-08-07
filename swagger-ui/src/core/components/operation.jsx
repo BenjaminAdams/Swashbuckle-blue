@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react"
 import { List, OrderedMap, fromJS } from 'immutable'
 import PropTypes from "prop-types"
-import { getList } from "core/utils"
+import { getList,atou } from "core/utils"
 import * as CustomPropTypes from "core/proptypes"
 import {getXhrHistory} from 'core/ls-actions'
 
@@ -65,14 +65,32 @@ export default class Operation extends PureComponent {
     }
   }
 
-    onChangeConsumesWrapper = ( val ) => {
-    let {
-      specActions: { changeConsumesValue },
-      path, method
-    } = this.props
+  onChangeConsumesWrapper = ( val ) => {
+    let { specActions: { changeConsumesValue }, path, method } = this.props
 
     var onChangeKey=[ path, method ]
     changeConsumesValue(onChangeKey, val)
+  }
+
+  loadValuesFromQry = (parameters) => {
+    console.log('this.stopLoadingValuesFromUrl', this.stopLoadingValuesFromUrl)
+
+    if (this.stopLoadingValuesFromUrl===true || !parameters || !parameters.count() || !window.location.hash.includes('?params=')) return parameters
+
+    var split=window.location.hash.split('?params=')
+    if(!split || !split[1]) return parameters
+    var slimParameters = fromJS(JSON.parse(atou(split[1])))
+
+    parameters= parameters.map( (x, index) => {
+          var name = x.get('name')     
+          var paramFromSlim= slimParameters.find(y=>y.get('name')==name)
+          
+          if(paramFromSlim) {
+            x= x.set('value', paramFromSlim.get('value'))
+          }      
+          return x
+      })
+    return parameters
   }
 
   onTryoutClick =() => {
@@ -120,6 +138,7 @@ export default class Operation extends PureComponent {
     let security = operation.get("security") || specSelectors.security()
     let produces = operation.get("produces")
     let parameters = getList(operation, ["parameters"])
+    parameters=this.loadValuesFromQry(parameters)
     let operationId = operation.get("__originalOperationId")
     let operationScheme = specSelectors.operationScheme(path, method)
     const Responses = getComponent("responses")
@@ -150,8 +169,8 @@ export default class Operation extends PureComponent {
 //   parameters = xhrHistory.first().get('parameters')
 // }
 
-console.log('request=', request? request.toJS() : request)
-console.log('response=', response? response.toJS() : response)
+//console.log('request=', request? request.toJS() : request)
+//console.log('response=', response? response.toJS() : response)
 
     return (
         <div className={deprecated ? "opblock opblock-deprecated" : shown ? `opblock opblock-${method} is-open` : `opblock opblock-${method}`} id={operationId} >

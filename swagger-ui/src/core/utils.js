@@ -21,6 +21,14 @@ export function objectify (thing) {
   return thing
 }
 
+export function utoa(str) {
+    return window.btoa(unescape(encodeURIComponent(str)));
+}
+// base64 encoded ascii to ucs-2 string
+export function atou(str) {
+    return decodeURIComponent(escape(window.atob(str)));
+}
+
 export function arrayify (thing) {
   if(!thing)
     return []

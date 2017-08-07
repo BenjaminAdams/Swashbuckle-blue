@@ -10,7 +10,7 @@ export function initHistory(){
 export function addHistory(saveToHistory){
   saveToHistory.dateAdded = new Date()
   var hst = getXhrHistory()
-  hst.push(saveToHistory)
+  hst.unshift(saveToHistory)
   window.localStorage.setItem('xhrHistory', JSON.stringify(hst))
 }
 

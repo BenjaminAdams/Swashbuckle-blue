@@ -347,6 +347,24 @@ body
             padding: 0 10px 0 0;
         }
     }
+
+    .opblock-info {
+        margin-left:5px;
+        padding: 6px 0px;
+        min-width: 55px;
+    }
+
+   .opblock-open {
+        float:right;
+        padding: 6px 0px;
+        min-width: 55px;
+        border-color: #f93e3e !important;
+        background: #f93e3e !important;
+        position: absolute;
+        right: 25px;    
+        cursor: pointer;
+        user-select: none;
+    }
 }
 
 .filter

@@ -4,11 +4,18 @@ import ImPropTypes from "react-immutable-proptypes"
 import Im from "immutable"
 import { getXhrHistory } from 'core/ls-actions'
 import { fromJS } from "immutable"
+import { atou } from 'core/utils'
 
 // More readable, just iterate over maps, only
 const eachMap = (iterable, fn) => iterable.valueSeq().filter(Im.Map.isMap).map(fn)
 
 export default class Parameters extends Component {
+constructor(props) {
+    super(props);
+   //  this.state = {stopLoadingValuesFromUrl:false};
+   this.stopLoadingValuesFromUrl=false
+  }
+
 
   static propTypes = {
     parameters: ImPropTypes.list.isRequired,
@@ -39,37 +46,35 @@ export default class Parameters extends Component {
   }
 
   onChange = (param, value, isXml) => {
-    let {
-      specActions: { changeParam },
-      onChangeKey,
-    } = this.props
-
+    let { specActions: { changeParam }, onChangeKey} = this.props
+    console.log('inside of onChange')
+    this.stopLoadingValuesFromUrl=true
     changeParam(onChangeKey, param.get("name"), value, isXml)
   }
 
-  loadValuesFromHistory = (parameters) => {
-    var slimParameters;
-    if (parameters.count()) {
-      var xhrHistory = fromJS(getXhrHistory())
-      if (xhrHistory != null && xhrHistory.count()) {
-        slimParameters = xhrHistory.first().get('parameters')
 
-        parameters= parameters.map( (x, index) => {
-            console.log('x, index=',x, index)
-            var name = x.get('name')     
-            var paramFromSlim= slimParameters.find(y=>y.get('name')==name)
-            
-            if(paramFromSlim) {
-             x= x.set('value', paramFromSlim.get('value'))
-            }
-         
-            return x
-        })
-      }
-    }
 
-    return parameters;
-  }
+  // loadValuesFromQry = (parameters) => {
+  //   console.log(' this.stopLoadingValuesFromUrl', this.stopLoadingValuesFromUrl)
+
+  //   if (this.stopLoadingValuesFromUrl===true || !parameters || !parameters.count() || !window.location.hash.includes('?params=')) return parameters
+
+  //   var split=window.location.hash.split('?params=')
+  //   if(!split || !split[1]) return parameters
+  //   var slimParameters = fromJS(JSON.parse(atou(split[1])))
+
+  //   parameters= parameters.map( (x, index) => {
+  //         var name = x.get('name')     
+  //         var paramFromSlim= slimParameters.find(y=>y.get('name')==name)
+          
+  //         if(paramFromSlim) {
+  //           x= x.set('value', paramFromSlim.get('value'))
+  //         }      
+  //         return x
+  //     })
+  //   return parameters
+  // }
+
 
   render() {
     let {
@@ -92,8 +97,10 @@ export default class Parameters extends Component {
     const TryItOutButton = getComponent("TryItOutButton")
     const isExecute = tryItOutEnabled && allowTryItOut
     summary = '<h3>' + tag + ' ' + operationId + '</h3>' + summary
-    parameters= this.loadValuesFromHistory(parameters)
-    console.log('parameters after',parameters)
+
+    console.log('rendering parameters.jsx again')
+
+   // parameters= this.loadValuesFromQry(parameters)
 
     return (
       <div className="opblock-section">

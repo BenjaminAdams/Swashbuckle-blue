@@ -84,7 +84,6 @@ export default class ParamBody extends PureComponent {
 
   _onChange = (val, isXml) => { (this.props.onChange || NOOP)(this.props.param, val, isXml) }
 
-
   //this is fired when the user changes the contents of the textbox
   handleOnChange = e => {
     const {consumesValue} = this.props

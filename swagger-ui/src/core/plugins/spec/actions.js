@@ -2,6 +2,7 @@ import YAML from "js-yaml"
 import parseUrl from "url-parse"
 import serializeError from "serialize-error"
 import { addHistory } from 'core/ls-actions'
+import { utoa } from 'core/utils'
 
 // Actions conform to FSA (flux-standard-actions)
 // {type: string,payload: Any|Error, meta: obj, error: bool}
@@ -216,8 +217,6 @@ export const executeRequest = (req) => ({ fn, specActions, specSelectors,urlHash
     routeId: op.routeId
   }
 
-  console.log('saveToHistory=', saveToHistory)
-
   return fn.execute(req)
     .then(res => {
       res.duration = Date.now() - startTime
@@ -280,10 +279,10 @@ export function setScheme(scheme, path, method) {
 
 function getSlimParams(largeParameters) {
   if (!largeParameters) return largeParameters
-  var parameters = JSON.parse(JSON.stringify(largeParameters)) //copy without ref
+ // var parameters = JSON.parse(JSON.stringify(largeParameters)) //copy without ref
 
-  return parameters.map(x => {
+  return utoa( JSON.stringify( largeParameters.map(x => {
     x.schema = null
     return {name: x.name, value:x.value}
-  });
+  })));
 }
