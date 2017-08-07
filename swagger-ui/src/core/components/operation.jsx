@@ -107,7 +107,9 @@ export default class Operation extends PureComponent {
       authActions,
       authSelectors,
       getConfigs,
-      tag
+      tag, 
+      urlHash,
+      routeId
     } = this.props
 
     let summary = operation.get("summary")
@@ -116,7 +118,7 @@ export default class Operation extends PureComponent {
     let externalDocs = operation.get("externalDocs")
     let responses = operation.get("responses")
     let security = operation.get("security") || specSelectors.security()
-    let produces = operation.get("produces")   
+    let produces = operation.get("produces")
     let parameters = getList(operation, ["parameters"])
     let operationId = operation.get("__originalOperationId")
     let operationScheme = specSelectors.operationScheme(path, method)
@@ -143,20 +145,10 @@ export default class Operation extends PureComponent {
     let shown = true
     let onChangeKey = [ path, method ] // Used to add values to _this_ operation ( indexed by path and method )
 
-    // var xhrHistory= List(getXhrHistory())
-    // if(xhrHistory && xhrHistory.first()){
-    //   parameters = List(xhrHistory.first().parameters)
-    //   parameters= parameters.map(x => {
-    //     x.schema = OrderedMap(x.schema)
-    //     return OrderedMap(x) 
-    //   })
-    // }
-var xhrHistory= fromJS(getXhrHistory())
-if(xhrHistory != null &&  xhrHistory.count()) {
-  parameters = xhrHistory.first().get('parameters')
-}
-
-    
+// var xhrHistory= fromJS(getXhrHistory())
+// if(xhrHistory != null &&  xhrHistory.count()) {
+//   parameters = xhrHistory.first().get('parameters')
+// }
 
 console.log('request=', request? request.toJS() : request)
 console.log('response=', response? response.toJS() : response)
@@ -230,6 +222,8 @@ console.log('response=', response? response.toJS() : response)
                     specSelectors={ specSelectors }
                     path={ path }
                     method={ method }
+                    urlHash={urlHash}
+                    routeId={routeId}
                     onExecute={ this.onExecute } />
               }
 

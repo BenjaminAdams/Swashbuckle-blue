@@ -34,12 +34,10 @@ export default class Operations extends React.Component {
 
       let filter = layoutSelectors.currentFilter()
 
-      if (filter) {
-        if (filter !== true) {
+      if (filter && filter !== true) {     
           taggedOps = taggedOps.filter((tagObj, tag) => {
             return tag.indexOf(filter) !== -1
-          })
-        }
+          })        
       }
 
       if (maxDisplayedTags && !isNaN(maxDisplayedTags) && maxDisplayedTags >= 0) {
@@ -79,7 +77,7 @@ export default class Operations extends React.Component {
                           tag={tag}
                           allowTryItOut={allowTryItOut}
                           displayOperationId={true}
-                          displayRequestDuration={displayRequestDuration}
+                          displayRequestDuration={true}
                           specActions={ specActions }
                           specSelectors={ specSelectors }
                           layoutActions={ layoutActions }

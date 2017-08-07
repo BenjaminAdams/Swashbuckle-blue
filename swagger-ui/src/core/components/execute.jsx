@@ -10,11 +10,14 @@ export default class Execute extends Component {
     path: PropTypes.string.isRequired,
     getComponent: PropTypes.func.isRequired,
     method: PropTypes.string.isRequired,
-    onExecute: PropTypes.func
+    onExecute: PropTypes.func,
+    urlHash:PropTypes.string.isRequired,
+    routeId:PropTypes.string.isRequired,
+                 
   }
 
   onClick=()=>{
-    let { specSelectors, specActions, operation, path, method } = this.props
+    let { specSelectors, specActions, operation, path, method,urlHash,routeId } = this.props
 
     specActions.validateParams( [path, method] )
 
@@ -22,7 +25,7 @@ export default class Execute extends Component {
       if(this.props.onExecute) {
         this.props.onExecute()
       }
-      specActions.execute( { operation, path, method } )
+      specActions.execute( { operation, path, method,urlHash,routeId } )
     }
   }
 

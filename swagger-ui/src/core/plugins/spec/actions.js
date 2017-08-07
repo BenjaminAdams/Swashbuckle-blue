@@ -1,7 +1,7 @@
 import YAML from "js-yaml"
 import parseUrl from "url-parse"
 import serializeError from "serialize-error"
-import {addHistory} from 'core/ls-actions'
+import { addHistory } from 'core/ls-actions'
 
 // Actions conform to FSA (flux-standard-actions)
 // {type: string,payload: Any|Error, meta: obj, error: bool}
@@ -22,11 +22,11 @@ export const UPDATE_RESOLVED = "spec_update_resolved"
 export const SET_SCHEME = "set_scheme"
 
 export function updateSpec(spec) {
-  if(spec instanceof Error) {
-    return {type: UPDATE_SPEC, error: true, payload: spec}
+  if (spec instanceof Error) {
+    return { type: UPDATE_SPEC, error: true, payload: spec }
   }
 
-  if(typeof spec === "string") {
+  if (typeof spec === "string") {
     return {
       type: UPDATE_SPEC,
       payload: spec.replace(/\t/g, "  ") || ""
@@ -47,18 +47,17 @@ export function updateResolved(spec) {
 }
 
 export function updateUrl(url) {
-  return {type: UPDATE_URL, payload: url}
+  return { type: UPDATE_URL, payload: url }
 }
 
 export function updateJsonSpec(json) {
-  if(!json || typeof json !== "object") {
+  if (!json || typeof json !== "object") {
     throw new Error("updateJson must only accept a simple JSON object")
   }
-  return {type: UPDATE_JSON, payload: json}
+  return { type: UPDATE_JSON, payload: json }
 }
 
-
-export const parseToJson = (str) => ({specActions, specSelectors, errActions}) => {
+export const parseToJson = (str) => ({ specActions, specSelectors, errActions }) => {
   let { specStr } = specSelectors
 
   let json = null
@@ -66,7 +65,7 @@ export const parseToJson = (str) => ({specActions, specSelectors, errActions}) =
     str = str || specStr()
     errActions.clear({ source: "parser" })
     json = YAML.safeLoad(str)
-  } catch(e) {
+  } catch (e) {
     // TODO: push error to state
     console.error(e)
     return errActions.newSpecErr({
@@ -79,13 +78,13 @@ export const parseToJson = (str) => ({specActions, specSelectors, errActions}) =
   return specActions.updateJsonSpec(json)
 }
 
-export const resolveSpec = (json, url) => ({specActions, specSelectors, errActions, fn: { fetch, resolve, AST }, getConfigs}) => {
+export const resolveSpec = (json, url) => ({ specActions, specSelectors, errActions, fn: { fetch, resolve, AST }, getConfigs }) => {
   const { modelPropertyMacro, parameterMacro } = getConfigs()
 
-  if(typeof(json) === "undefined") {
+  if (typeof(json) === "undefined") {
     json = specSelectors.specJson()
   }
-  if(typeof(url) === "undefined") {
+  if (typeof(url) === "undefined") {
     url = specSelectors.url()
   }
 
@@ -93,13 +92,13 @@ export const resolveSpec = (json, url) => ({specActions, specSelectors, errActio
 
   let specStr = specSelectors.specStr()
 
-  return resolve({fetch, spec: json, baseDoc: url, modelPropertyMacro, parameterMacro })
-    .then( ({spec, errors}) => {
+  return resolve({ fetch, spec: json, baseDoc: url, modelPropertyMacro, parameterMacro })
+    .then(({ spec, errors }) => {
       errActions.clear({
         type: "thrown"
       })
 
-      if(errors.length > 0) {
+      if (errors.length > 0) {
         let preparedErrors = errors
           .map(err => {
             console.error(err)
@@ -118,61 +117,61 @@ export const resolveSpec = (json, url) => ({specActions, specSelectors, errActio
     })
 }
 
-export const formatIntoYaml = () => ({specActions, specSelectors}) => {
+export const formatIntoYaml = () => ({ specActions, specSelectors }) => {
   let { specStr } = specSelectors
   let { updateSpec } = specActions
 
   try {
-    let yaml = YAML.safeDump(YAML.safeLoad(specStr()), {indent: 2})
+    let yaml = YAML.safeDump(YAML.safeLoad(specStr()), { indent: 2 })
     updateSpec(yaml)
-  } catch(e) {
+  } catch (e) {
     updateSpec(e)
   }
 }
 
-export function changeParam( path, paramName, value, isXml ){
+export function changeParam(path, paramName, value, isXml) {
   return {
     type: UPDATE_PARAM,
-    payload:{ path, value, paramName, isXml }
+    payload: { path, value, paramName, isXml }
   }
 }
 
-export function validateParams( payload ){
+export function validateParams(payload) {
   return {
     type: VALIDATE_PARAMS,
-    payload:{ pathMethod: payload }
+    payload: { pathMethod: payload }
   }
 }
 
-export function clearValidateParams( payload ){
+export function clearValidateParams(payload) {
   return {
     type: ClEAR_VALIDATE_PARAMS,
-    payload:{ pathMethod: payload }
+    payload: { pathMethod: payload }
   }
 }
 
 export function changeConsumesValue(path, value) {
   return {
     type: UPDATE_OPERATION_VALUE,
-    payload:{ path, value, key: "consumes_value" }
+    payload: { path, value, key: "consumes_value" }
   }
 }
 
 export function changeProducesValue(path, value) {
   return {
     type: UPDATE_OPERATION_VALUE,
-    payload:{ path, value, key: "produces_value" }
+    payload: { path, value, key: "produces_value" }
   }
 }
 
-export const setResponse = ( path, method, res ) => {
+export const setResponse = (path, method, res) => {
   return {
     payload: { path, method, res },
     type: SET_RESPONSE
   }
 }
 
-export const setRequest = ( path, method, req ) => {
+export const setRequest = (path, method, req) => {
   return {
     payload: { path, method, req },
     type: SET_REQUEST
@@ -189,16 +188,16 @@ export const logRequest = (req) => {
 
 // Actually fire the request via fn.execute
 // (For debugging) and ease of testing
-export const executeRequest = (req) => ({fn, specActions, specSelectors}) => {
-  let { pathName, method, operation } = req
+export const executeRequest = (req) => ({ fn, specActions, specSelectors }) => {
+  let { pathName, method, operation, urlHash, routeId } = req
   let op = operation.toJS()
 
   // if url is relative, parseUrl makes it absolute by inferring from `window.location`
   req.contextUrl = parseUrl(specSelectors.url()).toString()
 
-  if(op && op.operationId) {
+  if (op && op.operationId) {
     req.operationId = op.operationId
-  } else if(op && pathName && method) {
+  } else if (op && pathName && method) {
     req.operationId = fn.opId(op, pathName, method)
   }
 
@@ -209,75 +208,82 @@ export const executeRequest = (req) => ({fn, specActions, specSelectors}) => {
 
   // track duration of request
   const startTime = Date.now()
-  console.log('op=',op)
-  console.log('parsedRequest',parsedRequest)
-  console.log('req',req)
 
   var saveToHistory = {
     request: parsedRequest,
-    parameters: op.parameters
+    parameters: getSlimParams(op.parameters),
+    urlHash: urlHash,
+    routeId: routeId
   }
 
+  console.log('saveToHistory.parameters=', saveToHistory.parameters)
+
   return fn.execute(req)
-  .then(res => {
-    res.duration = Date.now() - startTime
-    saveToHistory.response = res
-    console.log('res=',res)
-    addHistory(saveToHistory)
+    .then(res => {
+      res.duration = Date.now() - startTime
+      saveToHistory.response = res
+      console.log('res=', res)
+      addHistory(saveToHistory)
 
-    specActions.setResponse(req.pathName, req.method, res)
-  })
-  .catch( err => { 
-    console.log('res=',err)   
-    //saveToHistory.response = { error: true, err: serializeError(err) }
-   // saveToHistory.response = serializeError(err)
-    var serializedError = serializeError(err)
-    if(serializedError.response) {
-          saveToHistory.response = serializedError.response
-    }else {
-          saveToHistory.response = serializedError
-    }
+      specActions.setResponse(req.pathName, req.method, res)
+    })
+    .catch(err => {
+      console.log('res=', err)
+      //saveToHistory.response = { error: true, err: serializeError(err) }
+      // saveToHistory.response = serializeError(err)
+      var serializedError = serializeError(err)
+      if (serializedError.response) {
+        saveToHistory.response = serializedError.response
+      } else {
+        saveToHistory.response = serializedError
+      }
 
-    saveToHistory.response.error=true
-    saveToHistory.duration = Date.now() - startTime
-    addHistory(saveToHistory)
-    specActions.setResponse(req.pathName, req.method, { error: true, err: serializeError(err) } )  }  )
-
-
-
+      saveToHistory.response.error = true
+      saveToHistory.duration = Date.now() - startTime
+      addHistory(saveToHistory)
+      specActions.setResponse(req.pathName, req.method, { error: true, err: serializeError(err) })
+    })
 }
 
-
-// I'm using extras as a way to inject properties into the final, `execute` method - It's not great. Anyone have a better idea? @ponelat
-export const execute = ( { path, method, ...extras }={} ) => (system) => {
-
-  let { fn:{fetch}, specSelectors, specActions } = system
+export const execute = ({ path, method, ...extras } = {}) => (system) => {
+  console.log('extras=', extras)
+  let { fn: { fetch }, specSelectors, specActions } = system
   let spec = specSelectors.spec().toJS()
   let scheme = specSelectors.operationScheme(path, method)
   let { requestContentType, responseContentType } = specSelectors.contentTypeValues([path, method]).toJS()
   let isXml = /xml/i.test(requestContentType)
   let parameters = specSelectors.parameterValues([path, method], isXml).toJS()
 
-  return specActions.executeRequest({fetch, spec, pathName: path, method, parameters, requestContentType, scheme, responseContentType, ...extras })
+  return specActions.executeRequest({ fetch, spec, pathName: path, method, parameters, requestContentType, scheme, responseContentType, ...extras })
 }
 
-export function clearResponse (path, method) {
+export function clearResponse(path, method) {
   return {
     type: CLEAR_RESPONSE,
-    payload:{ path, method }
+    payload: { path, method }
   }
 }
 
-export function clearRequest (path, method) {
+export function clearRequest(path, method) {
   return {
     type: CLEAR_REQUEST,
-    payload:{ path, method }
+    payload: { path, method }
   }
 }
 
-export function setScheme (scheme, path, method) {
+export function setScheme(scheme, path, method) {
   return {
     type: SET_SCHEME,
     payload: { scheme, path, method }
   }
+}
+
+function getSlimParams(largeParameters) {
+  if (!largeParameters) return largeParameters
+  var parameters = JSON.parse(JSON.stringify(largeParameters)) //copy without ref
+
+  return parameters.map(x => {
+    x.schema = null
+    return x
+  });
 }

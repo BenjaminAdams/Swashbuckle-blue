@@ -16,7 +16,7 @@ export class History extends React.Component {
     var hstDivs= hst.map(x => { 
       console.log(x)
       var req= x.get('request')
-      return <li>{req.get('url')}</li>
+      return <li>{req.get('url')}</li> 
 
      }).toArray()
 
