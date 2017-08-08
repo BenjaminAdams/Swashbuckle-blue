@@ -11,7 +11,13 @@ export function initHistory(){
 export function addHistory(saveToHistory){
   saveToHistory.dateAdded = new Date()
   var hst = getXhrHistory()
-  hst.unshift(saveToHistory)
+  hst.unshift(saveToHistory) //add history to start of array
+
+  if(hst.length > 200) {
+    //delete the oldest request to free up space
+   hst.splice(hst.length-1, 1)
+  }
+
   window.localStorage.setItem('xhrHistory', JSON.stringify(hst))
 }
 

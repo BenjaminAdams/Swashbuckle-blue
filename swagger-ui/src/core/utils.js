@@ -482,6 +482,8 @@ export const validateParam = (param, isXml) => {
   let value = isXml && param.get("in") === "body" ? param.get("value_xml") : param.get("value")
   let required = param.get("required")
   let type = param.get("type")
+  let ignored = param.get("ignore")
+  if(ignored===true) return []
 
   let stringCheck = type === "string" && !value
   let arrayCheck = type === "array" && Array.isArray(value) && !value.length

@@ -18,7 +18,7 @@ export default class Errors extends React.Component {
     if(editorActions && editorActions.jumpToLine) {
       var jumpToLine = editorActions.jumpToLine
     }
-
+    
     let errors = errSelectors.allErrors()
 
     // all thrown errors, plus error-level everything else

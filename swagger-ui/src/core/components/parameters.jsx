@@ -57,7 +57,7 @@ export default class Parameters extends Component {
       specSelectors,
       pathMethod,
       onChangeConsumesWrapper,
-      operationId,
+      operationId, 
       tag
     } = this.props
 

@@ -57,6 +57,7 @@ export default {
       return parameters.withMutations( parameters => {
         for ( let i = 0, len = parameters.count(); i < len; i++ ) {
           let errors = validateParam(parameters.get(i), isXml)
+          //console.log('errrors=',errors)
           parameters.setIn([i, "errors"], fromJS(errors))
         }
       })

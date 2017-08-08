@@ -38,12 +38,12 @@ export class History extends React.Component {
           <span className="timeago" title={x.get('dateAdded')}>{x.get('dateAdded')}</span>
         </span>
         </div>
-      </div>   
+      </div>  
       </Link>     
       
      }).toArray()
  
-     if(!hstDivs || hstDivs.length===0) hstDivs= <div>Nothing here, this page shows a history of all the requests you've made. Submit a request first</div>
+     if(!hstDivs || hstDivs.length===0) hstDivs= <div className="nothingHere"><h4>Nothing here</h4>This page shows a history of all the requests you've made. Submit a request first</div>
 
     return (
       <HashRouter basename={window.swashbuckleConfig.baseUrl} hashType="noslash">

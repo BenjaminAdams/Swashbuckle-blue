@@ -70,9 +70,16 @@
                 "parameters": [{
                     "name": "ignoreThis",
                     "in": "query",
-                    "required": true,
+                    "required": false,
                     "type": "string",
                     "ignore": true
+                },{
+                    "name": "butNotThis",
+                    "in": "query",
+                    "required": false,
+                    "type": "string",
+                    "example": "1111",
+                    "ignore": false
                 }],
                 "responses": {
                     "204": {
