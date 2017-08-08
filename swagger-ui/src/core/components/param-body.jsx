@@ -56,7 +56,7 @@ export default class ParamBody extends PureComponent {
     let isXml = /xml/i.test(consumesValue)
     let isJson = /json/i.test(consumesValue)
     let paramValue = isXml ? parameter.get("value_xml") : parameter.get("value")
-//debugger
+
     if ( paramValue !== undefined ) {
       let val = !paramValue && isJson ? "{}" : paramValue
       this.setState({ value: val })

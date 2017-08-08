@@ -66,8 +66,6 @@ export default class Parameters extends Component {
     const isExecute = tryItOutEnabled && allowTryItOut
     summary = '<h3>' + tag + ' ' + operationId + '</h3>' + summary
 
-    console.log('rendering parameters.jsx again')
-
     return (
       <div className="opblock-section">
         <div className="opblock-section-header" dangerouslySetInnerHTML={{__html:summary}}>        

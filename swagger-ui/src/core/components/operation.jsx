@@ -43,11 +43,7 @@ export default class Operation extends PureComponent {
   }
 
 componentWillMount(){
-    let {
-      operation,
-      specActions,
-      specSelectors
-    } = this.props
+    let { operation, specActions } = this.props
 
    let parameters = getList(operation, ["parameters"]) 
    parameters=this.loadValuesFromQry(parameters)
@@ -85,7 +81,6 @@ componentWillMount(){
   }
 
   loadValuesFromQry = (parameters) => {
-    console.log('loadValuesFromQry')
     let { specActions: { changeParam }, path, method } = this.props
     var onChangeKey=[ path, method ]
 
@@ -180,10 +175,6 @@ componentWillMount(){
     let shown = true
     let onChangeKey = [ path, method ] // Used to add values to _this_ operation ( indexed by path and method )
 
-//console.log('request=', request? request.toJS() : request)
-//console.log('response=', response? response.toJS() : response)
-console.log('rendering operation.jsx')
-
     return (
         <div className={deprecated ? "opblock opblock-deprecated" : shown ? `opblock opblock-${method} is-open` : `opblock opblock-${method}`} id={operationId} >
           <div className={`opblock-summary opblock-summary-${method}`} >
@@ -243,7 +234,7 @@ console.log('rendering operation.jsx')
                 operationId={operationId}
               />
                   
-            <div className={(!tryItOutEnabled || !response || !allowTryItOut) ? "execute-wrapper" : "btn-group"}>
+            <div className="btn-group">
               { !tryItOutEnabled || !allowTryItOut ? null :
 
                   <Execute
@@ -258,13 +249,15 @@ console.log('rendering operation.jsx')
                     onExecute={ this.onExecute } />
               }
 
-              { (!tryItOutEnabled || !response || !allowTryItOut) ? null :
+            
                   <Clear
                     onClick={ this.onClearClick }
                     specActions={ specActions }
+                    specSelectors={ specSelectors }
+                    operation={operation}
                     path={ path }
                     method={ method }/>
-              }
+              
             </div>
 
             {this.state.executeInProgress ? <div className="loading-container"><div className="loading"></div></div> : null}

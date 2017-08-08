@@ -73,12 +73,12 @@ export default class ParameterRow extends Component {
     let itemType = param.getIn(["items", "type"])
     let parameter = specSelectors.getParameter(pathMethod, param.get("name"))
 
-    var valueFromHistory= param.get('value')
+    var valueFromHistory= param.get('value') 
     let value = parameter ? parameter.get("value") : ""
  
     if(valueFromHistory) {
       value = valueFromHistory
-      parameter.set('value',value)
+     // parameter.set('value',value)
     }
 
     let schemaDesc= param.get("description")  //gets the comment from the param list in the class declaration
