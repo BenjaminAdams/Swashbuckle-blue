@@ -7,10 +7,12 @@ export function initHistory(){
   }
 }
 
-//todo: ensure we dont submit duplicate requests
 export function addHistory(saveToHistory){
   saveToHistory.dateAdded = new Date()
   var hst = getXhrHistory()
+
+  if(isItTheSameReq(saveToHistory, hst[0])) return
+
   hst.unshift(saveToHistory) //add history to start of array
 
   if(hst.length > 200) {
@@ -29,4 +31,11 @@ export function getXhrHistory() {
 
 export function clearXhrHistory() {
     window.localStorage.setItem('xhrHistory','[]')
+}
+
+//ensure we dont submit duplicate requests
+function isItTheSameReq(saveToHistory, theLastReq) {
+  if(!theLastReq) return false
+  if(saveToHistory.parameters == theLastReq.parameters) return true
+  return false
 }

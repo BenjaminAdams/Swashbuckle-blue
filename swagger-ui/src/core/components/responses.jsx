@@ -27,7 +27,7 @@ export default class Responses extends React.Component {
     consumes: fromJS(["application/json"]),
     displayRequestDuration: false
   }
-
+ 
   onChangeProducesWrapper = ( val ) => this.props.specActions.changeProducesValue(this.props.pathMethod, val)
 
   render() {
