@@ -7,6 +7,7 @@ export function initHistory(){
   }
 }
 
+//todo: ensure we dont submit duplicate requests
 export function addHistory(saveToHistory){
   saveToHistory.dateAdded = new Date()
   var hst = getXhrHistory()
@@ -18,4 +19,8 @@ export function getXhrHistory() {
   var hst=window.localStorage.getItem('xhrHistory')
   if(!hst) return []
   return JSON.parse(hst)
+}
+
+export function clearXhrHistory() {
+    window.localStorage.setItem('xhrHistory','[]')
 }

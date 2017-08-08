@@ -24,7 +24,6 @@ export default class Operations extends React.Component {
       if (taggedOps.size < 1) return <h3> No operations defined in spec! </h3>
 
       const Operation = getComponent("operation")
-      const OperationWrapper = getComponent("operationWrapper")
       const Collapse = getComponent("Collapse")
 
       var version= specSelectors.getVersion() 

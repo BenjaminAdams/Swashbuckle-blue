@@ -75,10 +75,12 @@ export default class ParameterRow extends Component {
 
     var valueFromHistory= param.get('value') 
     let value = parameter ? parameter.get("value") : ""
+ console.log('value=',value)
+ console.log('valueFromHistory=',valueFromHistory)
  
     if(valueFromHistory) {
       value = valueFromHistory
-     // parameter.set('value',value)
+      parameter.set('value',value)
     }
 
     let schemaDesc= param.get("description")  //gets the comment from the param list in the class declaration

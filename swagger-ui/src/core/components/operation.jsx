@@ -84,7 +84,7 @@ componentWillMount(){
     let { specActions: { changeParam, changeConsumesValue }, path, method } = this.props
     var onChangeKey=[ path, method ]
 
-    if (this.stopLoadingValuesFromUrl===true || !parameters || !parameters.count() || !window.location.hash.includes('?params=')) return parameters
+    if (!parameters || !parameters.count() || !window.location.hash.includes('?params=')) return parameters
 
     var split=window.location.hash.split('?params=')
     if(!split || !split[1]) return parameters
@@ -162,7 +162,6 @@ componentWillMount(){
     let security = operation.get("security") || specSelectors.security()
     let produces = operation.get("produces")
     let parameters = getList(operation, ["parameters"])
-  //  parameters=this.loadValuesFromQry(parameters)
     let operationId = operation.get("__originalOperationId")
     let operationScheme = specSelectors.operationScheme(path, method)
     const Responses = getComponent("responses")

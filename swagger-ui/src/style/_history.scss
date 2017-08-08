@@ -1,0 +1,26 @@
+.history {
+
+    h1 {
+        text-align: center;
+    } 
+
+    .timeago {
+        float:right;
+        padding: 6px 0px;
+        min-width: 55px;
+        position: absolute;
+        right: 25px;    
+        font-size: 12px;
+    }
+
+    .clearHstBtn {
+        float: right;
+        position: relative;
+        font-size: 15px;
+        position: relative;
+        top: -30px;
+        animation: swagger-ui-pulse 2s infinite;
+        color: #fff;
+        border-color: #4990e2;
+    }
+}

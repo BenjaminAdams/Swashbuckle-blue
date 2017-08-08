@@ -10,7 +10,7 @@ namespace Swashbuckle.Dummy.Controllers
     {
         [Route("v3/subscriptions/IgnoreThis")]
         // [SwaggerIgnore]
-        public void IgnoreThis([SwaggerIgnore]  string ignoreThis)
+        public void IgnoreThis([SwaggerIgnore] string ignoreThis, [SwaggerExample("57575757")] string butNotThis)
         {
             throw new NotImplementedException();
         }
