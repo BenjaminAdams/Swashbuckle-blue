@@ -42,6 +42,18 @@ export default class Operation extends PureComponent {
     }
   }
 
+componentWillMount(){
+    let {
+      operation,
+      specActions,
+      specSelectors
+    } = this.props
+
+   let parameters = getList(operation, ["parameters"]) 
+   parameters=this.loadValuesFromQry(parameters)
+}
+
+
   componentWillReceiveProps(nextProps) {
     const defaultContentType = "application/json"
     let { specActions, path, method, operation } = nextProps
@@ -73,7 +85,9 @@ export default class Operation extends PureComponent {
   }
 
   loadValuesFromQry = (parameters) => {
-    console.log('this.stopLoadingValuesFromUrl', this.stopLoadingValuesFromUrl)
+    console.log('loadValuesFromQry')
+    let { specActions: { changeParam }, path, method } = this.props
+    var onChangeKey=[ path, method ]
 
     if (this.stopLoadingValuesFromUrl===true || !parameters || !parameters.count() || !window.location.hash.includes('?params=')) return parameters
 
@@ -86,7 +100,9 @@ export default class Operation extends PureComponent {
           var paramFromSlim= slimParameters.find(y=>y.get('name')==name)
           
           if(paramFromSlim) {
-            x= x.set('value', paramFromSlim.get('value'))
+            var newVal= paramFromSlim.get('value')
+            x= x.set('value', newVal)
+            changeParam(onChangeKey, name, newVal, newVal.includes('<?xml'))
           }      
           return x
       })
@@ -138,7 +154,7 @@ export default class Operation extends PureComponent {
     let security = operation.get("security") || specSelectors.security()
     let produces = operation.get("produces")
     let parameters = getList(operation, ["parameters"])
-    parameters=this.loadValuesFromQry(parameters)
+  //  parameters=this.loadValuesFromQry(parameters)
     let operationId = operation.get("__originalOperationId")
     let operationScheme = specSelectors.operationScheme(path, method)
     const Responses = getComponent("responses")
@@ -164,13 +180,9 @@ export default class Operation extends PureComponent {
     let shown = true
     let onChangeKey = [ path, method ] // Used to add values to _this_ operation ( indexed by path and method )
 
-// var xhrHistory= fromJS(getXhrHistory())
-// if(xhrHistory != null &&  xhrHistory.count()) {
-//   parameters = xhrHistory.first().get('parameters')
-// }
-
 //console.log('request=', request? request.toJS() : request)
 //console.log('response=', response? response.toJS() : response)
+console.log('rendering operation.jsx')
 
     return (
         <div className={deprecated ? "opblock opblock-deprecated" : shown ? `opblock opblock-${method} is-open` : `opblock opblock-${method}`} id={operationId} >

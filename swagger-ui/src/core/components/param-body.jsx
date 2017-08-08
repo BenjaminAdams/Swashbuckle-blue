@@ -33,7 +33,8 @@ export default class ParamBody extends PureComponent {
 
     this.state = {
       isEditBox: false,
-      value: ""
+      value: "",
+      forceRerender: false            
     }
   }
 
@@ -55,8 +56,7 @@ export default class ParamBody extends PureComponent {
     let isXml = /xml/i.test(consumesValue)
     let isJson = /json/i.test(consumesValue)
     let paramValue = isXml ? parameter.get("value_xml") : parameter.get("value")
-
-
+//debugger
     if ( paramValue !== undefined ) {
       let val = !paramValue && isJson ? "{}" : paramValue
       this.setState({ value: val })
@@ -78,7 +78,7 @@ export default class ParamBody extends PureComponent {
   }
 
   onChange = (value, { isEditBox, isXml }) => {
-    this.setState({value, isEditBox})
+    this.setState({value, isEditBox, forceRerender:true})
     this._onChange(value, isXml)
   }
 
@@ -103,7 +103,7 @@ export default class ParamBody extends PureComponent {
       specSelectors,
       pathMethod,
       getComponent,
-      value
+     // value
     } = this.props
 
     const Button = getComponent("Button")
@@ -116,8 +116,8 @@ export default class ParamBody extends PureComponent {
     let consumesValue = specSelectors.contentTypeValues(pathMethod).get("requestContentType")
     let consumes = this.props.consumes && this.props.consumes.size ? this.props.consumes : ParamBody.defaultProp.consumes
 
-   // let { value, isEditBox } = this.state
-    let { isEditBox } = this.state
+   let { value, isEditBox } = this.state
+  //  let { isEditBox } = this.state
 
     return (
       <div className="body-param">

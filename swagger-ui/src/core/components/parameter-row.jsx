@@ -75,8 +75,10 @@ export default class ParameterRow extends Component {
 
     var valueFromHistory= param.get('value')
     let value = parameter ? parameter.get("value") : ""
+ 
     if(valueFromHistory) {
       value = valueFromHistory
+      parameter.set('value',value)
     }
 
     let schemaDesc= param.get("description")  //gets the comment from the param list in the class declaration
@@ -126,7 +128,6 @@ export default class ParameterRow extends Component {
                               schema={ param }/>
           }
 
-
           {
             bodyParam && schema ? <ModelExample getComponent={ getComponent }
                                                 isExecute={ isExecute }
@@ -135,12 +136,8 @@ export default class ParameterRow extends Component {
                                                 example={ bodyParam }/>
               : null
           }
-
         </span>
-
       </div>
     )
-
   }
-
 }

@@ -131,6 +131,7 @@ export const formatIntoYaml = () => ({ specActions, specSelectors }) => {
 }
 
 export function changeParam(path, paramName, value, isXml) {
+  console.log('changing param=',path, paramName, value, isXml)
   return {
     type: UPDATE_PARAM,
     payload: { path, value, paramName, isXml }

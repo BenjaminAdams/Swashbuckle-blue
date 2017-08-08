@@ -10,13 +10,6 @@ import { atou } from 'core/utils'
 const eachMap = (iterable, fn) => iterable.valueSeq().filter(Im.Map.isMap).map(fn)
 
 export default class Parameters extends Component {
-constructor(props) {
-    super(props);
-   //  this.state = {stopLoadingValuesFromUrl:false};
-   this.stopLoadingValuesFromUrl=false
-  }
-
-
   static propTypes = {
     parameters: ImPropTypes.list.isRequired,
     specActions: PropTypes.object.isRequired,
@@ -47,34 +40,9 @@ constructor(props) {
 
   onChange = (param, value, isXml) => {
     let { specActions: { changeParam }, onChangeKey} = this.props
-    console.log('inside of onChange')
-    this.stopLoadingValuesFromUrl=true
+    //console.log('inside of onChange, onChangeKey=',onChangeKey,param.toJS())
     changeParam(onChangeKey, param.get("name"), value, isXml)
   }
-
-
-
-  // loadValuesFromQry = (parameters) => {
-  //   console.log(' this.stopLoadingValuesFromUrl', this.stopLoadingValuesFromUrl)
-
-  //   if (this.stopLoadingValuesFromUrl===true || !parameters || !parameters.count() || !window.location.hash.includes('?params=')) return parameters
-
-  //   var split=window.location.hash.split('?params=')
-  //   if(!split || !split[1]) return parameters
-  //   var slimParameters = fromJS(JSON.parse(atou(split[1])))
-
-  //   parameters= parameters.map( (x, index) => {
-  //         var name = x.get('name')     
-  //         var paramFromSlim= slimParameters.find(y=>y.get('name')==name)
-          
-  //         if(paramFromSlim) {
-  //           x= x.set('value', paramFromSlim.get('value'))
-  //         }      
-  //         return x
-  //     })
-  //   return parameters
-  // }
-
 
   render() {
     let {
@@ -99,8 +67,6 @@ constructor(props) {
     summary = '<h3>' + tag + ' ' + operationId + '</h3>' + summary
 
     console.log('rendering parameters.jsx again')
-
-   // parameters= this.loadValuesFromQry(parameters)
 
     return (
       <div className="opblock-section">

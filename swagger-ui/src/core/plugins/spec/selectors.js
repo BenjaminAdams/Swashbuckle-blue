@@ -124,7 +124,6 @@ export const securityDefinitions = createSelector(
     spec => spec.get("securityDefinitions")
 )
 
-
 export const findDefinition = ( state, name ) => {
   return specResolved(state).getIn(["definitions", name], null)
 }
@@ -170,7 +169,6 @@ export const operationsWithRootInherited = createSelector(
         // return something with Immutable methods
         return Map()
       }
-
     }))
   }
 )
@@ -202,7 +200,6 @@ export const operationsWithTags = createSelector(
 
       op= op.set('parentId', parentId)
       op= op.set('routeId', routeId)
-      //op= op.set('urlHash', '/' + version + '/' + parentId + "_" + operationId)
       op= op.set('urlHash', '/' + version + '/' + routeId)
 
       if(tags.count() < 1)
@@ -248,7 +245,6 @@ export const getUrlFromVersion = createSelector(
   }
 )
 
-
 export const responses = createSelector(
   state,
   state => state.get( "responses", Map() )
@@ -274,6 +270,7 @@ export const allowTryItOutFor = () => {
 
 // Get the parameter value by parameter name
 export function getParameter(state, pathMethod, name) {
+ // console.log('inside of getParameter', state, pathMethod, name)
   let params = spec(state).getIn(["paths", ...pathMethod, "parameters"], fromJS([]))
   return params.filter( (p) => {
     return Map.isMap(p) && p.get("name") === name
@@ -290,6 +287,7 @@ export const hasHost = createSelector(
 
 // Get the parameter values, that the user filled out
 export function parameterValues(state, pathMethod, isXml) {
+
   let params = spec(state).getIn(["paths", ...pathMethod, "parameters"], fromJS([]))
   return params.reduce( (hash, p) => {
     let value = isXml && p.get("in") === "body" ? p.get("value_xml") : p.get("value")
