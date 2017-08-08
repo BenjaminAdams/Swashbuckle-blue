@@ -81,23 +81,36 @@ componentWillMount(){
   }
 
   loadValuesFromQry = (parameters) => {
-    let { specActions: { changeParam }, path, method } = this.props
+    let { specActions: { changeParam, changeConsumesValue }, path, method } = this.props
     var onChangeKey=[ path, method ]
 
     if (this.stopLoadingValuesFromUrl===true || !parameters || !parameters.count() || !window.location.hash.includes('?params=')) return parameters
 
     var split=window.location.hash.split('?params=')
     if(!split || !split[1]) return parameters
+
     var slimParameters = fromJS(JSON.parse(atou(split[1])))
 
     parameters= parameters.map( (x, index) => {
           var name = x.get('name')     
-          var paramFromSlim= slimParameters.find(y=>y.get('name')==name)
+          var paramFromSlim= slimParameters.find(y=>y.get('name')===name)
           
           if(paramFromSlim) {
+            var isXml=false
             var newVal= paramFromSlim.get('value')
+            if(!newVal) {
+              newVal= paramFromSlim.get('value_xml')
+              if(newVal) {
+                isXml = true
+                changeConsumesValue(onChangeKey, 'application/xml')
+              }else {
+                newVal = ''
+              }
+            }
+
             x= x.set('value', newVal)
-            changeParam(onChangeKey, name, newVal, newVal.includes('<?xml'))
+            changeParam(onChangeKey, name, newVal, isXml)
+         
           }      
           return x
       })

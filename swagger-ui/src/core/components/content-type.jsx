@@ -22,7 +22,8 @@ export default class ContentType extends React.Component {
 
   componentDidMount() {
     // Needed to populate the form, initially
-    this.props.onChange(this.props.contentTypes.first())
+    //commenting this out lets us pre-load data from the url params
+    //this.props.onChange(this.props.contentTypes.first())
   }
 
   onChangeWrapper = e => this.props.onChange(e.target.value)

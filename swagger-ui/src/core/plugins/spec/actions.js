@@ -213,7 +213,7 @@ export const executeRequest = (req) => ({ fn, specActions, specSelectors,urlHash
 
   var saveToHistory = {
     request: parsedRequest,
-    parameters: getSlimParams(op.parameters),
+    parameters: getSlimParams(op.parameters, req.requestContentType.includes('xml')),
     urlHash: op.urlHash,
     routeId: op.routeId
   }
@@ -278,12 +278,16 @@ export function setScheme(scheme, path, method) {
   }
 }
 
-function getSlimParams(largeParameters) {
+function getSlimParams(largeParameters, isXml) {
   if (!largeParameters) return largeParameters
- // var parameters = JSON.parse(JSON.stringify(largeParameters)) //copy without ref
 
   return utoa( JSON.stringify( largeParameters.map(x => {
-    x.schema = null
-    return {name: x.name, value:x.value}
+    
+    if(x.in==='body' && isXml===true) {
+        return {name: x.name, value_xml: x.value_xml }
+    }else {
+        return {name: x.name, value: x.value }
+    }
+    
   })));
 }
