@@ -213,7 +213,7 @@ export const executeRequest = (req) => ({ fn, specActions, specSelectors,urlHash
 
   var saveToHistory = {
     request: parsedRequest,
-    parameters: getSlimParams(op.parameters, req.requestContentType.includes('xml')),
+    parameters: getSlimParams(op.parameters, req.requestContentType ? req.requestContentType.includes('xml') : false ),
     urlHash: op.urlHash,
     routeId: op.routeId
   }

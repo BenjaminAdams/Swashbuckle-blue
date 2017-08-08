@@ -34,7 +34,7 @@ export default class ContentType extends React.Component {
     if ( !contentTypes || !contentTypes.size )
       return null
 
-    if(value===null) return null;
+    if(value===null) value=contentTypes.first();
 
     return (
       <div className={ "content-type-wrapper " + ( className || "" ) }>

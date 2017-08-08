@@ -52,15 +52,18 @@ export default class Responses extends React.Component {
             </div> : null
           }
 
-          <div className="acceptContainer">
-              <label htmlFor="" title="Accept header value">
-                <span>Accept</span>
-                <ContentType value={producesValue}
-                          onChange={this.onChangeProducesWrapper}
-                          contentTypes={produces}
-                          className="execute-content-type"/>
-              </label>
-          </div>
+          {produces.size >0 ?
+            <div className="acceptContainer">
+                <label htmlFor="" title="Accept header value">
+                  <span>Accept</span>
+                  <ContentType value={producesValue}
+                            onChange={this.onChangeProducesWrapper}
+                            contentTypes={produces}
+                            className="execute-content-type"/>
+                </label>
+            </div>
+            : null
+          }
         </div>
         <div className="responses-inner">
           {

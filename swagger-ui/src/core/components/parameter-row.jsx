@@ -73,14 +73,10 @@ export default class ParameterRow extends Component {
     let itemType = param.getIn(["items", "type"])
     let parameter = specSelectors.getParameter(pathMethod, param.get("name"))
 
-    // if(parameter.get('ignore') ===true) {
-    //   return <div></div>
-    // }
-
     var valueFromHistory= param.get('value') 
     let value = parameter ? parameter.get("value") : ""
- console.log('value=',value)
- console.log('valueFromHistory=',valueFromHistory)
+//  console.log('value=',value)
+//  console.log('valueFromHistory=',valueFromHistory)
 
     if(valueFromHistory) {
       value = valueFromHistory
