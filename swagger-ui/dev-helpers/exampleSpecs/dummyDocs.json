@@ -614,7 +614,7 @@
             "x-schema": "bar"
         },
         "Swashbuckle.Dummy.Controllers.SoMuch": {
-            "description": "SoMuch bro",
+            "description": "SoMuch fun here in this description",
             "required": ["funs", "listWithSomeGuidsInside"],
             "requiredConditionally": ["eumTest"],
             "type": "object",
@@ -662,6 +662,7 @@
         },
         "Swashbuckle.Dummy.Controllers.CoolThings": {
             "description": "Cool things we can do!",
+            "required": ["name"],
             "type": "object",
             "properties": {
                 "id": {
@@ -675,7 +676,7 @@
                     "description": "The name of the cool thing we did",
                     "type": "string",
                     "ignore": false,
-                    "example": "Kayaking"
+                    "example": "Kayaking"           
                 },
                 "swaggerExampleNullTest": {
                     "description": "This is a test to see if [SwaggerExample(\"null\")] will make the field null in the example payload",

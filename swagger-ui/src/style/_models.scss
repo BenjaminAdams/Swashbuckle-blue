@@ -40,16 +40,29 @@
     }
 
     .model-desc {
-        margin-bottom:15px;
+        margin-top: -10px;
+        margin-left:5px;
         p {
             color:gray;
-            font-size:18px;
+            font-size:14px;
         }
         
     }
 
+    .propContainer {
+        margin-top:8px;
+    }
+
     .brace-close, .brace-open {
         font-size:20px;
+    }
+
+    .inner-object {
+        margin-left: 40px;
+    }
+
+    .propModel {
+        margin-left:5px;
     }
 
     &-jump-to-path

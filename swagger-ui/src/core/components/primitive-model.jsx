@@ -12,7 +12,7 @@ export default class Primitive extends Component {
   }
 
   render(){
-    let { schema, getComponent, required } = this.props
+    let { schema, getComponent, required, requiredConditionally } = this.props
 
     if(!schema || !schema.get) {
       // don't render if schema isn't correctly formed
@@ -34,16 +34,25 @@ export default class Primitive extends Component {
     }
 
     return <span className="prop">
+      <span className="prop-type" style={ style }>{ type }</span>{ /* required && <span style={{ color: "red" }}>required *</span> */}
+      { format && <span className="prop-format">(${format})</span>}
+
       {
         !description ? null :<Markdown source={ description } />
       }
-      <span className="prop-type" style={ style }>{ type }</span>{ /* required && <span style={{ color: "red" }}>required *</span> */}
-      { format && <span className="prop-format">(${format})</span>}
+
+        { required && !requiredConditionally  && <p className="required"> * required</p> }  
+        { !required && requiredConditionally && <p className="required" title="This field is only sometimes required" >* conditionally required </p>}  
+          
+
       {
-        properties.size ? properties.entrySeq().map( ( [ key, v ] ) => <span key={`${key}-${v}`} style={ propStyle }>
-          <br />{ key }: { String(v) }</span>)
+        properties.size ? properties.entrySeq().map( ( [ key, v ] ) => 
+        <p key={`${key}-${v}`} style={ propStyle }>
+         { key }: { String(v) }</p>)
           : null
       }
+
+             
 
       {
         xml && xml.size ? (<span><br /><span style={ propStyle }>xml:</span>

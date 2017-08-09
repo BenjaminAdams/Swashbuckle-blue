@@ -13,7 +13,9 @@ export default class ObjectModel extends Component {
     name: PropTypes.string,
     isRef: PropTypes.bool,
     expandDepth: PropTypes.number,
-    depth: PropTypes.number
+    depth: PropTypes.number,
+    required: PropTypes.bool,
+    requiredConditionally: PropTypes.bool,
   }
 
   trimTitle = (title) => {
@@ -24,7 +26,7 @@ export default class ObjectModel extends Component {
   }
 
   render(){
-    let { schema, name, isRef, getComponent, depth, ...props } = this.props
+    let { schema, name, isRef, getComponent, depth,requiredConditionally,  ...props } = this.props
     let { expandDepth } = this.props
     expandDepth = 5;
     let description = schema.get("description")
@@ -63,11 +65,17 @@ export default class ObjectModel extends Component {
             !isRef ? null : <JumpToPathSection name={ name }/>
           }
           {
-            !description ? null : <div className="model-desc"><Markdown source={ description } /></div>
+             <div className="model-desc">
+            
+            { required && !requiredConditionally  && <span className="required"> * required</span> }  
+            { !required && requiredConditionally && <span className="required" title="This field is only sometimes required" >* conditionally required </span> } 
+            { !description ? null : <Markdown source={ description } /> }
+            
+            </div>
           } 
-          <span className="inner-object">
+          <div className="inner-object">
             {
-              <table className="model"><tbody>
+              <div className="model">
               {
                 !(properties && properties.size) ? null : properties.entrySeq().map(
                     ([key, value]) => {
@@ -78,38 +86,48 @@ export default class ObjectModel extends Component {
                         propertyStyle.fontWeight = "bold"
                       }
 
-                      return (<tr key={key}>
-                        <td style={ propertyStyle }>{ key }: <br />
-                        { isRequired && <span className="required">required * </span>}  
-                        {  isRequiredConditionally && <span className="required" title="This field is only sometimes required" >conditionally<br /> required * </span>}  
-                        
-                        </td>
-                        <td style={{ verticalAlign: "top" }}>
-                          <Model key={ `object-${name}-${key}_${value}` } { ...props }
-                                 required={ isRequired }
-                                 requiredConditionally={isRequiredConditionally}
-                                 getComponent={ getComponent }
-                                 schema={ value }
-                                 depth={ depth + 1 } />
-                        </td>
-                      </tr>)
+                      return (<div key={key}>
+                        <div className="propContainer" style={ propertyStyle }> 
+                          <span className="propName">{ key }:</span>
+                          
+                          <span className="propModel">
+                            <Model key={ `object-${name}-${key}_${value}` } { ...props }
+                                  required={ isRequired }
+                                  requiredConditionally={isRequiredConditionally}
+                                  getComponent={ getComponent }
+                                  schema={ value }
+                                  depth={ depth + 1 } />
+                          </span>
+                      
+                          {/* isRequired && <span className="required">required * </span> */}  
+                          { /* isRequiredConditionally && <span className="required" title="This field is only sometimes required" >conditionally required * </span> */}  
+                       
+                        </div>
+                      </div>
+                    
+                    
+                    )
                     }).toArray()
               }
+              
+
               {
+
+                
                 !additionalProperties || !additionalProperties.size ? null
-                  : <tr>
-                    <td>{ "< * >:" }</td>
-                    <td>
+                  : <div>
+                    <div>{ "< * >:" }</div>
+                    <div>
                       <Model { ...props } required={ false }
                              getComponent={ getComponent }
                              schema={ additionalProperties }
                              depth={ depth + 1 } />
-                    </td>
-                  </tr>
+                    </div>
+                    </div>
               }
-              </tbody></table>
+             </div>
           }
-        </span>
+        </div>
         <span className="brace-close">{ braceClose }</span>
       </ModelCollapse>
     </span>

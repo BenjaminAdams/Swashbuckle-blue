@@ -30,16 +30,21 @@ export default class ArrayModel extends Component {
       </span>
 
     return <span className="model">
-        {
+      <ModelCollapse title={titleEl} collapsed={ depth > expandDepth } collapsedContent={"Array[...]"}>
+        Array[<span><Model { ...this.props } schema={ items } required={ required } requiredConditionally={requiredConditionally}/></span>]
+      </ModelCollapse>  
+      {
           properties.size ? <span>
               { properties.entrySeq().map( ( [ key, v ] ) => <span key={`${key}-${v}`} style={propStyle}>
                 <br />{ `${key}: `}{ String(v) }</span>)
               }<br /></span>
             : null
-        }
-      <ModelCollapse title={titleEl} collapsed={ depth > expandDepth } collapsedContent="[...]">
-        Array[<span><Model { ...this.props } schema={ items } required={ false } requiredConditionally={requiredConditionally}/></span>]
-      </ModelCollapse>  
+      }
+
+        { /* required && !requiredConditionally  && <p className="required"> * required</p> */}  
+        { /* !required && requiredConditionally && <p className="required" title="This field is only sometimes required" >* conditionally required </p> */}  
+        
+
     </span>
   }
 }
