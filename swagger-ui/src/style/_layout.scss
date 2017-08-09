@@ -182,9 +182,7 @@ body
         display: inline-block;
         width: 100%;
         align-items: center;
-        padding: 8px 20px;
-        background: rgba(#fff,.8);
-        box-shadow: 0 1px 2px rgba(#000,.1);
+        padding: 0px 20px;
         min-height: 55px;
 
         .contentTypeContainer {float:left;}
@@ -490,7 +488,7 @@ body
 
 .responses-inner
 {
-    padding: 20px;
+    padding: 0 20px;
 
     h5,
     h4

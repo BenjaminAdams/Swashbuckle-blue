@@ -127,6 +127,8 @@ componentWillMount(){
     specActions.clearValidateParams([path, method])
   }
 
+  onChangeProducesWrapper = ( val ) => this.props.specActions.changeProducesValue([this.props.path,this.props.method], val)
+
   onExecute = () => {
     this.setState({ executeInProgress: true })
   }
@@ -167,14 +169,19 @@ componentWillMount(){
     const Responses = getComponent("responses")
     const Parameters = getComponent( "parameters" )
     const Execute = getComponent( "execute" )
+    const ContentType = getComponent( "contentType" )
     const Clear = getComponent( "clear" )
     const AuthorizeOperationBtn = getComponent( "authorizeOperationBtn" )
     const JumpToPath = getComponent("JumpToPath", true)
     const Collapse = getComponent( "Collapse" )
     const Markdown = getComponent( "Markdown" )
-
+    var pathMethod=[path, method]
     const { deepLinking } = getConfigs()
     const isDeepLinkingEnabled = deepLinking && deepLinking !== "false"
+
+    let consumesValue = specSelectors.contentTypeValues(pathMethod).get("requestContentType")
+    let consumes = specSelectors.operationConsumes(pathMethod)
+    produces = produces && produces.size ? produces : Responses.defaultProps.produces
 
     // Merge in Live Response
     if(response && response.size > 0) {
@@ -242,10 +249,35 @@ componentWillMount(){
                 getComponent={ getComponent }
                 specActions={ specActions }
                 specSelectors={ specSelectors }
-                pathMethod={ [path, method] }
+                pathMethod={pathMethod}
                 operationId={operationId}
               />
                   
+        <div className="opblock-section-header-response">
+          { consumes.size ? 
+            <div className="contentTypeContainer">
+              <label htmlFor="" title="Content-Type header value">
+                <span>Content-Type</span>
+                <ContentType value={ consumesValue } contentTypes={ consumes } onChange={this.onChangeConsumesWrapper} className="body-param-content-type" />
+              </label>
+            </div> : null
+          }
+
+          {produces.size >0 ?
+            <div className="acceptContainer">
+                <label htmlFor="" title="Accept header value">
+                  <span>Accept</span>
+                  <ContentType value={operation.get("produces_value")}
+                            onChange={this.onChangeProducesWrapper}
+                            contentTypes={produces}
+                            className="execute-content-type"/>
+                </label>
+            </div>
+            : null
+          }
+        </div>
+
+
             <div className="btn-group">
               { !tryItOutEnabled || !allowTryItOut ? null :
 
@@ -286,7 +318,6 @@ componentWillMount(){
                     producesValue={ operation.get("produces_value") }
                     pathMethod={ [path, method] }
                     displayRequestDuration={ displayRequestDuration }
-                    onChangeConsumesWrapper={this.onChangeConsumesWrapper}
                     fn={fn} />
               }
             </div>       

@@ -212,7 +212,11 @@ export const executeRequest = (req) => ({ fn, specActions, specSelectors,urlHash
   const startTime = Date.now()
 
   var saveToHistory = {
-    request: parsedRequest,
+    request: {
+      method: parsedRequest.method,
+      url: parsedRequest.url,
+      headers: parsedRequest.headers
+    },
     parameters: getSlimParams(op.parameters, req.requestContentType ? req.requestContentType.includes('xml') : false ),
     urlHash: op.urlHash,
     routeId: op.routeId
@@ -221,7 +225,13 @@ export const executeRequest = (req) => ({ fn, specActions, specSelectors,urlHash
   return fn.execute(req)
     .then(res => {
       res.duration = Date.now() - startTime
-      saveToHistory.response = res
+      // saveToHistory.response = {
+      //   ok: res.ok,
+      //   status: res.status,
+      //   statusText:res.statusText 
+      // }
+      saveToHistory.response = buildRespObj(res)
+
       console.log('res=', res)
       addHistory(saveToHistory)
 
@@ -231,13 +241,15 @@ export const executeRequest = (req) => ({ fn, specActions, specSelectors,urlHash
     .catch(err => {
       console.log('res=', err)
       //saveToHistory.response = { error: true, err: serializeError(err) }
-      // saveToHistory.response = serializeError(err)
       var serializedError = serializeError(err)
+
       if (serializedError.response) {
         saveToHistory.response = serializedError.response
       } else {
         saveToHistory.response = serializedError
       }
+
+      saveToHistory.response = buildRespObj(saveToHistory.response)
 
       saveToHistory.response.error = true
       saveToHistory.duration = Date.now() - startTime
@@ -248,8 +260,16 @@ export const executeRequest = (req) => ({ fn, specActions, specSelectors,urlHash
          err: serializeError(err),
          shareLink: getHistoryLink(saveToHistory)
       }
-      specActions.setResponse(req.pathName, req.method,res )
+      specActions.setResponse(req.pathName, req.method, res)
     })
+}
+
+function buildRespObj(res){
+  return {
+        ok: res.ok|| false,
+        status: res.status || 'err',
+        statusText:res.statusText  || 'error'
+  }
 }
 
 export const execute = ({ path, method,urlHash,routeId,  ...extras } = {}) => (system) => {

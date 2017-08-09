@@ -16,8 +16,7 @@ export default class Responses extends React.Component {
     specActions: PropTypes.object.isRequired,
     pathMethod: PropTypes.array.isRequired,
     displayRequestDuration: PropTypes.bool.isRequired,
-    fn: PropTypes.object.isRequired,
-    onChangeConsumesWrapper: PropTypes.func.isRequired
+    fn: PropTypes.object.isRequired
   }
 
   static defaultProps = {
@@ -28,43 +27,19 @@ export default class Responses extends React.Component {
     displayRequestDuration: false
   }
  
-  onChangeProducesWrapper = ( val ) => this.props.specActions.changeProducesValue(this.props.pathMethod, val)
+
 
   render() {
-    let { responses, request, tryItOutResponse, getComponent, specSelectors, fn, producesValue, displayRequestDuration,pathMethod,onChangeConsumesWrapper } = this.props
+    let { responses, request, tryItOutResponse, getComponent, specSelectors, fn, producesValue, displayRequestDuration,pathMethod } = this.props
     let defaultCode = defaultStatusCode( responses )
     const ContentType = getComponent( "contentType" )
     const LiveResponse = getComponent( "liveResponse" )
     const Response = getComponent( "response" )
-    let consumesValue = specSelectors.contentTypeValues(pathMethod).get("requestContentType")
-    let consumes = specSelectors.operationConsumes(pathMethod)
-    let produces = this.props.produces && this.props.produces.size ? this.props.produces : Responses.defaultProps.produces
+
 
     return (
       <div className="responses-wrapper">
-        <div className="opblock-section-header-response">
-          { consumes.size ? 
-            <div className="contentTypeContainer">
-              <label htmlFor="" title="Content-Type header value">
-                <span>Content-Type</span>
-                <ContentType value={ consumesValue } contentTypes={ consumes } onChange={onChangeConsumesWrapper} className="body-param-content-type" />
-              </label>
-            </div> : null
-          }
 
-          {produces.size >0 ?
-            <div className="acceptContainer">
-                <label htmlFor="" title="Accept header value">
-                  <span>Accept</span>
-                  <ContentType value={producesValue}
-                            onChange={this.onChangeProducesWrapper}
-                            contentTypes={produces}
-                            className="execute-content-type"/>
-                </label>
-            </div>
-            : null
-          }
-        </div>
         <div className="responses-inner">
           {
             !tryItOutResponse ? null
