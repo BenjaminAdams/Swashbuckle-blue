@@ -3,7 +3,7 @@ import PropTypes from "prop-types"
 import { fromJS } from "immutable"
 import ImPropTypes from "react-immutable-proptypes"
 import {getXhrHistory, clearXhrHistory} from 'core/ls-actions'
-import { atou, timeAgo } from 'core/utils'
+import { atou, timeAgo, getHistoryLink } from 'core/utils'
 import { HashRouter,Link } from 'react-router-dom'
 
 export class History extends React.Component {
@@ -26,7 +26,7 @@ export class History extends React.Component {
       var req= x.get('request')
       var lowerMethod = req.get('method').toLowerCase()
 
-      var theLink=x.get("urlHash") + '/' + '?params=' + x.get('parameters')
+      var theLink= getHistoryLink(x)
 
       return <Link to={theLink} key={index} style={{'textDecoration':'none'}}>
       <div className={"opblock opblock-" + lowerMethod +" is-open"}>

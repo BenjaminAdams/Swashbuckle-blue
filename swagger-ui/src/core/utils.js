@@ -476,6 +476,11 @@ export const validateFile = ( val ) => {
   }
 }
 
+export function getHistoryLink(historyItem) {
+  historyItem = Im.fromJS(historyItem)
+  return historyItem.get("urlHash") + '/' + '?params=' + historyItem.get('parameters')
+}
+
 // validation of parameters before execute
 export const validateParam = (param, isXml) => {
   let errors = []

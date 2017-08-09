@@ -35,7 +35,7 @@ export function clearXhrHistory() {
 
 //ensure we dont submit duplicate requests
 function isItTheSameReq(saveToHistory, theLastReq) {
-  if(!theLastReq) return false
-  if(saveToHistory.parameters == theLastReq.parameters) return true
+  if(!theLastReq) return false       
+  if(saveToHistory.parameters === theLastReq.parameters && saveToHistory.routeId === theLastReq.routeId) return true
   return false
 }

@@ -51,7 +51,6 @@ export default class Response extends React.Component {
       code,
       response,
       className,
-
       fn,
       getComponent,
       specSelectors,

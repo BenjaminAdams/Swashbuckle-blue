@@ -2,7 +2,7 @@ import YAML from "js-yaml"
 import parseUrl from "url-parse"
 import serializeError from "serialize-error"
 import { addHistory } from 'core/ls-actions'
-import { utoa } from 'core/utils'
+import { utoa, getHistoryLink } from 'core/utils'
 
 // Actions conform to FSA (flux-standard-actions)
 // {type: string,payload: Any|Error, meta: obj, error: bool}
@@ -225,6 +225,7 @@ export const executeRequest = (req) => ({ fn, specActions, specSelectors,urlHash
       console.log('res=', res)
       addHistory(saveToHistory)
 
+      res.shareLink= getHistoryLink(saveToHistory)
       specActions.setResponse(req.pathName, req.method, res)
     })
     .catch(err => {
@@ -241,7 +242,13 @@ export const executeRequest = (req) => ({ fn, specActions, specSelectors,urlHash
       saveToHistory.response.error = true
       saveToHistory.duration = Date.now() - startTime
       addHistory(saveToHistory)
-      specActions.setResponse(req.pathName, req.method, { error: true, err: serializeError(err) })
+
+      var res={
+         error: true,
+         err: serializeError(err),
+         shareLink: getHistoryLink(saveToHistory)
+      }
+      specActions.setResponse(req.pathName, req.method,res )
     })
 }
 

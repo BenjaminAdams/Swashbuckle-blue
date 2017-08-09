@@ -33,6 +33,18 @@ export default class LiveResponse extends React.Component {
     displayRequestDuration: PropTypes.bool.isRequired
   }
 
+  handleFocus(e) {
+    e.target.select()
+    document.execCommand("copy")
+  }
+
+  removeStartingSlash(str){
+    if (str.indexOf('/') == 0) {
+      str = str.slice(1);
+    }
+    return str
+  }
+
   render() {
     const { request, response, getComponent, displayRequestDuration } = this.props
 
@@ -57,6 +69,7 @@ export default class LiveResponse extends React.Component {
       body = response.get('name')  + ' ' + response.get('message')
     }
 
+    var shareLink= window.location.origin + '/#' + this.removeStartingSlash(response.get('shareLink'))
 
     return (
       <div>
@@ -99,6 +112,10 @@ export default class LiveResponse extends React.Component {
             </tr>
           </tbody>
         </table>
+        <h4 title="This link will share your request">Share Link</h4>
+        <div className="copy-paste">
+        <input type="text" className="shareLink" readOnly="true" value={shareLink} onFocus={this.handleFocus}/>
+        </div>
       { request && <Curl request={ request }/> }
       </div>
     )

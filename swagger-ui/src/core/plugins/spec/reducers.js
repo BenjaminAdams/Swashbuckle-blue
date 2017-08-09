@@ -80,7 +80,8 @@ export default {
         error: true,
         name: res.err.name,
         message: res.err.message,
-        statusCode: res.err.statusCode
+        statusCode: res.err.statusCode,
+        shareLink: res.shareLink
       }, res.err.response)
     } else {
       result = res
@@ -95,6 +96,7 @@ export default {
     if (win.Blob && res.data instanceof win.Blob) {
       newState = newState.setIn( [ "responses", path, method, "text" ], res.data)
     }
+
     return newState
   },
 
