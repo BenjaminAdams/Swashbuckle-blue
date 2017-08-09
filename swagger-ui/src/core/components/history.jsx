@@ -24,6 +24,7 @@ export class History extends React.Component {
     var hst=fromJS(getXhrHistory())
     var hstDivs= hst.map((x, index) => {
       var req= x.get('request')
+      var res= x.get('response')
       var lowerMethod = req.get('method').toLowerCase()
 
       var theLink= getHistoryLink(x)
@@ -33,6 +34,7 @@ export class History extends React.Component {
         <div className={"opblock-summary opblock-summary-"+ lowerMethod}>
         <span className="opblock-summary-method">{req.get('method')}</span>
         <span className="opblock-summary-method opblock-info">{x.get('duration')}ms</span>
+        <span className="opblock-summary-method opblock-info" title={res.get('statusText')}>{res.get('status')}</span>
         <span className="opblock-summary-path">
           <span title={req.get('url')}>{x.get('routeId')}</span>
           <span className="timeago" title={x.get('dateAdded')}>{x.get('dateAdded')}</span>
