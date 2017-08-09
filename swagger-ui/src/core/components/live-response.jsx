@@ -42,7 +42,7 @@ export default class LiveResponse extends React.Component {
     if (str.indexOf('/') == 0) {
       str = str.slice(1);
     }
-    return str
+    return str 
   }
 
   render() {
@@ -112,9 +112,9 @@ export default class LiveResponse extends React.Component {
             </tr>
           </tbody>
         </table>
-        <h4 title="This link will share your request">Share Link</h4>
+        <h4 title="This link will share your request">Share this request</h4>
         <div className="copy-paste">
-        <input type="text" className="shareLink" readOnly="true" value={shareLink} onFocus={this.handleFocus}/>
+          <input type="text" className="shareLink" readOnly="true" value={shareLink} onFocus={this.handleFocus}/>
         </div>
       { request && <Curl request={ request }/> }
       </div>

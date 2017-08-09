@@ -20,7 +20,7 @@ export default class Curl extends React.Component {
       <div>
         <h4>Curl</h4>
         <div className="copy-paste">
-          <textarea onFocus={this.handleFocus} readOnly="true" className="curl" style={{ whiteSpace: "normal" }} value={curl}></textarea>
+          <input type="text" className="shareLink" readOnly="true" value={curl} onFocus={this.handleFocus}/>
         </div>
       </div>
     )
