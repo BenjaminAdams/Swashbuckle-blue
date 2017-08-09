@@ -101,6 +101,7 @@ export default class ParameterRow extends Component {
 
     if(bodyParam && schema && typeof(schema.get) ==='function' && schema.get("description")) {
       //adds a comment from the top of the class
+      if(!schemaDesc) schemaDesc= ''
       schemaDesc = ' <p>' + schema.get("description") + '</p>' + schemaDesc
     }
 
