@@ -60,19 +60,16 @@ export default class ObjectModel extends Component {
 
     return <span className="model">
       <ModelCollapse title={titleEl} collapsed={ depth > expandDepth } collapsedContent={ collapsedContent }>
-         <span className="brace-open object">{ braceOpen }</span>
+       
+    
           {
-            !isRef ? null : <JumpToPathSection name={ name }/>
-          }
-          {
-             <div className="model-desc">
-            
-            { required && !requiredConditionally  && <span className="required"> * required</span> }  
-            { !required && requiredConditionally && <span className="required" title="This field is only sometimes required" >* conditionally required </span> } 
-            { !description ? null : <Markdown source={ description } /> }
-            
+            <div className="model-desc">          
+              { required && !requiredConditionally  && <span className="required"> * required</span> }  
+              { !required && requiredConditionally && <span className="required" title="This field is only sometimes required" >* conditionally required </span> } 
+              { !description ? null : <Markdown source={ description } /> }            
             </div>
           } 
+            <span className="brace-open object">{ braceOpen }</span>
           <div className="inner-object">
             {
               <div className="model">

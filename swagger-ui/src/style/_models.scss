@@ -2,6 +2,7 @@
 {
     font-size: 14px;
     font-weight: 300;
+    margin-top: -15px;
 
     @include text_code(#000);
     &-toggle
@@ -40,7 +41,7 @@
     }
 
     .model-desc {
-        margin-top: -10px;
+        margin-top:-5px;
         margin-left:5px;
         p {
             color:gray;
@@ -233,7 +234,7 @@ span
 {
     > span.model
     {
-        padding: 0 0 0 10px;
+        padding: 0 0 0 3px;
 
         .brace-close
         {
