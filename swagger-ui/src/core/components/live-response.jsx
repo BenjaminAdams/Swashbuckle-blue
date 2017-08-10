@@ -29,8 +29,7 @@ Duration.propTypes = {
 export default class LiveResponse extends React.Component {
   static propTypes = {
     response: PropTypes.object.isRequired,
-    getComponent: PropTypes.func.isRequired,
-    displayRequestDuration: PropTypes.bool.isRequired
+    getComponent: PropTypes.func.isRequired
   }
 
   handleFocus(e) {
@@ -46,9 +45,10 @@ export default class LiveResponse extends React.Component {
   }
 
   render() {
-    const { request, response, getComponent, displayRequestDuration } = this.props
+    const { request, response, getComponent } = this.props
 
-    const status = response.get("status")
+    var status = response.get("status")
+    var statusText = response.get("statusText")
     const url = response.get("url")
     const headers = response.get("headers").toJS()
     const notDocumented = response.get("notDocumented")
@@ -69,30 +69,41 @@ export default class LiveResponse extends React.Component {
       body = response.get('name')  + ' ' + response.get('message')
     }
 
+    var statusColor= 'green'
+    if(status ==='err' || status >299) {
+      statusColor='#ff6060' //red
+    }else if(!status) {
+       statusColor='#ff6060' //red
+       statusText='unknown error'
+       status='Err'
+    }
+
     var shareLink= window.location.origin + '/#' + this.removeStartingSlash(response.get('shareLink'))
 
     return (
       <div>
-        <h4>Server response</h4>
-        <table className="responses-table">
-          <thead>
-          <tr className="responses-header">
-            <td className="col col_header response-col_status">Code</td>
-            <td className="col col_header response-col_description">Details</td>
-          </tr>
-          </thead>
-          <tbody>
-            <tr className="response">
-              <td className="col response-col_status">
-                { status }
-                {
-                  notDocumented ? <div className="response-undocumented">
-                                    <i style={{color: 'red'}}>Error</i>
-                                  </div>
-                                : null
-                }
-              </td>
-              <td className="col response-col_description">
+        <h4>Server response </h4>
+
+<div className="response-infobar"> 
+
+<span className="response-infobar-status http-code" style={{backgroundColor: statusColor}}>
+   { status } {statusText}
+</span>
+
+<span className="response-infobar-status"  style={{color: 'gray'}}>{response.get('duration')}ms</span>
+
+
+       { /* notDocumented ? <div className="response-undocumented"> <i style={{color: 'red'}}>Error</i>  </div> : null */ }
+
+</div>
+        
+        <div className="responses-table">
+            <div className="response">
+              <span className="col response-col_status">
+             
+            
+              </span>
+              <span className="col response-col_description">
 
                 {
                   body ? <ResponseBody content={ body }
@@ -105,13 +116,9 @@ export default class LiveResponse extends React.Component {
                 {
                   hasHeaders ? <Headers headers={ returnObject }/> : null
                 }
-                {
-                  displayRequestDuration && duration ? <Duration duration={ duration } /> : null
-                }
-              </td>
-            </tr>
-          </tbody>
-        </table>
+              </span>
+            </div>
+        </div>
         <h4 title="This link will share your request">Share this request</h4>
         <div className="copy-paste">
           <input type="text" className="shareLink" readOnly="true" value={shareLink} onFocus={this.handleFocus}/>

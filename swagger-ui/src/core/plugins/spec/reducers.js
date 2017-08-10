@@ -81,7 +81,8 @@ export default {
         name: res.err.name,
         message: res.err.message,
         statusCode: res.err.statusCode,
-        shareLink: res.shareLink
+        shareLink: res.shareLink,
+        duration: res.duration
       }, res.err.response)
     } else {
       result = res

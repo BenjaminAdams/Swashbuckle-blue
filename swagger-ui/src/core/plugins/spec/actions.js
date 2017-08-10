@@ -258,7 +258,8 @@ export const executeRequest = (req) => ({ fn, specActions, specSelectors,urlHash
       var res={
          error: true,
          err: serializeError(err),
-         shareLink: getHistoryLink(saveToHistory)
+         shareLink: getHistoryLink(saveToHistory),
+         duration:saveToHistory.duration
       }
       specActions.setResponse(req.pathName, req.method, res)
     })
