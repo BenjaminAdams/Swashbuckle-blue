@@ -98,7 +98,8 @@ export default class Operations extends React.Component {
             <HashRouter basename={ baseUrl } hashType="noslash">
               <Switch>
                 { allTheRoutes }
-                <Route path="/:version/*" render={x=><h2>404 API Method Not Found</h2>}/>
+                {  /* had to disable this because when you clicked a link in the history and the versions didnt match it would show 404 
+                    <Route path="/:version/*" render={x=><h2>404 API Method Not Found</h2>}/>   */ }
               </Switch>
             </HashRouter>
           </div>

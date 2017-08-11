@@ -7,6 +7,10 @@ import { atou, timeAgo, getHistoryLink } from 'core/utils'
 import { HashRouter,Link } from 'react-router-dom'
 
 export class History extends React.Component {
+    static propTypes = {
+      specSelectors: PropTypes.object.isRequired
+    }
+
   componentDidMount() {
     timeAgo(this.el)
   }
@@ -20,6 +24,17 @@ export class History extends React.Component {
     this.forceUpdate()
   }
 
+  shouldWeReloadAfter = (histItem, theLink) => {
+    let { specSelectors } = this.props
+
+    if(histItem.get('specVersion') !== specSelectors.version() ){
+     
+      window.location.href = '/#'+theLink
+      location.reload();  //force reload the page because the versions are different
+      return false  
+    }
+  }
+
   render() {
     var hst=fromJS(getXhrHistory())
     var hstDivs= hst.map((x, index) => {
@@ -29,7 +44,7 @@ export class History extends React.Component {
 
       var theLink= getHistoryLink(x)
 
-      return <Link to={theLink} key={index} style={{'textDecoration':'none'}}>
+      return <Link to={theLink} key={index} style={{'textDecoration':'none'}}  onClick={() => this.shouldWeReloadAfter(x,theLink)} >
       <div className={"opblock opblock-" + lowerMethod +" is-open"}>
         <div className={"opblock-summary opblock-summary-"+ lowerMethod}>
         <span className="opblock-summary-method">{req.get('method')}</span>

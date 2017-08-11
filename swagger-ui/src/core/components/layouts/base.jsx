@@ -86,7 +86,7 @@ export default class BaseLayout extends React.Component {
                                             </Col>
                                         </Row>
                                 } />      
-                          <Route path={"/history"} exact key={"history"} component={History} />                 
+                          <Route path={"/history"} exact key={"history"}  render={x=> <History specSelectors={specSelectors} /> } />                 
                          </span>
                          </HashRouter>
 
