@@ -27,7 +27,7 @@ namespace Swashbuckle.Dummy.Controllers
         [Required]
         public decimal Amount { get; set; }
 
-        // [SwaggerIgnore]
+        [SwaggerIgnore]
         public string SwaggerIgnoredParam { get; set; }
 
         [Required, RegularExpression("^[3-6]?\\d{12,15}$")]

@@ -219,17 +219,13 @@ export const executeRequest = (req) => ({ fn, specActions, specSelectors,urlHash
     },
     parameters: getSlimParams(op.parameters, req.requestContentType ? req.requestContentType.includes('xml') : false ),
     urlHash: op.urlHash,
-    routeId: op.routeId
+    routeId: op.routeId,
+    specVersion: specSelectors.version()
   }
 
   return fn.execute(req)
     .then(res => {
       res.duration = Date.now() - startTime
-      // saveToHistory.response = {
-      //   ok: res.ok,
-      //   status: res.status,
-      //   statusText:res.statusText 
-      // }
       saveToHistory.response = buildRespObj(res)
 
       console.log('res=', res)

@@ -490,7 +490,7 @@ export const validateParam = (param, isXml) => {
   let ignored = param.get("ignore")
   if(ignored===true) return []
 
-  let stringCheck = type === "string" && !value
+  let stringCheck = (type === "string" && !value)
   let arrayCheck = type === "array" && Array.isArray(value) && !value.length
   let listCheck = type === "array" && Im.List.isList(value) && !value.count()
   let fileCheck = type === "file" && !(value instanceof win.File)
@@ -515,6 +515,12 @@ export const validateParam = (param, isXml) => {
   } else if ( type === "array" ) {
     let itemType
 
+    if (typeof(value) ==='string') {
+      //its broken when its an array type, a regular string can get to this point and crash at the next line
+    //  errors.push({ index: 0,error: "Required field is not provided" });
+    //  return errors
+    value=  Im.fromJS([value])
+    }
     if ( !value.count() ) { return errors }
 
     itemType = param.getIn(["items", "type"])
