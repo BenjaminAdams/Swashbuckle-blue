@@ -656,7 +656,7 @@ export function timeAgo(selector) {
         }
     }
     // update time every minute
-    setTimeout(timeAgo, 60000);
+    //setTimeout(timeAgo, 60000);
 
 }
 

@@ -44,9 +44,9 @@ export class History extends React.Component {
 
       var theLink= getHistoryLink(x)
 
-      return <Link to={theLink} key={index} style={{'textDecoration':'none'}}  onClick={() => this.shouldWeReloadAfter(x,theLink)} >
+      return <div><Link to={theLink} key={index} style={{'textDecoration':'none'}}  onClick={() => this.shouldWeReloadAfter(x,theLink)} >
       <div className={"opblock opblock-" + lowerMethod +" is-open"}>
-        <div className={"opblock-summary opblock-summary-"+ lowerMethod}>
+        <div className={"opblock-summary opblock-summary-"+ lowerMethod} style={{position:'relative'}}>
         <span className="opblock-summary-method">{req.get('method')}</span>
         <span className="opblock-summary-method opblock-info">{x.get('duration')}ms</span>
         <span className="opblock-summary-method opblock-info" title={res.get('statusText')}>{res.get('status')}</span>
@@ -56,7 +56,7 @@ export class History extends React.Component {
         </span>
         </div>
       </div>  
-      </Link>     
+      </Link></div>
       
      }).toArray()
  
@@ -66,7 +66,8 @@ export class History extends React.Component {
       <HashRouter basename={window.swashbuckleConfig.baseUrl} hashType="noslash">
       <div className="wrapper history">
       <h1>History</h1>
-      <button className="clearHstBtn btn expand-methods" onClick={this.clearHistory}>Clear History</button>
+      <div style={{position:'relative'}}><button className="clearHstBtn btn expand-methods" onClick={this.clearHistory}>Clear History</button></div>
+      
         {hstDivs}      
       </div>
       </HashRouter>

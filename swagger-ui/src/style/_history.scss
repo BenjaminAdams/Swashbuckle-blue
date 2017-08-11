@@ -20,9 +20,9 @@
     }
     .clearHstBtn {
         float: right;
-        position: relative;
         font-size: 15px;
-        position: relative;
+        position: absolute;
+        right: 5px;
         top: -30px;
         animation: swagger-ui-pulse 2s infinite;
         color: #fff;
