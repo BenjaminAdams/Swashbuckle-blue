@@ -63,30 +63,6 @@ export default class Parameters extends Component {
     const isExecute = tryItOutEnabled && allowTryItOut
     summary = '<h3>' + tag + ' ' + operationId + '</h3>' + summary
 
-
-
-    //console.log('find=',parameters.find(x=>x.get('name') === "headers"))
-
-    // if(parameters.indexOf(x=>x.get('name') === "headers") === -1) {
-    //   console.log('it does not have a header')
-
-    //   parameters= parameters.push(OrderedMap({
-    //     description: "test",
-    //     in: "customHeaders",
-    //     name:"headers",
-    //     required:false,
-    //     ignore: false,
-    //     schema: {
-    //       type: 'string'
-    //     },
-    //     value: ''
-    //   }))
-
-    // }
-
-     console.log('paramssObj=', parameters) 
-     console.log('paramss=', parameters.toJS()) 
-
     return (
       <div className="opblock-section">
         <div className="opblock-section-header" dangerouslySetInnerHTML={{__html:summary}}>        

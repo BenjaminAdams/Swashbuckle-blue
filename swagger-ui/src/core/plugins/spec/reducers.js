@@ -52,7 +52,7 @@ export default {
   },
   [UPDATE_CUSTOMHEADERS]: ( state, {payload} ) => {
     let { pathMethod,customHeaders } = payload
-    return state.setIn(["resolved", "paths", ...pathMethod, "customHeaders"], customHeaders)
+    return state.setIn(["resolved", "paths", ...pathMethod, "customHeaders"], fromJS(customHeaders))
   },
   [VALIDATE_PARAMS]: ( state, { payload:  { pathMethod } } ) => {
     let operation = state.getIn( [ "resolved", "paths", ...pathMethod ] )

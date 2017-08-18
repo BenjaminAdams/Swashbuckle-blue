@@ -289,15 +289,10 @@ export function getParameter(state, pathMethod, name) {
 }
 
 export function getCustomHeader(state, pathMethod) {
-  console.log('inside of getCustomHeader', state.toJS(), pathMethod)
-
-  //console.log('555555=', spec(state).toJS())
-  //console.log('teststst=', spec(state).getIn(["paths", ...pathMethod]  ).toJS())
-
   //let custHeaders = spec(state).getIn(["paths", ...pathMethod,  "customHeaders"], fromJS([{name:'asdasd', value:'123123'}]))
   let custHeaders = spec(state).getIn(["paths", ...pathMethod,  "customHeaders"],fromJS([]))
   console.log('custHeaders=',custHeaders)
-  return custHeaders
+  return custHeaders.toJS()
 }
 
 
