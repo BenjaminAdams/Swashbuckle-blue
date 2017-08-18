@@ -11,6 +11,7 @@ export const UPDATE_SPEC = "spec_update_spec"
 export const UPDATE_URL = "spec_update_url"
 export const UPDATE_JSON = "spec_update_json"
 export const UPDATE_PARAM = "spec_update_param"
+export const UPDATE_CUSTOMHEADERS = "spec_update_custom_headers"
 export const VALIDATE_PARAMS = "spec_validate_param"
 export const SET_RESPONSE = "spec_set_response"
 export const SET_REQUEST = "spec_set_request"
@@ -41,6 +42,8 @@ export function updateSpec(spec) {
 }
 
 export function updateResolved(spec) {
+  console.log('updating the spec=',spec)
+
   return {
     type: UPDATE_RESOLVED,
     payload: spec
@@ -135,6 +138,14 @@ export function changeParam(path, paramName, value, isXml) {
   return {
     type: UPDATE_PARAM,
     payload: { path, value, paramName, isXml }
+  }
+}
+
+export function updateCustomHeaders(pathMethod,customHeaders) {
+
+  return {
+    type: UPDATE_CUSTOMHEADERS,
+    payload: { pathMethod,customHeaders }
   }
 }
 

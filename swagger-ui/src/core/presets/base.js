@@ -35,6 +35,7 @@ import Response from "core/components/response"
 import ResponseBody from "core/components/response-body"
 import Parameters from "core/components/parameters"
 import ParameterRow from "core/components/parameter-row"
+import CustomHeaders from "core/components/custom-headers"
 import Execute from "core/components/execute"
 import Headers from "core/components/headers"
 import Errors from "core/components/errors"
@@ -88,6 +89,7 @@ export default function() {
       header: Header,
       highlightCode: HighlightCode,
       responses: Responses,
+      customHeaders: CustomHeaders,
       response: Response,
       responseBody: ResponseBody,
       parameters: Parameters,

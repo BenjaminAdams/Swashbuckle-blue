@@ -7,6 +7,7 @@ import {
   UPDATE_URL,
   UPDATE_JSON,
   UPDATE_PARAM,
+  UPDATE_CUSTOMHEADERS,
   VALIDATE_PARAMS,
   SET_RESPONSE,
   SET_REQUEST,
@@ -40,6 +41,7 @@ export default {
 
   [UPDATE_PARAM]: ( state, {payload} ) => {
     let { path, paramName, value, isXml } = payload
+
     return state.updateIn( [ "resolved", "paths", ...path, "parameters" ], fromJS([]), parameters => {
       const index = parameters.findIndex(p => p.get( "name" ) === paramName )
       if (!(value instanceof win.File)) {
@@ -48,7 +50,10 @@ export default {
       return parameters.setIn( [ index, isXml ? "value_xml" : "value" ], value)
     })
   },
-
+  [UPDATE_CUSTOMHEADERS]: ( state, {payload} ) => {
+    let { pathMethod,customHeaders } = payload
+    return state.setIn(["resolved", "paths", ...pathMethod, "customHeaders"], customHeaders)
+  },
   [VALIDATE_PARAMS]: ( state, { payload:  { pathMethod } } ) => {
     let operation = state.getIn( [ "resolved", "paths", ...pathMethod ] )
     let isXml = /xml/i.test(operation.get("consumes_value"))

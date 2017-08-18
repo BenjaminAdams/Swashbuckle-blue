@@ -3,11 +3,8 @@ import PropTypes from "prop-types"
 import ImPropTypes from "react-immutable-proptypes"
 import Im from "immutable"
 import { getXhrHistory } from 'core/ls-actions'
-import { fromJS } from "immutable"
-import { atou } from 'core/utils'
-
-// More readable, just iterate over maps, only
-const eachMap = (iterable, fn) => iterable.valueSeq().filter(Im.Map.isMap).map(fn)
+import { fromJS,OrderedMap } from "immutable"
+import { atou, eachMap } from 'core/utils'
 
 export default class Parameters extends Component {
   static propTypes = {
@@ -65,6 +62,30 @@ export default class Parameters extends Component {
     const TryItOutButton = getComponent("TryItOutButton")
     const isExecute = tryItOutEnabled && allowTryItOut
     summary = '<h3>' + tag + ' ' + operationId + '</h3>' + summary
+
+
+
+    //console.log('find=',parameters.find(x=>x.get('name') === "headers"))
+
+    // if(parameters.indexOf(x=>x.get('name') === "headers") === -1) {
+    //   console.log('it does not have a header')
+
+    //   parameters= parameters.push(OrderedMap({
+    //     description: "test",
+    //     in: "customHeaders",
+    //     name:"headers",
+    //     required:false,
+    //     ignore: false,
+    //     schema: {
+    //       type: 'string'
+    //     },
+    //     value: ''
+    //   }))
+
+    // }
+
+     console.log('paramssObj=', parameters) 
+     console.log('paramss=', parameters.toJS()) 
 
     return (
       <div className="opblock-section">

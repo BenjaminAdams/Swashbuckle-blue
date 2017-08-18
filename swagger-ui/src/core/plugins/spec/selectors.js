@@ -1,9 +1,9 @@
 import { createSelector } from "reselect"
 import { sorters } from "core/utils"
 import { fromJS, Set, Map, OrderedMap, List } from "immutable"
+import { updateResolved } from "./actions"
 
 const DEFAULT_TAG = "default"
-
 const OPERATION_METHODS = ["get", "put", "post", "delete", "options", "head", "patch"]
 
 const state = state => {
@@ -91,14 +91,19 @@ export const operations = createSelector(
         if(OPERATION_METHODS.indexOf(method) === -1) {
           return
         }
+
         list = list.push(fromJS({
           path: pathName,
-          method,
-          operation,
+          method, 
+          operation, 
+          //customHeaders:fromJS( [{name:'test', value:'xxx'}]),
+         // customHeaders: [{name:'test', value:'xxx'}],
           id: `${method}-${pathName}`
         }))
       })
     })
+
+
 
     return list
   }
@@ -113,6 +118,11 @@ export const produces = createSelector(
   spec,
   spec => Set(spec.get("produces"))
 )
+
+// export const customHeaders = createSelector(
+//   spec,
+//   spec => Set(spec.get("customHeaders"))
+// )
 
 export const security = createSelector(
     spec,
@@ -163,6 +173,7 @@ export const operationsWithRootInherited = createSelector(
           if ( !op.get("produces") ) {
             op.update("produces", a => Set(a).merge(produces))
           }
+
           return op
         })
       } else {
@@ -276,6 +287,31 @@ export function getParameter(state, pathMethod, name) {
     return Map.isMap(p) && p.get("name") === name
   }).first()
 }
+
+export function getCustomHeader(state, pathMethod) {
+  console.log('inside of getCustomHeader', state.toJS(), pathMethod)
+
+  //console.log('555555=', spec(state).toJS())
+  //console.log('teststst=', spec(state).getIn(["paths", ...pathMethod]  ).toJS())
+
+  //let custHeaders = spec(state).getIn(["paths", ...pathMethod,  "customHeaders"], fromJS([{name:'asdasd', value:'123123'}]))
+  let custHeaders = spec(state).getIn(["paths", ...pathMethod,  "customHeaders"],fromJS([]))
+  console.log('custHeaders=',custHeaders)
+  return custHeaders
+}
+
+
+// export function setCustomHeader(state, pathMethod, custHeaderArry) {
+//   //console.log('inside of setCustomHeader', state.toJS())
+
+//   console.log('setting a new headexxxxr=',custHeaderArry)
+
+//   let newSpec = spec(state).setIn(["paths", ...pathMethod, "customHeaders"], custHeaderArry)
+//   updateResolved(newSpec.toJS())
+
+//   console.log('getCustHeadersAfter=',getCustomHeader(state,pathMethod))
+//   return newSpec
+// }
 
 export const hasHost = createSelector(
   spec,

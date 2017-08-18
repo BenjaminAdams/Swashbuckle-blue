@@ -75,7 +75,7 @@ export default class ParameterRow extends Component {
 
     var valueFromHistory= param.get('value') 
     let value = parameter ? parameter.get("value") : ""
-//  console.log('value=',value)
+// console.log('value=',value)
 //  console.log('valueFromHistory=',valueFromHistory)
 
     if(valueFromHistory) {

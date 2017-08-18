@@ -148,6 +148,19 @@ namespace Swashbuckle.Swagger
                     })
                  .ToList();
 
+            //parameters.Add(new Parameter()
+            //{
+            //    @in = "header",
+            //    description = "Custom header values",
+            //    ignore = false,
+            //    name = "SomeHeaderValue",
+            //    schema = new Schema()
+            //    {
+            //        type = "array",
+            //        // items = new Schema() { type = "string" }
+            //    }
+            //});
+
             var responses = new Dictionary<string, Response>();
             var responseType = apiDescription.ResponseType();
             if (responseType == null || responseType == typeof(void))

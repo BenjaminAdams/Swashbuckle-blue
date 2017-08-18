@@ -1,5 +1,4 @@
 import Im from "immutable"
-
 import camelCase from "lodash/camelCase"
 import upperFirst from "lodash/upperFirst"
 import _memoize from "lodash/memoize"
@@ -12,6 +11,9 @@ import win from "./window"
 const DEFAULT_REPONSE_KEY = "default"
 
 export const isImmutable = (maybe) => Im.Iterable.isIterable(maybe)
+
+// More readable, just iterate over maps, only
+export const eachMap = (iterable, fn) => iterable.valueSeq().filter(Im.Map.isMap).map(fn)
 
 export function objectify (thing) {
   if(!isObject(thing))

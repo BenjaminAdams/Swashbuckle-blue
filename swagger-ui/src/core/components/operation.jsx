@@ -38,7 +38,8 @@ export default class Operation extends PureComponent {
   constructor(props, context) {
     super(props, context)
     this.state = {
-      tryItOutEnabled: false
+      tryItOutEnabled: true,
+      //customHeaders : []
     }
   }
 
@@ -175,6 +176,7 @@ componentWillMount(){
     const JumpToPath = getComponent("JumpToPath", true)
     const Collapse = getComponent( "Collapse" )
     const Markdown = getComponent( "Markdown" )
+    const CustomHeaders = getComponent('customHeaders')
     var pathMethod=[path, method]
     const { deepLinking } = getConfigs()
     const isDeepLinkingEnabled = deepLinking && deepLinking !== "false"
@@ -193,6 +195,8 @@ componentWillMount(){
     tryItOutEnabled= true  //always enable TryItOut
     let shown = true
     let onChangeKey = [ path, method ] // Used to add values to _this_ operation ( indexed by path and method )
+
+   var customHeaders= specSelectors.getCustomHeader(pathMethod)
 
     return (
         <div className={deprecated ? "opblock opblock-deprecated" : shown ? `opblock opblock-${method} is-open` : `opblock opblock-${method}`} id={operationId} >
@@ -252,6 +256,17 @@ componentWillMount(){
                 pathMethod={pathMethod}
                 operationId={operationId}
               />
+
+
+        <div className="opblock-section-header-response">          
+          <CustomHeaders 
+            customHeaders={customHeaders} 
+            specSelectors={specSelectors}  
+            specActions={specActions}
+            pathMethod={pathMethod}
+            
+            />
+        </div>
                   
         <div className="opblock-section-header-response">
           { consumes.size ? 
@@ -279,8 +294,6 @@ componentWillMount(){
 
 
             <div className="btn-group">
-              { !tryItOutEnabled || !allowTryItOut ? null :
-
                   <Execute
                     getComponent={getComponent}
                     operation={ operation }
@@ -291,7 +304,7 @@ componentWillMount(){
                     urlHash={urlHash}
                     routeId={routeId}
                     onExecute={ this.onExecute } />
-              }
+              
 
             
                   <Clear
