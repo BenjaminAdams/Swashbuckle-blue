@@ -291,19 +291,15 @@ export function getParameter(state, pathMethod, name) {
 export function getCustomHeader(state, pathMethod) {
   //let custHeaders = spec(state).getIn(["paths", ...pathMethod,  "customHeaders"], fromJS([{name:'asdasd', value:'123123'}]))
   let custHeaders = spec(state).getIn(["paths", ...pathMethod,  "customHeaders"],fromJS([]))
-  console.log('custHeaders=',custHeaders)
   return custHeaders.toJS()
 }
 
 
 // export function setCustomHeader(state, pathMethod, custHeaderArry) {
 //   //console.log('inside of setCustomHeader', state.toJS())
-
 //   console.log('setting a new headexxxxr=',custHeaderArry)
-
 //   let newSpec = spec(state).setIn(["paths", ...pathMethod, "customHeaders"], custHeaderArry)
 //   updateResolved(newSpec.toJS())
-
 //   console.log('getCustHeadersAfter=',getCustomHeader(state,pathMethod))
 //   return newSpec
 // }

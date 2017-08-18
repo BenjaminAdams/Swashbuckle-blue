@@ -83,7 +83,7 @@ export default class CustomHeaders extends Component {
             <div onClick={this.addEmptyHeader} className="addNewHeader" title="Adds a custom HTTP header to your request"><span className="plusIcon">+</span> Add custom header</div>
 
             <ul className="customHeaderList">
-                {fieldsArray}                
+                {fieldsArray}                 
             </ul>             
         </div>
         </span>
