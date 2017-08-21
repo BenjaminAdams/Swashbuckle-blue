@@ -4,6 +4,8 @@ import PropTypes from "prop-types"
 import { getList,atou } from "core/utils"
 import * as CustomPropTypes from "core/proptypes"
 import {getXhrHistory} from 'core/ls-actions'
+import {HistoryBoxes} from "core/components/history-boxes"
+//import HistoryBoxes from 'core/components/history-boxes.jsx'
 
 export default class Operation extends PureComponent {
   static propTypes = {
@@ -157,6 +159,8 @@ componentWillMount(){
       routeId
     } = this.props
 
+
+
     let summary = operation.get("summary")
     let description = operation.get("description")
     let deprecated = operation.get("deprecated")
@@ -177,6 +181,7 @@ componentWillMount(){
     const Collapse = getComponent( "Collapse" )
     const Markdown = getComponent( "Markdown" )
     const CustomHeaders = getComponent('customHeaders')
+    //const HistoryBoxes = getComponent('HistoryBoxes', true)
     var pathMethod=[path, method]
     const { deepLinking } = getConfigs()
     const isDeepLinkingEnabled = deepLinking && deepLinking !== "false"
@@ -316,6 +321,9 @@ componentWillMount(){
                     method={ method }/>
               
             </div>
+
+            <HistoryBoxes routeId={routeId} />
+            
 
             {this.state.executeInProgress ? <div className="loading-container"><div className="loading"></div></div> : null}
 

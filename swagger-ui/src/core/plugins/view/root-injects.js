@@ -97,7 +97,6 @@ const wrapRender = (component) => {
 
 
 export const getComponent = (getSystem, getStore, getComponents, componentName, container) => {
-
   if(typeof componentName !== "string")
     throw new TypeError("Need a string, to fetch a component. Was given a " + typeof componentName)
 

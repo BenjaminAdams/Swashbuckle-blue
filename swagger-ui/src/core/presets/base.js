@@ -36,6 +36,7 @@ import ResponseBody from "core/components/response-body"
 import Parameters from "core/components/parameters"
 import ParameterRow from "core/components/parameter-row"
 import CustomHeaders from "core/components/custom-headers"
+
 import Execute from "core/components/execute"
 import Headers from "core/components/headers"
 import Errors from "core/components/errors"
@@ -43,6 +44,7 @@ import ContentType from "core/components/content-type"
 import Overview from "core/components/overview"
 import Info from "core/components/info"
 import History from "core/components/history"
+import HistoryBoxes from "core/components/history-boxes.jsx"
 import Footer from "core/components/footer"
 import ParamBody from "core/components/param-body"
 import Curl from "core/components/curl"
@@ -90,6 +92,7 @@ export default function() {
       highlightCode: HighlightCode,
       responses: Responses,
       customHeaders: CustomHeaders,
+      historyBoxes: HistoryBoxes,
       response: Response,
       responseBody: ResponseBody,
       parameters: Parameters,

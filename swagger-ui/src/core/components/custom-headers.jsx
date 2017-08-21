@@ -74,11 +74,9 @@ export default class CustomHeaders extends Component {
     return (
       <div className="parameters">
         <span className="col parameters-col_name"></span>
-
         <span className="col parameters-col_description">
         <div>
             <div onClick={this.addEmptyHeader} className="addNewHeader" title="Adds a custom HTTP header to your request"><span className="plusIcon">+</span> Add custom header</div>
-
             <ul className="customHeaderList">
                 {fieldsArray}                 
             </ul>             

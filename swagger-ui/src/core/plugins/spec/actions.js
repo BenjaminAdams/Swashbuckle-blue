@@ -42,8 +42,6 @@ export function updateSpec(spec) {
 }
 
 export function updateResolved(spec) {
-  console.log('updating the spec=',spec)
-
   return {
     type: UPDATE_RESOLVED,
     payload: spec
@@ -217,27 +215,8 @@ export const executeRequest = (req) => ({ fn, specActions, specSelectors,urlHash
   var customHeaders = specSelectors.getCustomHeader([pathName, method])
   req.customHeaders = customHeaders
   let parsedRequest = Object.assign({}, req)
-  
 
-
-  // if(customHeaders) {
-  //   parsedRequest.headers = parsedRequest.headers ? parsedRequest.headers : {}
-
-  //   console.log('we are going to send some headers!', req)
-
-  //    for (var i = 0; i < customHeaders.length; i++) {
-  //       if(!customHeaders[i].name || !customHeaders[i].value ) continue
-          
-  //       parsedRequest.headers[customHeaders[i].name] = customHeaders[i].value
-  //    }
-  // }
-
-  console.log('parsedRequestb4b4b4b4=', parsedRequest)
   parsedRequest = fn.buildRequest(parsedRequest)
-
-  console.log('parsedRequest=', parsedRequest)
-
-
   specActions.setRequest(req.pathName, req.method, parsedRequest)
 
   // track duration of request

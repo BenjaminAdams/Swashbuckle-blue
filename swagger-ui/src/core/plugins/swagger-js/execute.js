@@ -159,10 +159,11 @@ console.log('custom headers in buildReq=',customHeaders)
     }
   }
 
-
   arrayOrEmpty(customHeaders) 
     .forEach((hdr) => {
-       req.headers[hdr.name] = hdr.value
+      if(hdr.name && hdr.value ) {
+        req.headers[hdr.name] = hdr.value
+      }     
     })
 
   // Will add the query object into the URL, if it exists
