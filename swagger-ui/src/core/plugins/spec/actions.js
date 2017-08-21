@@ -214,25 +214,29 @@ export const executeRequest = (req) => ({ fn, specActions, specSelectors,urlHash
     req.operationId = fn.opId(op, pathName, method)
   }
 
+  var customHeaders = specSelectors.getCustomHeader([pathName, method])
+  req.customHeaders = customHeaders
   let parsedRequest = Object.assign({}, req)
   
+
+
+  // if(customHeaders) {
+  //   parsedRequest.headers = parsedRequest.headers ? parsedRequest.headers : {}
+
+  //   console.log('we are going to send some headers!', req)
+
+  //    for (var i = 0; i < customHeaders.length; i++) {
+  //       if(!customHeaders[i].name || !customHeaders[i].value ) continue
+          
+  //       parsedRequest.headers[customHeaders[i].name] = customHeaders[i].value
+  //    }
+  // }
+
   console.log('parsedRequestb4b4b4b4=', parsedRequest)
   parsedRequest = fn.buildRequest(parsedRequest)
 
   console.log('parsedRequest=', parsedRequest)
 
-  var customHeaders = specSelectors.getCustomHeader([pathName, method])
-  if(customHeaders) {
-    parsedRequest.headers = parsedRequest.headers ? parsedRequest.headers : {}
-
-    console.log('we are going to send some headers!', req)
-
-     for (var i = 0; i < customHeaders.length; i++) {
-        if(!customHeaders[i].name || !customHeaders[i].value ) continue
-          
-        parsedRequest[customHeaders[i].name] = customHeaders[i].value
-     }
-  }
 
   specActions.setRequest(req.pathName, req.method, parsedRequest)
 

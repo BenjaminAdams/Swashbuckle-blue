@@ -21,13 +21,10 @@ export default class CustomHeaders extends Component {
     let { specSelectors, specActions, pathMethod } = this.props
     let { customHeaders } = this.state
 
-    console.log('adding a new header b4b4b4', customHeaders)
     customHeaders.push({ name: '', value: '' })
-
     specActions.updateCustomHeaders(pathMethod, customHeaders)
     this.setState({ customHeaders: customHeaders })
 
-    console.log('adding a new header', customHeaders)
   }
 
 //   updateHeaders = (e) => {
@@ -88,8 +85,6 @@ export default class CustomHeaders extends Component {
         </div>
         </span>
         </div>
-
     )
-
   }
 }

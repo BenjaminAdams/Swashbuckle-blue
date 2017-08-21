@@ -9,6 +9,7 @@ export default function downloadUrlPlugin (toolbox) {
   const actions = {
     download: (url)=> ({ errActions, specSelectors, specActions }) => {
       let { fetch } = fn
+      
       url = url || specSelectors.url()
       specActions.updateLoadingStatus("loading")
       fetch({

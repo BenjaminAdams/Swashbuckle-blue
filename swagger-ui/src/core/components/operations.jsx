@@ -1,9 +1,10 @@
 import React from "react"
 import PropTypes from "prop-types"
-import { helpers } from "swagger-client"
+//import { helpers } from "swagger-client"
+import { opId } from "core/plugins/swagger-js"
 import { HashRouter, Route, Link, Switch } from 'react-router-dom'
 
-const { opId } = helpers
+
 
 export default class Operations extends React.Component {
     static propTypes = {
