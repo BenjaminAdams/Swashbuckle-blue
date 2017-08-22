@@ -14,7 +14,6 @@ export default class Parameters extends Component {
     specSelectors: PropTypes.object.isRequired,
     fn: PropTypes.object.isRequired,
     tryItOutEnabled: PropTypes.bool,
-    allowTryItOut: PropTypes.bool,
     onTryoutClick: PropTypes.func,
     onCancelClick: PropTypes.func,
     onChangeKey: PropTypes.array,
@@ -29,7 +28,6 @@ export default class Parameters extends Component {
     onTryoutClick: Function.prototype,
     onCancelClick: Function.prototype,
     tryItOutEnabled: false,
-    allowTryItOut: true,
     onChangeKey: [],
     summary: '',
     operationId: ''
@@ -46,7 +44,6 @@ export default class Parameters extends Component {
       onTryoutClick,
       onCancelClick,
       parameters,
-      allowTryItOut,
       tryItOutEnabled,
       summary,
       fn,
@@ -60,7 +57,7 @@ export default class Parameters extends Component {
 
     const ParameterRow = getComponent("parameterRow")
     const TryItOutButton = getComponent("TryItOutButton")
-    const isExecute = tryItOutEnabled && allowTryItOut
+    const isExecute = true 
     summary = '<h3>' + tag + ' ' + operationId + '</h3>' + summary
 
     return (

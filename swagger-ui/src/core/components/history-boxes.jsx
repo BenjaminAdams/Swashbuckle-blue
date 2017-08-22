@@ -19,16 +19,10 @@ export class HistoryBoxes extends React.Component {
     timeAgo(this.el)
   }
 
-  // reloadPage = (theLink) => {
-  //     window.location.href = '/#'+theLink
-  //     location.reload(); 
-  //     return false   
-  // }
-
   render() {
     let {routeId} = this.props
     var hst=fromJS(getXhrHistory())
-console.log('rendering historyBoxes')
+
     var hstDivs= hst.filter(x=>x.get('routeId') === routeId).map((x, index) => {
       var req= x.get('request')
       var res= x.get('response')

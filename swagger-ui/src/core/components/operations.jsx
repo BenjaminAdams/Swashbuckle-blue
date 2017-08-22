@@ -50,33 +50,17 @@ export default class Operations extends React.Component {
 
       var allTheRoutes = taggedOps.map((tagObj, tag) => {
           let operations = tagObj.get("operations")
-          let tagDescription = tagObj.getIn(["tagDetails", "description"], null)
-          let isShownKey = ["operations-tag", tag]
-          let showTag = layoutSelectors.isShown(isShownKey, docExpansion === "full" || docExpansion === "list")
 
           var routes = operations.map(op => {
-              const path = op.get("path", "")
-              const method = op.get("method", "")
-              const jumpToKey = `paths.${path}.${method}`
-              const operationId = op.getIn(["operation", "operationId"]) || op.getIn(["operation", "__originalOperationId"]) || opId(op.get("operation"), path, method) || op.get("id")
-              const isShownKey = ["operations", tag, operationId]
-              const allowTryItOut = specSelectors.allowTryItOutFor(op.get("path"), op.get("method"))
-              const response = specSelectors.responseFor(op.get("path"), op.get("method"))
-              const request = specSelectors.requestFor(op.get("path"), op.get("method"))
 
               return <Route exact
-                      //?status=:status&page=:page&limit=:limit
                       path={ op.get('urlHash') + '/:historyParams?' } 
                       key={ op.get('routeId') } 
                       render={ x => 
                         <Operation
                           {...op.toObject()}
-                          jumpToKey={jumpToKey}
                           key={x.location.pathname} //we have to pass this so it re-renders between historybox items
-                          response={ response }
-                          request={ request }
                           tag={tag}
-                          allowTryItOut={allowTryItOut}
                           displayOperationId={true}
                           displayRequestDuration={true}
                           specActions={ specActions }
@@ -87,7 +71,6 @@ export default class Operations extends React.Component {
                           authSelectors={ authSelectors }
                           getComponent={ getComponent }
                           fn={fn}
-                          getConfigs={ getConfigs }
                           qryParamsFromRouter={x.match.params}
                         />
             }

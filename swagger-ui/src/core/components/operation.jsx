@@ -12,12 +12,8 @@ export default class Operation extends PureComponent {
     path: PropTypes.string.isRequired,
     method: PropTypes.string.isRequired,
     operation: PropTypes.object.isRequired,
-    jumpToKey: CustomPropTypes.arrayOrString.isRequired,
-    allowTryItOut: PropTypes.bool,
     displayOperationId: PropTypes.bool,
     displayRequestDuration: PropTypes.bool,
-    response: PropTypes.object,
-    request: PropTypes.object,
     getComponent: PropTypes.func.isRequired,
     authActions: PropTypes.object,
     authSelectors: PropTypes.object,
@@ -26,14 +22,11 @@ export default class Operation extends PureComponent {
     layoutActions: PropTypes.object.isRequired,
     layoutSelectors: PropTypes.object.isRequired,
     fn: PropTypes.object.isRequired,
-    getConfigs: PropTypes.func.isRequired,
     tag: PropTypes.string,
     qryParamsFromRouter: PropTypes.object
   }
 
   static defaultProps = {
-    response: null,
-    allowTryItOut: true,
     displayOperationId: false,
     displayRequestDuration: false
   }
@@ -51,8 +44,6 @@ componentWillMount(){
 
    let parameters = getList(operation, ["parameters"]) 
    parameters=this.loadValuesFromQry(parameters)
-
-   console.log('componentWillMountcomponentWillMountcomponentWillMountcomponentWillMountcomponentWillMount')
 }
 
 
@@ -64,9 +55,9 @@ componentWillMount(){
     let consumes = operation.get("consumes")
     let consumesValue = operation.get("consumes_value")
 
-    if(nextProps.response !== this.props.response) {
-      this.setState({ executeInProgress: false })
-    }
+   // if(nextProps.response !== this.props.response) {  //moved this out of operations.jsx
+   //   this.setState({ executeInProgress: false })
+   // }
 
     if (producesValue === undefined) {
       producesValue = produces && produces.size ? produces.first() : defaultContentType
@@ -77,10 +68,6 @@ componentWillMount(){
       consumesValue = consumes && consumes.size ? consumes.first() : defaultContentType
       specActions.changeConsumesValue([path, method], consumesValue)
     }
-
-    //let parameters = getList(operation, ["parameters"]) 
-    //parameters=this.loadValuesFromQry(parameters)
-
   }
 
   onChangeConsumesWrapper = ( val ) => {
@@ -101,7 +88,7 @@ componentWillMount(){
     parameters= parameters.map( (x, index) => {
           var name = x.get('name')     
           var paramFromSlim= slimParameters.find(y=>y.get('name')===name)
-          console.log('got values=',paramFromSlim.get('value'))
+
           if(paramFromSlim) {
             var isXml=false
             var newVal= paramFromSlim.get('value')
@@ -141,15 +128,7 @@ componentWillMount(){
   }
 
   render() {
-    let {
-      jumpToKey,
-      path,
-      method,
-      operation,
-      response,
-      request,
-      allowTryItOut,
-      displayOperationId,
+    let {  path, method, operation,  displayOperationId,
       displayRequestDuration,
       fn,
       getComponent,
@@ -157,11 +136,13 @@ componentWillMount(){
       specSelectors,
       authActions,
       authSelectors,
-      getConfigs,
       tag, 
       urlHash,
       routeId
     } = this.props
+
+    var response = specSelectors.responseFor(path, method)
+    var request = specSelectors.requestFor(path, method)
 
     let summary = operation.get("summary")
     let description = operation.get("description")
@@ -185,8 +166,6 @@ componentWillMount(){
     const CustomHeaders = getComponent('customHeaders')
     //const HistoryBoxes = getComponent('HistoryBoxes', true)
     var pathMethod=[path, method]
-    const { deepLinking } = getConfigs()
-    const isDeepLinkingEnabled = deepLinking && deepLinking !== "false"
 
     let consumesValue = specSelectors.contentTypeValues(pathMethod).get("requestContentType")
     let consumes = specSelectors.operationConsumes(pathMethod)
@@ -211,7 +190,6 @@ componentWillMount(){
               <span className="opblock-summary-method">{method.toUpperCase()}</span>
               <span className={ deprecated ? "opblock-summary-path__deprecated" : "opblock-summary-path" } >
                     <span>{path}</span>
-                <JumpToPath path={jumpToKey} />
               </span>
 
             { /*  displayOperationId && operationId ? <span className="opblock-summary-operation-id">{operationId}</span> : null */ }
@@ -253,7 +231,6 @@ componentWillMount(){
                 onTryoutClick = { this.onTryoutClick }
                 onCancelClick = { this.onCancelClick }
                 tryItOutEnabled = { tryItOutEnabled }
-                allowTryItOut={allowTryItOut}
                 summary={summary}
                 fn={fn}
                 tag={tag}

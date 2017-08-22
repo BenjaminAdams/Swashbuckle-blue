@@ -239,14 +239,14 @@ export const executeRequest = (req) => ({ fn, specActions, specSelectors,urlHash
       res.duration = Date.now() - startTime
       saveToHistory.response = buildRespObj(res)
 
-      console.log('res=', res)
+     // console.log('res=', res)
       addHistory(saveToHistory)
 
       res.shareLink= getHistoryLink(saveToHistory)
       specActions.setResponse(req.pathName, req.method, res)
     })
     .catch(err => {
-      console.log('res=', err)
+      //console.log('res=', err)
       //saveToHistory.response = { error: true, err: serializeError(err) }
       var serializedError = serializeError(err)
 
