@@ -480,7 +480,7 @@ export const validateFile = ( val ) => {
 
 export function getHistoryLink(historyItem) {
   historyItem = Im.fromJS(historyItem)
-  return historyItem.get("urlHash") + '/' + '?params=' + historyItem.get('parameters')
+  return historyItem.get("urlHash") + '/' + historyItem.get('parameters')
 }
 
 // validation of parameters before execute

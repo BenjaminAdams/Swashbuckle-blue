@@ -27,7 +27,8 @@ export default class Operation extends PureComponent {
     layoutSelectors: PropTypes.object.isRequired,
     fn: PropTypes.object.isRequired,
     getConfigs: PropTypes.func.isRequired,
-    tag: PropTypes.string
+    tag: PropTypes.string,
+    qryParamsFromRouter: PropTypes.object
   }
 
   static defaultProps = {
@@ -50,6 +51,8 @@ componentWillMount(){
 
    let parameters = getList(operation, ["parameters"]) 
    parameters=this.loadValuesFromQry(parameters)
+
+   console.log('componentWillMountcomponentWillMountcomponentWillMountcomponentWillMountcomponentWillMount')
 }
 
 
@@ -74,6 +77,10 @@ componentWillMount(){
       consumesValue = consumes && consumes.size ? consumes.first() : defaultContentType
       specActions.changeConsumesValue([path, method], consumesValue)
     }
+
+    //let parameters = getList(operation, ["parameters"]) 
+    //parameters=this.loadValuesFromQry(parameters)
+
   }
 
   onChangeConsumesWrapper = ( val ) => {
@@ -84,20 +91,17 @@ componentWillMount(){
   }
 
   loadValuesFromQry = (parameters) => {
-    let { specActions: { changeParam, changeConsumesValue }, path, method } = this.props
+    let { specActions: { changeParam, changeConsumesValue }, path, method, qryParamsFromRouter } = this.props
     var onChangeKey=[ path, method ]
 
-    if (!parameters || !parameters.count() || !window.location.hash.includes('?params=')) return parameters
+    if (!parameters || !parameters.count() || !qryParamsFromRouter || !qryParamsFromRouter.historyParams) return parameters
 
-    var split=window.location.hash.split('?params=')
-    if(!split || !split[1]) return parameters
-
-    var slimParameters = fromJS(JSON.parse(atou(split[1])))
+    var slimParameters = fromJS(JSON.parse(atou(qryParamsFromRouter.historyParams)))
 
     parameters= parameters.map( (x, index) => {
           var name = x.get('name')     
           var paramFromSlim= slimParameters.find(y=>y.get('name')===name)
-          
+          console.log('got values=',paramFromSlim.get('value'))
           if(paramFromSlim) {
             var isXml=false
             var newVal= paramFromSlim.get('value')
@@ -158,8 +162,6 @@ componentWillMount(){
       urlHash,
       routeId
     } = this.props
-
-
 
     let summary = operation.get("summary")
     let description = operation.get("description")

@@ -19,12 +19,11 @@ export class HistoryBoxes extends React.Component {
     timeAgo(this.el)
   }
 
-  reloadPage = (theLink) => {
-      window.location.href = '/#'+theLink
-      location.reload(); 
-      return false  
-    
-  }
+  // reloadPage = (theLink) => {
+  //     window.location.href = '/#'+theLink
+  //     location.reload(); 
+  //     return false   
+  // }
 
   render() {
     let {routeId} = this.props
@@ -36,11 +35,12 @@ console.log('rendering historyBoxes')
       var lowerMethod = req.get('method').toLowerCase()
       var theLink= getHistoryLink(x)
       var iconColor= 'green'
-      if(!res.get('status') || res.get('status') > 299){
+      
+      if(!res.get('status') || res.get('status') > 299 || res.get('status') === 'err' ){
         iconColor='red'
       }
 
-      return <Link to={theLink} key={index} className={iconColor} onClick={() => this.reloadPage(theLink)}>
+      return <Link to={theLink} key={index} className={iconColor} >
       <div className='timeAgoPopup'>
         <span className="timeago" title={x.get('dateAdded')}>{x.get('dateAdded')}</span> | <span>{x.get('duration')}ms</span> | <span>{res.get('status')}</span>
       </div>

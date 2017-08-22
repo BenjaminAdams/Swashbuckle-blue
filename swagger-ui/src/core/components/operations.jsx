@@ -64,14 +64,15 @@ export default class Operations extends React.Component {
               const response = specSelectors.responseFor(op.get("path"), op.get("method"))
               const request = specSelectors.requestFor(op.get("path"), op.get("method"))
 
-              return <Route 
-                      exact path={ op.get('urlHash') } 
+              return <Route exact
+                      //?status=:status&page=:page&limit=:limit
+                      path={ op.get('urlHash') + '/:historyParams?' } 
                       key={ op.get('routeId') } 
                       render={ x => 
                         <Operation
                           {...op.toObject()}
                           jumpToKey={jumpToKey}
-                          key={isShownKey}
+                          key={x.location.pathname} //we have to pass this so it re-renders between historybox items
                           response={ response }
                           request={ request }
                           tag={tag}
@@ -87,6 +88,7 @@ export default class Operations extends React.Component {
                           getComponent={ getComponent }
                           fn={fn}
                           getConfigs={ getConfigs }
+                          qryParamsFromRouter={x.match.params}
                         />
             }
             />}).toArray()
