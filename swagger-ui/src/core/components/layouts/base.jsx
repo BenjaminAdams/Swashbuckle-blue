@@ -66,6 +66,8 @@ export default class BaseLayout extends React.Component {
       return <h4>No spec provided.</h4>
     }
 
+console.log('rendering the base.jsx')
+
     var baseUrl = window.swashbuckleConfig.baseUrl
 
     return (
@@ -101,7 +103,7 @@ export default class BaseLayout extends React.Component {
 
                     <Row>
                         <Col mobile={12} desktop={12} >
-                            <Operations />
+                             <Operations /> 
                         </Col>
                     </Row>
                     { /* <Row>

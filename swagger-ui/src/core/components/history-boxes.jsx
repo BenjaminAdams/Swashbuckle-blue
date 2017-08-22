@@ -29,7 +29,7 @@ export class HistoryBoxes extends React.Component {
   render() {
     let {routeId} = this.props
     var hst=fromJS(getXhrHistory())
-    console.log('hst=', hst)
+console.log('rendering historyBoxes')
     var hstDivs= hst.filter(x=>x.get('routeId') === routeId).map((x, index) => {
       var req= x.get('request')
       var res= x.get('response')
@@ -51,11 +51,14 @@ export class HistoryBoxes extends React.Component {
      if(!hstDivs || hstDivs.length===0) return <div></div>
 
     return (
-      <HashRouter basename={window.swashbuckleConfig.baseUrl} hashType="noslash">
-      <div className="detailsHistoryList">     
-        {hstDivs}      
+      <div>
+        <h5 className="histBoxesTitle">History</h5>
+        <HashRouter basename={window.swashbuckleConfig.baseUrl} hashType="noslash">
+        <div className="detailsHistoryList">     
+          {hstDivs}      
+        </div>
+        </HashRouter>
       </div>
-      </HashRouter>
     )
   }
 }

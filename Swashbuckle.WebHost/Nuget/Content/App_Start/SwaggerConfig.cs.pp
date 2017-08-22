@@ -34,6 +34,19 @@ namespace $rootnamespace$
                         //
                         c.SingleApiVersion("v1", "$rootnamespace$");
 
+						//Or if you want to provide more details, also adding an intro into the description field is great
+						//c.SingleApiVersion("v1", "Swashbuckle")
+						//    .Description("A sample API for testing and prototyping Swashbuckle features")
+						//    .TermsOfService("Some terms")
+						//    .Contact(cc => cc
+						//        .Name("Some contact")
+						//        .Url("http://tempuri.org/contact")
+						//        .Email("some.contact@tempuri.org"))
+						//    .License(lc => lc
+						//        .Name("Some License")
+						//        .Url("http://tempuri.org/license"));
+
+
                         // If your API has multiple versions, use "MultipleApiVersions" instead of "SingleApiVersion".
                         // In this case, you must provide a lambda that tells Swashbuckle which actions should be
                         // included in the docs for a given API version. Like "SingleApiVersion", each call to "Version"

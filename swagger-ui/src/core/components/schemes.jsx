@@ -15,7 +15,7 @@ export default class Schemes extends React.Component {
     let { schemes } = this.props
 
     //fire 'change' event to set default 'value' of select
-    this.setScheme(schemes.first())
+   // this.setScheme(schemes.first())  //We do not need to set it here...it causes the layout to re-render
   }
 
   componentWillReceiveProps(nextProps) {
