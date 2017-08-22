@@ -94,6 +94,8 @@ export default class Operations extends React.Component {
             return routes;
           }).toArray()
 
+          console.log('rendering operations', allTheRoutes.length)
+
         return (
           <div>
             <HashRouter basename={ baseUrl } hashType="noslash">

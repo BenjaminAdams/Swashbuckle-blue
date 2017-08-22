@@ -59,7 +59,7 @@ export default class ParameterRow extends Component {
   render() {
     let {param, onChange, getComponent, isExecute, fn, onChangeConsumes, specSelectors, pathMethod} = this.props
 
-    // const onChangeWrapper = (value) => onChange(param, value)
+    //const onChangeWrapper = (value) => onChange(param, value)
     const JsonSchemaForm = getComponent("JsonSchemaForm")
     const ParamBody = getComponent("ParamBody")
     let inType = param.get("in")
@@ -72,15 +72,16 @@ export default class ParameterRow extends Component {
     let requiredConditionally = param.get("requiredConditionally")
     let itemType = param.getIn(["items", "type"])
     let parameter = specSelectors.getParameter(pathMethod, param.get("name"))
-
     var valueFromHistory= param.get('value') 
     let value = parameter ? parameter.get("value") : ""
-// console.log('value=',value)
-//  console.log('valueFromHistory=',valueFromHistory)
 
     if(valueFromHistory) {
       value = valueFromHistory
       parameter.set('value',value)
+    }
+
+    if(typeof(value) ==='undefined' && parameter) {
+      value=parameter.get('example')
     }
 
     let schemaDesc= param.get("description")  //gets the comment from the param list in the class declaration

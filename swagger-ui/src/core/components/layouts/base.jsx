@@ -29,7 +29,7 @@ export default class BaseLayout extends React.Component {
     this.setState({ showSidebar: this.state.showSidebar });
 
     if (this.state.showSidebar === true) {
-           this.setState({ leftPadding: '250px' });
+        this.setState({ leftPadding: '250px' });
     } else { 
         this.setState({ leftPadding: '0px' });  
     }
@@ -92,14 +92,14 @@ console.log('rendering the base.jsx')
                          </span>
                          </HashRouter>
 
-                    {
+                    { /*
                         filter === null || filter === false ? null :
                             <div className="filter-container">
                                 <Col className="filter wrapper" mobile={12}>
                                     <input className="operation-filter-input" placeholder="Filter by tag" type="text" onChange={this.onFilterChange} value={filter === true || filter === "true" ? "" : filter} disabled={isLoading} style={inputStyle} />
                                 </Col>
                             </div>
-                    }
+                    */ }
 
                     <Row>
                         <Col mobile={12} desktop={12} >
