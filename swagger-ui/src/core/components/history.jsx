@@ -44,7 +44,7 @@ export class History extends React.Component {
 
       var theLink= getHistoryLink(x)
 
-      return <div><Link to={theLink} key={index} style={{'textDecoration':'none'}}  onClick={() => this.shouldWeReloadAfter(x,theLink)} >
+      return <div key={index}><Link to={theLink} style={{'textDecoration':'none'}}  onClick={() => this.shouldWeReloadAfter(x,theLink)} >
       <div className={"opblock opblock-" + lowerMethod +" is-open"}>
         <div className={"opblock-summary opblock-summary-"+ lowerMethod} style={{position:'relative'}}>
         <span className="opblock-summary-method">{req.get('method')}</span>

@@ -6,10 +6,11 @@ import {getXhrHistory, clearXhrHistory} from 'core/ls-actions'
 import { atou, timeAgo, getHistoryLink } from 'core/utils'
 import { HashRouter,Link } from 'react-router-dom'
 
-export class HistoryBoxes extends React.Component {
+export class HistoryBoxes extends React.PureComponent {
     static propTypes = {
       routeId:  PropTypes.string.isRequired
     }
+
 
   componentDidMount() {
     timeAgo(this.el)

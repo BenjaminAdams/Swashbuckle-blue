@@ -9,7 +9,8 @@ export default class Auths extends React.Component {
     authSelectors: PropTypes.object.isRequired,
     authActions: PropTypes.object.isRequired,
     specSelectors: PropTypes.object.isRequired,
-    closeFunction: PropTypes.func
+    closeFunction: PropTypes.func,
+    taggedOps: PropTypes.object.isRequired
   }
 
   constructor(props, context) {
@@ -18,36 +19,46 @@ export default class Auths extends React.Component {
     this.state = {}
   }
 
-  onAuthChange =(auth) => {
-    let { name } = auth
-
-    this.setState({ [name]: auth })
+  shouldComponentUpdate(nextProps, nextState) {
+    let { specSelectors } = this.props
+    if (this.props.taggedOps.count() != nextProps.taggedOps.count()) {
+      return true
+    } else {
+      return false
+    }
   }
 
-  submitAuth =(e) => {
+  onAuthChange = (auth) => {
+    let { name } = auth
+
+    this.setState({
+      [name]: auth })
+  }
+
+  submitAuth = (e) => {
     e.preventDefault()
 
     let { authActions, closeFunction } = this.props
 
     authActions.authorize(this.state)
 
-    if(closeFunction) {
+    if (closeFunction) {
       closeFunction()
     }
   }
 
-  logoutClick =(e) => {
+  logoutClick = (e) => {
     e.preventDefault()
 
     let { authActions, definitions, closeFunction } = this.props
-    let auths = definitions.map( (val, key) => {
+    let auths = definitions.map((val, key) => {
       return key
     }).toArray()
 
-    localStorage.setItem('securitiesPayload','{}')
+    localStorage.setItem('securitiesPayload', '{}')
     authActions.logout(auths)
-    
-    if(closeFunction) {
+
+    if (closeFunction) {
       closeFunction()
     }
   }
@@ -61,12 +72,12 @@ export default class Auths extends React.Component {
 
     let authorized = authSelectors.authorized()
 
-    let authorizedAuth = definitions.filter( (definition, key) => {
+    let authorizedAuth = definitions.filter((definition, key) => {
       return !!authorized.get(key)
     })
 
-    let nonOauthDefinitions = definitions.filter( schema => schema.get("type") !== "oauth2")
-    let oauthDefinitions = definitions.filter( schema => schema.get("type") === "oauth2")
+    let nonOauthDefinitions = definitions.filter(schema => schema.get("type") !== "oauth2")
+    let oauthDefinitions = definitions.filter(schema => schema.get("type") === "oauth2")
 
     return (
       <div className="auth-container">

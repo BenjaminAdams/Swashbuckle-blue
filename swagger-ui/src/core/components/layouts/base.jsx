@@ -11,18 +11,39 @@ export default class BaseLayout extends React.Component {
     specSelectors: PropTypes.object.isRequired,
     layoutSelectors: PropTypes.object.isRequired,
     layoutActions: PropTypes.object.isRequired,
-    getComponent: PropTypes.func.isRequired
+    getComponent: PropTypes.func.isRequired,
+    taggedOps: PropTypes.object.isRequired
   }
 
   constructor(props) {
     super(props);
     this.state = { showSidebar: true, leftPadding: '250px' };
+    this.loadedOnce=false
   }
 
-  onFilterChange = (e) => {
-    let { target: { value } } = e
-    this.props.layoutActions.updateFilter(value)
+//   shouldComponentUpdate(nextProps, nextState) {
+//       console.log('nextProps=',nextProps)
+//       console.log('nextState=',nextState)  
+//       if(this.loadedOnce===false) {
+//           this.loadedOnce=true
+//           return true
+//       }else {
+//           console.log('NOT RELOADING')
+//           return false
+//       }
+//   }
+
+
+shouldComponentUpdate(nextProps, nextState) {
+      let { specSelectors } = this.props
+
+      if(this.props.taggedOps.count() != nextProps.taggedOps.count()){
+        return true
+      }else {
+        return false
+      }
   }
+
 
   toggleSidebar = () => {
     this.state.showSidebar= !this.state.showSidebar//we have to set this before we call setState because its not changing it in local scope
@@ -36,8 +57,8 @@ export default class BaseLayout extends React.Component {
   }
 
   render() {
-    let { specSelectors, specActions, getComponent, layoutSelectors } = this.props
-    let taggedOps = specSelectors.taggedOperations()
+    let { specSelectors, specActions, getComponent, layoutSelectors, taggedOps } = this.props
+    //let taggedOps = specSelectors.taggedOperations()
     let info = specSelectors.info()
     let url = specSelectors.url()
     let basePath = specSelectors.basePath()
@@ -68,49 +89,38 @@ export default class BaseLayout extends React.Component {
 
 console.log('rendering the base.jsx')
 
+    //let taggedOps = specSelectors.operationsExtraSlim()
+
     var baseUrl = window.swashbuckleConfig.baseUrl
 
     return (
       <span>
       <Sidebar taggedOps={taggedOps} toggleSidebarFunc={this.toggleSidebar} showSidebar={this.state.showSidebar} />
       <div className='swagger-ui'>               
-                <div id="swagger-ui-container" style={{ paddingLeft: this.state.leftPadding }}>
-                <Header />
+            <div id="swagger-ui-container" style={{ paddingLeft: this.state.leftPadding }}>
+                <Header taggedOps={taggedOps} />
                 <Errors />
-                      <HashRouter basename={ baseUrl } hashType="noslash">
-                       <span>
-                          <Route path={"/"} exact key={"home"} render={x => 
-                                <Row className="information-container">
-                                            <Col mobile={12}>
-                                                {info.count() ? (
-                                                    <Info info={info} url={url} host={host} basePath={basePath} externalDocs={externalDocs} getComponent={getComponent} />
-                                                ) : null}
-                                            </Col>
-                                        </Row>
-                                } />      
-                          <Route path={"/history"} exact key={"history"}  render={x=> <History specSelectors={specSelectors} /> } />                 
-                         </span>
-                         </HashRouter>
-
-                    { /*
-                        filter === null || filter === false ? null :
-                            <div className="filter-container">
-                                <Col className="filter wrapper" mobile={12}>
-                                    <input className="operation-filter-input" placeholder="Filter by tag" type="text" onChange={this.onFilterChange} value={filter === true || filter === "true" ? "" : filter} disabled={isLoading} style={inputStyle} />
-                                </Col>
-                            </div>
-                    */ }
+                <HashRouter basename={ baseUrl } hashType="noslash">
+                <span>
+                    <Route path={"/"} exact key={"home"} render={x => 
+                        <Row className="information-container">
+                                    <Col mobile={12}>
+                                        {info.count() ? (
+                                            <Info info={info} url={url} host={host} basePath={basePath} externalDocs={externalDocs} getComponent={getComponent} />
+                                        ) : null}
+                                    </Col>
+                                </Row>
+                        } />      
+                    <Route path={"/history"} exact key={"history"}  render={x=> <History specSelectors={specSelectors} /> } />                 
+                    </span>
+                    </HashRouter>
 
                     <Row>
                         <Col mobile={12} desktop={12} >
-                             <Operations /> 
+                             <Operations  taggedOps={taggedOps}/> 
                         </Col>
                     </Row>
-                    { /* <Row>
-                         <Col mobile={12} desktop={12} >
-                             <Models />
-                         </Col>
-                    </Row> */}
+
                 </div>
             </div>
             </span>

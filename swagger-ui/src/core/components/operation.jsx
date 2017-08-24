@@ -11,7 +11,7 @@ export default class Operation extends PureComponent {
   static propTypes = {
     path: PropTypes.string.isRequired,
     method: PropTypes.string.isRequired,
-    operation: PropTypes.object.isRequired,
+    //operation: PropTypes.object.isRequired,
     displayOperationId: PropTypes.bool,
     displayRequestDuration: PropTypes.bool,
     getComponent: PropTypes.func.isRequired,
@@ -40,16 +40,22 @@ export default class Operation extends PureComponent {
   }
 
 componentWillMount(){
-    let { operation, specActions } = this.props
+    let {  path, method, parentId, specSelectors } = this.props
+    
+    var pathMethod=[path, method]
+    let operation = specSelectors.getOperation(parentId,pathMethod)
 
-   let parameters = getList(operation, ["parameters"]) 
-   parameters=this.loadValuesFromQry(parameters)
+    let parameters = getList(operation, ["parameters"])     
+    parameters=this.loadValuesFromQry(parameters)
 }
 
 
   componentWillReceiveProps(nextProps) {
     const defaultContentType = "application/json"
-    let { specActions, path, method, operation } = nextProps
+    let { specActions, path, method, parentId,specSelectors } = nextProps
+
+    var pathMethod=[path, method]
+    let operation = specSelectors.getOperation(parentId,pathMethod)
     let producesValue = operation.get("produces_value")
     let produces = operation.get("produces")
     let consumes = operation.get("consumes")
@@ -128,18 +134,26 @@ componentWillMount(){
   }
 
   render() {
-    let {  path, method, operation,  displayOperationId,
+    let {  path, method,  displayOperationId,
       displayRequestDuration,
-      fn,
+      fn,      
       getComponent,
       specActions,
       specSelectors,
       authActions,
       authSelectors,
+      parentId,
       tag, 
       urlHash,
       routeId
     } = this.props
+
+    var pathMethod=[path, method]
+
+    
+    let operation = specSelectors.getOperation(parentId,pathMethod)
+
+console.log('we got it',operation.toJS())
 
     var response = specSelectors.responseFor(path, method)
     var request = specSelectors.requestFor(path, method)
@@ -165,7 +179,7 @@ componentWillMount(){
     const Markdown = getComponent( "Markdown" )
     const CustomHeaders = getComponent('customHeaders')
     //const HistoryBoxes = getComponent('HistoryBoxes', true)
-    var pathMethod=[path, method]
+
 
     let consumesValue = specSelectors.contentTypeValues(pathMethod).get("requestContentType")
     let consumes = specSelectors.operationConsumes(pathMethod)

@@ -2,7 +2,7 @@
 import PropTypes from "prop-types"
 import { HashRouter, Link } from 'react-router-dom'
 
-class ListChildren extends React.Component {
+class ListChildren extends React.PureComponent {
   static propTypes = {
     operations: PropTypes.array.isRequired,
     version: PropTypes.string.isRequired
@@ -17,10 +17,10 @@ class ListChildren extends React.Component {
     var self=this
 
     var ops = operations.map(function(op) {
-      return <li key={op.routeId} className="sidebarChild" title={op.operation.operationId}>
+      return <li key={op.routeId} className="sidebarChild" title={op.operationId}>
         <Link to={op.urlHash} onClick={self.gotoTop}>
           <div className={"methodBtn " + "btn-"+op.method}>{op.method}</div>
-          <div className="childTxt">{op.operation.operationId}</div>
+          <div className="childTxt">{op.operationId}</div>
         </Link>
       </li>
     })
@@ -33,23 +33,36 @@ class ListChildren extends React.Component {
 
 export default class Sidebar extends React.Component {
   static propTypes = {
-    taggedOps: PropTypes.object.isRequired,
     showSidebar:  PropTypes.bool.isRequired,  //showSidebar is an input to propigate/share the click event of the close/hide button from the Operations.jsx file
     toggleSidebarFunc: PropTypes.func.isRequired,
-    specActions: PropTypes.object.isRequired,
     getComponent: PropTypes.func.isRequired,
     getConfigs: PropTypes.func.isRequired,
     specSelectors: PropTypes.object.isRequired,
+    taggedOps: PropTypes.object.isRequired
   }
 
 constructor(props) {
     super(props);
      this.state = {showSidebar: props.showSidebar};
   }
-  
-  render() {
-    let { taggedOps, showSidebar,toggleSidebarFunc, specActions, getComponent,specSelectors } = this.props
 
+shouldComponentUpdate(nextProps, nextState) {
+      let { specSelectors } = this.props
+
+      if(this.props.taggedOps.count() != nextProps.taggedOps.count()){
+        return true
+      }else {
+        return false
+      }
+  }
+
+
+  render() {
+    let { showSidebar, toggleSidebarFunc, getComponent, specSelectors,taggedOps } = this.props
+    
+   // let taggedOps = specSelectors.operationsExtraSlim()
+
+console.log('loading sidebar', taggedOps.toJS())
     const SidebarUrlLoader = getComponent("sidebarUrlLoader", true) 
 
     var baseUrl = window.swashbuckleConfig.baseUrl
@@ -57,11 +70,9 @@ constructor(props) {
 
     var parentNodes = taggedOps
       .entrySeq()
-      .map(function(tagObj, tag) {
-        let operations = tagObj[1]
-          .get("operations")
-          .toJS()
-        return <li key={tagObj[0]} className="sidebarParent">{tagObj[0]}<ListChildren operations={operations} version={version} /></li>
+      .map(function(operations, tag) {
+      
+        return <li key={operations[0]} className="sidebarParent">{operations[0]}<ListChildren operations={operations[1].toJS()} version={version} /></li>
       });
 
     return <HashRouter basename={baseUrl} hashType="noslash">

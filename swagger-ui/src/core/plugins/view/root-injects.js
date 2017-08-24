@@ -5,6 +5,7 @@ import omit from "lodash/omit"
 
 const SystemWrapper = (getSystem, ComponentToWrap ) => class extends Component {
   render() {
+    //console.log('...getSystem()',getSystem())
     return <ComponentToWrap {...getSystem() } {...this.props} {...this.context} />
   }
 }

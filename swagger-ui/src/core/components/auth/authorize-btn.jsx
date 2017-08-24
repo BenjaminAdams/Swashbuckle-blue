@@ -1,21 +1,31 @@
 import React from "react"
 import PropTypes from "prop-types"
+//import AuthorizationPopup from "core/components/auth/authorization-popup.jsx"
 
 export default class AuthorizeBtn extends React.Component {
   static propTypes = {
     className: PropTypes.string,
-    authActions: PropTypes.object.isRequired
+    taggedOps: PropTypes.object.isRequired
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    let { specSelectors } = this.props
+    if (this.props.taggedOps.count() != nextProps.taggedOps.count()) {
+      return true
+    } else {
+      return false
+    }
   }
 
   componentWillMount() {
-    let {  authActions } = this.props
-    var secPayload= localStorage.getItem('securitiesPayload')
-    if(secPayload) {
+    let { authActions } = this.props
+    var secPayload = localStorage.getItem('securitiesPayload')
+    if (secPayload) {
       authActions.authorize(JSON.parse(secPayload))
     }
   }
 
-  onClick =() => {
+  onClick = () => {
     let { authActions, authSelectors } = this.props
     let definitions = authSelectors.definitionsToAuthorize()
 
@@ -23,13 +33,12 @@ export default class AuthorizeBtn extends React.Component {
   }
 
   render() {
-    let { authSelectors, getComponent, authActions } = this.props
+    let { authSelectors, authActions, getComponent, taggedOps } = this.props
     //must be moved out of button component
     const AuthorizationPopup = getComponent("authorizationPopup", true)
 
     let showPopup = !!authSelectors.shownDefinitions()
     let isAuthorized = !!authSelectors.authorized().size
-
 
     return (
       <span>
@@ -39,11 +48,10 @@ export default class AuthorizeBtn extends React.Component {
             <use xlinkHref={ isAuthorized ? "#locked" : "#unlocked" } />
           </svg>
         </button>
-      { showPopup && <AuthorizationPopup /> }
+      { showPopup && <AuthorizationPopup taggedOps={taggedOps} /> }
       </span>
     )
   }
-
 
   static propTypes = {
     getComponent: PropTypes.func.isRequired,

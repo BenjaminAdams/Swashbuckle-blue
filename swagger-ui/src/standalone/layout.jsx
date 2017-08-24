@@ -1,8 +1,8 @@
 import React from "react"
-import PropTypes from "prop-types"
+import PropTypes from "prop-types" 
+
 
 export default class StandaloneLayout extends React.Component {
-
   static propTypes = {
     errSelectors: PropTypes.object.isRequired,
     errActions: PropTypes.object.isRequired,
@@ -15,6 +15,8 @@ export default class StandaloneLayout extends React.Component {
 
   render() {
     let { getComponent, specSelectors } = this.props
+
+    let taggedOps = specSelectors.operationsExtraSlim()
 
     let Container = getComponent("Container")
     let Row = getComponent("Row")
@@ -47,7 +49,7 @@ export default class StandaloneLayout extends React.Component {
             <h4 className="mainLoading">Failed to load config.</h4>
           </div>
         }
-        { !loadingStatus || loadingStatus === "success" && <BaseLayout /> }
+        { !loadingStatus || loadingStatus === "success" && <BaseLayout taggedOps={taggedOps} /> }
         <Row>
           <Col>
             <OnlineValidatorBadge />

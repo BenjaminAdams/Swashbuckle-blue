@@ -15,43 +15,51 @@ export default class Operations extends React.Component {
       layoutActions: PropTypes.object.isRequired,
       authActions: PropTypes.object.isRequired,
       authSelectors: PropTypes.object.isRequired,
-      getConfigs: PropTypes.func.isRequired
+      getConfigs: PropTypes.func.isRequired,
+      taggedOps: PropTypes.object.isRequired
     };
 
-    render() {
-      let { specSelectors, specActions, getComponent, layoutSelectors, layoutActions, authActions, authSelectors, getConfigs, fn } = this.props
+shouldComponentUpdate(nextProps, nextState) {
+      let { specSelectors } = this.props
 
-      let taggedOps = specSelectors.taggedOperations()
+      if(this.props.taggedOps.count() != nextProps.taggedOps.count()){
+        return true
+      }else {
+        return false
+      }
+  }
+
+
+
+    render() {
+      let { specSelectors, specActions, getComponent, layoutSelectors, layoutActions, authActions, authSelectors, getConfigs, fn, taggedOps } = this.props
+
+      //let taggedOps = specSelectors.taggedOperations()
+     // let taggedOps = specSelectors.operationsExtraSlim()     
+
       if (taggedOps.size < 1) return <h3> No operations defined in spec! </h3>
 
       const Operation = getComponent("operation")
       const Collapse = getComponent("Collapse")
 
       var version= specSelectors.getVersion() 
-      let { docExpansion, displayOperationId, displayRequestDuration, maxDisplayedTags, deepLinking } = getConfigs()
+      let { docExpansion, displayOperationId, displayRequestDuration,  deepLinking } = getConfigs()
 
       const isDeepLinkingEnabled = deepLinking && deepLinking !== "false"
 
       let filter = layoutSelectors.currentFilter()
 
-      if (filter && filter !== true) {     
-          taggedOps = taggedOps.filter((tagObj, tag) => {
-            return tag.indexOf(filter) !== -1
-          })        
-      }
-
-      if (maxDisplayedTags && !isNaN(maxDisplayedTags) && maxDisplayedTags >= 0) {
-        taggedOps = taggedOps.slice(0, maxDisplayedTags)
-      }
-
       //var baseUrlSplit = window.location.pathname.split('/swagger/ui/index')
       //var baseUrl = baseUrlSplit[0] + '/swagger/ui/index'
       var baseUrl = window.swashbuckleConfig.baseUrl
 
-      var allTheRoutes = taggedOps.map((tagObj, tag) => {
-          let operations = tagObj.get("operations")
+      var allTheRoutes = taggedOps.map((operations, tag) => {
+
+         // let operations = tagObj.get("operations")
 
           var routes = operations.map(op => {
+
+//console.log('opx=', op.toJS())
 
               return <Route exact
                       path={ op.get('urlHash') + '/:historyParams?' } 
@@ -59,6 +67,11 @@ export default class Operations extends React.Component {
                       render={ x => 
                         <Operation
                           {...op.toObject()}
+                          bensOperationId={op.get('operationId')}
+                          path={op.get('path')}
+                          parentId={op.get('parentId')}
+                          //urlHash={op.get('urlHash')}
+                          method={op.get('method')}
                           key={x.location.pathname} //we have to pass this so it re-renders between historybox items
                           tag={tag}
                           displayOperationId={true}
