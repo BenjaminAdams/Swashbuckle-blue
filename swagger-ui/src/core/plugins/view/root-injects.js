@@ -6,6 +6,9 @@ import omit from "lodash/omit"
 const SystemWrapper = (getSystem, ComponentToWrap ) => class extends Component {
   render() {
     //console.log('...getSystem()',getSystem())
+    // this.props.state=this.props.state.delete('spec')
+     //this.props.state['spec'] =null
+     //this.props.state._root.entries[1]=null
     return <ComponentToWrap {...getSystem() } {...this.props} {...this.context} />
   }
 }

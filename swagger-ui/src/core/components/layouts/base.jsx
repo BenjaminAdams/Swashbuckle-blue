@@ -1,7 +1,7 @@
 import React from "react"
 import PropTypes from "prop-types"
 import { HashRouter, Route, Link } from 'react-router-dom'
-import {History} from "core/components/history"
+import { History } from "core/components/history"
 
 export default class BaseLayout extends React.Component {
   static propTypes = {
@@ -18,41 +18,31 @@ export default class BaseLayout extends React.Component {
   constructor(props) {
     super(props);
     this.state = { showSidebar: true, leftPadding: '250px' };
-    this.loadedOnce=false
+    this.loadedOnce = false
+
+    console.log('props in base', props)
   }
 
-//   shouldComponentUpdate(nextProps, nextState) {
-//       console.log('nextProps=',nextProps)
-//       console.log('nextState=',nextState)  
-//       if(this.loadedOnce===false) {
-//           this.loadedOnce=true
-//           return true
-//       }else {
-//           console.log('NOT RELOADING')
-//           return false
-//       }
-//   }
+  shouldComponentUpdate(nextProps, nextState) {
+    //       console.log('nextProps=',nextProps)
+    //       console.log('nextState=',nextState)  
+    let { specSelectors } = this.props
 
-
-shouldComponentUpdate(nextProps, nextState) {
-      let { specSelectors } = this.props
-
-      if(this.props.taggedOps.count() != nextProps.taggedOps.count()){
-        return true
-      }else {
-        return false
-      }
+    if (this.props.taggedOps.count() != nextProps.taggedOps.count()) {
+      return true
+    } else {
+      return false
+    }
   }
-
 
   toggleSidebar = () => {
-    this.state.showSidebar= !this.state.showSidebar//we have to set this before we call setState because its not changing it in local scope
+    this.state.showSidebar = !this.state.showSidebar //we have to set this before we call setState because its not changing it in local scope
     this.setState({ showSidebar: this.state.showSidebar });
 
     if (this.state.showSidebar === true) {
-        this.setState({ leftPadding: '250px' });
-    } else { 
-        this.setState({ leftPadding: '0px' });  
+      this.setState({ leftPadding: '250px' });
+    } else {
+      this.setState({ leftPadding: '0px' });
     }
   }
 
@@ -87,7 +77,7 @@ shouldComponentUpdate(nextProps, nextState) {
       return <h4>No spec provided.</h4>
     }
 
-console.log('rendering the base.jsx')
+    console.log('rendering the base.jsx')
 
     //let taggedOps = specSelectors.operationsExtraSlim()
 

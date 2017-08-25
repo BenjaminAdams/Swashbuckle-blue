@@ -12,8 +12,7 @@ export default class Execute extends Component {
     method: PropTypes.string.isRequired,
     onExecute: PropTypes.func,
     urlHash:PropTypes.string.isRequired,
-    routeId:PropTypes.string.isRequired,
-                 
+    routeId:PropTypes.string.isRequired,                 
   }
 
   onClick=()=>{

@@ -106,9 +106,9 @@ module.exports = function SwaggerUI(opts) {
         layout: constructorConfig.layout,
         filter: constructorConfig.filter
       },
-      spec: {
-        spec: "",
-        url: constructorConfig.url
+     spec: {
+       spec: "",
+       url: constructorConfig.url
       }
     }
   })

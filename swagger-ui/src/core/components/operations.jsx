@@ -58,8 +58,7 @@ shouldComponentUpdate(nextProps, nextState) {
          // let operations = tagObj.get("operations")
 
           var routes = operations.map(op => {
-
-//console.log('opx=', op.toJS())
+              var response = specSelectors.responseFor(op.get('path'), op.get('method'))
 
               return <Route exact
                       path={ op.get('urlHash') + '/:historyParams?' } 
@@ -74,6 +73,8 @@ shouldComponentUpdate(nextProps, nextState) {
                           method={op.get('method')}
                           key={x.location.pathname} //we have to pass this so it re-renders between historybox items
                           tag={tag}
+                          response={response}
+                          taggedOps={taggedOps}
                           displayOperationId={true}
                           displayRequestDuration={true}
                           specActions={ specActions }

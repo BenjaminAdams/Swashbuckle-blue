@@ -1,10 +1,10 @@
 import React, { PureComponent } from "react"
 import { List, OrderedMap, fromJS } from 'immutable'
 import PropTypes from "prop-types"
-import { getList,atou } from "core/utils"
+import { getList, atou } from "core/utils"
 import * as CustomPropTypes from "core/proptypes"
-import {getXhrHistory} from 'core/ls-actions'
-import {HistoryBoxes} from "core/components/history-boxes"
+import { getXhrHistory } from 'core/ls-actions'
+import { HistoryBoxes } from "core/components/history-boxes"
 //import HistoryBoxes from 'core/components/history-boxes.jsx'
 
 export default class Operation extends PureComponent {
@@ -21,12 +21,15 @@ export default class Operation extends PureComponent {
     specSelectors: PropTypes.object.isRequired,
     layoutActions: PropTypes.object.isRequired,
     layoutSelectors: PropTypes.object.isRequired,
+    response: PropTypes.object,
     fn: PropTypes.object.isRequired,
     tag: PropTypes.string,
-    qryParamsFromRouter: PropTypes.object
+    qryParamsFromRouter: PropTypes.object,
+    taggedOps: PropTypes.object.isRequired
   }
 
   static defaultProps = {
+    response: null,
     displayOperationId: false,
     displayRequestDuration: false
   }
@@ -35,35 +38,53 @@ export default class Operation extends PureComponent {
     super(props, context)
     this.state = {
       tryItOutEnabled: true,
+      response: props.response
       //customHeaders : []
     }
   }
 
-componentWillMount(){
-    let {  path, method, parentId, specSelectors } = this.props
-    
-    var pathMethod=[path, method]
-    let operation = specSelectors.getOperation(parentId,pathMethod)
+  //not working here
+  // shouldComponentUpdate(nextProps, nextState) {
+  //     let { specSelectors } = this.props
+  //     if(this.props.taggedOps.count() != nextProps.taggedOps.count()){
+  //       return true
+  //     }else {
+  //       return false
+  //     }
+  // }
 
-    let parameters = getList(operation, ["parameters"])     
-    parameters=this.loadValuesFromQry(parameters)
-}
+  componentWillMount() {
+    let { path, method, parentId, specSelectors } = this.props
 
+    var pathMethod = [path, method]
+    let operation = specSelectors.getOperation(parentId, pathMethod)
+
+    let parameters = getList(operation, ["parameters"])
+    parameters = this.loadValuesFromQry(parameters)
+  }
 
   componentWillReceiveProps(nextProps) {
     const defaultContentType = "application/json"
-    let { specActions, path, method, parentId,specSelectors } = nextProps
+    let { specActions, path, method, parentId, specSelectors } = nextProps
 
-    var pathMethod=[path, method]
-    let operation = specSelectors.getOperation(parentId,pathMethod)
+    var pathMethod = [path, method]
+    let operation = specSelectors.getOperation(parentId, pathMethod)
     let producesValue = operation.get("produces_value")
     let produces = operation.get("produces")
     let consumes = operation.get("consumes")
     let consumesValue = operation.get("consumes_value")
 
-   // if(nextProps.response !== this.props.response) {  //moved this out of operations.jsx
-   //   this.setState({ executeInProgress: false })
-   // }
+    var response = specSelectors.responseFor(path, method)
+    if (response) {
+      this.setState({
+        response: response,
+        executeInProgress: false
+      })
+    }
+
+    //  if(nextProps.response !== this.props.response) {  //moved this out of operations.jsx
+    //    this.setState({ executeInProgress: false })
+    //  }
 
     if (producesValue === undefined) {
       producesValue = produces && produces.size ? produces.first() : defaultContentType
@@ -76,86 +97,87 @@ componentWillMount(){
     }
   }
 
-  onChangeConsumesWrapper = ( val ) => {
+  onChangeConsumesWrapper = (val) => {
     let { specActions: { changeConsumesValue }, path, method } = this.props
 
-    var onChangeKey=[ path, method ]
+    var onChangeKey = [path, method]
     changeConsumesValue(onChangeKey, val)
   }
 
   loadValuesFromQry = (parameters) => {
     let { specActions: { changeParam, changeConsumesValue }, path, method, qryParamsFromRouter } = this.props
-    var onChangeKey=[ path, method ]
+    var onChangeKey = [path, method]
 
     if (!parameters || !parameters.count() || !qryParamsFromRouter || !qryParamsFromRouter.historyParams) return parameters
 
     var slimParameters = fromJS(JSON.parse(atou(qryParamsFromRouter.historyParams)))
 
-    parameters= parameters.map( (x, index) => {
-          var name = x.get('name')     
-          var paramFromSlim= slimParameters.find(y=>y.get('name')===name)
+    parameters = parameters.map((x, index) => {
+      var name = x.get('name')
+      var paramFromSlim = slimParameters.find(y => y.get('name') === name)
 
-          if(paramFromSlim) {
-            var isXml=false
-            var newVal= paramFromSlim.get('value')
-            if(!newVal) {
-              newVal= paramFromSlim.get('value_xml')
-              if(newVal) {
-                isXml = true
-                changeConsumesValue(onChangeKey, 'application/xml')
-              }else {
-                newVal = ''
-              }
-            }
+      if (paramFromSlim) {
+        var isXml = false
+        var newVal = paramFromSlim.get('value')
+        if (!newVal) {
+          newVal = paramFromSlim.get('value_xml')
+          if (newVal) {
+            isXml = true
+            changeConsumesValue(onChangeKey, 'application/xml')
+          } else {
+            newVal = ''
+          }
+        }
 
-            x= x.set('value', newVal)
-            changeParam(onChangeKey, name, newVal, isXml)
-         
-          }      
-          return x
-      })
+        x = x.set('value', newVal)
+        changeParam(onChangeKey, name, newVal, isXml)
+
+      }
+      return x
+    })
     return parameters
   }
 
-  onTryoutClick =() => {
-    this.setState({tryItOutEnabled: !this.state.tryItOutEnabled})
+  onTryoutClick = () => {
+    this.setState({ tryItOutEnabled: !this.state.tryItOutEnabled })
   }
 
-  onCancelClick =() => {
+  onCancelClick = () => {
     let { specActions, path, method } = this.props
-    this.setState({tryItOutEnabled: !this.state.tryItOutEnabled})
+    this.setState({ tryItOutEnabled: !this.state.tryItOutEnabled })
     specActions.clearValidateParams([path, method])
   }
 
-  onChangeProducesWrapper = ( val ) => this.props.specActions.changeProducesValue([this.props.path,this.props.method], val)
+  onChangeProducesWrapper = (val) => this.props.specActions.changeProducesValue([this.props.path, this.props.method], val)
 
   onExecute = () => {
     this.setState({ executeInProgress: true })
   }
 
   render() {
-    let {  path, method,  displayOperationId,
+    let {
+      path,
+      method,
+      displayOperationId,
       displayRequestDuration,
-      fn,      
+      fn,
       getComponent,
       specActions,
       specSelectors,
       authActions,
       authSelectors,
       parentId,
-      tag, 
+      //response, //moved to state
+      tag,
       urlHash,
       routeId
     } = this.props
 
-    var pathMethod=[path, method]
+    var pathMethod = [path, method]
 
-    
-    let operation = specSelectors.getOperation(parentId,pathMethod)
+    let operation = specSelectors.getOperation(parentId, pathMethod)
 
-console.log('we got it',operation.toJS())
-
-    var response = specSelectors.responseFor(path, method)
+    //var response = specSelectors.responseFor(path, method)
     var request = specSelectors.requestFor(path, method)
 
     let summary = operation.get("summary")
@@ -169,37 +191,36 @@ console.log('we got it',operation.toJS())
     let operationId = operation.get("__originalOperationId")
     let operationScheme = specSelectors.operationScheme(path, method)
     const Responses = getComponent("responses")
-    const Parameters = getComponent( "parameters" )
-    const Execute = getComponent( "execute" )
-    const ContentType = getComponent( "contentType" )
-    const Clear = getComponent( "clear" )
-    const AuthorizeOperationBtn = getComponent( "authorizeOperationBtn" )
+    const Parameters = getComponent("parameters")
+    const Execute = getComponent("execute")
+    const ContentType = getComponent("contentType")
+    const Clear = getComponent("clear")
+    const AuthorizeOperationBtn = getComponent("authorizeOperationBtn")
     const JumpToPath = getComponent("JumpToPath", true)
-    const Collapse = getComponent( "Collapse" )
-    const Markdown = getComponent( "Markdown" )
+    const Collapse = getComponent("Collapse")
+    const Markdown = getComponent("Markdown")
     const CustomHeaders = getComponent('customHeaders')
     //const HistoryBoxes = getComponent('HistoryBoxes', true)
-
 
     let consumesValue = specSelectors.contentTypeValues(pathMethod).get("requestContentType")
     let consumes = specSelectors.operationConsumes(pathMethod)
     produces = produces && produces.size ? produces : Responses.defaultProps.produces
 
     // Merge in Live Response
-    if(response && response.size > 0) {
-      let notDocumented = !responses.get(String(response.get("status")))
-      response = response.set("notDocumented", notDocumented)
-    }
+    // if (response && response.size > 0) {
+    //   let notDocumented = !responses.get(String(response.get("status")))
+    //   response = response.set("notDocumented", notDocumented)
+    // }
 
     let { tryItOutEnabled } = this.state
-    tryItOutEnabled= true  //always enable TryItOut
+    tryItOutEnabled = true //always enable TryItOut
     let shown = true
-    let onChangeKey = [ path, method ] // Used to add values to _this_ operation ( indexed by path and method )
+    let onChangeKey = [path, method] // Used to add values to _this_ operation ( indexed by path and method )
 
-   var customHeaders= specSelectors.getCustomHeader(pathMethod)
+    var customHeaders = specSelectors.getCustomHeader(pathMethod)
 
     return (
-        <div className={deprecated ? "opblock opblock-deprecated" : shown ? `opblock opblock-${method} is-open` : `opblock opblock-${method}`} id={operationId} >
+      <div className={deprecated ? "opblock opblock-deprecated" : shown ? `opblock opblock-${method} is-open` : `opblock opblock-${method}`} id={operationId} >
           <div className={`opblock-summary opblock-summary-${method}`} >
               <span className="opblock-summary-method">{method.toUpperCase()}</span>
               <span className={ deprecated ? "opblock-summary-path__deprecated" : "opblock-summary-path" } >
@@ -324,7 +345,7 @@ console.log('we got it',operation.toJS())
                   <Responses
                     responses={ responses }
                     request={ request }
-                    tryItOutResponse={ response }
+                    tryItOutResponse={ this.state.response }
                     getComponent={ getComponent }
                     specSelectors={ specSelectors }
                     specActions={ specActions }
