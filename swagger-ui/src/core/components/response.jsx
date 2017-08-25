@@ -39,7 +39,8 @@ export default class Response extends React.Component {
     getComponent: PropTypes.func.isRequired,
     specSelectors: PropTypes.object.isRequired,
     fn: PropTypes.object.isRequired,
-    contentType: PropTypes.string
+    contentType: PropTypes.string,
+    taggedOps: PropTypes.object.isRequired
   }
 
   static defaultProps = {
@@ -54,7 +55,8 @@ export default class Response extends React.Component {
       fn,
       getComponent,
       specSelectors,
-      contentType
+      contentType,
+      taggedOps
     } = this.props
 
     let { inferSchema } = fn
@@ -65,7 +67,7 @@ export default class Response extends React.Component {
     const Headers = getComponent("headers")
     const HighlightCode = getComponent("highlightCode")
     const ModelExample = getComponent("modelExample")
-    const Markdown = getComponent( "Markdown" )
+    const Markdown = getComponent( "Markdown", false )
 
     let sampleResponse = schema ? getSampleSchema(schema, contentType, { includeReadOnly: true }) : null
     let example = getExampleComponent( sampleResponse, examples, HighlightCode )
@@ -86,6 +88,7 @@ export default class Response extends React.Component {
               getComponent={ getComponent }
               specSelectors={ specSelectors }
               schema={ fromJS(schema) }
+              taggedOps={taggedOps}
               example={ example }/>
           ) : null}
 

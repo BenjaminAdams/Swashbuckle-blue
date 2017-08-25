@@ -32,7 +32,7 @@ export default class ParamBody extends PureComponent {
     super(props, context)
 
     this.state = {
-      isEditBox: false,
+      isEditBox: true,
       value: "",
       forceRerender: false            
     }

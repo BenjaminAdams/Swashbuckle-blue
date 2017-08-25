@@ -7,7 +7,17 @@ export default class ModelComponent extends Component {
     name: PropTypes.string,
     getComponent: PropTypes.func.isRequired,
     specSelectors: PropTypes.object.isRequired,
-    expandDepth: PropTypes.number
+    expandDepth: PropTypes.number,
+    taggedOps: PropTypes.object.isRequired
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    let { specSelectors, response } = this.props
+    if (this.props.taggedOps.count() != nextProps.taggedOps.count()) {
+      return true
+    } else {
+      return false
+    } 
   }
 
   render(){

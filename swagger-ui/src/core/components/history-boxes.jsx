@@ -2,15 +2,33 @@ import React from "react"
 import PropTypes from "prop-types"
 import { fromJS } from "immutable"
 import ImPropTypes from "react-immutable-proptypes"
-import {getXhrHistory, clearXhrHistory} from 'core/ls-actions'
+import { getXhrHistory, clearXhrHistory } from 'core/ls-actions'
 import { atou, timeAgo, getHistoryLink } from 'core/utils'
-import { HashRouter,Link } from 'react-router-dom'
+import { HashRouter, Link } from 'react-router-dom'
 
 export class HistoryBoxes extends React.PureComponent {
-    static propTypes = {
-      routeId:  PropTypes.string.isRequired
-    }
+  static propTypes = {
+    routeId: PropTypes.string.isRequired,
+    response: PropTypes.object,
+    taggedOps: PropTypes.object.isRequired,
+    hst: PropTypes.object
+  }
 
+  static defaultProps = {
+    hst: fromJS({})
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    let { specSelectors, response } = this.props
+
+    if (this.props.taggedOps.count() != nextProps.taggedOps.count()) {
+      return true
+    } else if (nextProps.response !== this.props.response) {
+      return true
+    } else {
+      return false
+    }
+  }
 
   componentDidMount() {
     timeAgo(this.el)
@@ -21,18 +39,20 @@ export class HistoryBoxes extends React.PureComponent {
   }
 
   render() {
-    let {routeId} = this.props
-    var hst=fromJS(getXhrHistory())
+    let { routeId, hst } = this.props
+    //var hst = fromJS(getXhrHistory())
 
-    var hstDivs= hst.filter(x=>x.get('routeId') === routeId).map((x, index) => {
-      var req= x.get('request')
-      var res= x.get('response')
+console.log('rendering hst')
+
+    var hstDivs = hst.filter(x => x.get('routeId') === routeId).map((x, index) => {
+      var req = x.get('request')
+      var res = x.get('response')
       var lowerMethod = req.get('method').toLowerCase()
-      var theLink= getHistoryLink(x)
-      var iconColor= 'green'
-      
-      if(!res.get('status') || res.get('status') > 299 || res.get('status') === 'err' ){
-        iconColor='red'
+      var theLink = getHistoryLink(x)
+      var iconColor = 'green'
+
+      if (!res.get('status') || res.get('status') > 299 || res.get('status') === 'err') {
+        iconColor = 'red'
       }
 
       return <Link to={theLink} key={index} className={iconColor} >
@@ -40,10 +60,10 @@ export class HistoryBoxes extends React.PureComponent {
         <span className="timeago" title={x.get('dateAdded')}>{x.get('dateAdded')}</span> | <span>{x.get('duration')}ms</span> | <span>{res.get('status')}</span>
       </div>
       </Link>
-      
-     }).toArray()
- 
-     if(!hstDivs || hstDivs.length===0) return <div></div>
+
+    }).toArray()
+
+    if (!hstDivs || hstDivs.length === 0) return <div></div>
 
     return (
       <div>

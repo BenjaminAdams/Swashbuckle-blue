@@ -167,6 +167,7 @@ export default class Operation extends PureComponent {
       authActions,
       authSelectors,
       parentId,
+      taggedOps,
       //response, //moved to state
       tag,
       urlHash,
@@ -191,14 +192,14 @@ export default class Operation extends PureComponent {
     let operationId = operation.get("__originalOperationId")
     let operationScheme = specSelectors.operationScheme(path, method)
     const Responses = getComponent("responses")
-    const Parameters = getComponent("parameters")
+    const Parameters = getComponent("parameters", false)
     const Execute = getComponent("execute")
     const ContentType = getComponent("contentType")
     const Clear = getComponent("clear")
     const AuthorizeOperationBtn = getComponent("authorizeOperationBtn")
     const JumpToPath = getComponent("JumpToPath", true)
     const Collapse = getComponent("Collapse")
-    const Markdown = getComponent("Markdown")
+    const Markdown = getComponent("Markdown", false)
     const CustomHeaders = getComponent('customHeaders')
     //const HistoryBoxes = getComponent('HistoryBoxes', true)
 
@@ -269,6 +270,7 @@ export default class Operation extends PureComponent {
                 summary={summary}
                 fn={fn}
                 tag={tag}
+                taggedOps={taggedOps}
                 getComponent={ getComponent }
                 specActions={ specActions }
                 specSelectors={ specSelectors }
@@ -336,7 +338,7 @@ export default class Operation extends PureComponent {
               
             </div>
 
-            <HistoryBoxes routeId={routeId} />
+            <HistoryBoxes hst={fromJS(getXhrHistory())} routeId={routeId} response={this.state.response} taggedOps={taggedOps} />
             
 
             {this.state.executeInProgress ? <div className="loading-container"><div className="loading"></div></div> : null}
@@ -344,9 +346,11 @@ export default class Operation extends PureComponent {
               { !responses ? null :
                   <Responses
                     responses={ responses }
+                    response={this.state.response}
                     request={ request }
                     tryItOutResponse={ this.state.response }
                     getComponent={ getComponent }
+                    taggedOps={taggedOps}
                     specSelectors={ specSelectors }
                     specActions={ specActions }
                     produces={ produces }

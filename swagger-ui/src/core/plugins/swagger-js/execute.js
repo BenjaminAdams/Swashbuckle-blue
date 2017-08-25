@@ -70,8 +70,6 @@ export function buildRequest({
 }) {
   parameterBuilders = parameterBuilders || PARAMETER_BUILDERS
 
-console.log('custom headers in buildReq=',customHeaders)
-
   // Base Template
   let req = {
     url: baseUrl({spec, scheme, contextUrl}),

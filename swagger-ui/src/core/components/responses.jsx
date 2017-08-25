@@ -16,7 +16,8 @@ export default class Responses extends React.Component {
     specActions: PropTypes.object.isRequired,
     pathMethod: PropTypes.array.isRequired,
     displayRequestDuration: PropTypes.bool.isRequired,
-    fn: PropTypes.object.isRequired
+    fn: PropTypes.object.isRequired,
+    taggedOps: PropTypes.object.isRequired
   }
 
   static defaultProps = {
@@ -26,20 +27,28 @@ export default class Responses extends React.Component {
     consumes: fromJS(["application/json"]),
     displayRequestDuration: false
   }
- 
 
+  shouldComponentUpdate(nextProps, nextState) {
+    let { specSelectors, response } = this.props
+
+    if (this.props.taggedOps.count() != nextProps.taggedOps.count()) {
+      return true
+    } else if (nextProps.response !== this.props.response) {
+      return true
+    } else {
+      return false
+    }
+  }
 
   render() {
-    let { responses, request, tryItOutResponse, getComponent, specSelectors, fn, producesValue, displayRequestDuration,pathMethod } = this.props
-    let defaultCode = defaultStatusCode( responses )
-    const ContentType = getComponent( "contentType" )
-    const LiveResponse = getComponent( "liveResponse" )
-    const Response = getComponent( "response" )
-
+    let { responses, request, tryItOutResponse, getComponent, specSelectors, fn, producesValue, displayRequestDuration, pathMethod, taggedOps } = this.props
+    let defaultCode = defaultStatusCode(responses)
+    const ContentType = getComponent("contentType")
+    const LiveResponse = getComponent("liveResponse")
+    const Response = getComponent("response")
 
     return (
       <div className="responses-wrapper">
-
         <div className="responses-inner">
           {
             !tryItOutResponse ? null
@@ -71,6 +80,7 @@ export default class Responses extends React.Component {
                               fn={fn}
                               className={ className }
                               code={ code }
+                              taggedOps={taggedOps}
                               response={ response }
                               specSelectors={ specSelectors }
                               contentType={ producesValue }

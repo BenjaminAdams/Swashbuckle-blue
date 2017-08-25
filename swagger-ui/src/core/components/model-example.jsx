@@ -7,7 +7,8 @@ export default class ModelExample extends React.Component {
     specSelectors: PropTypes.object.isRequired,
     schema: PropTypes.object.isRequired,
     example: PropTypes.any.isRequired,
-    isExecute: PropTypes.bool
+    isExecute: PropTypes.bool,
+    taggedOps: PropTypes.object.isRequired
   }
 
   constructor(props, context) {
@@ -27,7 +28,7 @@ export default class ModelExample extends React.Component {
   }
 
   render() {
-    let { getComponent, specSelectors, schema, example, isExecute } = this.props
+    let { getComponent, specSelectors, schema, example, isExecute,taggedOps } = this.props
     const ModelWrapper = getComponent("ModelWrapper")
 
     return <div>
@@ -47,6 +48,7 @@ export default class ModelExample extends React.Component {
         {
            this.state.activeTab === "model" && <ModelWrapper schema={ schema }
                                                      getComponent={ getComponent }
+                                                     taggedOps={taggedOps}
                                                      specSelectors={ specSelectors }
                                                      expandDepth={ 5 } />
         }

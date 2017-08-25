@@ -21,17 +21,28 @@ export default class Parameters extends Component {
     summary: PropTypes.string,
     onChangeConsumesWrapper: PropTypes.func.isRequired,
     operationId: PropTypes.string,
-    tag: PropTypes.string
+    tag: PropTypes.string,
+    taggedOps: PropTypes.object.isRequired,
   }
 
   static defaultProps = {
     onTryoutClick: Function.prototype,
     onCancelClick: Function.prototype,
-    tryItOutEnabled: false,
+    tryItOutEnabled: true,
     onChangeKey: [],
     summary: '',
     operationId: ''
   }
+
+  //wont work here
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   let { specSelectors, response } = this.props
+  //   if (this.props.taggedOps.count() != nextProps.taggedOps.count()) {
+  //     return true
+  //   } else {
+  //     return false
+  //   }
+  // }
 
   onChange = (param, value, isXml) => {
     let { specActions: { changeParam }, onChangeKey} = this.props
@@ -52,6 +63,7 @@ export default class Parameters extends Component {
       pathMethod,
       onChangeConsumesWrapper,
       operationId, 
+      taggedOps,
       tag
     } = this.props
 
@@ -80,6 +92,7 @@ export default class Parameters extends Component {
                     <ParameterRow fn={ fn }
                       getComponent={ getComponent }
                       param={ parameter }
+                      taggedOps={taggedOps}
                       key={ parameter.get( "name" ) }
                       onChange={ this.onChange }
                       onChangeConsumes={onChangeConsumesWrapper}
