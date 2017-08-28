@@ -19,7 +19,8 @@ export default class ParamBody extends PureComponent {
     specSelectors: PropTypes.object.isRequired,
     pathMethod: PropTypes.array.isRequired,
     value: PropTypes.string,
-    taggedOps: PropTypes.object.isRequired
+    taggedOps: PropTypes.object.isRequired,
+    changeShowDocsFor:PropTypes.func
   };
 
   static defaultProp = {
@@ -35,26 +36,55 @@ export default class ParamBody extends PureComponent {
     this.state = {
       isEditBox: true,
       value: "",
-      forceRerender: false            
+      forceRerender: false
     }
 
-    this.renderedOnce=false
+    this.renderedOnce = false
+    this.userInteracts = this.userInteracts.bind(this)
   }
 
   // shouldComponentUpdate(nextProps, nextState) {
   //   let { specSelectors, response } = this.props
-
   //   if(this.renderedOnce===false) {
   //     this.renderedOnce=true
   //     return true
   //   }
-
   //   if (this.props.taggedOps.count() != nextProps.taggedOps.count()) {
   //     return true
   //   } else {
   //     return false
   //   }
   // }
+
+  userInteracts = e => {
+    const { changeShowDocsFor } = this.props
+    var lineNumber = this.getLineNumber(e.target)
+    var lineTxt = this.getLineOfTxt(e.target, lineNumber)
+    var variableName=this.extractVariableName(lineTxt)
+    console.log('variableName=',variableName)
+    if(variableName) {
+      changeShowDocsFor(variableName)
+    }
+  }
+
+  getLineOfTxt(textarea, lineNumber) {
+    var splits = textarea.value.split("\n");
+    return splits[lineNumber-1]
+  }
+
+  getLineNumber(textarea) {
+    return textarea.value.substr(0, textarea.selectionStart).split("\n").length;
+  }
+
+  extractVariableName(str) {
+    var ret = "";
+    if (/"/.test(str)) {
+      ret = str.match(/"(.*?)"/)[1];
+    } else {
+      ret = str;
+    }
+    return ret;
+  }
 
   componentDidMount() {
     this.updateValues.call(this, this.props)
@@ -65,9 +95,9 @@ export default class ParamBody extends PureComponent {
   }
 
   updateValues = (props) => {
-    let { specSelectors, pathMethod, param, isExecute, consumesValue="" } = props
+    let { specSelectors, pathMethod, param, isExecute, consumesValue = "" } = props
     let parameter = specSelectors ? specSelectors.getParameter(pathMethod, param.get("name")) : {}
-    if(!parameter){
+    if (!parameter) {
       //console.log('param was null', props)
       return;
     }
@@ -75,43 +105,45 @@ export default class ParamBody extends PureComponent {
     let isJson = /json/i.test(consumesValue)
     let paramValue = isXml ? parameter.get("value_xml") : parameter.get("value")
 
-    if ( paramValue !== undefined ) {
+    if (paramValue !== undefined) {
       let val = !paramValue && isJson ? "{}" : paramValue
       this.setState({ value: val })
-      this.onChange(val, {isXml: isXml, isEditBox: isExecute})
+      this.onChange(val, { isXml: isXml, isEditBox: isExecute })
     } else {
       if (isXml) {
-        this.onChange(this.sample("xml"), {isXml: isXml, isEditBox: isExecute})
+        this.onChange(this.sample("xml"), { isXml: isXml, isEditBox: isExecute })
       } else {
-        this.onChange(this.sample(), {isEditBox: isExecute})
+        this.onChange(this.sample(), { isEditBox: isExecute })
       }
     }
   }
 
   sample = (xml) => {
-    let { param, fn:{inferSchema} } = this.props
+    let { param, fn: { inferSchema } } = this.props
     let schema = inferSchema(param.toJS())
 
     return getSampleSchema(schema, xml)
   }
 
   onChange = (value, { isEditBox, isXml }) => {
-    this.setState({value, isEditBox, forceRerender:true})
+    this.setState({ value, isEditBox, forceRerender: true })
     this._onChange(value, isXml)
   }
 
-  _onChange = (val, isXml) => { (this.props.onChange || NOOP)(this.props.param, val, isXml) }
+  _onChange = (val, isXml) => {
+    (this.props.onChange || NOOP)(this.props.param, val, isXml)
+  }
 
   //this is fired when the user changes the contents of the textbox
   handleOnChange = e => {
-    const {consumesValue} = this.props
+    const { consumesValue } = this.props
     const isJson = /json/i.test(consumesValue)
     const isXml = /xml/i.test(consumesValue)
     const inputValue = isJson ? e.target.value.trim() : e.target.value
-    this.onChange(inputValue, {isXml})
+    this.onChange(inputValue, { isXml })
   }
 
-  toggleIsEditBox = () => this.setState( state => ({isEditBox: !state.isEditBox}))
+  toggleIsEditBox = () => this.setState(state => ({ isEditBox: !state.isEditBox }))
 
   render() {
     let {
@@ -121,7 +153,7 @@ export default class ParamBody extends PureComponent {
       specSelectors,
       pathMethod,
       getComponent,
-     // value
+      // value
     } = this.props
 
     const Button = getComponent("Button")
@@ -134,14 +166,19 @@ export default class ParamBody extends PureComponent {
     let consumesValue = specSelectors.contentTypeValues(pathMethod).get("requestContentType")
     let consumes = this.props.consumes && this.props.consumes.size ? this.props.consumes : ParamBody.defaultProp.consumes
 
-   let { value, isEditBox } = this.state
-  //  let { isEditBox } = this.state
+    let { value, isEditBox } = this.state
+    //  let { isEditBox } = this.state
 
     return (
       <div className="body-param">
         {
           isEditBox && isExecute
-            ? <TextArea className={ "body-param__text" + ( errors.count() ? " invalid" : "")} value={value} onChange={ this.handleOnChange }/>
+            ? <TextArea className={ "body-param__text" + ( errors.count() ? " invalid" : "")} 
+            value={value} 
+            onChange={ this.handleOnChange } 
+            onClick={this.userInteracts} 
+            onKeyUp={this.userInteracts}
+            />
             : (value && <HighlightCode className="body-param__example"
                                value={ value }/>)
         }

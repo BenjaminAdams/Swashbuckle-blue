@@ -1,79 +1,51 @@
-table
-{
+table {
     width: 100%;
     padding: 0 10px;
     border-collapse: collapse;
-
-    &.model
-    {
-        tbody
-        {
-            tr
-            {
-                td
-                {
+    &.model {
+        tbody {
+            tr {
+                td {
                     padding: 0;
-
                     vertical-align: top;
-
-                    &:first-of-type
-                    {
+                    &:first-of-type {
                         width: 100px;
-                        padding:0px 0 0 40px;
+                        padding: 0px 0 0 40px;
                     }
                 }
             }
         }
     }
-
-    &.headers
-    {
-        td
-        {
+    &.headers {
+        td {
             font-size: 12px;
             font-weight: 300;
-
             vertical-align: middle;
-
             @include text_code();
         }
     }
-
-    tbody
-    {
-        tr
-        {
-            td
-            {
+    tbody {
+        tr {
+            td {
                 padding: 10px 0 0 0;
                 border-bottom: 20px solid transparent;
                 vertical-align: top;
-
-                &:first-of-type
-                {
+                &:first-of-type {
                     width: 20%;
                     padding: 10px 0;
                 }
             }
         }
     }
-
-    thead
-    {
-        tr
-        {
+    thead {
+        tr {
             th,
-            td
-            {
+            td {
                 font-size: 12px;
                 font-weight: bold;
-
                 padding: 12px 0;
-
                 text-align: left;
-
                 border-bottom: 1px solid rgba(#3b4151, .2);
-
                 @include text_body();
             }
         }
@@ -81,88 +53,90 @@ table
 }
 
 .propName {
-    font-size:18px;
-    color:green;
+    font-size: 18px;
+    color: green;
 }
 
 .parameters-col_name {
+    position: relative;
     display: inline-block;
     width: 15%;
     vertical-align: top;
     padding-top: 20px;
 }
 
-.parameters-col_description
-{
+.parameters-col_description {
     display: inline-block;
     width: 85%;
-
-    p
-    {
-        font-size: 14px;     
+    p {
+        font-size: 14px;
         margin: 0;
-
     }
-
-    input[type=text]
-    {
+    input[type=text] {
         width: 100%;
         max-width: 340px;
     }
 }
 
-.parameter__name
-{
+.parameter__name {
     font-size: 16px;
     font-weight: normal;
-
     @include text_headline();
 }
 
-    .required
-    {
-        font-weight: bold;
-        font-size: 12px !important;
-        color: rgba(#f00, .6) !important;
-    }
+.required {
+    font-weight: bold;
+    font-size: 12px !important;
+    color: rgba(#f00, .6) !important;
+}
 
-
-.parameter__in
-{
+.parameter__in {
     font-size: 12px;
     font-style: italic;
-
     @include text_code(#888);
 }
 
-
-.table-container
-{
+.table-container {
     padding: 0 20px 20px 20px;
 }
 
-
 .addNewHeader {
     font-size: 12px;
-    cursor: pointer;
-    //  font-family: Arial, "Times New Roman", Georgia, Serif;
+    cursor: pointer; //  font-family: Arial, "Times New Roman", Georgia, Serif;
     color: #3b4151;
     user-select: none;
-
     .plusIcon {
         border-radius: 20px;
         background: #49cc90;
-        color:white;
+        color: white;
         padding: 0px 4px;
     }
 }
 
 .customHeaderList {
-    width:100%; 
+    width: 100%;
     list-style-type: none;
-    padding-left:15px;
-
+    padding-left: 15px;
     input {
-        width:35% !important;
+        width: 35% !important;
+    }
+}
+
+.docsPopup {
+    position: absolute;
+    top: 125px;
+    right: 20px;
+    width: 270px;
+    min-height: 50px;
+    padding: 10px;
+    border: 1px solid #ebebeb;
+    border-radius: 6px;
+    background: #fff;
+    -webkit-box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.2);
+    h3 {
+        margin-top: -5px;
+        margin-bottom:5px;
+        color:green;
     }
 }
