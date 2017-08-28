@@ -8,14 +8,14 @@ export default class AuthorizeBtn extends React.Component {
     taggedOps: PropTypes.object.isRequired
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    let { specSelectors } = this.props
-    if (this.props.taggedOps.count() != nextProps.taggedOps.count()) {
-      return true
-    } else {
-      return false
-    }
-  }
+  // shouldComponentUpdate(nextProps, nextState) {  //auth popup wont show
+  //   let { specSelectors } = this.props
+  //   if (this.props.taggedOps.count() != nextProps.taggedOps.count()) {
+  //     return true
+  //   } else {
+  //     return false
+  //   }
+  // }
 
   componentWillMount() {
     let { authActions } = this.props
@@ -42,7 +42,7 @@ export default class AuthorizeBtn extends React.Component {
 
     return (
       <span>
-        <button className={isAuthorized ? "btn authorize locked" : "btn authorize unlocked"} onClick={ this.onClick }>
+        <button className={isAuthorized ? "btn authorize-header locked" : "btn authorize-header unlocked"} onClick={ this.onClick }>
           <span>Authorize</span>
           <svg width="20" height="20">
             <use xlinkHref={ isAuthorized ? "#locked" : "#unlocked" } />

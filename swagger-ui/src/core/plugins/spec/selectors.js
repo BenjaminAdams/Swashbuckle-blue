@@ -227,7 +227,7 @@ export const operationsExtraSlim = createSelector(
     return operationsWithTags.map(ops => {
       return ops.map(op => {
         if (op) {
-          op = op.set('operationId', op.get('operation').get('operationId'))
+          op = op.set('operationId', op.get('operation').get('__originalOperationId'))
           return op.delete('operation')
         } else {
           // return something with Immutable methods

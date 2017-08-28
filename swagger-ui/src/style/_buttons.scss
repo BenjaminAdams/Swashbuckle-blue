@@ -37,10 +37,28 @@
     {
         line-height: 1;
         display: inline;
+
+        color:#49cc90;
+        border-color:#49cc90;
+
+
+        span
+        {
+            float: left;
+            padding: 4px 20px 0 0;
+        }
+
+        svg
+        {
+            fill: white;
+        }
+    }
+
+    &.authorize-header {
+        line-height: 1;
+        display: inline;
         color:white;
         border-color: white;
-
-
         span
         {
             float: left;

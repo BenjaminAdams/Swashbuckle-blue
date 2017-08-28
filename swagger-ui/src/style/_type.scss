@@ -1,13 +1,12 @@
 @mixin text_body($color: #3b4151)
 {
-     font-family: Arial, "Times New Roman", Georgia, Serif;
-
+    font-family: Arial, "Times New Roman", Georgia, Serif;
     color: $color;
 }
 
 @mixin text_code($color: #3b4151)
 {
-    font-family: 'Source Code Pro', monospace;
+    font-family: Arial, "Times New Roman", Georgia, Serif;
     font-weight: 600;
 
     color: $color;
@@ -15,11 +14,11 @@
 
 @mixin text_headline($color: #3b4151)
 {
-     font-family: Arial, "Times New Roman", Georgia, Serif;
+    font-family: Arial, "Times New Roman", Georgia, Serif;
 
     color: $color;
 }
 
-textarea {
-    font-family: 'Source Code Pro', monospace;
+textarea, input {
+    font-family: 'Source Code Pro', monospace !important;
 }

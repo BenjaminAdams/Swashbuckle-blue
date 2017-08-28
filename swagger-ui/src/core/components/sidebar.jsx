@@ -17,6 +17,7 @@ class ListChildren extends React.PureComponent {
     var self = this
 
     var ops = operations.map(function(op) {
+      //console.log(op)
       return <li key={op.routeId} className="sidebarChild" title={op.operationId}>
         <Link to={op.urlHash} onClick={self.gotoTop}>
           <div className={"methodBtn " + "btn-"+op.method}>{op.method}</div>

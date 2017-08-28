@@ -1,16 +1,13 @@
 .auth-btn-wrapper
 {
     display: flex;
-
     padding: 10px 0;
-
     justify-content: center;
 }
 
 .auth-wrapper
 {
     display: flex;
-
     flex: 1;
     justify-content: flex-end;
     max-width: 250px;
@@ -33,7 +30,6 @@
 {
     margin: 0 0 10px 0;
     padding: 10px 20px;
-
     border-bottom: 1px solid #ebebeb;
 
     &:last-of-type
