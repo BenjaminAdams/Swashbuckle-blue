@@ -25,8 +25,6 @@ export default class Header extends React.Component {
     let { getComponent, specSelectors, specActions, authActions, authSelectors, taggedOps } = this.props
     const Link = getComponent("Link")
 
-console.log('props in header=', this.props)
-
     let AuthorizeBtn = getComponent("authorizeBtn", true)
     let schemes = specSelectors.schemes()
     var customLogo = window.swashbuckleConfig.customLogo || null

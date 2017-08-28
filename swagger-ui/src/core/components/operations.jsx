@@ -93,8 +93,6 @@ shouldComponentUpdate(nextProps, nextState) {
             return routes;
           }).toArray()
 
-          console.log('rendering operations', allTheRoutes.length)
-
         return (
           <div>
             <HashRouter basename={ baseUrl } hashType="noslash">

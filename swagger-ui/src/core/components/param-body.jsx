@@ -18,7 +18,8 @@ export default class ParamBody extends PureComponent {
     isExecute: PropTypes.bool,
     specSelectors: PropTypes.object.isRequired,
     pathMethod: PropTypes.array.isRequired,
-    value: PropTypes.string
+    value: PropTypes.string,
+    taggedOps: PropTypes.object.isRequired
   };
 
   static defaultProp = {
@@ -36,7 +37,24 @@ export default class ParamBody extends PureComponent {
       value: "",
       forceRerender: false            
     }
+
+    this.renderedOnce=false
   }
+
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   let { specSelectors, response } = this.props
+
+  //   if(this.renderedOnce===false) {
+  //     this.renderedOnce=true
+  //     return true
+  //   }
+
+  //   if (this.props.taggedOps.count() != nextProps.taggedOps.count()) {
+  //     return true
+  //   } else {
+  //     return false
+  //   }
+  // }
 
   componentDidMount() {
     this.updateValues.call(this, this.props)

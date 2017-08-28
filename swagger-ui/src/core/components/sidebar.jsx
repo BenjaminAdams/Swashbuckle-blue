@@ -9,12 +9,12 @@ class ListChildren extends React.PureComponent {
   }
 
   gotoTop = () => {
-     window.scrollTo(0, 0);
+    window.scrollTo(0, 0);
   }
 
   render() {
     const { operations, version } = this.props
-    var self=this
+    var self = this
 
     var ops = operations.map(function(op) {
       return <li key={op.routeId} className="sidebarChild" title={op.operationId}>
@@ -33,7 +33,7 @@ class ListChildren extends React.PureComponent {
 
 export default class Sidebar extends React.Component {
   static propTypes = {
-    showSidebar:  PropTypes.bool.isRequired,  //showSidebar is an input to propigate/share the click event of the close/hide button from the Operations.jsx file
+    showSidebar: PropTypes.bool.isRequired, //showSidebar is an input to propigate/share the click event of the close/hide button from the Operations.jsx file
     toggleSidebarFunc: PropTypes.func.isRequired,
     getComponent: PropTypes.func.isRequired,
     getConfigs: PropTypes.func.isRequired,
@@ -41,37 +41,34 @@ export default class Sidebar extends React.Component {
     taggedOps: PropTypes.object.isRequired
   }
 
-constructor(props) {
+  constructor(props) {
     super(props);
-     this.state = {showSidebar: props.showSidebar};
+    this.state = { showSidebar: props.showSidebar };
   }
 
-shouldComponentUpdate(nextProps, nextState) {
-      let { specSelectors } = this.props
+  shouldComponentUpdate(nextProps, nextState) {
+    let { specSelectors } = this.props
 
-      if(this.props.taggedOps.count() != nextProps.taggedOps.count()){
-        return true
-      }else {
-        return false
-      }
+    if (this.props.taggedOps.count() != nextProps.taggedOps.count()) {
+      return true
+    } else {
+      return false
+    }
   }
-
 
   render() {
-    let { showSidebar, toggleSidebarFunc, getComponent, specSelectors,taggedOps } = this.props
-    
-   // let taggedOps = specSelectors.operationsExtraSlim()
+    let { showSidebar, toggleSidebarFunc, getComponent, specSelectors, taggedOps } = this.props
 
-console.log('loading sidebar', taggedOps.toJS())
-    const SidebarUrlLoader = getComponent("sidebarUrlLoader", true) 
+    // let taggedOps = specSelectors.operationsExtraSlim()
+    const SidebarUrlLoader = getComponent("sidebarUrlLoader", true)
 
     var baseUrl = window.swashbuckleConfig.baseUrl
-    var version=specSelectors.getVersion()
+    var version = specSelectors.getVersion()
 
     var parentNodes = taggedOps
       .entrySeq()
       .map(function(operations, tag) {
-      
+
         return <li key={operations[0]} className="sidebarParent">{operations[0]}<ListChildren operations={operations[1].toJS()} version={version} /></li>
       });
 

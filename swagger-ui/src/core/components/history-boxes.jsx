@@ -42,8 +42,6 @@ export class HistoryBoxes extends React.PureComponent {
     let { routeId, hst } = this.props
     //var hst = fromJS(getXhrHistory())
 
-console.log('rendering hst')
-
     var hstDivs = hst.filter(x => x.get('routeId') === routeId).map((x, index) => {
       var req = x.get('request')
       var res = x.get('response')

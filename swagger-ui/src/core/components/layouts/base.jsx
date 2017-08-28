@@ -18,9 +18,6 @@ export default class BaseLayout extends React.Component {
   constructor(props) {
     super(props);
     this.state = { showSidebar: true, leftPadding: '250px' };
-    this.loadedOnce = false
-
-    console.log('props in base', props)
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -76,8 +73,6 @@ export default class BaseLayout extends React.Component {
     if (isSpecEmpty) {
       return <h4>No spec provided.</h4>
     }
-
-    console.log('rendering the base.jsx')
 
     //let taggedOps = specSelectors.operationsExtraSlim()
 
