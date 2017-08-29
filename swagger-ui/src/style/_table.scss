@@ -125,6 +125,7 @@ table {
 .docsPopup {
     position: absolute;
     top: 90px;
+    z-index:1006;
     left: -285px;
     width: 270px;
     min-height: 50px;

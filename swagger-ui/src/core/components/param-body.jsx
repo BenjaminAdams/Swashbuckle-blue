@@ -39,7 +39,7 @@ export default class ParamBody extends PureComponent {
       forceRerender: false,
       displayDocsForName: null
     }
-    
+
     this.renderedOnce = false
     this.userInteracts = this.userInteracts.bind(this)
     this.hidePopup = this.hidePopup.bind(this)
@@ -62,10 +62,10 @@ export default class ParamBody extends PureComponent {
     var lineNumber = this.getLineNumber(e.target)
     var lineTxt = this.getLineOfTxt(e.target, lineNumber)
     var variableName = this.extractVariableName(lineTxt)
-    
+
 
     if (variableName) {
-     this.setState({ displayDocsForName: variableName })
+      this.setState({ displayDocsForName: variableName })
     }
   }
 
@@ -83,17 +83,15 @@ export default class ParamBody extends PureComponent {
 
     if (foundJson) {
       return foundJson[1]
-    } 
+    }
 
     var foundXml = str.match(/<(.*?)>/);
-    if(foundXml) {
+    if (foundXml) {
       return foundXml[1]
-    }else {
-      return null
     }
+
+    return null
   }
-
-
 
   componentDidMount() {
     this.updateValues.call(this, this.props)
@@ -209,12 +207,12 @@ export default class ParamBody extends PureComponent {
           }
         </div>
 
-        { this.state.displayDocsForName ? 
-              <ParamBodyDocs 
-                param={param} 
-                selectedName={this.state.displayDocsForName} 
-                taggedOps={taggedOps} 
-                getComponent={getComponent} /> : null }
+        {this.state.displayDocsForName ?
+          <ParamBodyDocs
+            param={param}
+            selectedName={this.state.displayDocsForName}
+            taggedOps={taggedOps}
+            getComponent={getComponent} /> : null}
 
       </div>
     )
