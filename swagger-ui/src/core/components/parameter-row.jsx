@@ -2,7 +2,6 @@ import React, { Component } from "react"
 import PropTypes from "prop-types"
 import win from "core/window"
 import IM from 'immutable'
-import ParamBodyDocs from "core/components/param-body-docs.jsx"
 
 export default class ParameterRow extends Component {
   static propTypes = {
@@ -20,10 +19,6 @@ export default class ParameterRow extends Component {
   constructor(props, context) {
     super(props, context)
     let { specSelectors, pathMethod, param } = props
-
-    this.state = {
-      displayDocsForName: null
-    }
 
     let defaultValue = param.get("default")
     let parameter = specSelectors.getParameter(pathMethod, param.get("name"))
@@ -63,11 +58,6 @@ export default class ParameterRow extends Component {
   onChangeWrapper = (value) => {
     let { onChange, param } = this.props
     return onChange(param, value)
-  }
-
-  changeShowDocsFor = (name) => {
-    let {param} = this.props
-    this.setState({ displayDocsForName: name })
   }
 
   render() {
@@ -132,12 +122,6 @@ export default class ParameterRow extends Component {
           </div>
           <div className="parameter__type">{ param.get("type") } { itemType && `[${itemType}]` }</div>
           <div className="parameter__in">({ param.get("in") })</div>
-          { this.state.displayDocsForName ? 
-              <ParamBodyDocs 
-                param={param} 
-                selectedName={this.state.displayDocsForName} 
-                taggedOps={taggedOps} 
-                getComponent={getComponent} /> : null }
         </span>
 
         <span className="col parameters-col_description">

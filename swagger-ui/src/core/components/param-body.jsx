@@ -2,6 +2,7 @@ import React, { PureComponent } from "react"
 import PropTypes from "prop-types"
 import { fromJS, List } from "immutable"
 import { getSampleSchema } from "core/utils"
+import ParamBodyDocs from "core/components/param-body-docs.jsx"
 
 const NOOP = Function.prototype
 
@@ -19,8 +20,7 @@ export default class ParamBody extends PureComponent {
     specSelectors: PropTypes.object.isRequired,
     pathMethod: PropTypes.array.isRequired,
     value: PropTypes.string,
-    taggedOps: PropTypes.object.isRequired,
-    changeShowDocsFor: PropTypes.func
+    taggedOps: PropTypes.object.isRequired
   };
 
   static defaultProp = {
@@ -36,9 +36,10 @@ export default class ParamBody extends PureComponent {
     this.state = {
       isEditBox: true,
       value: "",
-      forceRerender: false
+      forceRerender: false,
+      displayDocsForName: null
     }
-
+    
     this.renderedOnce = false
     this.userInteracts = this.userInteracts.bind(this)
     this.hidePopup = this.hidePopup.bind(this)
@@ -58,12 +59,11 @@ export default class ParamBody extends PureComponent {
   // }
 
   userInteracts = e => {
-    const { changeShowDocsFor } = this.props
     var lineNumber = this.getLineNumber(e.target)
     var lineTxt = this.getLineOfTxt(e.target, lineNumber)
     var variableName = this.extractVariableName(lineTxt)
     if (variableName) {
-      changeShowDocsFor(variableName)
+     this.setState({ displayDocsForName: variableName })
     }
   }
 
@@ -95,8 +95,7 @@ export default class ParamBody extends PureComponent {
   }
 
   hidePopup = () => {
-    const { changeShowDocsFor } = this.props
-    changeShowDocsFor(null)
+    this.setState({ displayDocsForName: null })
   }
 
   updateValues = (props) => {
@@ -158,6 +157,7 @@ export default class ParamBody extends PureComponent {
       specSelectors,
       pathMethod,
       getComponent,
+      taggedOps
       // value
     } = this.props
 
@@ -165,6 +165,7 @@ export default class ParamBody extends PureComponent {
     const TextArea = getComponent("TextArea")
     const HighlightCode = getComponent("highlightCode")
     const ContentType = getComponent("contentType")
+    const ParamBody = getComponent("ParamBody")
     // for domains where specSelectors not passed
     let parameter = specSelectors ? specSelectors.getParameter(pathMethod, param.get("name")) : param
     let errors = parameter.get("errors", List())
@@ -198,6 +199,14 @@ export default class ParamBody extends PureComponent {
               </div>
           }
         </div>
+
+        { this.state.displayDocsForName ? 
+              <ParamBodyDocs 
+                param={param} 
+                selectedName={this.state.displayDocsForName} 
+                taggedOps={taggedOps} 
+                getComponent={getComponent} /> : null }
+
       </div>
     )
 

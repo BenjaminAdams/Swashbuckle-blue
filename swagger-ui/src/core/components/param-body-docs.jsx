@@ -58,6 +58,7 @@ export default class ParamBodyDocs extends React.Component {
 
   findRecursive = (properties) => {
     console.log('properties==', properties)
+    if(!properties) return null
     let { selectedName } = this.props
     var self = this
 
@@ -75,7 +76,6 @@ export default class ParamBodyDocs extends React.Component {
         var foundInner = self.findRecursive(v[1].getIn(['properties']))
         if (foundInner) {
           found = foundInner
-
         }
       }
     });
