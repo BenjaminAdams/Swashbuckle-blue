@@ -22,3 +22,4 @@ swagger-ui/.chrome/Crashpad/metadata
 .chrome
 largeApi.json
 $tf*
+npm-debug.log

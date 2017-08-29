@@ -28,8 +28,11 @@ export default class ParameterRow extends Component {
     let defaultValue = param.get("default")
     let parameter = specSelectors.getParameter(pathMethod, param.get("name"))
     let value = parameter ? parameter.get("value") : ""
+    let exampleValue=param.get('example')
     if ( defaultValue !== undefined && value === undefined ) {
       this.onChangeWrapper(defaultValue)
+    }else if(exampleValue) {
+      this.onChangeWrapper(exampleValue)
     }
   }
 
@@ -88,7 +91,7 @@ export default class ParameterRow extends Component {
 
     if(valueFromHistory) {
       value = valueFromHistory
-      parameter.set('value',value)
+      parameter=parameter.set('value',value)
     }
 
     if(typeof(value) ==='undefined' && parameter) {
