@@ -20,15 +20,21 @@ export default class ParameterRow extends Component {
     super(props, context)
     let { specSelectors, pathMethod, param } = props
 
-    let defaultValue = param.get("default")
-    let parameter = specSelectors.getParameter(pathMethod, param.get("name"))
-    let value = parameter ? parameter.get("value") : ""
-    let exampleValue=param.get('example')
-    if ( defaultValue !== undefined && value === undefined ) {
-      this.onChangeWrapper(defaultValue)
-    }else if(exampleValue) {
-      this.onChangeWrapper(exampleValue)
-    }
+
+  }
+
+  componentWillMount() {
+    let { specSelectors, pathMethod, param } = this.props
+    this.componentWillReceiveProps(this.props)
+    // let defaultValue = param.get("default")
+    // let parameter = specSelectors.getParameter(pathMethod, param.get("name"))
+    // let value = parameter ? parameter.get("value") : ""
+    // let exampleValue=param.get('example')
+    // if ( defaultValue !== undefined && value === undefined ) {
+    //   this.onChangeWrapper(defaultValue)
+    // }else if(exampleValue) {
+    //   this.onChangeWrapper(exampleValue)
+    // }
   }
 
   componentWillReceiveProps(props) {
