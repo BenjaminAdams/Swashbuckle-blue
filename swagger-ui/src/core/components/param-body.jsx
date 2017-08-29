@@ -20,7 +20,7 @@ export default class ParamBody extends PureComponent {
     pathMethod: PropTypes.array.isRequired,
     value: PropTypes.string,
     taggedOps: PropTypes.object.isRequired,
-    changeShowDocsFor:PropTypes.func
+    changeShowDocsFor: PropTypes.func
   };
 
   static defaultProp = {
@@ -41,6 +41,7 @@ export default class ParamBody extends PureComponent {
 
     this.renderedOnce = false
     this.userInteracts = this.userInteracts.bind(this)
+    this.hidePopup = this.hidePopup.bind(this)
   }
 
   // shouldComponentUpdate(nextProps, nextState) {
@@ -60,16 +61,15 @@ export default class ParamBody extends PureComponent {
     const { changeShowDocsFor } = this.props
     var lineNumber = this.getLineNumber(e.target)
     var lineTxt = this.getLineOfTxt(e.target, lineNumber)
-    var variableName=this.extractVariableName(lineTxt)
-    console.log('variableName=',variableName)
-    if(variableName) {
+    var variableName = this.extractVariableName(lineTxt)
+    if (variableName) {
       changeShowDocsFor(variableName)
     }
   }
 
   getLineOfTxt(textarea, lineNumber) {
     var splits = textarea.value.split("\n");
-    return splits[lineNumber-1]
+    return splits[lineNumber - 1]
   }
 
   getLineNumber(textarea) {
@@ -92,6 +92,12 @@ export default class ParamBody extends PureComponent {
 
   componentWillReceiveProps(nextProps) {
     this.updateValues.call(this, nextProps)
+  }
+
+  hidePopup = () => {
+    const { changeShowDocsFor } = this.props
+    console.log('hiding <popoup></popoup>')
+    changeShowDocsFor(null)
   }
 
   updateValues = (props) => {
@@ -173,23 +179,24 @@ export default class ParamBody extends PureComponent {
       <div className="body-param">
         {
           isEditBox && isExecute
-            ? <TextArea className={ "body-param__text" + ( errors.count() ? " invalid" : "")} 
-            value={value} 
-            onChange={ this.handleOnChange } 
-            onClick={this.userInteracts} 
-            onKeyUp={this.userInteracts}
+            ? <TextArea className={"body-param__text" + (errors.count() ? " invalid" : "")}
+              value={value}
+              onChange={this.handleOnChange}
+              onClick={this.userInteracts}
+              onKeyUp={this.userInteracts}
+              onBlur={this.hidePopup}
             />
             : (value && <HighlightCode className="body-param__example"
-                               value={ value }/>)
+              value={value} />)
         }
         <div className="body-param-options">
           {
             !isExecute ? null
-                       : <div className="body-param-edit">
-                        <Button className={isEditBox ? "btn cancel body-param__example-edit" : "btn edit body-param__example-edit"}
-                                 onClick={this.toggleIsEditBox}>{ isEditBox ? "Cancel" : "Edit"}
-                         </Button>
-                         </div>
+              : <div className="body-param-edit">
+                <Button className={isEditBox ? "btn cancel body-param__example-edit" : "btn edit body-param__example-edit"}
+                  onClick={this.toggleIsEditBox}>{isEditBox ? "Cancel" : "Edit"}
+                </Button>
+              </div>
           }
         </div>
       </div>

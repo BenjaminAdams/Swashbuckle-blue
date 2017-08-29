@@ -132,7 +132,11 @@ export default class ParameterRow extends Component {
           </div>
           <div className="parameter__type">{ param.get("type") } { itemType && `[${itemType}]` }</div>
           <div className="parameter__in">({ param.get("in") })</div>
-          <ParamBodyDocs param={param} selectedName={this.state.displayDocsForName} taggedOps={taggedOps} getComponent={getComponent} />
+          {this.state.displayDocsForName ? <ParamBodyDocs 
+              param={param} 
+              selectedName={this.state.displayDocsForName} 
+              taggedOps={taggedOps} 
+              getComponent={getComponent} /> : null }
         </span>
 
         <span className="col parameters-col_description">
