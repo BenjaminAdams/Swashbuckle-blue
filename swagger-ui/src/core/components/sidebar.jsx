@@ -44,11 +44,15 @@ export default class Sidebar extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { showSidebar: props.showSidebar };
+    this.state = { 
+      showSidebar: props.showSidebar
+     };
   }
 
   shouldComponentUpdate(nextProps, nextState) {
     let { specSelectors } = this.props
+
+    if(this.props.showSidebar !== nextProps.showSidebar) return true
 
     if (this.props.taggedOps.count() != nextProps.taggedOps.count()) {
       return true

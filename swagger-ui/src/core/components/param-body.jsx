@@ -96,7 +96,6 @@ export default class ParamBody extends PureComponent {
 
   hidePopup = () => {
     const { changeShowDocsFor } = this.props
-    console.log('hiding <popoup></popoup>')
     changeShowDocsFor(null)
   }
 

@@ -20,10 +20,10 @@ export default class BaseLayout extends React.Component {
     this.state = { showSidebar: true, leftPadding: '250px' };
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    //       console.log('nextProps=',nextProps)
-    //       console.log('nextState=',nextState)  
+  shouldComponentUpdate(nextProps, nextState) {  
     let { specSelectors } = this.props
+
+    if(this.state.showSidebar !== nextState.showSidebar) return true
 
     if (this.props.taggedOps.count() != nextProps.taggedOps.count()) {
       return true
@@ -33,13 +33,12 @@ export default class BaseLayout extends React.Component {
   }
 
   toggleSidebar = () => {
-    this.state.showSidebar = !this.state.showSidebar //we have to set this before we call setState because its not changing it in local scope
-    this.setState({ showSidebar: this.state.showSidebar });
+    var showSidebar = !this.state.showSidebar //we have to set this before we call setState because its not changing it in local scope
 
-    if (this.state.showSidebar === true) {
-      this.setState({ leftPadding: '250px' });
+    if (showSidebar === true) {
+      this.setState({ leftPadding: '250px', showSidebar: showSidebar });
     } else {
-      this.setState({ leftPadding: '0px' });
+      this.setState({ leftPadding: '0px', showSidebar: showSidebar });
     }
   }
 
@@ -80,35 +79,35 @@ export default class BaseLayout extends React.Component {
 
     return (
       <span>
-      <Sidebar taggedOps={taggedOps} toggleSidebarFunc={this.toggleSidebar} showSidebar={this.state.showSidebar} />
-      <div className='swagger-ui'>               
-            <div id="swagger-ui-container" style={{ paddingLeft: this.state.leftPadding }}>
-                <Header taggedOps={taggedOps} />
-                <Errors />
-                <HashRouter basename={ baseUrl } hashType="noslash">
-                <span>
-                    <Route path={"/"} exact key={"home"} render={x => 
-                        <Row className="information-container">
-                                    <Col mobile={12}>
-                                        {info.count() ? (
-                                            <Info info={info} url={url} host={host} basePath={basePath} externalDocs={externalDocs} getComponent={getComponent} />
-                                        ) : null}
-                                    </Col>
-                                </Row>
-                        } />      
-                    <Route path={"/history"} exact key={"history"}  render={x=> <History specSelectors={specSelectors} /> } />                 
-                    </span>
-                    </HashRouter>
+        <Sidebar taggedOps={taggedOps} toggleSidebarFunc={this.toggleSidebar} showSidebar={this.state.showSidebar} />
+        <div className='swagger-ui'>
+          <div id="swagger-ui-container" style={{ paddingLeft: this.state.leftPadding }}>
+            <Header taggedOps={taggedOps} />
+            <Errors />
+            <HashRouter basename={baseUrl} hashType="noslash">
+              <span>
+                <Route path={"/"} exact key={"home"} render={x =>
+                  <Row className="information-container">
+                    <Col mobile={12}>
+                      {info.count() ? (
+                        <Info info={info} url={url} host={host} basePath={basePath} externalDocs={externalDocs} getComponent={getComponent} />
+                      ) : null}
+                    </Col>
+                  </Row>
+                } />
+                <Route path={"/history"} exact key={"history"} render={x => <History specSelectors={specSelectors} />} />
+              </span>
+            </HashRouter>
 
-                    <Row>
-                        <Col mobile={12} desktop={12} >
-                             <Operations  taggedOps={taggedOps}/> 
-                        </Col>
-                    </Row>
+            <Row>
+              <Col mobile={12} desktop={12} >
+                <Operations taggedOps={taggedOps} />
+              </Col>
+            </Row>
 
-                </div>
-            </div>
-            </span>
+          </div>
+        </div>
+      </span>
 
     )
   }
