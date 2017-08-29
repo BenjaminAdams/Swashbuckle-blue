@@ -57,7 +57,7 @@ export default class ParamBodyDocs extends React.Component {
   }
 
   findRecursive = (properties) => {
-    console.log('properties==', properties)
+   // console.log('properties==', properties)
     if(!properties) return null
     let { selectedName } = this.props
     var self = this
@@ -65,7 +65,7 @@ export default class ParamBodyDocs extends React.Component {
     var found = null;
 
     properties.entrySeq().forEach(v => {
-      console.log(v)
+     // console.log(v)
 
       if (v[0] === selectedName) {
 

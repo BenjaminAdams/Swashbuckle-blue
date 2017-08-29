@@ -62,6 +62,8 @@ export default class ParamBody extends PureComponent {
     var lineNumber = this.getLineNumber(e.target)
     var lineTxt = this.getLineOfTxt(e.target, lineNumber)
     var variableName = this.extractVariableName(lineTxt)
+    
+
     if (variableName) {
      this.setState({ displayDocsForName: variableName })
     }
@@ -77,14 +79,21 @@ export default class ParamBody extends PureComponent {
   }
 
   extractVariableName(str) {
-    var ret = "";
-    if (/"/.test(str)) {
-      ret = str.match(/"(.*?)"/)[1];
-    } else {
-      ret = str;
+    var foundJson = str.match(/"(.*?)"/);
+
+    if (foundJson) {
+      return foundJson[1]
+    } 
+
+    var foundXml = str.match(/<(.*?)>/);
+    if(foundXml) {
+      return foundXml[1]
+    }else {
+      return null
     }
-    return ret;
   }
+
+
 
   componentDidMount() {
     this.updateValues.call(this, this.props)
