@@ -34,8 +34,13 @@ export default class ParamBodyDocs extends React.Component {
     let { selectedName } = this.props
     var self = this
     var schema = param.get('schema')
-    var tmp = schema.toJS()
+    console.log('schema=', schema.toJS())
     var found = schema.getIn(['properties', selectedName])
+
+    // if(!found) {    //if its an array it will exist inside of 'items' 
+    //   found= schema.getIn(['properties', 'items', selectedName])
+    // }
+
     if (found) return found
     //found= schema.getIn(['properties', 'schema',selectedName ])
     //  var props=schema.getIn(['properties'])
@@ -70,13 +75,24 @@ export default class ParamBodyDocs extends React.Component {
       if (v[0] === selectedName) {
 
         found = v[1]
-      }
-
+      } 
+      
       if (v[1].has('properties')) {
-        var foundInner = self.findRecursive(v[1].getIn(['properties']))
+        let foundInner = self.findRecursive(v[1].getIn(['properties']))
         if (foundInner) {
           found = foundInner
         }
+      }
+      
+      if(v[1].has('items')) {  //items is for arrays
+          var arrayItems= v[1].get('items')
+          if(arrayItems && arrayItems.has('properties')) {           
+              let foundInner = self.findRecursive(arrayItems.getIn(['properties']))
+              if (foundInner) {
+                found = foundInner
+              }
+          }
+          
       }
     });
 
