@@ -41,6 +41,7 @@ export default class ParamBody extends PureComponent {
     }
 
     this.renderedOnce = false
+    this.lastLineSelected=null
     this.userInteracts = this.userInteracts.bind(this)
     this.hidePopup = this.hidePopup.bind(this)
   }
@@ -60,6 +61,10 @@ export default class ParamBody extends PureComponent {
 
   userInteracts = e => {
     var lineNumber = this.getLineNumber(e.target)
+    if(lineNumber===this.lastLineSelected) {
+      return //prevent re-rendering of docs popup if its the same prop
+    }
+    this.lastLineSelected=lineNumber
     var lineTxt = this.getLineOfTxt(e.target, lineNumber)
     var variableName = this.extractVariableName(lineTxt)
 
@@ -103,6 +108,7 @@ export default class ParamBody extends PureComponent {
 
   hidePopup = () => {
     this.setState({ displayDocsForName: null })
+    this.lastLineSelected=null
   }
 
   updateValues = (props) => {
