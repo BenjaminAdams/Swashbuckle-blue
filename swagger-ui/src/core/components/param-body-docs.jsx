@@ -1,6 +1,6 @@
 import React from "react"
 import PropTypes from "prop-types"
-//import Logo from "../../img/logo_small.png"
+import { List } from "immutable"
 //import AuthorizeBtn from "core/components/auth/authorize-btn.jsx"
 
 export default class ParamBodyDocs extends React.Component {
@@ -34,19 +34,29 @@ export default class ParamBodyDocs extends React.Component {
     let { selectedName } = this.props
     var self = this
     var schema = param.get('schema')
-    console.log('schema=', schema.toJS())
+    //console.log('schema=', schema.toJS())
     var found = schema.getIn(['properties', selectedName])
 
     // if(!found) {    //if its an array it will exist inside of 'items' 
     //   found= schema.getIn(['properties', 'items', selectedName])
     // }
 
-    if (found) return found
+    // if (found) return {
+    //   param: found,
+    //   //required: 
+    // }
     //found= schema.getIn(['properties', 'schema',selectedName ])
     //  var props=schema.getIn(['properties'])
     // found= props.getIn(['schema',selectedName])
 
-    return this.findRecursive(schema.getIn(['properties']))
+    var propsAndItems = schema.getIn(['properties'])
+    if(propsAndItems) {
+      propsAndItems.merge(schema.getIn(['items']))
+    }else {
+      propsAndItems=schema.getIn(['items'])
+    }
+
+    return this.findRecursive(propsAndItems, schema)
 
     //    var found= schema.getIn(['properties']).entrySeq().forEach(v => { 
     //         console.log(v) 
@@ -61,38 +71,55 @@ export default class ParamBodyDocs extends React.Component {
     //     return found    
   }
 
-  findRecursive = (properties) => {
-   // console.log('properties==', properties)
+  findRecursive = (properties, parent) => {
+    //console.log('properties==', properties)
+    //console.log('parent=',parent)
     if(!properties) return null
     let { selectedName } = this.props
     var self = this
 
     var found = null;
 
-    properties.entrySeq().forEach(v => {
-     // console.log(v)
+    properties.entrySeq().forEach( (v) => {
+      //console.log('v=',v)
+      if(v) {
+        if (v[0] === selectedName) {
 
-      if (v[0] === selectedName) {
+          let asdasdasd= parent.get('required')
 
-        found = v[1]
-      } 
-      
-      if (v[1].has('properties')) {
-        let foundInner = self.findRecursive(v[1].getIn(['properties']))
-        if (foundInner) {
-          found = foundInner
-        }
-      }
-      
-      if(v[1].has('items')) {  //items is for arrays
-          var arrayItems= v[1].get('items')
-          if(arrayItems && arrayItems.has('properties')) {           
-              let foundInner = self.findRecursive(arrayItems.getIn(['properties']))
-              if (foundInner) {
-                found = foundInner
-              }
+          found= {
+            param: v[1],
+            required: List.isList(parent.get('required')) && parent.get('required').contains(selectedName) ,
+            requiredConditionally: List.isList(parent.get('requiredConditionally')) && parent.get('requiredConditionally').contains(selectedName)
           }
+          return false
+        } 
+        
+        if (!found && v[1].has('properties')) {
+          let foundInner = self.findRecursive(v[1].getIn(['properties']), v[1])
           
+          if (foundInner) {            
+            found= foundInner
+            return false
+          }
+        }
+        
+        if(!found && v[1].has('items')) {  //items is for arrays
+            var arrayItems= v[1].get('items')
+            
+            if(arrayItems && arrayItems.has('properties')) {           
+                let foundInner = self.findRecursive(arrayItems.getIn(['properties']), v[1])
+                if (foundInner) {
+                  
+                  found= {
+                    param:foundInner.param,
+                    required: List.isList(arrayItems.get('required')) && arrayItems.get('required').contains(selectedName) ,
+                    requiredConditionally: List.isList(arrayItems.get('requiredConditionally')) && arrayItems.get('requiredConditionally').contains(selectedName)
+                  }
+                  return false
+                }
+            }          
+        }
       }
     });
 
@@ -109,15 +136,18 @@ export default class ParamBodyDocs extends React.Component {
     if (!found) return <div></div>
 
     let PrimitiveModel = getComponent("PrimitiveModel")
-    found = found.delete('required')
-    found = found.delete('properties')
-    found = found.delete('ignore')
-    found = found.delete('requiredConditionally')
+    //clear some props we dont want to display in the popup
+    found.param = found.param.delete('required')
+    found.param = found.param.delete('properties')
+    found.param = found.param.delete('items')
+    found.param = found.param.delete('x-schema')
+    found.param = found.param.delete('ignore')
+    found.param = found.param.delete('requiredConditionally')
 
     return (
       <div className="docsPopup model parameters">
       <h3>{selectedName}</h3>
-        <PrimitiveModel getComponent={getComponent} schema={found} required={true} requiredConditionally={true} />
+        <PrimitiveModel getComponent={getComponent} schema={found.param} required={found.required} requiredConditionally={found.requiredConditionally} />
       </div>
     )
   }
