@@ -19,9 +19,14 @@
         width: 155px;
     }
 
+    button {
+        width: 160px;
+    }
+
     select {
         margin-right:5px;
         padding: 7px 40px 5px 10px;
+        min-width:120px
     }
     
 }

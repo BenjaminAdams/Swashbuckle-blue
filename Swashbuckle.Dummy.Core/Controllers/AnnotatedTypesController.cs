@@ -1,6 +1,7 @@
 ﻿using Swashbuckle.Annotations;
 using Swashbuckle.Annotations.AttributeTags;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Net.Http;
@@ -13,14 +14,41 @@ namespace Swashbuckle.Dummy.Controllers
     {
         [HttpPost]
         [Route("IgnoreThisPlz")]
-        public int IgnoreOneParam(Payment payment)
+        public Payment IgnoreOneParam(Payment payment)
         {
             if (!ModelState.IsValid)
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState));
 
-            throw new NotImplementedException();
+            return payment;
         }
+
+
+        [HttpPost]
+        [Route("ArrayInputExample")]
+        public List<ClassRoom> ArrayInputExample(List<ClassRoom> input)
+        {
+            if (!ModelState.IsValid)
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState));
+
+            return input;
+        }
+
     }
+
+    public class ClassRoom
+    {
+        [SwaggerExample("Mr. Adams")]
+        [RequiredConditionally]
+        public string TeacherName { get; set; }
+
+        [SwaggerExample("5")]
+        [Required]
+        public int StudentCount { get; set; }
+
+        [SwaggerExample("Blue")]
+        public string FavoriteColor { get; set; }
+    }
+
 
     public class Payment
     {
@@ -35,7 +63,7 @@ namespace Swashbuckle.Dummy.Controllers
 
         [Required, Range(1, 12)]
         public int ExpMonth { get; set; }
-
+        [RequiredConditionally]
         [Required, Range(14, 99)]
         public int ExpYear { get; set; }
 

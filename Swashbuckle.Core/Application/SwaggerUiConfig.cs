@@ -82,6 +82,11 @@ namespace Swashbuckle.Application
             CustomAsset(path, resourceAssembly, resourceName);
         }
 
+        internal IAssetProvider GetSwaggerUiProvider()
+        {
+            return new EmbeddedAssetProvider(_pathToAssetMap, _templateParams);
+        }
+
         public void SetApiKeyDetails(SecuritySchemeBuilder sec)
         {
             if (sec == null) return;
@@ -124,6 +129,11 @@ namespace Swashbuckle.Application
             CustomAsset(path, resourceAssembly, resourceName);
         }
 
+        public void DocExpansion(DocExpansion docExpansion)
+        {
+            _templateParams["%(DocExpansion)"] = docExpansion.ToString().ToLower();
+        }
+
         public void CustomAsset(string path, Assembly resourceAssembly, string resourceName)
         {
             _pathToAssetMap[path] = new EmbeddedAssetDescriptor(resourceAssembly, resourceName, path == "index");
@@ -163,11 +173,6 @@ namespace Swashbuckle.Application
             _templateParams["%(OAuth2AppName)"] = appName;
         }
 
-        internal IAssetProvider GetSwaggerUiProvider()
-        {
-            return new EmbeddedAssetProvider(_pathToAssetMap, _templateParams);
-        }
-
         internal string GetRootUrl(HttpRequestMessage swaggerRequest)
         {
             return _rootUrlResolver(swaggerRequest);
@@ -187,5 +192,11 @@ namespace Swashbuckle.Application
                 _pathToAssetMap[path] = new EmbeddedAssetDescriptor(thisAssembly, resourceName, path == "index");
             }
         }
+    }
+    public enum DocExpansion
+    {
+        None,
+        List,
+        Full
     }
 }

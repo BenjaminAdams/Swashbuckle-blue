@@ -34,34 +34,18 @@ export default class ParamBodyDocs extends React.Component {
     let { selectedName } = this.props
     var self = this
     var schema = param.get('schema')
-    //console.log('schema=', schema.toJS())
-    //var found = schema.getIn(['properties', selectedName])
-
-    // if(!found) {    //if its an array it will exist inside of 'items' 
-    //   found= schema.getIn(['properties', 'items', selectedName])
-    // }
-
-    // if (found) return {
-    //   param: found,
-    //   //required: 
-    // }
-    //found= schema.getIn(['properties', 'schema',selectedName ])
-    //  var props=schema.getIn(['properties'])
-    // found= props.getIn(['schema',selectedName])
 
     var propsAndItems = schema.getIn(['properties'])
     if(propsAndItems) {
-      propsAndItems.merge(schema.getIn(['items']))
+      propsAndItems.merge(schema.getIn(['items', 'properties']))
     }else {
-      propsAndItems=schema.getIn(['items'])
+      propsAndItems=schema.getIn(['items', 'properties'])
     }
 
     return this.findRecursive(propsAndItems, schema)  
   }
 
   findRecursive = (properties, parent) => {
-    //console.log('properties==', properties)
-    //console.log('parent=',parent)
     if(!properties) return null
     let { selectedName } = this.props
     var self = this
@@ -69,11 +53,8 @@ export default class ParamBodyDocs extends React.Component {
     var found = null;
 
     properties.entrySeq().forEach( (v) => {
-      //console.log('v=',v)
-      if(v) {
+      if(v && v[1]) {
         if (v[0] === selectedName) {
-
-          let asdasdasd= parent.get('required')
 
           found= {
             param: v[1],
@@ -118,10 +99,9 @@ export default class ParamBodyDocs extends React.Component {
     let { param, selectedName, getComponent } = this.props
 
     if (!selectedName) return <div></div>
-    var found = this.findTheRightDocs(param)
 
-    console.log('we found=', found)
-    if (!found) return <div></div>
+    var found = this.findTheRightDocs(param)
+    if (!found || !found.param) return <div></div>
 
     let PrimitiveModel = getComponent("PrimitiveModel")
     //clear some props we dont want to display in the popup

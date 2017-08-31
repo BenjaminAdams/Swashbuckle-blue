@@ -31,11 +31,11 @@
     <tags>Swagger SwaggerUi Documentation Discovery Help WebApi AspNet AspNetWebApi Docs WebHost IIS</tags>
     <dependencies>
       <dependency id="Microsoft.AspNet.WebApi.WebHost" version="5.2.3" />
-      <dependency id="WebActivatorEx" />
+      <dependency id="WebActivatorEx" version="2.2.0" />
       <dependency id="Swashbuckle.Blue.Core" version="7.0.0.00" />
     </dependencies>
   </metadata>
   <files>
     <file src="Nuget\Content\App_Start\SwaggerConfig.cs.pp" target="Content\App_Start" />
   </files>
-</package>
+</package> 

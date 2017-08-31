@@ -168,6 +168,7 @@ namespace Swashbuckle.Dummy.Controllers
         ///     The name of the cool thing we did
         /// </summary>
         [SwaggerExample("Kayaking")]
+        [Required]
         public string Name { get; set; }
 
         /// <summary>
