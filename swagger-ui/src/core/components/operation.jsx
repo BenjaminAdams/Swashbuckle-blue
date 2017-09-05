@@ -63,7 +63,7 @@ export default class Operation extends PureComponent {
     parameters = this.loadValuesFromQry(parameters)
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps, nextState) {
     const defaultContentType = "application/json"
     let { specActions, path, method, parentId, specSelectors } = nextProps
 
@@ -75,16 +75,17 @@ export default class Operation extends PureComponent {
     let consumesValue = operation.get("consumes_value")
 
     var response = specSelectors.responseFor(path, method)
-    if (response) {
+    if (response && this.state.response !== response) {
       this.setState({
         response: response,
         executeInProgress: false
       })
     }
-
-    //  if(nextProps.response !== this.props.response) {  //moved this out of operations.jsx
-    //    this.setState({ executeInProgress: false })
-    //  }
+    
+    
+      // if(this.state.response !== nextState.response) {  
+      //   this.setState({ executeInProgress: false })
+      // }
 
     if (producesValue === undefined) {
       producesValue = produces && produces.size ? produces.first() : defaultContentType
@@ -150,8 +151,11 @@ export default class Operation extends PureComponent {
 
   onChangeProducesWrapper = (val) => this.props.specActions.changeProducesValue([this.props.path, this.props.method], val)
 
-  onExecute = () => {
-    this.setState({ executeInProgress: true })
+  onExecute = () => {    
+    this.setState({ 
+      response:null,
+      executeInProgress: true
+     })
   }
 
   render() {

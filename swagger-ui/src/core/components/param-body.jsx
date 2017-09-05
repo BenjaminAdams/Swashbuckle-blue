@@ -44,7 +44,7 @@ export default class ParamBody extends PureComponent {
     this.lastLineSelected=null
     this.userInteracts = this.userInteracts.bind(this)
     this.hidePopup = this.hidePopup.bind(this)
-  }
+  } 
 
   // shouldComponentUpdate(nextProps, nextState) {
   //   let { specSelectors, response } = this.props

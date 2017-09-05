@@ -119,9 +119,9 @@ export class Button extends React.Component {
 }
 
 
-export const TextArea = (props) => <textarea {...props} />
+export const TextArea = (props) => <textarea {...props} spellCheck={false} />
 
-export const Input = (props) => <input {...props} />
+export const Input = (props) => <input {...props} spellCheck={false} />
 
 export class Select extends React.Component {
   static propTypes = {
