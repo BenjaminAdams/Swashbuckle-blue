@@ -24,8 +24,6 @@ export default class StandaloneLayout extends React.Component {
 
 
     const BaseLayout = getComponent("BaseLayout", true)
-    const OnlineValidatorBadge = getComponent("onlineValidatorBadge", true)
-
     const loadingStatus = specSelectors.loadingStatus()
 
     if(loadingStatus === "failed") {
@@ -50,11 +48,7 @@ export default class StandaloneLayout extends React.Component {
           </div>
         }
         { !loadingStatus || loadingStatus === "success" && <BaseLayout taggedOps={taggedOps} /> }
-        <Row>
-          <Col>
-            <OnlineValidatorBadge />
-          </Col>
-        </Row>
+
       </Container>
     )
   }

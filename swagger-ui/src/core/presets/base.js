@@ -23,7 +23,6 @@ import BasicAuth from "core/components/auth/basic-auth"
 import Oauth2 from "core/components/auth/oauth2"
 import Clear from "core/components/clear"
 import LiveResponse from "core/components/live-response"
-import OnlineValidatorBadge from "core/components/online-validator-badge"
 import Operations from "core/components/operations"
 import Operation from "core/components/operation"
 import Sidebar from "core/components/sidebar"
@@ -82,7 +81,6 @@ export default function() {
       clear: Clear,
       liveResponse: LiveResponse,
       info: Info,
-      onlineValidatorBadge: OnlineValidatorBadge,
       operations: Operations,
       operation: Operation,
       sidebar: Sidebar,

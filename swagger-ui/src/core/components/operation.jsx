@@ -82,11 +82,6 @@ export default class Operation extends PureComponent {
       })
     }
     
-    
-      // if(this.state.response !== nextState.response) {  
-      //   this.setState({ executeInProgress: false })
-      // }
-
     if (producesValue === undefined) {
       producesValue = produces && produces.size ? produces.first() : defaultContentType
       specActions.changeProducesValue([path, method], producesValue)

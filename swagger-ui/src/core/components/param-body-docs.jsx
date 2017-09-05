@@ -34,6 +34,7 @@ export default class ParamBodyDocs extends React.Component {
     let { selectedName } = this.props
     var self = this
     var schema = param.get('schema')
+    selectedName= selectedName.toLowerCase()
 
     var propsAndItems = schema.getIn(['properties'])
     if(propsAndItems) {
@@ -49,17 +50,17 @@ export default class ParamBodyDocs extends React.Component {
     if(!properties) return null
     let { selectedName } = this.props
     var self = this
-
     var found = null;
+    selectedName= selectedName.toLowerCase()
 
     properties.entrySeq().forEach( (v) => {
       if(v && v[1]) {
-        if (v[0] === selectedName) {
+        if (v[0] && v[0].toLowerCase() === selectedName.toLowerCase()) {
 
           found= {
             param: v[1],
-            required: List.isList(parent.get('required')) && parent.get('required').contains(selectedName) ,
-            requiredConditionally: List.isList(parent.get('requiredConditionally')) && parent.get('requiredConditionally').contains(selectedName)
+            required: List.isList(parent.get('required')) && self.containsIgnoreCase(selectedName,parent.get('required')),
+            requiredConditionally: List.isList(parent.get('requiredConditionally')) && self.containsIgnoreCase(selectedName, parent.get('requiredConditionally'))
           }
           return false
         } 
@@ -82,8 +83,8 @@ export default class ParamBodyDocs extends React.Component {
                   
                   found= {
                     param:foundInner.param,
-                    required: List.isList(arrayItems.get('required')) && arrayItems.get('required').contains(selectedName) ,
-                    requiredConditionally: List.isList(arrayItems.get('requiredConditionally')) && arrayItems.get('requiredConditionally').contains(selectedName)
+                    required: List.isList(arrayItems.get('required')) && self.containsIgnoreCase(selectedName,arrayItems.get('required')),
+                    requiredConditionally: List.isList(arrayItems.get('requiredConditionally')) && self.containsIgnoreCase(selectedName,arrayItems.get('requiredConditionally'))
                   }
                   return false
                 }
@@ -94,6 +95,14 @@ export default class ParamBodyDocs extends React.Component {
 
     return found
   }
+
+containsIgnoreCase = (needle, haystack) => {
+  if(!needle || !haystack) return false
+    
+    var lowerHaystack= haystack.map(x => x.toLowerCase())  
+    return lowerHaystack.contains(needle)
+}
+
 
   render() {
     let { param, selectedName, getComponent } = this.props
