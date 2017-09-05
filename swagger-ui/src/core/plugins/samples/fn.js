@@ -1,6 +1,7 @@
 import { objectify, isFunc, normalizeArray } from "core/utils"
 import XML from "xml"
 import memoizee from "memoizee"
+import upperFirst from "lodash/upperFirst"
 
 const primitives = {
   "string": () => "string",
@@ -116,6 +117,19 @@ export const sampleXmlFromSchema = (schema, config={}) => {
   }
 
   name = name || "notagname"
+  
+  if(window.swashbuckleConfig.xmlVariableNamesUppercase) {
+    name= upperFirst(name)
+  }
+
+  if(window.swashbuckleConfig.xmlRemoveNameSpace && name.includes('.')) {
+    var split= name.split('.')
+    if(split) {
+      name= split[split.length-1]
+    }
+    
+  }
+
   // add prefix to name if exists
   displayName = (prefix ? prefix + ":" : "") + name
   if ( namespace ) {

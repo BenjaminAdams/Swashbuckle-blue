@@ -88,12 +88,14 @@
       apiKeyLocation: 'header',
       apiKeyName: 'none',
       enableDiscoveryUrlSelector: 'true',
-      customLogo: 'http://i.imgur.com/2QS9HX9.png'
+      customLogo: 'http://i.imgur.com/2QS9HX9.png',
+      xmlRemoveNameSpace: 'true',
+      xmlVariableNamesUppercase: 'true'
 
     };
 
     // Build a system
-    const ui = SwaggerUIBundle({
+    var ui = SwaggerUIBundle({
       //url: "http://petstore.swagger.io/v2/swagger.json",
       url: "http://localhost:3200/exampleSpecs/dummyDocs.json",
       dom_id: '#swagger-ui',

@@ -223,6 +223,9 @@ namespace Swashbuckle.Dummy
                     //
                     c.EnableDiscoveryUrlSelector();
 
+                    c.XmlRemoveNameSpace(true);
+                    c.XmlVariableNamesUppercase(true);
+
                     // Use the "InjectStylesheet" option to enrich the UI with one or more additional CSS stylesheets.
                     // The file must be included in your project as an "Embedded Resource", and then the resource's
                     // "Logical Name" is passed to the method as shown below.
@@ -254,7 +257,7 @@ namespace Swashbuckle.Dummy
                     // It can be set to "None" (default), "List" (shows operations for each resource),
                     // or "Full" (fully expanded: shows operations and their details).
                     //
-                    //c.DocExpansion(DocExpansion.List);
+                    c.DocExpansion(DocExpansion.List);
 
                     // Use the CustomAsset option to provide your own version of assets used in the swagger-ui.
                     // It's typically used to instruct Swashbuckle to return your version instead of the default

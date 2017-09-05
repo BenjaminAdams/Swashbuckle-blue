@@ -201,6 +201,14 @@ namespace $rootnamespace$
                         //
                         //c.InjectJavaScript(thisAssembly, "Swashbuckle.Dummy.SwaggerExtensions.testScript1.js");
 
+						//XML Content-Type Only - it will trim objects in XML contentTypes, it will format your variable names like so:
+						// 'foo.foobar.bar' will be renamed to 'bar'
+						//c.XmlRemoveNameSpace(true);
+
+						//XML Content-Type Only - It will make the variable names have the first letter capitalized so it will change:
+						// '<foo>bar</foo>' will be renamed to <Foo>bar</Foo>
+						//c.XmlVariableNamesUppercase(true);
+
                         // The swagger-ui renders boolean data types as a dropdown. By default, it provides "true" and "false"
                         // strings as the possible choices. You can use this option to change these to something else,
                         // for example 0 and 1.

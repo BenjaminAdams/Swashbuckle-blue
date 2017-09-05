@@ -37,6 +37,8 @@ namespace Swashbuckle.Application
                 { "%(ApiKeyLocation)", "header" },
                 { "%(ApiKeyName)", "none" },
                 { "%(EnableDiscoveryUrlSelector)", "false" },
+                { "%(XmlVariableNamesUppercase)", "true" },
+                { "%(XmlRemoveNameSpace)", "true" },
             };
             _rootUrlResolver = rootUrlResolver;
 
@@ -129,9 +131,20 @@ namespace Swashbuckle.Application
             CustomAsset(path, resourceAssembly, resourceName);
         }
 
+        [Obsolete]
         public void DocExpansion(DocExpansion docExpansion)
         {
             _templateParams["%(DocExpansion)"] = docExpansion.ToString().ToLower();
+        }
+
+        public void XmlVariableNamesUppercase(bool value)
+        {
+            _templateParams["%(XmlVariableNamesUppercase)"] = value.ToString().ToLower();
+        }
+
+        public void XmlRemoveNameSpace(bool value)
+        {
+            _templateParams["%(XmlRemoveNameSpace)"] = value.ToString().ToLower();
         }
 
         public void CustomAsset(string path, Assembly resourceAssembly, string resourceName)
@@ -193,6 +206,7 @@ namespace Swashbuckle.Application
             }
         }
     }
+
     public enum DocExpansion
     {
         None,
