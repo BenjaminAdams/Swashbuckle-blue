@@ -61,7 +61,7 @@ export default class Operations extends React.Component {
         var response = specSelectors.responseFor(op.get('path'), op.get('method'))
 
         return <Route exact
-          path={op.get('urlHash') + '/:historyParams?'}
+          path={op.get('urlHash') + '/:historyParams?/:respBody?'}
           key={op.get('routeId')}
           render={x =>
             <Operation

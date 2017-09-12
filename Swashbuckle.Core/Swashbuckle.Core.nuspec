@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>Swashbuckle.Blue.Core</id>
-    <version>7.0.0.1</version>
+    <version>7.0.0.2</version>
     <title>Swashbuckle.Blue.Core - Swagger for WebApi</title>
     <authors>Benjamin Adams</authors>
     <licenseUrl>http://opensource.org/licenses/BSD-3-Clause</licenseUrl>

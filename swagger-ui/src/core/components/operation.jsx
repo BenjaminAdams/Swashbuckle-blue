@@ -61,6 +61,7 @@ export default class Operation extends PureComponent {
 
     let parameters = getList(operation, ["parameters"])
     parameters = this.loadValuesFromQry(parameters)
+
   }
 
   componentWillReceiveProps(nextProps, nextState) {
@@ -108,6 +109,10 @@ export default class Operation extends PureComponent {
 
     var slimParameters = fromJS(JSON.parse(atou(qryParamsFromRouter.historyParams)))
 
+    var respBodyFromUrl= atou(qryParamsFromRouter.respBody)
+    if(respBodyFromUrl && respBodyFromUrl != 'null') {
+      this.respBodyFromUrl=respBodyFromUrl
+    }
     parameters = parameters.map((x, index) => {
       var name = x.get('name')
       var paramFromSlim = slimParameters.find(y => y.get('name') === name)
@@ -345,6 +350,7 @@ export default class Operation extends PureComponent {
               { !responses ? null :
                   <Responses
                     responses={ responses }
+                    respBodyFromUrl={this.respBodyFromUrl}
                     response={this.state.response}
                     request={ request }
                     tryItOutResponse={ this.state.response }

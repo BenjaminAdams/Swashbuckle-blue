@@ -118,16 +118,15 @@ export const sampleXmlFromSchema = (schema, config={}) => {
 
   name = name || "notagname"
   
-  if(window.swashbuckleConfig.xmlVariableNamesUppercase) {
+  if(window.swashbuckleConfig.xmlVariableNamesUppercase ==='true') {
     name= upperFirst(name)
   }
 
-  if(window.swashbuckleConfig.xmlRemoveNameSpace && name.includes('.')) {
+  if(window.swashbuckleConfig.xmlRemoveNameSpace ==='true' && name.includes('.')) {
     var split= name.split('.')
     if(split) {
       name= split[split.length-1]
     }
-    
   }
 
   // add prefix to name if exists

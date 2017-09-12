@@ -24,10 +24,12 @@ export function objectify (thing) {
 }
 
 export function utoa(str) {
+    if(!str) return ''
     return window.btoa(unescape(encodeURIComponent(str)));
 }
 // base64 encoded ascii to ucs-2 string
 export function atou(str) {
+    if(!str) return ''
     return decodeURIComponent(escape(window.atob(str)));
 }
 
@@ -479,8 +481,23 @@ export const validateFile = ( val ) => {
 }
 
 export function getHistoryLink(historyItem) {
+  let respBody=null
   historyItem = Im.fromJS(historyItem)
-  return historyItem.get("urlHash") + '/' + historyItem.get('parameters')
+  var respBodyStr= getRespBodyFromHstLink(historyItem)
+  
+  return historyItem.get("urlHash") + '/' + historyItem.get('parameters') + respBodyStr
+}
+
+function getRespBodyFromHstLink(historyItem){
+  var response= historyItem.get('response')
+  if(response) {
+    var respBody= response.get('respBody')
+    if(respBody && respBody != 'null') {
+      return '/' + respBody
+    }
+  }
+
+  return '/';
 }
 
 // validation of parameters before execute

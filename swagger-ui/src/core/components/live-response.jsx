@@ -29,6 +29,7 @@ Duration.propTypes = {
 export default class LiveResponse extends React.Component {
   static propTypes = {
     response: PropTypes.object.isRequired,
+    respBodyFromUrl: PropTypes.string,
     getComponent: PropTypes.func.isRequired
   }
 
@@ -99,8 +100,7 @@ export default class LiveResponse extends React.Component {
         
         <div className="responses-table">
             <div className="response">
-              <span className="col response-col_status">
-             
+              <span className="col response-col_status">            
             
               </span>
               <span className="col response-col_description">

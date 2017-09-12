@@ -6,7 +6,7 @@ import lowerCase from "lodash/lowerCase"
 export default class ResponseBody extends React.Component {
 
   static propTypes = {
-    content: PropTypes.any.isRequired,
+    content: PropTypes.any,
     contentType: PropTypes.string,
     getComponent: PropTypes.func.isRequired,
     headers: PropTypes.object,
@@ -18,6 +18,13 @@ export default class ResponseBody extends React.Component {
     const HighlightCode = getComponent("highlightCode")
     let body, bodyEl
     url = url || ""
+
+    if(!content) return <div></div>
+
+      if(!headers) {
+        headers= []
+        headers["Content-Disposition"] = ''//null guard
+      }
 
     // JSON
     if (/json/i.test(contentType)) {

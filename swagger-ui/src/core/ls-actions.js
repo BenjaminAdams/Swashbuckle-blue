@@ -11,11 +11,11 @@ export function addHistory(saveToHistory){
   saveToHistory.dateAdded = new Date()
   var hst = getXhrHistory()
 
-  if(isItTheSameReq(saveToHistory, hst[0])) return
+  //if(isItTheSameReq(saveToHistory, hst[0])) return 
 
   hst.unshift(saveToHistory) //add history to start of array
 
-  if(hst.length > 200) {
+  if(hst.length > 150) {
     //delete the oldest request to free up space
    hst.splice(hst.length-1, 1)
   }

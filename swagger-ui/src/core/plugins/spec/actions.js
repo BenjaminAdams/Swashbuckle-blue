@@ -239,15 +239,12 @@ export const executeRequest = (req) => ({ fn, specActions, specSelectors,urlHash
       res.duration = Date.now() - startTime
       saveToHistory.response = buildRespObj(res)
 
-     // console.log('res=', res)
       addHistory(saveToHistory)
 
       res.shareLink= getHistoryLink(saveToHistory)
       specActions.setResponse(req.pathName, req.method, res)
     })
     .catch(err => {
-      //console.log('res=', err)
-      //saveToHistory.response = { error: true, err: serializeError(err) }
       var serializedError = serializeError(err)
 
       if (serializedError.response) {
@@ -273,10 +270,17 @@ export const executeRequest = (req) => ({ fn, specActions, specSelectors,urlHash
 }
 
 function buildRespObj(res){
+
+  var respBody = null
+  if(res.text){
+    respBody=utoa(res.text)
+  }
+
   return {
         ok: res.ok|| false,
         status: res.status || 'err',
-        statusText:res.statusText  || 'error'
+        statusText:res.statusText  || 'error',
+        respBody: respBody
   }
 }
 
