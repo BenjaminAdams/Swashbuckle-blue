@@ -58,7 +58,7 @@ export default class Operations extends React.Component {
       // let operations = tagObj.get("operations")
 
       var routes = operations.map(op => {
-        var response = specSelectors.responseFor(op.get('path'), op.get('method'))
+      var response = specSelectors.responseFor(op.get('path'), op.get('method'))
 
         return <Route exact
           path={op.get('urlHash') + '/:historyParams?/:respBody?/:contentType?'}

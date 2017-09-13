@@ -21,7 +21,7 @@ export default class Operation extends PureComponent {
     specSelectors: PropTypes.object.isRequired,
     layoutActions: PropTypes.object.isRequired,
     layoutSelectors: PropTypes.object.isRequired,
-    response: PropTypes.object,
+   // response: PropTypes.object,
     fn: PropTypes.object.isRequired,
     tag: PropTypes.string,
     qryParamsFromRouter: PropTypes.object,

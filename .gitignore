@@ -23,3 +23,4 @@ swagger-ui/.chrome/Crashpad/metadata
 largeApi.json
 $tf*
 npm-debug.log
+.vs/Swashbuckle/v15/sqlite3/storage.ide
