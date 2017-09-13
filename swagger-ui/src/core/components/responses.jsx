@@ -18,7 +18,8 @@ export default class Responses extends React.Component {
     displayRequestDuration: PropTypes.bool.isRequired,
     fn: PropTypes.object.isRequired,
     taggedOps: PropTypes.object.isRequired,
-    respBodyFromUrl: PropTypes.string
+    respBodyFromUrl: PropTypes.string,
+    contentTypeFromUrl: PropTypes.string
   }
 
   static defaultProps = {
@@ -44,7 +45,8 @@ export default class Responses extends React.Component {
   }
 
   render() {
-    let { responses, request, tryItOutResponse, getComponent, specSelectors, fn, producesValue, displayRequestDuration, pathMethod, taggedOps, respBodyFromUrl } = this.props
+    let { responses, request, tryItOutResponse, getComponent, specSelectors, fn, 
+                      producesValue, displayRequestDuration, pathMethod, taggedOps, respBodyFromUrl,contentTypeFromUrl } = this.props
     let defaultCode = defaultStatusCode(responses)
     const ContentType = getComponent("contentType")
     const LiveResponse = getComponent("liveResponse")
@@ -56,7 +58,7 @@ export default class Responses extends React.Component {
         <div className="responses-inner">
           {
             !tryItOutResponse ?   <ResponseBody content={ respBodyFromUrl }
-                                       contentType={ null }
+                                       contentType={ contentTypeFromUrl }
                                        url={ null }
                                        headers={ null }
                                        getComponent={ getComponent }/>

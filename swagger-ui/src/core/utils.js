@@ -489,12 +489,19 @@ export function getHistoryLink(historyItem) {
 }
 
 function getRespBodyFromHstLink(historyItem){
+  var urlParam=''
   var response= historyItem.get('response')
   if(response) {
     var respBody= response.get('respBody')
     if(respBody && respBody != 'null') {
-      return '/' + respBody
+      urlParam += '/' + respBody
     }
+
+    var contentType=response.get('contentType')
+    if(contentType) {
+      urlParam += '/' + contentType
+    }
+    return urlParam;
   }
 
   return '/';

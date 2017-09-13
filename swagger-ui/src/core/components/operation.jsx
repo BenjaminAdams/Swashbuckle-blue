@@ -112,6 +112,7 @@ export default class Operation extends PureComponent {
     var respBodyFromUrl= atou(qryParamsFromRouter.respBody)
     if(respBodyFromUrl && respBodyFromUrl != 'null') {
       this.respBodyFromUrl=respBodyFromUrl
+      this.contentTypeFromUrl = atou(qryParamsFromRouter.contentType)
     }
     parameters = parameters.map((x, index) => {
       var name = x.get('name')
@@ -157,6 +158,18 @@ export default class Operation extends PureComponent {
       executeInProgress: true
      })
   }
+
+  clearRespFunc = () => {
+    let { specActions, path, method } = this.props
+
+    specActions.clearResponse(path, method)
+
+    this.setState({ 
+      response:null,
+      tryItOutEnabled: false,
+     })
+  }
+
 
   render() {
     let {
@@ -342,7 +355,7 @@ export default class Operation extends PureComponent {
               
             </div>
 
-            <HistoryBoxes hst={fromJS(getXhrHistory())} routeId={routeId} response={this.state.response} taggedOps={taggedOps} />
+            <HistoryBoxes hst={fromJS(getXhrHistory())} routeId={routeId} response={this.state.response} taggedOps={taggedOps} clearRespFunc={this.clearRespFunc} />
             
 
             {this.state.executeInProgress ? <div className="loading-container"><div className="loading"></div></div> : null}
@@ -351,6 +364,7 @@ export default class Operation extends PureComponent {
                   <Responses
                     responses={ responses }
                     respBodyFromUrl={this.respBodyFromUrl}
+                    contentTypeFromUrl={this.contentTypeFromUrl}
                     response={this.state.response}
                     request={ request }
                     tryItOutResponse={ this.state.response }

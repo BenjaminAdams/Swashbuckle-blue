@@ -11,7 +11,8 @@ export class HistoryBoxes extends React.PureComponent {
     routeId: PropTypes.string.isRequired,
     response: PropTypes.object,
     taggedOps: PropTypes.object.isRequired,
-    hst: PropTypes.object
+    hst: PropTypes.object,
+    clearRespFunc: PropTypes.func
   }
 
   static defaultProps = {
@@ -38,6 +39,12 @@ export class HistoryBoxes extends React.PureComponent {
     timeAgo(this.el)
   }
 
+  boxClick =() =>{
+    let { clearRespFunc } = this.props
+    clearRespFunc()
+  }
+
+
   render() {
     let { routeId, hst } = this.props
     //var hst = fromJS(getXhrHistory())
@@ -53,7 +60,7 @@ export class HistoryBoxes extends React.PureComponent {
         iconColor = 'red'
       }
 
-      return <Link to={theLink} key={index} className={iconColor} >
+      return <Link to={theLink} key={index} className={iconColor} onClick={this.boxClick} >
       <div className='timeAgoPopup'>
         <span className="timeago" title={x.get('dateAdded')}>{x.get('dateAdded')}</span> | <span>{x.get('duration')}ms</span> | <span>{res.get('status')}</span>
       </div>

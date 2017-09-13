@@ -83,10 +83,10 @@ export const parseToJson = (str) => ({ specActions, specSelectors, errActions })
 export const resolveSpec = (json, url) => ({ specActions, specSelectors, errActions, fn: { fetch, resolve, AST }, getConfigs }) => {
   const { modelPropertyMacro, parameterMacro } = getConfigs()
 
-  if (typeof(json) === "undefined") {
+  if (typeof (json) === "undefined") {
     json = specSelectors.specJson()
   }
-  if (typeof(url) === "undefined") {
+  if (typeof (url) === "undefined") {
     url = specSelectors.url()
   }
 
@@ -139,11 +139,11 @@ export function changeParam(path, paramName, value, isXml) {
   }
 }
 
-export function updateCustomHeaders(pathMethod,customHeaders) {
+export function updateCustomHeaders(pathMethod, customHeaders) {
 
   return {
     type: UPDATE_CUSTOMHEADERS,
-    payload: { pathMethod,customHeaders }
+    payload: { pathMethod, customHeaders }
   }
 }
 
@@ -199,7 +199,7 @@ export const logRequest = (req) => {
 
 // Actually fire the request via fn.execute
 // (For debugging) and ease of testing
-export const executeRequest = (req) => ({ fn, specActions, specSelectors,urlHash,routeId }) => {
+export const executeRequest = (req) => ({ fn, specActions, specSelectors, urlHash, routeId }) => {
   let { pathName, method, operation } = req
   let op = operation.toJS()
 
@@ -228,7 +228,7 @@ export const executeRequest = (req) => ({ fn, specActions, specSelectors,urlHash
       url: parsedRequest.url,
       headers: parsedRequest.headers
     },
-    parameters: getSlimParams(op.parameters, req.requestContentType ? req.requestContentType.includes('xml') : false ),
+    parameters: getSlimParams(op.parameters, req.requestContentType ? req.requestContentType.includes('xml') : false),
     urlHash: op.urlHash,
     routeId: op.routeId,
     specVersion: specSelectors.version()
@@ -241,7 +241,7 @@ export const executeRequest = (req) => ({ fn, specActions, specSelectors,urlHash
 
       addHistory(saveToHistory)
 
-      res.shareLink= getHistoryLink(saveToHistory)
+      res.shareLink = getHistoryLink(saveToHistory)
       specActions.setResponse(req.pathName, req.method, res)
     })
     .catch(err => {
@@ -259,34 +259,40 @@ export const executeRequest = (req) => ({ fn, specActions, specSelectors,urlHash
       saveToHistory.duration = Date.now() - startTime
       addHistory(saveToHistory)
 
-      var res={
-         error: true,
-         err: serializeError(err),
-         shareLink: getHistoryLink(saveToHistory),
-         duration:saveToHistory.duration
+      var res = {
+        error: true,
+        err: serializeError(err),
+        shareLink: getHistoryLink(saveToHistory),
+        duration: saveToHistory.duration
       }
       specActions.setResponse(req.pathName, req.method, res)
     })
 }
 
-function buildRespObj(res){
+function buildRespObj(res) {
 
-  var respBody = null
-  if(res.text){
-    respBody=utoa(res.text)
+  var respBody, contentType
+  if (res.text) {
+    respBody = utoa(res.text)
   }
 
+  if (res.headers && res.headers['content-type']) {
+    contentType = utoa(res.headers['content-type'])
+  }
+
+
   return {
-        ok: res.ok|| false,
-        status: res.status || 'err',
-        statusText:res.statusText  || 'error',
-        respBody: respBody
+    ok: res.ok || false,
+    status: res.status || 'err',
+    statusText: res.statusText || 'error',
+    respBody: respBody,
+    contentType: contentType
   }
 }
 
-export const execute = ({ path, method,urlHash,routeId,  ...extras } = {}) => (system) => {
-  
-  let { fn: { fetch }, specSelectors, specActions,urlHash,routeId } = system
+export const execute = ({ path, method, urlHash, routeId, ...extras } = {}) => (system) => {
+
+  let { fn: { fetch }, specSelectors, specActions, urlHash, routeId } = system
   let spec = specSelectors.spec().toJS()
   let scheme = specSelectors.operationScheme(path, method)
   let { requestContentType, responseContentType } = specSelectors.contentTypeValues([path, method]).toJS()
@@ -320,13 +326,13 @@ export function setScheme(scheme, path, method) {
 function getSlimParams(largeParameters, isXml) {
   if (!largeParameters) return largeParameters
 
-  return utoa( JSON.stringify( largeParameters.map(x => {
-    
-    if(x.in==='body' && isXml===true) {
-        return {name: x.name, value_xml: x.value_xml }
-    }else {
-        return {name: x.name, value: x.value }
+  return utoa(JSON.stringify(largeParameters.map(x => {
+
+    if (x.in === 'body' && isXml === true) {
+      return { name: x.name, value_xml: x.value_xml }
+    } else {
+      return { name: x.name, value: x.value }
     }
-    
+
   })));
 }
