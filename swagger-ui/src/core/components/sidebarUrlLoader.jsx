@@ -14,7 +14,10 @@ export default class Topbar extends React.Component {
 
   constructor(props, context) {
     super(props, context)
-    this.state = { url: props.specSelectors.url(), selectedIndex: 0 }
+    this.state = { 
+      url: props.specSelectors.url(),
+      selectedIndex: 0
+     }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -51,8 +54,9 @@ export default class Topbar extends React.Component {
 
   setSelectedUrl = (selectedUrl) => {
     const configs = this.props.getConfigs()
-    const urls = configs.urls || []
+    const urls = window.swashbuckleConfig.discoveryUrlObj || []
 
+    
     if(urls && urls.length) {
       if(selectedUrl)
       {
@@ -68,10 +72,11 @@ export default class Topbar extends React.Component {
 
   componentWillMount() {
     const configs = this.props.getConfigs()
-    const urls = configs.urls || []
+    const urls = window.swashbuckleConfig.discoveryUrlObj
 
     if(urls && urls.length) {
       let primaryName = configs["urls.primaryName"]
+      
       if(primaryName)
       {
         urls.forEach((spec, i) => {
@@ -84,13 +89,13 @@ export default class Topbar extends React.Component {
     }
   }
 
-  componentDidMount() {
-    const urls = this.props.getConfigs().urls || []
+  // componentDidMount() {
+  //   const urls = window.swashbuckleConfig.discoveryUrlObj
 
-    if(urls && urls.length) {
-      this.loadSpec(urls[this.state.selectedIndex].url)
-    }
-  }
+  //   if(urls && urls.length) {
+  //     this.loadSpec(urls[this.state.selectedIndex].url)
+  //   }
+  // }
 
   onFilterChange =(e) => {
     let {target: {value}} = e
@@ -114,7 +119,7 @@ export default class Topbar extends React.Component {
     let formOnSubmit = null
 
     if(window.swashbuckleConfig.discoveryUrlObj.length< 2 ) return <span></span>;
-   var selectedDiscUrl= specSelectors.getUrlFromVersion()
+    var selectedDiscUrl= specSelectors.getUrlFromVersion()
 
     if(urls) {
       let rows = []

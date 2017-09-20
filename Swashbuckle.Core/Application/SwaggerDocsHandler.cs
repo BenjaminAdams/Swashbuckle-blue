@@ -15,6 +15,7 @@ namespace Swashbuckle.Application
     public class SwaggerDocsHandler : HttpMessageHandler
     {
         private readonly SwaggerDocsConfig _config;
+        private static Dictionary<string, SwaggerDocument> _cache = new Dictionary<string, SwaggerDocument>();
 
         public SwaggerDocsHandler(SwaggerDocsConfig config)
         {
@@ -26,10 +27,21 @@ namespace Swashbuckle.Application
             var swaggerProvider = _config.GetSwaggerProvider(request);
             var rootUrl = _config.GetRootUrl(request);
             var apiVersion = request.GetRouteData().Values["apiVersion"].ToString();
+            var cacheKey = string.Format("{0}_{1}", rootUrl, apiVersion);
 
             try
             {
-                var swaggerDoc = swaggerProvider.GetSwagger(rootUrl, apiVersion);
+                SwaggerDocument swaggerDoc;
+                if (_cache.ContainsKey(cacheKey))
+                {
+                    _cache.TryGetValue(cacheKey, out swaggerDoc);
+                }
+                else
+                {
+                    swaggerDoc = swaggerProvider.GetSwagger(rootUrl, apiVersion);
+                    _cache.Add(cacheKey, swaggerDoc);
+                }
+
                 var content = ContentFor(request, swaggerDoc);
                 return TaskFor(new HttpResponseMessage { Content = content });
             }

@@ -25,3 +25,4 @@ $tf*
 npm-debug.log
 .vs/Swashbuckle/v15/sqlite3/storage.ide
 *.ide
+*.ide
