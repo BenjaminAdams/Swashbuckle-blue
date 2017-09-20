@@ -2,6 +2,8 @@
 using Swashbuckle.Annotations.AttributeTags;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Net;
+using System.Net.Http;
 using System.Web.Http;
 
 namespace Swashbuckle.Dummy.Controllers
@@ -20,6 +22,16 @@ namespace Swashbuckle.Dummy.Controllers
                             [MinLength(24)] string strWithMinLen)
         {
             throw new NotImplementedException();
+        }
+
+        [HttpPost]
+        [Route("v3/TestTest")]
+        public Payment TestTest(Payment payment)
+        {
+            if (!ModelState.IsValid)
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState));
+
+            return payment;
         }
     }
 }

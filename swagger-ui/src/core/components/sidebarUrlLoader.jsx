@@ -61,7 +61,8 @@ export default class Topbar extends React.Component {
       if(selectedUrl)
       {
         urls.forEach((spec, i) => {
-          if(spec.url === selectedUrl)
+          
+          if(selectedUrl.endsWith(spec.url) )
             {
               this.setState({selectedIndex: i})
             }
@@ -120,6 +121,7 @@ export default class Topbar extends React.Component {
 
     if(window.swashbuckleConfig.discoveryUrlObj.length< 2 ) return <span></span>;
     var selectedDiscUrl= specSelectors.getUrlFromVersion()
+    console.log('selectedDiscUrl=',selectedDiscUrl)
 
     if(urls) {
       let rows = []

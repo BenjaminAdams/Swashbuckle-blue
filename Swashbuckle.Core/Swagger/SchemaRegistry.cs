@@ -217,6 +217,11 @@ namespace Swashbuckle.Swagger
                     break;
             }
 
+            if (primitiveContract.UnderlyingType?.AssemblyQualifiedName != null)
+            {
+                schema.isNullable = primitiveContract.UnderlyingType.AssemblyQualifiedName.ToLower().Contains("nullable");
+            }
+
             schema.WithValidationProperties(primitiveContract);
 
             return schema;

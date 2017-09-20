@@ -172,6 +172,8 @@ namespace Swashbuckle.Swagger
 
         public string format;
 
+        public bool isNullable;
+
         public string title;
 
         public string description;

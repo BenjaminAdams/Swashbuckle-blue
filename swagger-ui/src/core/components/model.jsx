@@ -42,6 +42,10 @@ export default class Model extends Component {
         }
 
         modelSchema = modelSchema.delete('ignore')
+        
+        if (!modelSchema.get('isNullable')) {
+            modelSchema = modelSchema.delete('isNullable')
+        }
 
         type = modelSchema && modelSchema.get("type")
         if (!type && modelSchema && modelSchema.get("properties")) {

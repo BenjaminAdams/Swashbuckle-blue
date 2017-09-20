@@ -22,7 +22,6 @@ namespace Swashbuckle.Dummy.Controllers
             return payment;
         }
 
-
         [HttpPost]
         [Route("ArrayInputExample")]
         public List<ClassRoom> ArrayInputExample(List<ClassRoom> input)
@@ -32,7 +31,6 @@ namespace Swashbuckle.Dummy.Controllers
 
             return input;
         }
-
     }
 
     public class ClassRoom
@@ -49,11 +47,12 @@ namespace Swashbuckle.Dummy.Controllers
         public string FavoriteColor { get; set; }
     }
 
-
     public class Payment
     {
         [Required]
         public decimal Amount { get; set; }
+
+        public int? ThisIsANullAbleInt { get; set; }
 
         [SwaggerIgnore]
         public string SwaggerIgnoredParam { get; set; }
@@ -63,6 +62,7 @@ namespace Swashbuckle.Dummy.Controllers
 
         [Required, Range(1, 12)]
         public int ExpMonth { get; set; }
+
         [RequiredConditionally]
         [Required, Range(14, 99)]
         public int ExpYear { get; set; }

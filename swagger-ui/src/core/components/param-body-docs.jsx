@@ -120,6 +120,9 @@ containsIgnoreCase = (needle, haystack) => {
     found.param = found.param.delete('x-schema')
     found.param = found.param.delete('ignore')
     found.param = found.param.delete('requiredConditionally')
+    if(!found.param.get('isNullable')) {
+      found.param = found.param.delete('isNullable')
+    }
 
     return (
       <div className="docsPopup model parameters">
