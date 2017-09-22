@@ -62,6 +62,7 @@ namespace Swashbuckle.Dummy
 
                             // ReSharper disable once ConvertToLambdaExpression
                             vc.Version("v1", "Swashbuckle Dummy API V1");
+                            vc.Version("v8", "v8");
                         }
                     );
 

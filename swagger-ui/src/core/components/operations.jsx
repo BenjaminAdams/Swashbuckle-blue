@@ -29,8 +29,6 @@ export default class Operations extends React.Component {
     }
   }
 
-
-
   render() {
     let { specSelectors, specActions, getComponent, layoutSelectors, layoutActions, authActions, authSelectors, getConfigs, fn, taggedOps } = this.props
 

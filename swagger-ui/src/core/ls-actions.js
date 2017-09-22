@@ -26,7 +26,6 @@ export function addHistory(saveToHistory) {
   catch (e) {
     removeTwoHistoryItems(hst)
   }
-
 }
 
 export function getXhrHistory() {

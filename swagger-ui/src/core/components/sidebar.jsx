@@ -17,7 +17,6 @@ class ListChildren extends React.PureComponent {
     var self = this
 
     var ops = operations.map(function(op) {
-      //console.log(op)
       return <li key={op.routeId} className="sidebarChild" title={op.operationId}>
         <Link to={op.urlHash} onClick={self.gotoTop}>
           <div className={"methodBtn " + "btn-"+op.method}>{op.method}</div>
@@ -45,7 +44,8 @@ export default class Sidebar extends React.Component {
   constructor(props) {
     super(props);
     this.state = { 
-      showSidebar: props.showSidebar
+      showSidebar: props.showSidebar,
+      selectedIndex: 0
      };
   }
 
@@ -54,17 +54,20 @@ export default class Sidebar extends React.Component {
 
     if(this.props.showSidebar !== nextProps.showSidebar) return true
 
-    if (this.props.taggedOps.count() != nextProps.taggedOps.count()) {
+    if (this.props.taggedOps.count() != nextProps.taggedOps.count()) {      
       return true
-    } else {
+    } else if(this.state.selectedIndex != nextState.selectedIndex){
+      return true
+    }    
+    else {
       return false
     }
   }
 
   render() {
-    let { showSidebar, toggleSidebarFunc, getComponent, specSelectors, taggedOps } = this.props
+    let { showSidebar, toggleSidebarFunc, getComponent, specSelectors } = this.props
 
-    // let taggedOps = specSelectors.operationsExtraSlim()
+    let taggedOps = specSelectors.operationsExtraSlim()
     const SidebarUrlLoader = getComponent("sidebarUrlLoader", true)
 
     var baseUrl = window.swashbuckleConfig.baseUrl
@@ -87,7 +90,7 @@ export default class Sidebar extends React.Component {
             
       </div>
       <ul id="sidebar" style={this.props.showSidebar ? {} : { display: 'none' }}>
-        <li className="sidebarParent">{ SidebarUrlLoader ? <SidebarUrlLoader /> : null }</li>
+        <li className="sidebarParent">{ SidebarUrlLoader ? <SidebarUrlLoader selectedIndex={this.state.selectedIndex} /> : null }</li>
         <li className="sidebarParent">
           <ul>
             <li><Link to="/">Intro</Link></li>

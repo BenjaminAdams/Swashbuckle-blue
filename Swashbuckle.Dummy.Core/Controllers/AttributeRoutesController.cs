@@ -33,5 +33,15 @@ namespace Swashbuckle.Dummy.Controllers
 
             return payment;
         }
+
+        [HttpPost]
+        [Route("v8/TestTestxxx")]
+        public Payment TestTestxxx(Payment payment)
+        {
+            if (!ModelState.IsValid)
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState));
+
+            return payment;
+        }
     }
 }
