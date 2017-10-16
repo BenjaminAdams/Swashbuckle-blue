@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Web.Http;
 using System.Web.Http.Description;
 using System.Web.Http.Routing.Constraints;
+using Swashbuckle.Annotations.AttributeTags;
 
 namespace Swashbuckle.Dummy
 {
@@ -46,11 +47,21 @@ namespace Swashbuckle.Dummy
                     //        .Url("http://tempuri.org/license"));
 
                     c.MultipleApiVersions(
+                        //version is the version selected by the user in the dropdown
                         (apiDesc, version) =>
                         {
                             //System.Console.WriteLine("path=" + apiDesc.RelativePath);
                             var path = apiDesc.RelativePath.Split('/');
                             var pathVersion = path[0];
+
+                            if (version == "depricated" && apiDesc.ActionDescriptor.GetCustomAttributes<SwaggerDepricated>().Any())
+                            {
+                                return true;
+                            }
+                            else if (apiDesc.ActionDescriptor.GetCustomAttributes<SwaggerDepricated>().Any())
+                            {
+                                return false;
+                            }
 
                             // var testtt = CultureInfo.InvariantCulture.CompareInfo.IndexOf(pathVersion, version, CompareOptions.IgnoreCase);
 
@@ -63,6 +74,7 @@ namespace Swashbuckle.Dummy
                             // ReSharper disable once ConvertToLambdaExpression
                             vc.Version("v1", "Swashbuckle Dummy API V1");
                             vc.Version("v8", "v8");
+                            vc.Version("depricated", "Depricated Apis");
                         }
                     );
 

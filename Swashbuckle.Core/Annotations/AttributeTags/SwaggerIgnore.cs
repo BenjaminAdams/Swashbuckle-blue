@@ -10,4 +10,9 @@ namespace Swashbuckle.Annotations.AttributeTags
     public class SwaggerIgnore : Attribute
     {
     }
+
+    [AttributeUsage(AttributeTargets.All)]
+    public class SwaggerDepricated : Attribute
+    {
+    }
 }

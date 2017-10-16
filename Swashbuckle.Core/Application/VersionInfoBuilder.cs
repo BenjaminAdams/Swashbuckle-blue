@@ -17,7 +17,9 @@ namespace Swashbuckle.Application
         public InfoBuilder Version(string version, string title)
         {
             var infoBuilder = new InfoBuilder(version, title);
+
             _versionInfos[version] = infoBuilder;
+
             return infoBuilder;
         }
 

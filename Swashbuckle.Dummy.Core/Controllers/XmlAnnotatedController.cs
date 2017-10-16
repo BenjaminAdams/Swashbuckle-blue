@@ -85,10 +85,12 @@ namespace Swashbuckle.Dummy.Controllers
 
         /// <summary>
         ///    So much funs! .So we can verify an array schema serializes properly
+        /// this route is depricated
         /// </summary>
         /// <param name="funs"></param>
         [HttpPost]
         [Route("yayxx")]
+        [SwaggerDepricated]
         [SwaggerResponse(HttpStatusCode.Accepted)]
         [SwaggerResponse(HttpStatusCode.Ambiguous)]
         [SwaggerResponse(HttpStatusCode.Conflict)]
