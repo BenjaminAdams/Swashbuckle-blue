@@ -1003,6 +1003,14 @@ namespace Swashbuckle.Tests
                 OHay = "test",
                 SomethingElse = "bbbbb",
                 ThisIsSensitive = "88888",
+                ThisStringIsPIISensitive = "3123ggg",
+                ThisGuidIsPIISensitive = Guid.Parse("4e5c99a6-ac70-4de4-bac4-f75ee66be559"),
+                ThisIntIsPIISensitive = 12347777,
+                ThisDecimalIsPIISensitive = 123441.11m,
+                ThisLongIsPIISensitive = 33334444,
+                ThisEnumIsPIISensitive = TypesOfDogs.goldenR,
+                ThisNullableGuidIsPIISensitive = Guid.Parse("773399a6-ac70-4de4-bac4-f75ee66be559"),
+                ThisNullableIntIsPIISensitive = 54441111,
                 ASensitiveList = new List<string>()
                 {
                     "99999",
@@ -1025,6 +1033,27 @@ namespace Swashbuckle.Tests
             Assert.IsFalse(res.Contains("88888"));
             Assert.IsFalse(res.Contains("99999"));
             Assert.IsFalse(res.Contains("221212"));
+            Assert.IsFalse(res.Contains("221212"));
+            Assert.IsTrue(res.Contains("3123***")); //this is a PII masked string
+            Assert.IsTrue(res.Contains("4e5c0000-0000-0000-0000-000000000000")); //this is a PII masked guid
+            Assert.IsTrue(res.Contains("77330000-0000-0000-0000-000000000000")); //this is a PII masked nullable guid
+            Assert.IsTrue(res.Contains("12340000")); //this is a PII masked int
+            Assert.IsTrue(res.Contains("54440000")); //this is a PII masked nullable int
+            Assert.IsTrue(res.Contains("33330000")); //this is a PII masked Long
+            Assert.IsTrue(res.Contains("123400000")); //this is a PII masked decimal
+        }
+
+        [TestMethod]
+        public void SenseitiveDataPII_Enum()
+        {
+            var obj = new AClassWithAnEnum()
+            {
+                ThisEnumIsPIISensitive = TypesOfDogs.goldenR
+            };
+
+            var res = obj.ObjToJson();
+
+            Assert.AreEqual("{\"ThisEnumIsPIISensitive\":\"goldenR\"}", res);
         }
 
         [TestMethod]
@@ -1234,5 +1263,42 @@ namespace Swashbuckle.Tests
 
         [SensitiveData]
         public List<string> ASensitiveList { get; set; }
+
+        [SensitiveDataPII]
+        public string ThisStringIsPIISensitive { get; set; }
+
+        [SensitiveDataPII]
+        public Guid? ThisNullableGuidIsPIISensitive { get; set; }
+
+        [SensitiveDataPII]
+        public int? ThisNullableIntIsPIISensitive { get; set; }
+
+        [SensitiveDataPII]
+        public Guid ThisGuidIsPIISensitive { get; set; }
+
+        [SensitiveDataPII]
+        public int ThisIntIsPIISensitive { get; set; }
+
+        [SensitiveDataPII]
+        public long ThisLongIsPIISensitive { get; set; }
+
+        [SensitiveDataPII]
+        public decimal ThisDecimalIsPIISensitive { get; set; }
+
+        [SensitiveDataPII]
+        public TypesOfDogs ThisEnumIsPIISensitive { get; set; }
+    }
+
+    public class AClassWithAnEnum  //dont add members to this plz
+    {
+        [SensitiveDataPII]
+        public TypesOfDogs ThisEnumIsPIISensitive { get; set; }
+    }
+
+    public enum TypesOfDogs
+    {
+        beagle,
+        border,
+        goldenR
     }
 }

@@ -69,6 +69,7 @@
   <ItemGroup>
     <Compile Include="Annotations\AttributeTags\DefinedValidationAttribute.cs" />
     <Compile Include="Annotations\AttributeTags\RequiredConditionally.cs" />
+    <Compile Include="Annotations\AttributeTags\SensitiveDataPII.cs" />
     <Compile Include="Annotations\AttributeTags\SensitiveData.cs" />
     <Compile Include="Annotations\AttributeTags\SwaggerExample.cs" />
     <Compile Include="Annotations\AttributeTags\SwaggerIgnore.cs" />
