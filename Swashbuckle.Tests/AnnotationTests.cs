@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Swashbuckle.Dummy.Controllers;
 using Assert = NUnit.Framework.Assert;
+using Newtonsoft.Json;
 
 namespace Swashbuckle.Tests
 {
@@ -1043,6 +1044,54 @@ namespace Swashbuckle.Tests
             Assert.IsTrue(res.Contains("123400000")); //this is a PII masked decimal
         }
 
+
+        [TestMethod]
+        public void SenseitiveDataPII_WhatIfTheyAreNull()
+        {
+            var obj = new NestedObjWithSensitive()
+            {
+              
+                ThisDecimalIsPIISensitive = 123441.11m,
+                ThisLongIsPIISensitive = 33334444,
+                ThisEnumIsPIISensitive = TypesOfDogs.goldenR,
+                ThisNullableGuidIsPIISensitive = null,
+                ThisNullableIntIsPIISensitive = null
+            };
+
+            var res = obj.ObjToJson();
+
+            var yay = JsonConvert.DeserializeObject<NestedObjWithSensitive>(res);
+            Assert.AreEqual(33330000, yay.ThisLongIsPIISensitive);
+            Assert.AreEqual(TypesOfDogs.beagle, yay.ThisEnumIsPIISensitive);
+            Assert.IsNull(yay.ThisNullableGuidIsPIISensitive);
+            Assert.IsNull(yay.ThisNullableIntIsPIISensitive);
+        }
+
+
+        [TestMethod]
+        public void SenseitiveDataPII_CustomMasksLonger()
+        {
+            var obj = new TheseArePIIWithWeirdMasks()
+            {
+                Str2="123456",
+                Str5="12345678",
+                Int2=1234567,
+                Int5=12345678
+
+            };
+
+            var res = obj.ObjToJson();
+
+            var yay = JsonConvert.DeserializeObject<TheseArePIIWithWeirdMasks>(res);
+            Assert.AreEqual("12****", yay.Str2);
+            Assert.AreEqual("12345***", yay.Str5);
+            Assert.AreEqual("12****", yay.Str2);
+            Assert.AreEqual("12****", yay.Str2);
+
+        }
+
+
+
         [TestMethod]
         public void SenseitiveDataPII_Enum()
         {
@@ -1053,7 +1102,7 @@ namespace Swashbuckle.Tests
 
             var res = obj.ObjToJson();
 
-            Assert.AreEqual("{\"ThisEnumIsPIISensitive\":\"goldenR\"}", res);
+            Assert.AreEqual("{\"ThisEnumIsPIISensitive\":\"beagle\"}", res);
         }
 
         [TestMethod]
@@ -1301,4 +1350,24 @@ namespace Swashbuckle.Tests
         border,
         goldenR
     }
+
+    public class TheseArePIIWithWeirdMasks
+    {
+        [SensitiveDataPII(5)]
+        public string Str5 { get; set; }
+
+        [SensitiveDataPII(2)]
+        public string Str2 { get; set; }
+
+        [SensitiveDataPII(5)]
+        public int Int5 { get; set; }
+
+        [SensitiveDataPII(2)]
+        public int Int2 { get; set; }
+
+
+
+    }
+
+
 }

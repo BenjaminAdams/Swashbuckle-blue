@@ -88,72 +88,90 @@ namespace Swashbuckle.Annotations.AttributeTags
 
             if (attrPII != null)
             {
-                property.SetValue(input, GetMaskedValue(property, input, attrPII));
+                try
+                {
+                    property.SetValue(input, GetMaskedValue(property, input, attrPII));
+                }
+                catch (Exception ex)
+                {
+                    var tmp = ex;
+                }
             }
         }
 
-        private static dynamic GetValue(PropertyInfo property, object input)
-        {
-            var value = property.GetValue(input);
-            if (Nullable.GetUnderlyingType(property.PropertyType) != null)
-            {
-                Type t = Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType;
+        //private static dynamic GetValue(PropertyInfo property, object input)
+        //{
+        //    var value = property.GetValue(input);
+        //    if (Nullable.GetUnderlyingType(property.PropertyType) != null)
+        //    {
+        //        Type t = Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType;
 
-                object newType = ChangeType(value, t);
-                return newType;
-            }
-            else
-            {
-                return property.GetValue(input);
-            }
-        }
+        //        object newType = ChangeType(value, t);
+        //        return newType;
+        //    }
+        //    else
+        //    {
+        //        return property.GetValue(input);
+        //    }
+        //}
 
-        public static object ChangeType(object value, Type type)
-        {
-            if (value == null && type.IsGenericType) return Activator.CreateInstance(type);
-            if (value == null) return null;
-            if (type == value.GetType()) return value;
-            if (type.IsEnum)
-            {
-                if (value is string)
-                    return Enum.Parse(type, value as string);
-                else
-                    return Enum.ToObject(type, value);
-            }
-            if (!type.IsInterface && type.IsGenericType)
-            {
-                Type innerType = type.GetGenericArguments()[0];
-                object innerValue = ChangeType(value, innerType);
-                return Activator.CreateInstance(type, new object[] { innerValue });
-            }
-            if (value is string && type == typeof(Guid)) return new Guid(value as string);
-            if (value is string && type == typeof(Version)) return new Version(value as string);
-            if (!(value is IConvertible)) return value;
-            return Convert.ChangeType(value, type);
-        }
+        //public static object ChangeType(object value, Type type)
+        //{
+        //    if (value == null && type.IsGenericType) return Activator.CreateInstance(type);
+        //    if (value == null) return null;
+        //    if (type == value.GetType()) return value;
+        //    if (type.IsEnum)
+        //    {
+        //        if (value is string)
+        //            return Enum.Parse(type, value as string);
+        //        else
+        //            return Enum.ToObject(type, value);
+        //    }
+        //    if (!type.IsInterface && type.IsGenericType)
+        //    {
+        //        Type innerType = type.GetGenericArguments()[0];
+        //        object innerValue = ChangeType(value, innerType);
+        //        return Activator.CreateInstance(type, new object[] { innerValue });
+        //    }
+        //    if (value is string && type == typeof(Guid)) return new Guid(value as string);
+        //    if (value is string && type == typeof(Version)) return new Version(value as string);
+        //    if (!(value is IConvertible)) return value;
+        //    return Convert.ChangeType(value, type);
+        //}
 
         private static dynamic GetMaskedValue(PropertyInfo property, object input, SensitiveDataPII attr)
         {
-            // var value = property.GetValue(input);
-            var value = GetValue(property, input);
+            var value = property.GetValue(input);
+           // var value = GetValue(property, input);
+          
+
             try
             {
-                //if (typeof(IList).IsAssignableFrom(property.PropertyType) && value == null) //check if object is a list and is null
-                //  {
-                //      throw new ValidationException(_nullParamMsg + property.Name.AppendJson(input, outputJsonPayload));
-                //  }
+                if (typeof(IList).IsAssignableFrom(property.PropertyType) && value == null) //check if object is a list and is null
+                {
+                    return value;//this attribute tag shouldnt be on lists
+                }
 
-                //todo handle nullable fields
+                //handle nullable fields
+                var typeName = property.PropertyType.Name.ToUpper();
+                if ((Nullable.GetUnderlyingType(property.PropertyType) != null && value != null))
+                {
+                    typeName = Nullable.GetUnderlyingType(property.PropertyType).Name.ToUpper();
 
-                //if ((Nullable.GetUnderlyingType(property.PropertyType) != null) && (value == null))
-                //{
-                //    if (attr.ErrorMessage != null) throw new ValidationException(attr.ErrorMessage.AppendJson(input, outputJsonPayload));
-                //    throw new ValidationException(_nullParamMsg + property.Name.AppendJson(input, outputJsonPayload));
-                //}
+                }else if (Nullable.GetUnderlyingType(property.PropertyType) != null && value==null)
+                {
+                    //when its a nullable type and the value is null, theres no need to mask it
+                   return null;
+                }
+                    //if ((Nullable.GetUnderlyingType(property.PropertyType) != null) && (value == null))
+                    //{
+                    //    if (attr.ErrorMessage != null) throw new ValidationException(attr.ErrorMessage.AppendJson(input, outputJsonPayload));
+                    //    throw new ValidationException(_nullParamMsg + property.Name.AppendJson(input, outputJsonPayload));
+                    //}
 
-                var propertyTypeName = value.
+                    // var propertyTypeName = value.
 
-                switch (property.PropertyType.Name.ToUpper())
+                    switch (typeName)
                 {
                     case "STRING":
 
@@ -173,7 +191,7 @@ namespace Swashbuckle.Annotations.AttributeTags
                         break;
 
                     case "GUID":
-                        if ((Guid)value != Guid.Empty)
+                        if ( (Guid)value != Guid.Empty)
                         {
                             string newGuid = ((Guid)value).ToString().Replace("-", "");
                             newGuid = newGuid.Substring(0, attr._showChars) + new string('0', newGuid.Length - attr._showChars);
@@ -218,7 +236,7 @@ namespace Swashbuckle.Annotations.AttributeTags
                         }
                         else
                         {
-                            return newInt;
+                            return value;
                         }
 
                     case "INT64":
@@ -231,13 +249,13 @@ namespace Swashbuckle.Annotations.AttributeTags
                         }
                         else
                         {
-                            return newLong;
+                            return value;
                         }
 
                     default:
-                        var theType = property.PropertyType;
-                        var asddd = DefaultValue(property.PropertyType);
-                        return value;
+                        //var theType = property.PropertyType;
+                        return DefaultValue(property.PropertyType);
+                        //return value;
                         break;
                 }
             }
