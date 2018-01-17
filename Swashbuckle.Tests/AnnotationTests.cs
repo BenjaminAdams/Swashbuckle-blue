@@ -4,6 +4,7 @@ using Swashbuckle.Annotations.AttributeTags;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using Swashbuckle.Dummy.Controllers;
 using Assert = NUnit.Framework.Assert;
 using Newtonsoft.Json;
@@ -1029,28 +1030,26 @@ namespace Swashbuckle.Tests
             };
 
             var res = obj.ObjToJson();
-            Assert.IsFalse(res.Contains("yyyy"));
-            Assert.IsFalse(res.Contains("1111"));
-            Assert.IsFalse(res.Contains("88888"));
-            Assert.IsFalse(res.Contains("99999"));
+            var yay = JsonConvert.DeserializeObject<NestedObjWithSensitive>(res);
+            Assert.IsNull(yay.ThisHasSomeSensitiveFields.SensitiveString);
+            Assert.AreEqual(0, yay.ThisHasSomeSensitiveFields.SensitiveInt);
+            Assert.IsNull(yay.ThisIsSensitive);
+            Assert.IsNull(yay.ASensitiveList);
             Assert.IsFalse(res.Contains("221212"));
-            Assert.IsFalse(res.Contains("221212"));
-            Assert.IsTrue(res.Contains("3123***")); //this is a PII masked string
-            Assert.IsTrue(res.Contains("4e5c0000-0000-0000-0000-000000000000")); //this is a PII masked guid
-            Assert.IsTrue(res.Contains("77330000-0000-0000-0000-000000000000")); //this is a PII masked nullable guid
-            Assert.IsTrue(res.Contains("12340000")); //this is a PII masked int
-            Assert.IsTrue(res.Contains("54440000")); //this is a PII masked nullable int
-            Assert.IsTrue(res.Contains("33330000")); //this is a PII masked Long
-            Assert.IsTrue(res.Contains("123400000")); //this is a PII masked decimal
+            Assert.AreEqual("3123***", yay.ThisStringIsPIISensitive);
+            Assert.AreEqual(Guid.Parse("4e5c0000-0000-0000-0000-000000000000"), yay.ThisGuidIsPIISensitive);
+            Assert.AreEqual(Guid.Parse("77330000-0000-0000-0000-000000000000"), yay.ThisNullableGuidIsPIISensitive);
+            Assert.AreEqual(12340000, yay.ThisIntIsPIISensitive);
+            Assert.AreEqual(54440000, yay.ThisNullableIntIsPIISensitive);
+            Assert.AreEqual(33330000, yay.ThisLongIsPIISensitive);
+            Assert.AreEqual(123400.00m, yay.ThisDecimalIsPIISensitive);
         }
-
 
         [TestMethod]
         public void SenseitiveDataPII_WhatIfTheyAreNull()
         {
             var obj = new NestedObjWithSensitive()
             {
-              
                 ThisDecimalIsPIISensitive = 123441.11m,
                 ThisLongIsPIISensitive = 33334444,
                 ThisEnumIsPIISensitive = TypesOfDogs.goldenR,
@@ -1067,17 +1066,19 @@ namespace Swashbuckle.Tests
             Assert.IsNull(yay.ThisNullableIntIsPIISensitive);
         }
 
-
         [TestMethod]
         public void SenseitiveDataPII_CustomMasksLonger()
         {
             var obj = new TheseArePIIWithWeirdMasks()
             {
-                Str2="123456",
-                Str5="12345678",
-                Int2=1234567,
-                Int5=12345678
-
+                Str2 = "123456",
+                Str5 = "12345678",
+                Int2 = 1234567,
+                Int5 = 12345678,
+                d6 = 777777777.45m,
+                d3 = 55555,
+                f2 = 12345,
+                double3 = 8888111
             };
 
             var res = obj.ObjToJson();
@@ -1085,12 +1086,69 @@ namespace Swashbuckle.Tests
             var yay = JsonConvert.DeserializeObject<TheseArePIIWithWeirdMasks>(res);
             Assert.AreEqual("12****", yay.Str2);
             Assert.AreEqual("12345***", yay.Str5);
-            Assert.AreEqual("12****", yay.Str2);
-            Assert.AreEqual("12****", yay.Str2);
-
+            Assert.AreEqual(1200000, yay.Int2);
+            Assert.AreEqual(12345000, yay.Int5);
+            Assert.AreEqual("777777000.00", yay.d6.ToString());
+            Assert.AreEqual(55500m, yay.d3);
+            Assert.AreEqual(8880000d, yay.double3);
+            Assert.AreEqual(12000, yay.f2);
         }
 
+        [TestMethod]
+        public void SenseitiveDataPII_CustomMasksShorter()
+        {
+            var obj = new TheseArePIIWithWeirdMasks()
+            {
+                Str2 = "2",
+                Str5 = "416",
+                Int2 = 8,
+                Int5 = 3999,
+                d6 = 33.12m,
+                d3 = 52,
+                f2 = 9,
+                double3 = 88
+            };
 
+            var res = obj.ObjToJson();
+
+            var yay = JsonConvert.DeserializeObject<TheseArePIIWithWeirdMasks>(res);
+            Assert.AreEqual("2", yay.Str2);
+            Assert.AreEqual("416", yay.Str5);
+            Assert.AreEqual(8, yay.Int2);
+            Assert.AreEqual(3999, yay.Int5);
+            Assert.AreEqual(33.12m, yay.d6);
+            Assert.AreEqual(52m, yay.d3);
+            Assert.AreEqual(88d, yay.double3);
+            Assert.AreEqual(9, yay.f2);
+        }
+
+        [TestMethod]
+        public void SenseitiveDataPII_CustomMasksSameLength()
+        {
+            var obj = new TheseArePIIWithWeirdMasks()
+            {
+                Str2 = "12",
+                Str5 = "12345",
+                Int2 = 12,
+                Int5 = 12345,
+                d6 = 770.45m,
+                d3 = 555,
+                f2 = 12,
+                double3 = 888
+            };
+
+            var res = obj.ObjToJson();
+
+            var yay = JsonConvert.DeserializeObject<TheseArePIIWithWeirdMasks>(res);
+            Assert.AreEqual("12", yay.Str2);
+            Assert.AreEqual("12345", yay.Str5);
+            Assert.AreEqual(12, yay.Int2);
+            Assert.AreEqual(12345, yay.Int5);
+            Assert.AreEqual("770.45", yay.d6.ToString());
+            Assert.AreEqual(555m, yay.d3);
+            Assert.AreEqual(888d, yay.double3);
+            Assert.AreEqual(12, yay.f2);
+        }
 
         [TestMethod]
         public void SenseitiveDataPII_Enum()
@@ -1365,9 +1423,16 @@ namespace Swashbuckle.Tests
         [SensitiveDataPII(2)]
         public int Int2 { get; set; }
 
+        [SensitiveDataPII(2)]
+        public float? f2 { get; set; }
 
+        [SensitiveDataPII(6)]
+        public decimal? d6 { get; set; }
 
+        [SensitiveDataPII(3)]
+        public decimal? d3 { get; set; }
+
+        [SensitiveDataPII(3)]
+        public double? double3 { get; set; }
     }
-
-
 }
