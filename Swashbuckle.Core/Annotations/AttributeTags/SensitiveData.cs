@@ -40,6 +40,7 @@ namespace Swashbuckle.Annotations.AttributeTags
                     {
                         foreach (var item in items)
                         {
+                            if (item == null) continue;
                             MaskSensitiveData(item.GetType(), item);
                         }
                     }
@@ -70,6 +71,7 @@ namespace Swashbuckle.Annotations.AttributeTags
                 //check nested arrays
                 foreach (var item in elems)
                 {
+                    if (item == null) continue;
                     MaskSensitiveData(item.GetType(), item);
                 }
                 return true;

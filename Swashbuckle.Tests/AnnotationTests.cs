@@ -97,6 +97,33 @@ namespace Swashbuckle.Tests
         }
 
         [TestMethod]
+        // [PaymentsExpectedException(typeof(ArgumentNullException), "StringType")]
+        public void TestRequiredFieldStringTypeForEmptyValues_FullPath()
+        {
+            m_TestObject = new RequiredFieldTestObject()
+            {
+                DecimalType = 10,
+                GuidType = Guid.NewGuid(),
+                IntegerType = 10,
+                NullableDecimalType = 20,
+                NullableIntegerType = 20,
+                StringType = string.Empty
+            };
+
+            try
+            {
+                SwagValidator.Validate(m_TestObject, false, true);
+            }
+            catch (Exception ex)
+            {
+                Assert.AreEqual(ex.Message, "Value cannot be null. Parameter name: StringType");
+                return;
+            }
+
+            Assert.IsTrue(false);
+        }
+
+        [TestMethod]
         //[PaymentsExpectedException(typeof(ArgumentNullException), "IntegerType")]
         public void TestRequiredFieldIntegerTypeForDefaultValues()
         {
@@ -138,7 +165,7 @@ namespace Swashbuckle.Tests
 
             try
             {
-                SwagValidator.Validate(m_TestObject);
+                SwagValidator.Validate(m_TestObject, false, true);
             }
             catch (Exception ex)
             {
@@ -163,7 +190,7 @@ namespace Swashbuckle.Tests
 
             try
             {
-                SwagValidator.Validate(m_TestObject);
+                SwagValidator.Validate(m_TestObject, false, true);
             }
             catch (Exception ex)
             {
@@ -335,7 +362,7 @@ namespace Swashbuckle.Tests
 
             try
             {
-                SwagValidator.Validate(derivedObject);
+                SwagValidator.Validate(derivedObject, false, true);
             }
             catch (Exception ex)
             {
@@ -461,7 +488,7 @@ namespace Swashbuckle.Tests
                     MinLengthOf3 = "12" //not long enough
                 };
 
-                SwagValidator.Validate(obj2); //should throw exception
+                SwagValidator.Validate(obj2, false, true); //should throw exception
                 Assert.Fail(); // should not reach here because empty string threw exception
             }
             catch (Exception ex)
@@ -508,7 +535,7 @@ namespace Swashbuckle.Tests
                 {
                     Text = "US"
                 };
-                Assert.IsTrue(SwagValidator.Validate(obj));
+                Assert.IsTrue(SwagValidator.Validate(obj, false, true));
 
                 //Invalid Value
                 obj.Text = "PPP";
@@ -518,6 +545,42 @@ namespace Swashbuckle.Tests
             catch (Exception ex)
             {
                 Assert.IsTrue(ex.Message.Contains("is invalid. Received value"));
+            }
+        }
+
+        [TestMethod]
+        public void ChildIsAddrTest()
+        {
+            try
+            {
+                var obj = new ExamplePayload()
+                {
+                    Buid = "11",
+                    Country = "US",
+                    Region = "US",
+                    Currency = "USD",
+                    Segment = "bsd",
+                    ClientSessionId = "CBBC54DA-005A-AAAA-BBBB-A1027626F0D4",
+                    Amount = 1,
+                    SuccessUrl = "http://Success.com",
+                    CancelUrl = "http://Cancel.com",
+                    Address = new SharedAddress()
+                    {
+                        Address1 = "123 Main St",
+                        City = "Round Rock",
+                        Country = "US",
+                        ZipCode = "78682",
+                        State = "TX"
+                    }
+                };
+
+                obj.Amount = 0;
+                SwagValidator.Validate(obj, false, true);
+                Assert.Fail(); // should not reach here because empty string threw exception
+            }
+            catch (Exception ex)
+            {
+                Assert.AreEqual("Value cannot be null or zero. Parameter name: Amount", ex.Message);
             }
         }
 
@@ -705,7 +768,7 @@ namespace Swashbuckle.Tests
                 ThisIsNotARequiredObj = null  //since this is not required this should not throw error
             };
 
-            Assert.IsTrue(SwagValidator.Validate(obj1));
+            Assert.IsTrue(SwagValidator.Validate(obj1, false, true));
         }
 
         [TestMethod]
@@ -719,12 +782,35 @@ namespace Swashbuckle.Tests
 
             try
             {
-                SwagValidator.Validate(obj1);
+                SwagValidator.Validate(obj1, false, true);
                 Assert.Fail(); // should not reach here
             }
             catch (Exception ex)
             {
                 Assert.AreEqual("Value cannot be null. Parameter name: ThisIsARequiredObj", ex.Message);
+            }
+        }
+
+        [TestMethod]
+        public void ObjectWithNestedClass_ThrowsError()
+        {
+            var obj1 = new SomeObjectWithNestedClass()
+            {
+                SomethingElse = "something",
+                ThisIsARequiredObj = new slot()
+                {
+                    MyProperty1 = "a234234234sd"
+                }
+            };
+
+            try
+            {
+                SwagValidator.Validate(obj1, false, true);
+                Assert.Fail(); // should not reach here
+            }
+            catch (Exception ex)
+            {
+                Assert.AreEqual("ThisIsARequiredObj.MyProperty1 has length 12.  Maxlength is 5", ex.Message);
             }
         }
 
@@ -998,6 +1084,118 @@ namespace Swashbuckle.Tests
         }
 
         [TestMethod]
+        public void RequiredTagShowsFullPath()
+        {
+            var obj = new NestedObjWithSensitive()
+            {
+                OHay = "test",
+                SomethingElse = "bbbbb",
+                ThisIsSensitive = "88888",
+                ThisStringIsPIISensitive = "3123ggg",
+                ThisGuidIsPIISensitive = Guid.Parse("4e5c99a6-ac70-4de4-bac4-f75ee66be559"),
+                ThisIntIsPIISensitive = 12347777,
+                ThisDecimalIsPIISensitive = 123441.11m,
+                ThisLongIsPIISensitive = 33334444,
+                ThisEnumIsPIISensitive = TypesOfDogs.goldenR,
+                ThisNullableGuidIsPIISensitive = Guid.Parse("773399a6-ac70-4de4-bac4-f75ee66be559"),
+                ThisNullableIntIsPIISensitive = 54441111,
+                ASensitiveList = new List<string>()
+                {
+                    "99999",
+                    "221212"
+                },
+                ThisHasSomeSensitiveFields = new RequiredFieldDerived()
+                {
+                    BaseIntegerType = 1230,
+                    BaseStringType = "asdasd",
+                    DerivedIntegerType = 0, //this is required
+                    DerivedStringType = "xxxx",
+                    SensitiveInt = 1111,
+                    SensitiveString = "yyyy"
+                }
+            };
+
+            try
+            {
+                SwagValidator.Validate(obj, false, true);
+                Assert.Fail("it should have thrown an exception");
+            }
+            catch (Exception ex)
+            {
+                Assert.AreEqual(ex.Message, "Value cannot be null or zero. Parameter name: ThisHasSomeSensitiveFields.DerivedIntegerType");
+                return;
+            }
+        }
+
+        [TestMethod]
+        public void NullArrayWorks()
+        {
+            var obj = new NestedObjWithSensitive()
+            {
+                OHay = "test",
+                SomethingElse = "bbbbb",
+                ThisIsSensitive = "88888",
+                ThisStringIsPIISensitive = "3123ggg",
+                ThisGuidIsPIISensitive = Guid.Parse("4e5c99a6-ac70-4de4-bac4-f75ee66be559"),
+                ThisIntIsPIISensitive = 12347777,
+                ThisDecimalIsPIISensitive = 123441.11m,
+                ThisLongIsPIISensitive = 33334444,
+                ThisEnumIsPIISensitive = TypesOfDogs.goldenR,
+                ThisNullableGuidIsPIISensitive = Guid.Parse("773399a6-ac70-4de4-bac4-f75ee66be559"),
+                ThisNullableIntIsPIISensitive = 54441111,
+                AListHereYo = new List<AClassWithAnEnum>()
+                {
+                    null
+                },
+                ThisHasSomeSensitiveFields = new RequiredFieldDerived()
+                {
+                    BaseIntegerType = 1230,
+                    BaseStringType = "asdasd",
+                    DerivedIntegerType = 440,
+                    DerivedStringType = "xxxx",
+                    SensitiveInt = 1111,
+                    SensitiveString = "yyyy"
+                }
+            };
+
+            try
+            {
+                StringExtensions.ObjToJson(obj);
+            }
+            catch (Exception ex)
+            {
+                Assert.AreEqual(ex.Message, "Value cannot be null or zero. Parameter name: ThisHasSomeSensitiveFields.DerivedIntegerType");
+                return;
+            }
+        }
+
+        [TestMethod]
+        public void RequiredTagShowsFullPath_ThreeNestedLevelsLol()
+        {
+            var obj = new ThreeNestedLevelsLol()
+            {
+                OhHay = new ThreeNestedLevelsInnerLol()
+                {
+                    OhHayInner1 = new ThreeNestedLevelsInnerInnerLol()
+                    {
+                        OhHayInner2 = null //this is a required field
+                    }
+                }
+            };
+
+            try
+            {
+                SwagValidator.Validate(obj, false, true);
+                Assert.Fail("it should have thrown an exception");
+            }
+            catch (Exception ex)
+            {
+                Assert.AreEqual(ex.Message, "Value cannot be null. Parameter name: OhHay.OhHayInner1.OhHayInner2");
+                return;
+            }
+        }
+
+        [TestMethod]
         public void SenseitiveData_NestedObj()
         {
             var obj = new NestedObjWithSensitive()
@@ -1088,7 +1286,7 @@ namespace Swashbuckle.Tests
             Assert.AreEqual("12345***", yay.Str5);
             Assert.AreEqual(1200000, yay.Int2);
             Assert.AreEqual(12345000, yay.Int5);
-            Assert.AreEqual("777777000.00", yay.d6.ToString());
+            Assert.AreEqual(777777000m, yay.d6);
             Assert.AreEqual(55500m, yay.d3);
             Assert.AreEqual(8880000d, yay.double3);
             Assert.AreEqual(12000, yay.f2);
@@ -1253,6 +1451,7 @@ namespace Swashbuckle.Tests
 
     public class slot
     {
+        [StringLength(5, MinimumLength = 4)]
         public string MyProperty1 { get; set; }
     }
 
@@ -1366,10 +1565,14 @@ namespace Swashbuckle.Tests
         public string ThisIsSensitive { get; set; }
 
         public string OHay { get; set; }
+
+        [Required]
         public RequiredFieldDerived ThisHasSomeSensitiveFields { get; set; }
 
         [SensitiveData]
         public List<string> ASensitiveList { get; set; }
+
+        public List<AClassWithAnEnum> AListHereYo { get; set; }
 
         [SensitiveDataPII]
         public string ThisStringIsPIISensitive { get; set; }
@@ -1434,5 +1637,225 @@ namespace Swashbuckle.Tests
 
         [SensitiveDataPII(3)]
         public double? double3 { get; set; }
+    }
+
+    public class ThreeNestedLevelsLol
+    {
+        public ThreeNestedLevelsInnerLol OhHay { get; set; }
+    }
+
+    public class ThreeNestedLevelsInnerLol
+    {
+        public ThreeNestedLevelsInnerInnerLol OhHayInner1 { get; set; }
+    }
+
+    public class ThreeNestedLevelsInnerInnerLol
+    {
+        [Required]
+        public string OhHayInner2 { get; set; }
+    }
+
+    public class ExamplePayload
+    {
+        [SwaggerIgnore]
+        public Guid Ptid { get; set; }
+
+        /// <summary>
+        /// Initiate Call Gpid
+        /// </summary>
+        [SwaggerExample("GUID")]
+        public Guid Gpid { get; set; }
+
+        /// <summary>
+        /// Consumer Id
+        /// </summary>
+        [SwaggerIgnore]
+        public int ConsumerId { get; set; }
+
+        /// <summary>
+        /// Billing Address
+        /// </summary>
+        public SharedAddress Address { get; set; }
+
+        /// <summary>
+        /// Business Unit id
+        /// </summary>
+        [SwaggerExample("11")]
+        [Required]
+        public string Buid { get; set; }
+
+        /// <summary>
+        /// Country of the Customer
+        /// </summary>
+        [SwaggerExample("US")]
+        [Required]
+        [DefinedValidation(ValidationType.Country)]
+        public string Country { get; set; }
+
+        /// <summary>
+        /// Region of the Customer
+        /// </summary>
+        [SwaggerExample("US")]
+        [Required]
+        [DefinedValidation(ValidationType.Region)]
+        public string Region { get; set; }
+
+        /// <summary>
+        /// Currency Code
+        /// </summary>
+        [SwaggerExample("USD")]
+        [Required]
+        [DefinedValidation(ValidationType.Currency)]
+        public string Currency { get; set; }
+
+        /// <summary>
+        /// Success Url
+        /// </summary>
+        [MaxLength(200)]
+        [DefinedValidation(ValidationType.Url)]
+        [Required]
+        [SwaggerExample("https://delldynquote.int.ssi-cloud.com/payurl-success.html")]
+        public string SuccessUrl { get; set; }
+
+        /// <summary>
+        /// Cancel url
+        /// </summary>
+        [DefinedValidation(ValidationType.Url)]
+        [SwaggerExample("http://delldynquote.int.ssi-cloud.com/payurl-cancel.html")]
+        [MaxLength(200)]
+        [Required]
+        public string CancelUrl { get; set; }
+
+        /// <summary>
+        /// Dell Company number is required for C2R
+        /// </summary>
+        [SwaggerExample("14")]
+        [RequiredConditionally]
+        public string CompanyNumber { get; set; }
+
+        /// <summary>
+        /// Session Id of the Browser/Customer
+        /// </summary>
+        [SwaggerExample("ab123cd")]
+        [Required]
+        public string ClientSessionId { get; set; }
+
+        /// <summary>
+        /// Order Description
+        /// </summary>
+        [SwaggerExample("Order Description")]
+        public string OrderDescription { get; set; }
+
+        /// <summary>
+        /// Payment Amount
+        /// </summary>
+        [SwaggerExample("500.00")]
+        [Required]
+        public decimal Amount { get; set; }
+
+        /// <summary>
+        /// Quote Number
+        /// </summary>
+        [SwaggerExample("Q123")]
+        [MaxLength(50)]
+        public string QuoteNumber { get; set; }
+
+        /// <summary>
+        /// Segment Code
+        /// </summary>
+        [SwaggerExample("CON")]
+        [MaxLength(50)]
+        [Required]
+        public string Segment { get; set; }
+
+        /// <summary>
+        /// Terms
+        /// </summary>
+        [SwaggerExample("15 Days")]
+        [MaxLength(100)]
+        public string Terms { get; set; }
+
+        [DefinedValidation(ValidationType.Language)]
+        [SwaggerExample("EN")]
+        [StringLength(2, MinimumLength = 2, ErrorMessage = @"Language must be 2 characters in ISO 639-1 format. https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes")]
+        public string Language { get; set; }
+
+        /// <summary>
+        /// Customer Profile ID
+        /// </summary>
+        [SwaggerExample("123")]
+        public string CustomerProfileId { get; set; }
+    }
+
+    public class SharedAddress
+    {
+        /// <summary>
+        /// Address line 1
+        /// </summary>
+        [RequiredConditionally]
+        [SwaggerExample("123 Main St")]
+        [MaxLength(255)]
+        public virtual string Address1 { get; set; }
+
+        /// <summary>
+        /// Option Address line 2.  When the Country=BR the address2 must not be over 50 characters
+        /// </summary>
+        [SwaggerExample("bldg 2")]
+        [MaxLength(250)]
+        public string Address2 { get; set; }
+
+        /// <summary>
+        /// Option Address line 3. When the Country=BR the "Compliment" will be Address3 + Address4
+        /// </summary>
+        [SwaggerExample("District")]
+        [MaxLength(250)]
+        public string Address3 { get; set; }
+
+        /// <summary>
+        /// Option Address line 4. When the Country=BR the "Compliment" will be Address3 + Address4
+        /// </summary>
+        [SwaggerExample("1234")]
+        [MaxLength(250)]
+        public string Address4 { get; set; }
+
+        /// <summary>
+        /// <p>Postal Code of purchaser.</p>
+        /// <p>*Not required in Ireland</p>
+        /// </summary>
+        [RequiredConditionally]
+        [SwaggerExample("78682")]
+        [MaxLength(15)]
+        public string ZipCode { get; set; }
+
+        /// <summary>
+        /// City of purchaser.  When the Country=BR the city must not be over 50 characters
+        /// </summary>
+        [Required]
+        [SwaggerExample("Round Rock")]
+        [MaxLength(250)]
+        public string City { get; set; }
+
+        /// <summary>
+        /// State or province of purchaser.  Two letter ISO_3166-2  **For Credit Card in US, CA, and LA regions this is required**
+        /// </summary>
+
+        [SwaggerExample("TX")]
+        [MaxLength(2)]
+        public string State { get; set; }
+
+        /// <summary>
+        /// Country of purchaser.  Two-letter ISO 3166-1
+        /// </summary>
+        [Required]
+        [SwaggerExample("US")]
+        [MaxLength(2)]
+        public string Country { get; set; }
+
+        /// <summary>
+        /// Phone number of purchaser.
+        /// </summary>
+        [SwaggerExample("9035171619")]
+        [MaxLength(20)]
+        public string PhoneNumber { get; set; }
     }
 }

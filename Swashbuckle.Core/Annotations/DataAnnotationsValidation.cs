@@ -23,12 +23,12 @@ namespace Swashbuckle.Annotations
         /// <param name="errorMessage">The error message</param>
         /// <param name="outputJsonPayload">If you want the error message to contain the values in the object we are validating</param>
         /// <returns></returns>
-        public static bool TryValidate(object input, out string errorMessage, bool outputJsonPayload = false)
+        public static bool TryValidate(object input, out string errorMessage, bool outputJsonPayload = false, bool showFullPath = false)
         {
             errorMessage = null;
             try
             {
-                Validate(input, outputJsonPayload);
+                ValidateReal(input, outputJsonPayload, showFullPath);
                 return true;
             }
             catch (Exception ex)
@@ -38,13 +38,18 @@ namespace Swashbuckle.Annotations
             }
         }
 
+        public static bool Validate(object input, bool outputJsonPayload = false, bool showFullPath = false)
+        {
+            return ValidateReal(input, outputJsonPayload, showFullPath);
+        }
+
         ///  <summary>
         ///  Validates the attribute tag validations declared on the class.  Throws an ValidationException if any validation rules are not met
         ///  </summary>
         ///  <param name="input">The object you wish to validate</param>
         ///  <param name="outputJsonPayload">If true will output the contents of input payload in the exception</param>
         ///  <exception cref="ValidationException"></exception>
-        public static bool Validate(object input, bool outputJsonPayload = false)
+        private static bool ValidateReal(object input, bool outputJsonPayload = false, bool showFullPath = false, string parentPath = null)
         {
             if (input == null) return false;
             if (IsPrimitiveType(input) == true) return true;
@@ -56,62 +61,77 @@ namespace Swashbuckle.Annotations
 
                 if (typeof(IList).IsAssignableFrom(prp.PropertyType)) // Property is collection
                 {
-                    CheckListProperty(input, prp, outputJsonPayload);
+                    var innerParentPath = BuildParentPath(parentPath, prp.Name);
+                    CheckListProperty(input, prp, outputJsonPayload, showFullPath, innerParentPath);
                 }
                 else
                 {
                     // Property is object
-                    CheckRangeAttribute(prp, input, outputJsonPayload);  //check range first
-                    CheckRequiredAttribute(prp, input, outputJsonPayload);
-                    CheckMaxLengthAttribute(prp, input, outputJsonPayload);
-                    CheckMinLengthAttribute(prp, input, outputJsonPayload);
-                    CheckStringLengthAttribute(prp, input, outputJsonPayload);
-                    CheckDefinedExAttribute(prp, input, outputJsonPayload);
-                    CheckRegularExpressionAttribute(prp, input, outputJsonPayload);
+                    CheckRangeAttribute(prp, input, outputJsonPayload, showFullPath, parentPath);  //check range first
+                    CheckRequiredAttribute(prp, input, outputJsonPayload, showFullPath, parentPath);
+                    CheckMaxLengthAttribute(prp, input, outputJsonPayload, showFullPath, parentPath);
+                    CheckMinLengthAttribute(prp, input, outputJsonPayload, showFullPath, parentPath);
+                    CheckStringLengthAttribute(prp, input, outputJsonPayload, showFullPath, parentPath);
+                    CheckDefinedExAttribute(prp, input, outputJsonPayload, showFullPath, parentPath);
+                    CheckRegularExpressionAttribute(prp, input, outputJsonPayload, showFullPath, parentPath);
 
                     if (prp.PropertyType.Assembly == input.GetType().Assembly)
                     {
                         //check nested classes
-                        Validate(prp.GetValue(input, null), outputJsonPayload);
+                        var innerParentPath = BuildParentPath(parentPath, prp.Name);
+
+                        ValidateReal(prp.GetValue(input, null), outputJsonPayload, showFullPath, innerParentPath);
                     }
                 }
             }
             return true;
         }
 
-        private static void CheckListProperty(object input, PropertyInfo prp, bool outputJsonPayload = false)
+        private static string BuildParentPath(string parentPath, string currentName)
+        {
+            if (parentPath == null)
+            {
+                return currentName;
+            }
+            else
+            {
+                return parentPath + "." + currentName;
+            }
+        }
+
+        private static void CheckListProperty(object input, PropertyInfo prp, bool outputJsonPayload = false, bool showFullPath = false, string parentPath = null)
         {
             var propValue = prp.GetValue(input, null);
             var listvalue = (IList)propValue;
 
             if (listvalue != null && listvalue.Count > 0) // Has values then iterate
             {
-                CheckList(listvalue, outputJsonPayload);
+                CheckList(listvalue, outputJsonPayload, showFullPath, parentPath);
             }
             else  // validate for required attribute
             {
-                ObjReqChecker(input, prp);
+                ObjReqChecker(input, prp, outputJsonPayload, showFullPath, parentPath);
             }
         }
 
-        private static void ObjReqChecker(object input, PropertyInfo prp, bool outputJsonPayload = false)
+        private static void ObjReqChecker(object input, PropertyInfo property, bool outputJsonPayload = false, bool showFullPath = false, string parentPath = null)
         {
-            if (prp.GetCustomAttribute(typeof(RequiredAttribute)) != null) // validate for required attribute
+            if (property.GetCustomAttribute(typeof(RequiredAttribute)) != null) // validate for required attribute
             {
-                var errormessage = ((ValidationAttribute)(prp.GetCustomAttribute(typeof(RequiredAttribute)))).ErrorMessage;
+                var errormessage = ((ValidationAttribute)(property.GetCustomAttribute(typeof(RequiredAttribute)))).ErrorMessage;
                 if (errormessage != null)
                 {
                     throw new ValidationException(errormessage.AppendJson(input, outputJsonPayload));
                 }
                 else
                 {
-                    throw new ValidationException(_nullParamMsg + prp.Name.AppendJson(input, outputJsonPayload));
+                    throw new ValidationException(GetErrMsg(property, input, outputJsonPayload, showFullPath, parentPath));
                 }
             }
         }
 
         //if the root object is a list we need to check each element
-        private static bool CheckList(object input, bool outputJsonPayload = false)
+        private static bool CheckList(object input, bool outputJsonPayload = false, bool showFullPath = false, string parentPath = null)
         {
             var elems = input as IList;
             if (elems != null)
@@ -119,14 +139,14 @@ namespace Swashbuckle.Annotations
                 //check nested arrays
                 foreach (var item in elems)
                 {
-                    Validate(item, outputJsonPayload);
+                    ValidateReal(item, outputJsonPayload, showFullPath, parentPath);
                 }
                 return true;
             }
             return false;
         }
 
-        private static void CheckRangeAttribute(PropertyInfo property, object input, bool outputJsonPayload)
+        private static void CheckRangeAttribute(PropertyInfo property, object input, bool outputJsonPayload, bool showFullPath, string parentPath)
         {
             var attr = (RangeAttribute)(property.GetCustomAttribute(typeof(RangeAttribute)));
             if (attr == null) return;
@@ -142,17 +162,17 @@ namespace Swashbuckle.Annotations
             if (valAsDbl > maxValue)
             {
                 if (attr.ErrorMessage != null) throw new ValidationException(attr.ErrorMessage.AppendJson(input, outputJsonPayload));
-                throw new ValidationException(string.Format("{0} is invalid. Received value: {1}, accepted values: {2} to {3}", property.Name, value, minValue, maxValue).AppendJson(input, outputJsonPayload));
+                throw new ValidationException(string.Format("{0} is invalid. Received value: {1}, accepted values: {2} to {3}", GetVariableName(property, showFullPath, parentPath), value, minValue, maxValue).AppendJson(input, outputJsonPayload));
             }
 
             if (valAsDbl < minValue)
             {
                 if (attr.ErrorMessage != null) throw new ValidationException(attr.ErrorMessage.AppendJson(input, outputJsonPayload));
-                throw new ValidationException(string.Format("{0} is invalid. Received value: {1}, accepted values: {2} to {3}", property.Name, value, minValue, maxValue).AppendJson(input, outputJsonPayload));
+                throw new ValidationException(string.Format("{0} is invalid. Received value: {1}, accepted values: {2} to {3}", GetVariableName(property, showFullPath, parentPath), value, minValue, maxValue).AppendJson(input, outputJsonPayload));
             }
         }
 
-        private static void CheckStringLengthAttribute(PropertyInfo property, object input, bool outputJsonPayload)
+        private static void CheckStringLengthAttribute(PropertyInfo property, object input, bool outputJsonPayload, bool showFullPath, string parentPath)
         {
             var attr = (StringLengthAttribute)(property.GetCustomAttribute(typeof(StringLengthAttribute)));
             if (attr == null) return;
@@ -163,17 +183,17 @@ namespace Swashbuckle.Annotations
             if (value.ToString().Length > attr.MaximumLength)
             {
                 if (attr.ErrorMessage != null) throw new ValidationException(attr.ErrorMessage.AppendJson(input, outputJsonPayload));
-                throw new ValidationException(string.Format("{0} has length {1}.  Maxlength is {2}", property.Name, value.ToString().Length, attr.MaximumLength).AppendJson(input, outputJsonPayload));
+                throw new ValidationException(string.Format("{0} has length {1}.  Maxlength is {2}", GetVariableName(property, showFullPath, parentPath), value.ToString().Length, attr.MaximumLength).AppendJson(input, outputJsonPayload));
             }
 
             if (value.ToString().Length < attr.MinimumLength)
             {
                 if (attr.ErrorMessage != null) throw new ValidationException(attr.ErrorMessage.AppendJson(input, outputJsonPayload));
-                throw new ValidationException(string.Format("{0} has length {1}.  Minlength is {2}", property.Name, value.ToString().Length, attr.MinimumLength).AppendJson(input, outputJsonPayload));
+                throw new ValidationException(string.Format("{0} has length {1}.  Minlength is {2}", GetVariableName(property, showFullPath, parentPath), value.ToString().Length, attr.MinimumLength).AppendJson(input, outputJsonPayload));
             }
         }
 
-        private static void CheckMaxLengthAttribute(PropertyInfo property, object input, bool outputJsonPayload)
+        private static void CheckMaxLengthAttribute(PropertyInfo property, object input, bool outputJsonPayload, bool showFullPath, string parentPath)
         {
             var attr = (MaxLengthAttribute)(property.GetCustomAttribute(typeof(MaxLengthAttribute)));
             if (attr == null) return;
@@ -184,7 +204,7 @@ namespace Swashbuckle.Annotations
             if (value.ToString().Length > attr.Length)
             {
                 if (attr.ErrorMessage != null) throw new ValidationException(attr.ErrorMessage.AppendJson(input, outputJsonPayload));
-                throw new ValidationException(string.Format("{0} has length {1}.  Maxlength is {2}", property.Name, value.ToString().Length, attr.Length).AppendJson(input, outputJsonPayload));
+                throw new ValidationException(string.Format("{0} has length {1}.  Maxlength is {2}", GetVariableName(property, showFullPath, parentPath), value.ToString().Length, attr.Length).AppendJson(input, outputJsonPayload));
             }
         }
 
@@ -195,7 +215,7 @@ namespace Swashbuckle.Annotations
         /// <param name="input">The input.</param>
         /// <param name="outputJsonPayload">if set to <c>true</c> [output json payload].</param>
         /// <exception cref="ValidationException"></exception>
-        private static void CheckDefinedExAttribute(PropertyInfo property, object input, bool outputJsonPayload)
+        private static void CheckDefinedExAttribute(PropertyInfo property, object input, bool outputJsonPayload, bool showFullPath, string parentPath)
         {
             var attr = (DefinedValidationAttribute)(property.GetCustomAttribute(typeof(DefinedValidationAttribute)));
             if (attr == null)
@@ -212,7 +232,7 @@ namespace Swashbuckle.Annotations
 
             if (DefinedValidationAttribute.Validate(attr.KeyName, value.ToString()) == false)
             {
-                throw new ValidationException(string.Format("{0} is invalid. Received value: {1}", property.Name, value).AppendJson(input, outputJsonPayload));
+                throw new ValidationException(string.Format("{0} is invalid. Received value: {1}", GetVariableName(property, showFullPath, parentPath), value).AppendJson(input, outputJsonPayload));
             }
         }
 
@@ -223,7 +243,7 @@ namespace Swashbuckle.Annotations
         /// <param name="input">The input.</param>
         /// <param name="outputJsonPayload">if set to <c>true</c> [output json payload].</param>
         /// <exception cref="ValidationException"></exception>
-        private static void CheckRegularExpressionAttribute(PropertyInfo property, object input, bool outputJsonPayload)
+        private static void CheckRegularExpressionAttribute(PropertyInfo property, object input, bool outputJsonPayload, bool showFullPath, string parentPath)
         {
             var attr = (RegularExpressionAttribute)(property.GetCustomAttribute(typeof(RegularExpressionAttribute)));
             if (attr == null)
@@ -240,11 +260,11 @@ namespace Swashbuckle.Annotations
 
             if (Regex.IsMatch(value.ToString(), attr.Pattern, RegexOptions.IgnoreCase) == false)
             {
-                throw new ValidationException(string.Format("{0} is invalid. Received value: {1}", property.Name, value).AppendJson(input, outputJsonPayload));
+                throw new ValidationException(string.Format("{0} is invalid. Received value: {1}", GetVariableName(property, showFullPath, parentPath), value).AppendJson(input, outputJsonPayload));
             }
         }
 
-        private static void CheckMinLengthAttribute(PropertyInfo property, object input, bool outputJsonPayload)
+        private static void CheckMinLengthAttribute(PropertyInfo property, object input, bool outputJsonPayload, bool showFullPath, string parentPath)
         {
             var attr = (MinLengthAttribute)(property.GetCustomAttribute(typeof(MinLengthAttribute)));
             if (attr == null) return;
@@ -255,11 +275,48 @@ namespace Swashbuckle.Annotations
             if (value.ToString().Length < attr.Length)
             {
                 if (attr.ErrorMessage != null) throw new ValidationException(attr.ErrorMessage.AppendJson(input, outputJsonPayload));
-                throw new ValidationException(string.Format("{0} has length {1}.  Minlength is {2}", property.Name, value.ToString().Length, attr.Length).AppendJson(input, outputJsonPayload));
+                throw new ValidationException(string.Format("{0} has length {1}.  Minlength is {2}", GetVariableName(property, showFullPath, parentPath), value.ToString().Length, attr.Length).AppendJson(input, outputJsonPayload));
             }
         }
 
-        private static void CheckRequiredAttribute(PropertyInfo property, object input, bool outputJsonPayload)
+        private static string GetErrMsg(PropertyInfo property, object input, bool outputJsonPayload, bool showFullPath, string parentPath)
+        {
+            try
+            {
+                return _nullParamMsg + GetVariableName(property, showFullPath, parentPath).AppendJson(input, outputJsonPayload);
+            }
+            catch
+            {
+                return _nullParamMsg + property.Name.AppendJson(input, outputJsonPayload);
+            }
+        }
+
+        private static string GetErrMsgNumber(PropertyInfo property, object input, bool outputJsonPayload, bool showFullPath, string parentPath)
+        {
+            try
+            {
+                return _nullOrZeroParamMsg + GetVariableName(property, showFullPath, parentPath).AppendJson(input, outputJsonPayload);
+            }
+            catch
+            {
+                return _nullOrZeroParamMsg + property.Name.AppendJson(input, outputJsonPayload);
+            }
+        }
+
+        private static string GetVariableName(PropertyInfo property, bool showFullPath, string parentPath)
+        {
+            if (showFullPath == true && parentPath != null)
+            {
+                //return property.DeclaringType.FullName + "." + property.Name;
+                return parentPath + "." + property.Name;
+            }
+            else
+            {
+                return property.Name;
+            }
+        }
+
+        private static void CheckRequiredAttribute(PropertyInfo property, object input, bool outputJsonPayload, bool showFullPath, string parentPath)
         {
             var value = property.GetValue(input);
 
@@ -275,7 +332,7 @@ namespace Swashbuckle.Annotations
             if ((Nullable.GetUnderlyingType(property.PropertyType) != null) && (value == null))
             {
                 if (attr.ErrorMessage != null) throw new ValidationException(attr.ErrorMessage.AppendJson(input, outputJsonPayload));
-                throw new ValidationException(_nullParamMsg + property.Name.AppendJson(input, outputJsonPayload));
+                throw new ValidationException(GetErrMsg(property, input, outputJsonPayload, showFullPath, parentPath));
             }
 
             switch (property.PropertyType.Name.ToUpper())
@@ -285,7 +342,7 @@ namespace Swashbuckle.Annotations
                     if (value == null || string.IsNullOrWhiteSpace(value.ToString()))
                     {
                         if (attr.ErrorMessage != null) throw new ValidationException(attr.ErrorMessage.AppendJson(input, outputJsonPayload));
-                        throw new ValidationException(_nullParamMsg + property.Name.AppendJson(input, outputJsonPayload));
+                        throw new ValidationException(GetErrMsg(property, input, outputJsonPayload, showFullPath, parentPath));
                     }
                     break;
 
@@ -296,7 +353,7 @@ namespace Swashbuckle.Annotations
                     if ((Guid)value == Guid.Empty)
                     {
                         if (attr.ErrorMessage != null) throw new ValidationException(attr.ErrorMessage.AppendJson(input, outputJsonPayload));
-                        throw new ValidationException(_nullParamMsg + property.Name.AppendJson(input, outputJsonPayload));
+                        throw new ValidationException(GetErrMsg(property, input, outputJsonPayload, showFullPath, parentPath));
                     }
                     break;
 
@@ -307,7 +364,7 @@ namespace Swashbuckle.Annotations
                     if (Convert.ToDouble(value) == 0)
                     {
                         if (attr.ErrorMessage != null) throw new ValidationException(attr.ErrorMessage.AppendJson(input, outputJsonPayload));
-                        throw new ValidationException(_nullOrZeroParamMsg + property.Name.AppendJson(input, outputJsonPayload));
+                        throw new ValidationException(GetErrMsgNumber(property, input, outputJsonPayload, showFullPath, parentPath));
                     }
                     break;
 
@@ -316,7 +373,7 @@ namespace Swashbuckle.Annotations
                     if (value == null)
                     {
                         if (attr.ErrorMessage != null) throw new ValidationException(attr.ErrorMessage.AppendJson(input, outputJsonPayload));
-                        throw new ValidationException(_nullParamMsg + property.Name.AppendJson(input, outputJsonPayload));
+                        throw new ValidationException(GetErrMsg(property, input, outputJsonPayload, showFullPath, parentPath));
                     }
                     break;
             }
